@@ -1,0 +1,23 @@
+{
+  "menu-item-home": "Übersicht",
+  "menu-item-newad": "Neue Anzeige",
+  "menu-item-manageads": "Anzeigen verwalten",
+  "menu-item-history": "Verlauf",
+  "menu-item-support": "Support kontaktieren",
+  "menu-item-settings": "Einstellungen",
+  "menu-item-logout": "Ausloggen",
+  "menu-item-openmain": "Uni-Index öffnen",
+  "menu-item-institution": "Universitätsseite öffnen",
+
+  "ad-col-id": "ID",
+  "ad-col-booked-until": "Gebucht bis",
+  "ad-col-type": "Art",
+  "ad-col-size": "Größe",
+  "ad-col-level": "Level",
+
+  "ad-size-small": "Klein",
+  "ad-size-medium": "Mittel",
+  "ad-size-large": "Groß",
+  "ad-type-institution": "Institution",
+  "ad-type-subject": "Studiengang"
+}

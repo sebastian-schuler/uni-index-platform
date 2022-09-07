@@ -1,0 +1,38 @@
+{
+  "page-title": "Uni-Index",
+  "variable-example": "Eine Variable nutzen {{count}}",
+  "page-settings": "Einstellungen",
+  "page-settings-language": "Sprache",
+
+  "nav-home": "Startseite",
+  "nav-locations": "Standorte",
+  "nav-subjects": "Fächer",
+  "nav-institutions": "Institute",
+
+  "breadcrumb-back-to": "Zurück zu {{origin}}",
+
+  "countries-search-label": "Ein Land suchen",
+  "countries-search-placeholder": "z.B. Deutschland",
+
+  "global-search": "Alles durchsuchen",
+  "ad-label": "Anzeigen",
+
+  "title-popular-courses": "Beliebte Studiengänge",
+  "title-popular-institutions": "Beliebte Hochschulen",
+  "title-popular-locations": "Beliebte Orte",
+  "link-all-courses": "Alle Studiengänge anzeigen",
+  "link-all-institutions": "Alle Hochschulen anzeigen",
+  "link-all-locations": "Alle Standorte anzeigen",
+
+  "card-label-universities": {
+    "0": "Keine Hochschulen",
+    "one": "Eine Hochschule",
+    "other": "{{count}} Hochschulen"
+  },
+
+  "card-label-courses": {
+    "0": "Keine Studiengänge",
+    "one": "Ein Studiengang",
+    "other": "{{count}} Studiengänge"
+  }
+}

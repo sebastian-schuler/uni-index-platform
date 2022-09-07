@@ -1,0 +1,39 @@
+{
+  "page-title": "Uni-Index",
+  "variable-example": "Using a variable {{count}}",
+
+  "page-settings": "Settings",
+  "page-settings-language": "Language",
+
+  "nav-home": "Home",
+  "nav-locations": "Locations",
+  "nav-subjects": "Subjects",
+  "nav-institutions": "Institutions",
+
+  "breadcrumb-back-to": "Back to {{origin}}",
+
+  "countries-search-label": "Search for a country",
+  "countries-search-placeholder": "e.g. Germany",
+
+  "global-search": "Search anything",
+  "ad-label": "Ads",
+
+  "title-popular-courses": "Popular Courses",
+  "title-popular-institutions": "Popular Universities",
+  "title-popular-locations": "Popular Locations",
+  "link-all-courses": "See all courses",
+  "link-all-institutions": "See all universities",
+  "link-all-locations": "See all locations",
+
+  "card-label-universities": {
+    "0": "No universities",
+    "one": "{{count}} University",
+    "other": "{{count}} Universities"
+  },
+
+  "card-label-courses": {
+    "0": "No courses",
+    "one": "{{count}} Course",
+    "other": "{{count}} Courses"
+  }
+}

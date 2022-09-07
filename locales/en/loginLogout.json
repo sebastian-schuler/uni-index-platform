@@ -1,0 +1,37 @@
+{
+  "login-email-label": "Email Address",
+  "login-password-label": "Password",
+  "login-forgot": "Forgot your password?",
+  "login-button-text": "Log In",
+  "login-needaccount": "Don't have an account? Sign Up",
+  "login-error-username": "Please enter your email",
+  "login-title": "Sign in as institute",
+
+  "signup-institution-label": "Institution *",
+  "signup-institution-helper": "Every institution can only have one account, and every account has to be linked to an institution.",
+  "signup-email-label": "Email",
+  "signup-email-helper": "Your email address will be used to log in to your account.",
+  "signup-password-label": "Password",
+  "signup-password-helper": "Your password has to be between 8 and 64 characters, using: 2 upper case letters, 1 symbol, 3 lower case letters, and 2 digits",
+  "signup-displayname-label": "Display name",
+  "signup-terms-notice": "<0>By clicking Sign Up, you agree to our <1></1>.</0>",
+  "signup-terms-name": "Terms and Conditions",
+
+  "signup-title": "Sign up",
+  "signup-next": "Next",
+  "signup-back": "Back",
+  "signup-finish": "Finish",
+  "signup-steps": [
+    { "t": "Select institution" },
+    { "t": "Enter your details" },
+    { "t": "Confirm" }
+  ],
+  "signup-completed": "Account successfully created! You will be forwarded in a few seconds.",
+
+  "signup-error-step": "Error in step",
+  "signup-error-email-taken": "Email is already in use",
+  "signup-error-email-invalid": "Email is not valid",
+  "signup-error-password-invalid": "Password is not valid",
+  "signup-error-displayname-invalid": "Display name is not valid. (4-32 Letters, no special characters, no numbers)",
+  "signup-error-institution-taken": "Institution already has an account. Contact us if you've lost access to your email."
+}

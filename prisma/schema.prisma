@@ -1,0 +1,144 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model City {
+  id                  Int                   @id(map: "City_new_pkey") @default(autoincrement())
+  url                 String                @unique(map: "City URL") @db.VarChar
+  state_id            String                @db.VarChar
+  name                String                @db.VarChar
+  popularity_score    Int                   @default(0)
+  State               State                 @relation(fields: [state_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "City inside State")
+  InstitutionLocation InstitutionLocation[]
+  Subject             Subject[]
+}
+
+model Country {
+  id               String  @id @db.VarChar(3)
+  url              String  @unique(map: "Unique Country URL ") @db.VarChar
+  translations     Json?   @db.Json
+  name             String  @db.VarChar
+  popularity_score Int     @default(0)
+  State            State[]
+}
+
+model Institution {
+  id                     Int                     @id @default(autoincrement())
+  name                   String                  @unique(map: "Unique Institution Name") @db.VarChar
+  url                    String                  @unique(map: "Unique Institution URL") @db.VarChar
+  website                String?                 @db.VarChar
+  popularity_score       Int                     @default(0)
+  InstitutionLocation    InstitutionLocation[]
+  InstitutionSocialMedia InstitutionSocialMedia?
+  Subject                Subject[]
+  User                   User?
+}
+
+model InstitutionLocation {
+  institution_id Int
+  city_id        Int
+  Institution    Institution @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Institution has location")
+  City           City        @relation(fields: [city_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Location has Institution")
+
+  @@id([institution_id, city_id])
+}
+
+model InstitutionSocialMedia {
+  institution_id   Int         @id(map: "InstitutionSocialMediaNew_pkey")
+  twitter_link     String?     @db.VarChar
+  facebook_link    String?     @db.VarChar
+  youtube_link     String?     @db.VarChar
+  instagram_link   String?     @db.VarChar
+  twitter_points   Int         @default(0)
+  facebook_points  Int         @default(0)
+  youtube_points   Int         @default(0)
+  instagram_points Int         @default(0)
+  last_update      BigInt
+  total_score      Decimal     @default(0) @db.Decimal
+  Institution      Institution @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Institution has Social Media Data")
+}
+
+model State {
+  id               String  @id @db.VarChar
+  url              String  @unique(map: "Unique State URL") @db.VarChar
+  name_native      String  @db.VarChar
+  country_id       String  @db.VarChar
+  name_en          String? @db.VarChar
+  popularity_score Int     @default(0)
+  Country          Country @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "State inside Country")
+  City             City[]
+}
+
+model Subject {
+  id               Int         @unique(map: "ID must be unique") @default(autoincrement())
+  url              String      @db.VarChar
+  institution_id   Int
+  location_id      Int
+  name             String      @db.VarChar
+  subject_type_id  Int
+  semester_count   Int?
+  degree           String?     @db.VarChar
+  popularity_score Int         @default(0)
+  City             City        @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Subject at City")
+  SubjectType      SubjectType @relation(fields: [subject_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Subject belongs to Type")
+  Institution      Institution @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Subject offered by Institution")
+  UserAd           UserAd[]
+
+  @@id([url, institution_id], map: "Subjectnew_pkey")
+}
+
+model SubjectType {
+  id      Int       @id @default(autoincrement())
+  url     String    @unique(map: "Unique SubjectType URL") @db.VarChar
+  name_en String?   @db.VarChar
+  name_de String?   @db.VarChar
+  Subject Subject[]
+}
+
+model User {
+  id             BigInt          @id(map: "UserInstitution_pkey") @default(autoincrement())
+  email          String          @unique(map: "Unique User Email") @db.VarChar
+  display_name   String?         @db.VarChar
+  password       String          @db.VarChar
+  institution_id Int             @unique(map: "Unique Institution ID in User")
+  Institution    Institution     @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User belongs to Institution")
+  UserAd         UserAd[]
+  UserImages     UserImages[]
+  UserSessionID  UserSessionID[]
+}
+
+model UserAd {
+  id           BigInt      @id(map: "PremiumAd_pkey") @default(autoincrement())
+  user_id      BigInt
+  booked_until BigInt
+  level        Int
+  subject_id   Int?
+  type         String      @db.VarChar
+  placement    String[]    @db.VarChar
+  size         Int         @default(1)
+  description  String?     @db.VarChar
+  image_id     String?     @db.VarChar
+  UserImages   UserImages? @relation(fields: [image_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Ad has image")
+  Subject      Subject?    @relation(fields: [subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Ad is for Subject")
+  User         User        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User has Premium Ads")
+}
+
+model UserImages {
+  id      String   @id @db.VarChar
+  user_id BigInt
+  User    User     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User has images")
+  UserAd  UserAd[]
+}
+
+model UserSessionID {
+  token    String @id(map: "Session_ID_pkey") @db.VarChar
+  user_id  BigInt
+  lifetime BigInt
+  User     User   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User has Sessions")
+}

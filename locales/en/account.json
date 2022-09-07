@@ -1,0 +1,23 @@
+{
+  "menu-item-home": "Home",
+  "menu-item-newad": "Create new ad",
+  "menu-item-manageads": "Manage ads",
+  "menu-item-history": "History",
+  "menu-item-support": "Contact our support",
+  "menu-item-settings": "Settings",
+  "menu-item-logout": "Log out",
+  "menu-item-openmain": "Open Uni-Index",
+  "menu-item-institution": "Open Institution Page",
+
+  "ad-col-id": "ID",
+  "ad-col-booked-until": "Booked until",
+  "ad-col-type": "Type",
+  "ad-col-size": "Size",
+  "ad-col-level": "Level",
+
+  "ad-size-small": "Small",
+  "ad-size-medium": "Medium",
+  "ad-size-large": "Large",
+  "ad-type-institution": "Institution",
+  "ad-type-subject": "Subject"
+}
