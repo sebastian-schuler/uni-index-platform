@@ -1,8 +1,8 @@
 import { Card, createStyles, Image, Text } from '@mantine/core';
 import Link from 'next/link';
-import path from 'path';
 import React, { memo } from 'react';
 import { PATH_PLACEHOLDER_IMAGES } from '../../../lib/urlConstants';
+import { toLink } from '../../../lib/util';
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -22,7 +22,7 @@ interface Props {
     title: string
     headline: string
     subtext: string
-    imgUrl: string
+    imgUrl?: string
     description: string
     colHeight: number
     disableLink?: boolean
@@ -33,9 +33,9 @@ const LargeAd: React.FC<Props> = ({ title, link, headline, subtext, imgUrl, desc
     const { classes } = useStyles();
     if (disableLink) {
         return (
-            <Card component='div' withBorder radius="md" className={classes.card} title={title} sx={{height: colHeight}}>
+            <Card component='div' withBorder radius="md" shadow="sm" className={classes.card} title={title} sx={{height: colHeight}}>
                 <Card.Section>
-                    <Image src={imgUrl || path.join(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={130} />
+                    <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={130} />
                 </Card.Section>
                 <Text className={classes.title} weight={500}>
                     {headline}
@@ -52,10 +52,10 @@ const LargeAd: React.FC<Props> = ({ title, link, headline, subtext, imgUrl, desc
 
     return (
         <Link href={link} passHref>
-            <Card component='a' withBorder radius="md" className={classes.card} title={title} sx={{height: colHeight}}>
+            <Card component='a' withBorder radius="md" shadow="sm" className={classes.card} title={title} sx={{height: colHeight}}>
 
                 <Card.Section>
-                    <Image src={imgUrl || path.join(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={130} />
+                    <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={130} />
                 </Card.Section>
 
                 <Text className={classes.title} weight={500}>

@@ -35,7 +35,7 @@ export default async function handler(
         return;
 
         // If session lifetime is up
-    }else if( Number(session.lifetime) < Date.now() ){
+    } else if (Number(session.lifetime) < Date.now()) {
         removeUserSession(session.token);
         res.writeHead(401, { 'Content-Type': 'text/plain' });
         res.end('Token expired');
@@ -55,34 +55,36 @@ export default async function handler(
             return;
         }
 
-        console.log(fields)
+        const { type, size, until, description, subject } = fields;
+
+        console.log(type,size,until,description,subject);
 
         const keys = Object.keys(files);
 
-        console.log(keys)
+        console.log("keys: ", keys);
 
         if (keys.length > 0) {
             const file = files[keys[0]] as formidable.File;
 
             console.log(file.size);
 
-            addNewAd(
-                0,
-                Number(fields.until),
-                fields.adtype as string,
-                Number(fields.adsize),
-                [],
-                Number(fields.user_id),
-                Number(fields.subject_id),
-                fields.description as string,
-                "",
-            );
+            // addNewAd(
+            //     0,
+            //     Number(fields.until),
+            //     fields.adtype as string,
+            //     Number(fields.adsize),
+            //     [],
+            //     Number(fields.user_id),
+            //     Number(fields.subject_id),
+            //     fields.description as string,
+            //     "",
+            // );
 
-            // fs.promises.copyFile(file.filepath, path.join('uploads','bild.jpg') ).then(() => {
-            //     console.log("ok");
-            // }).catch((err) => {
-            //     console.log(err)
-            // });
+            fs.promises.copyFile(file.filepath, path.join('uploads', 'bild.jpg')).then(() => {
+                console.log("ok");
+            }).catch((err) => {
+                console.log(err)
+            });
 
         }
 

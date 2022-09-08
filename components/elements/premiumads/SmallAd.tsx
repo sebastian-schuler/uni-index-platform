@@ -30,7 +30,7 @@ const SmallAd: React.FC<Props> = ({ title, link, headline, subtext, colHeight, d
     if (!disableLink) {
         return (
             <Link href={link} passHref>
-                <Card component='a' withBorder radius="md" className={classes.card} title={title} sx={{ height: colHeight }}>
+                <Card component='a' withBorder radius="md" shadow="sm" className={classes.card} title={title} sx={{ height: colHeight }}>
 
                     <Text className={classes.title} weight={500}>
                         {headline}
@@ -44,7 +44,7 @@ const SmallAd: React.FC<Props> = ({ title, link, headline, subtext, colHeight, d
         )
     } else {
         return (
-            <Card component='div' withBorder radius="md" className={classes.card} title={title} sx={{ height: colHeight }}>
+            <Card component='div' withBorder radius="md" shadow="sm" className={classes.card} title={title} sx={{ height: colHeight }}>
 
                 <Text className={classes.title} weight={500}>
                     {headline}

@@ -1,8 +1,8 @@
-import { Card, createStyles, Image, Text, Group, Box } from '@mantine/core'
+import { Box, Card, createStyles, Group, Image, Text } from '@mantine/core'
 import Link from 'next/link'
-import path from 'path'
 import React, { memo } from 'react'
 import { PATH_PLACEHOLDER_IMAGES } from '../../../lib/urlConstants'
+import { toLink } from '../../../lib/util'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -25,7 +25,7 @@ interface Props {
     title: string
     headline: string
     subtext: string
-    imgUrl: string
+    imgUrl?: string
     colHeight: number
     disableLink?: boolean
 }
@@ -36,10 +36,10 @@ const MediumAd: React.FC<Props> = ({ title, link, headline, subtext, imgUrl, col
 
     if (disableLink) {
         return (
-            <Card component='div' withBorder radius="md" p={0} className={classes.card} title={title} >
+            <Card component='div' withBorder radius="md" shadow="sm" p={0} className={classes.card} title={title} >
                 <Group noWrap spacing={0}>
                     <Box sx={{ width: "50%" }}>
-                        <Image src={imgUrl || path.join(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} />
+                        <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} />
                     </Box>
                     <div className={classes.body}>
                         <Text transform="uppercase" color="dimmed" weight={700} size="xs">
@@ -59,10 +59,10 @@ const MediumAd: React.FC<Props> = ({ title, link, headline, subtext, imgUrl, col
 
     return (
         <Link href={link} passHref>
-            <Card component='a' withBorder radius="md" p={0} className={classes.card} title={title} >
+            <Card component='a' withBorder radius="md" shadow="sm" p={0} className={classes.card} title={title} >
                 <Group noWrap spacing={0}>
                     <Box sx={{ width: "50%" }}>
-                        <Image src={imgUrl || path.join(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} />
+                        <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} />
                     </Box>
                     <div className={classes.body}>
                         <Text transform="uppercase" color="dimmed" weight={700} size="xs">
