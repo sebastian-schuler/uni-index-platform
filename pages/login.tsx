@@ -1,39 +1,63 @@
-import { Avatar, Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import {
+  Anchor, Box, Button,
+  Center, Checkbox, createStyles, Group, Paper, PasswordInput, Stack, Text, TextInput, Title, useMantineTheme
+} from '@mantine/core';
+import { IconArrowLeft } from '@tabler/icons';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import PasswordInput from '../components/elements/accounts/PasswordInput';
+import ForgotPassword from '../components/layout/account/ForgotPassword';
 import LayoutContainer from '../components/layout/LayoutContainer';
-import Link from '../components/mui/NextLinkMui';
 import { useAuth } from '../context/SessionContext';
-import { URL_REGISTER } from '../data/urlConstants';
 import { LoginStatus } from '../lib/types/AccountHandlingTypes';
-import { toLink } from '../lib/util';
+import { URL_REGISTER } from '../lib/urlConstants';
 
-type Props = {
+const useStyles = createStyles((theme) => ({
+  title: {
+    fontSize: 26,
+    fontWeight: 900,
+    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+  },
 
-}
+  controls: {
+    [theme.fn.smallerThan('xs')]: {
+      flexDirection: 'column-reverse',
+    },
+  },
 
-const CustomerLogin: NextPage<Props> = props => {
+  control: {
+    [theme.fn.smallerThan('xs')]: {
+      width: '100%',
+      textAlign: 'center',
+    },
+  },
+
+  link: {
+    color: theme.colors.brandOrange[5],
+  }
+}));
+
+const CustomerLogin: NextPage = () => {
+
+  const theme = useMantineTheme();
+  const { classes } = useStyles();
 
   // Router
   const router = useRouter();
   // AuthContext
   const { token, setAuthToken } = useAuth();
-  // If a token exists, assume its valid and redirect to account page, it will be checked there anyway to get data
-  if (token !== "") {
-    router.replace('/account');
-    return (<></>);
-  }
+
 
   // Login fields
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   // Errors
-  const [isUsernameError, setIsUsernameError] = useState<boolean>(false);
-  const [isPasswordError, setIsPasswordError] = useState<boolean>(false);
+  const [usernameError, setUsernameError] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string>("");
+
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   // Translation
   const { t } = useTranslation('loginLogout');
@@ -64,17 +88,16 @@ const CustomerLogin: NextPage<Props> = props => {
 
       // Set context and cookie and go to account page
       setAuthToken(token, lifetime);
-      router.replace('/account');
 
     } else {
       const status: LoginStatus = res.status;
 
       if (status === "NO_USER") {
-        setIsUsernameError(true);
+        setUsernameError("No user with this username");
 
       } else if (status === "NO_AUTH") {
-        setIsPasswordError(true);
-        setIsUsernameError(false);
+        setPasswordError("Wrong password");
+        setUsernameError("");
 
       } else {
         console.log("Something went wrong.");
@@ -84,15 +107,94 @@ const CustomerLogin: NextPage<Props> = props => {
 
   // Listen to enter key pressed
   const handleEnterPressed = (key: string) => {
-    if (key === "Enter") {
+    if (key === "Enter" && username !== "" && password !== "") {
       submitLogin();
     }
   }
 
+  // If a token exists, assume its valid and redirect to account page, it will be checked there anyway to get data
+  if (token !== "") {
+    router.replace('/account');
+    return (<></>);
+  }
+
   return (
     <LayoutContainer>
+      <Center>
+        <Stack spacing={0}>
 
-      <Grid
+          {
+            showForgotPassword ?
+              <ForgotPassword setShowForgotPassword={setShowForgotPassword} /> :
+              (
+                <>
+                  <Title
+                    align="center"
+                    sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+                  >
+                    Welcome back!
+                  </Title>
+                  <Text color="dimmed" size="sm" align="center" mt={5}>
+                    Do not have an account yet?{' '}
+                    <Anchor href={URL_REGISTER} size="sm" className={classes.link}>
+                      Create account
+                    </Anchor>
+                  </Text>
+
+                  <Paper component='form' withBorder shadow="md" p={30} mt={30} radius="md" sx={{ maxWidth: 400, backgroundColor: theme.colors.light[0] }}>
+                    <TextInput
+                      autoComplete='username'
+                      value={username}
+                      onChange={(event) => setUsername(event.currentTarget.value)}
+                      label="Email"
+                      placeholder="name@uni.de"
+                      required
+                      error={usernameError}
+                    />
+                    <PasswordInput
+                      autoComplete='current-password'
+                      value={password}
+                      onChange={(event) => setPassword(event.currentTarget.value)}
+                      onKeyDown={(event) => handleEnterPressed(event.key)}
+                      label="Password"
+                      placeholder="Your password"
+                      required
+                      mt="md"
+                      error={passwordError}
+                    />
+                    <Group position="apart" mt="md">
+                      <Checkbox label="Remember me" />
+                      <Anchor
+                        component='a'
+                        onClick={(event) => {
+                          event.preventDefault()
+                          setShowForgotPassword(true);
+                        }}
+                        size="sm"
+                        className={classes.link}
+                      >
+                        Forgot password?
+                      </Anchor>
+                    </Group>
+                    <Button radius={"md"} fullWidth mt="xl" onClick={submitLogin} disabled={username === "" || password === ""}>
+                      Sign in
+                    </Button>
+                  </Paper>
+                </>
+              )
+          }
+
+        </Stack>
+      </Center>
+    </LayoutContainer>
+  )
+
+}
+
+export default CustomerLogin
+
+
+{/* <Grid
         container
         sx={{
           marginY: 8,
@@ -107,7 +209,6 @@ const CustomerLogin: NextPage<Props> = props => {
 
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-                {/* <LockOutlinedIcon /> */}
               </Avatar>
               <Typography component="h1" variant="h5">
                 {langContent.loginTitle}
@@ -160,17 +261,4 @@ const CustomerLogin: NextPage<Props> = props => {
 
           </Paper>
         </Grid>
-      </Grid>
-    </LayoutContainer>
-  )
-
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-}
-
-
-export default CustomerLogin
+      </Grid> */}

@@ -1,22 +1,20 @@
 import {
-  ActionIcon,
   Anchor,
   Burger, Center, createStyles, Divider, Drawer, Group, Header, Menu, Stack, Text
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconChevronDown, IconSettings } from '@tabler/icons';
+import { IconChevronDown } from '@tabler/icons';
 import Link from 'next/link';
-import { useState } from 'react';
 import ResponsiveContainer from '../ResponsiveContainer';
-import LanguageModal from './LanguageModal';
 
-const HEADER_HEIGHT = 60;
+export const HEADER_HEIGHT = 60;
 
 const useStyles = createStyles((theme) => ({
   header: {
     backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
     borderBottom: 0,
-    color: theme.white
+    color: theme.white,
+    boxShadow: theme.shadows.sm,
   },
 
   inner: {
@@ -92,17 +90,6 @@ interface NestedLinkProps {
 
 const WebsiteHeader = () => {
 
-  // const mainLinks: LinkProps[] = [
-  //   { label: "Home", link: "/" },
-  //   { label: "Locations", link: "/locations" },
-  //   { label: "Subjects", link: "/subjects" },
-  //   { label: "Institutions", link: "/institutions" },
-  // ]
-  // const userLinks: LinkProps[] = [
-  //   { label: "Social Media Ranking", link: "/social-media-ranking" },
-  //   { label: "Account", link: "/login" },
-  // ]
-
   const links: NestedLinkProps[] = [
     { parent: { label: "Home", link: "/" }, children: [] },
     { parent: { label: "Locations", link: "/locations" }, children: [] },
@@ -153,7 +140,7 @@ const WebsiteHeader = () => {
 
   return (
     <>
-      <Header height={HEADER_HEIGHT} className={classes.header}>
+      <Header height={HEADER_HEIGHT} className={classes.header} fixed zIndex={9999}>
         <ResponsiveContainer>
           <div className={classes.inner}>
             {/* <MantineLogo size={28} inverted /> */}

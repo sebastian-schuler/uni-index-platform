@@ -1,5 +1,5 @@
 import React from 'react'
-import { URL_INSTITUTION, URL_LOCATION, URL_SUBJECT } from '../../../data/urlConstants'
+import { URL_INSTITUTION, URL_LOCATION, URL_SUBJECT } from '../../../lib/urlConstants'
 import { LinkableCity, LinkableInstitution, LinkableSubject } from '../../../lib/types/Linkables'
 import { toLink } from '../../../lib/util'
 import InternalLink from '../InternalLink'

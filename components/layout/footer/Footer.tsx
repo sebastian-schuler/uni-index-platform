@@ -1,11 +1,10 @@
-import { Box, Grid, Stack, Text, Title, useMantineTheme } from '@mantine/core';
+import { Box, Grid, Stack, Title, useMantineTheme, Divider, Text } from '@mantine/core';
 import { City, Country, State } from '@prisma/client';
 import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import Link from 'next/link';
 import { memo } from 'react';
-import { URL_LOGIN, URL_REGISTER } from '../../../data/urlConstants';
 import { Searchable } from '../../../lib/types/UiHelperTypes';
+import { URL_LOGIN, URL_REGISTER } from '../../../lib/urlConstants';
 import { getLocalizedName, toLink } from '../../../lib/util';
 import MantineLink from '../../elements/MantineLink';
 import ResponsiveContainer from '../ResponsiveContainer';
@@ -60,7 +59,7 @@ const Footer: NextPage<Props> = props => {
             } else if (val.type === "Searchable") {
                 const searchable = val.data as Searchable[];
                 searchable.forEach(val => {
-                    dataRow.content.push({ name: val.data.name, url: '/location/' + val.data.url })
+                    dataRow.content.push({ name: getLocalizedName({ lang: lang, searchable: val }), url: '/location/' + val.data.url })
                 });
             }
 
@@ -70,8 +69,8 @@ const Footer: NextPage<Props> = props => {
 
     return (
 
-        <Box component={'footer'} sx={{ backgroundColor: theme.colors.brandGray[5], color: theme.white, py: 6 }}>
-            <ResponsiveContainer paddingY>
+        <Box component={'footer'} sx={{ backgroundColor: theme.colors.brandGray[5], color: theme.white }}>
+            <ResponsiveContainer sx={{ paddingTop: 64, paddingBottom: 32 }}>
 
                 <Grid gutter={1}>
                     {
@@ -85,7 +84,7 @@ const Footer: NextPage<Props> = props => {
                                         {
 
                                             footerList.content.map((item, j) => (
-                                                <MantineLink key={item.name+j} label={item.name} url={item.url} />
+                                                <MantineLink key={item.name + j} label={item.name} url={item.url} />
                                             ))
 
                                         }
@@ -95,6 +94,10 @@ const Footer: NextPage<Props> = props => {
                         })
                     }
                 </Grid>
+
+                <Divider mt={16} mb={16} sx={{ opacity: 0.5 }} />
+
+                <Text align='center' size={"sm"} color={"dimmed"}>Copyright @ Uni-Index</Text>
 
             </ResponsiveContainer>
         </Box>

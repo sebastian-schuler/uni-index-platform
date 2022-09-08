@@ -1,8 +1,7 @@
-import { Grid } from '@mui/material';
+import { Group, SimpleGrid, Stack } from '@mantine/core';
 import { SubjectType } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import GenericPageHeader from '../../../components/elements/GenericPageHeader';
 import SubjectCard from '../../../components/elements/itemcards/SubjectCard';
@@ -15,26 +14,23 @@ import { getCountries, getSubjectsDetailedByCategory, getSubjectType } from '../
 import { DetailedSubject } from '../../../lib/types/DetailedDatabaseTypes';
 import { getDBLocale, getLocalizedName } from '../../../lib/util';
 
-type Props = {
+interface Props {
   subjectTypeInfo: SubjectType,
   subjects: DetailedSubject[],
   footerContent: FooterContent[],
 }
 
-const SubjectCategoryPage: NextPage<Props> = props => {
-
-  const { subjectTypeInfo, subjects, footerContent } = props;
+const SubjectCategoryPage: NextPage<Props> = ({ subjectTypeInfo, subjects, footerContent }: Props) => {
 
   const { t, lang } = useTranslation('subject');
   const langContent = {
     pageTitle: t('common:page-title')
   }
 
-  const query = useRouter().query;
-  const courseTypeName = getLocalizedName({ lang: lang, any: props.subjectTypeInfo });
+  const courseTypeName = getLocalizedName({ lang: lang, any: subjectTypeInfo });
 
   return (
-    <LayoutContainer footerContent={props.footerContent}>
+    <LayoutContainer footerContent={footerContent}>
 
       <Meta
         title={langContent.pageTitle + " - " + courseTypeName}
@@ -42,44 +38,43 @@ const SubjectCategoryPage: NextPage<Props> = props => {
       />
 
 
-      <Breadcrumb subjectTypeInfo={props.subjectTypeInfo} />
+      <Breadcrumb subjectTypeInfo={subjectTypeInfo} />
 
-      <GenericPageHeader title={courseTypeName} description={"Find courses of this type"} />
+      <Stack>
 
-      <Grid container columnSpacing={4}>
+        <GenericPageHeader title={courseTypeName} description={"Find courses of this type"} />
 
-        <Grid item xs={12} sm={3} xl={2}>
-          ffffffffffffffffffffffffffff
+        <Group position='apart' >
           {/* <SearchBox
             label={langContent.searchLabel}
             placeholder={langContent.searchPlaceholder}
             searchableList={dataList}
             setSearchableList={setDataList}
-            /> */}
-        </Grid>
+          />
+          <OrderBySelect orderBy={orderBy} handleChange={handleOrderChange} /> */}
+        </Group>
 
-        <Grid item
-          xs={12} sm={9} xl={10}
-          flexGrow={1}
-          component={'section'}
+        <SimpleGrid
+          cols={4}
+          spacing="lg"
+          breakpoints={[
+            { maxWidth: 980, cols: 3, spacing: 'md' },
+            { maxWidth: 755, cols: 2, spacing: 'sm' },
+            { maxWidth: 600, cols: 1, spacing: 'sm' },
+          ]}
         >
+          {
+            subjects.map((subject, i) => (
+              // searchableCountry.visible && (
+                <SubjectCard key={i} subject={subject} />
+              // )
+            ))
+          }
+        </SimpleGrid>
 
-          <Grid container columnSpacing={4}>
-            {
-              subjects.map((subject, i) => (
+      </Stack>
 
-                <Grid key={i} item xs={4} sm={5} xl={3}>
-                  <SubjectCard subject={subject} />
-                </Grid>
-
-              ))
-            }
-          </Grid>
-
-        </Grid>
-      </Grid>
-
-    </LayoutContainer>
+    </LayoutContainer >
   )
 }
 

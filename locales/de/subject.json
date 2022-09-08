@@ -1,4 +1,7 @@
 {
     "subjects-title": "Fächer",
-    "subjects-title-sub": "Finde ein Studienfach deiner Wahl."
+    "subjects-title-sub": "Finde ein Studienfach deiner Wahl.",
+
+    "subjecttype-search-label": "Eine Fachrichtung suchen",
+    "subjecttype-search-placeholder": "z.B. Marketing"
 }

@@ -63,7 +63,7 @@ const institutions: NextPage<Props> = props => {
 export const getStaticProps: GetStaticProps = async (context) => {
 
     const countryList = await getDetailedCountries();
-    const searchableCountries = generateSearchable(context.locale, countryList);
+    const searchableCountries = generateSearchable({ lang: context.locale, array: { type: "Country", data: countryList } });
 
     // Ads
     const ads: DetailedPremiumAd[] = await getAds(AD_PAGE_INSTITUTIONS);

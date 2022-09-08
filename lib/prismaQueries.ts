@@ -1,6 +1,7 @@
 import { Subject } from '@prisma/client';
 import prisma from '../lib/prisma';
 import { InstitutionRegistrationDBItem } from "./types/AccountHandlingTypes";
+import { DetailedSubject } from './types/DetailedDatabaseTypes';
 import { LinkableCity, LinkableInstitution, LinkableSubject } from "./types/Linkables";
 import { SocialMediaDBEntry } from './types/SocialMediaTypes';
 
@@ -139,7 +140,7 @@ export const getSubjectTypeSubjectCount = async (typeUrl: string) => {
 // ===========================================================
 
 // Return DetailedSubjects, where SubjectType is URL parameter 
-export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string) => {
+export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string): Promise<DetailedSubject[]> => {
     return await prisma.subject.findMany({
         include: {
             SubjectType: true,
@@ -156,6 +157,27 @@ export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string) 
             SubjectType: {
                 url: subjectCategoryUrl
             }
+        }
+    });
+}
+
+// Return DetailedSubjects, where institutionId is parameter
+export const getSubjectsDetailedByInstitution = async (institutionId: number) => {
+
+    return await prisma.subject.findMany({
+        include: {
+            SubjectType: true,
+            Institution: true,
+            City: {
+                select: {
+                    State: {
+                        select: { Country: true }
+                    }
+                }
+            }
+        },
+        where: {
+            institution_id: institutionId
         }
     });
 }
@@ -285,23 +307,6 @@ export const getSubjectsInstitutionByName = async (subjectName: string) => {
             name: subjectName
         }
     });
-}
-
-// Return Subjects + corresponding SubjectType, where Institution is URL parameter, order by name
-export const getSubjectsSubjectTypeByInstitution = async (institutionUrl: string, orderBy: OrderBy) => {
-    return await prisma.subject.findMany({
-        include: {
-            SubjectType: true
-        },
-        where: {
-            Institution: {
-                url: institutionUrl
-            }
-        },
-        orderBy: {
-            name: orderBy
-        }
-    })
 }
 
 // Return States + corresponding City+Country, where Country is URL parameter, order by localized name
@@ -584,7 +589,7 @@ export const getSocialMedia = async (institutionId: number) => {
     });
 }
 
-export const getSubject = async (subjectUrl: string, institutionUrl: string):Promise<Subject | null> => {
+export const getSubject = async (subjectUrl: string, institutionUrl: string): Promise<Subject | null> => {
 
     const institutionId = (await getInstitutionIdByUrl(institutionUrl))?.id ?? null;
 

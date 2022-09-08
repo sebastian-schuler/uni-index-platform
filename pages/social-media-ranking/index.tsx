@@ -1,4 +1,3 @@
-import { DataGrid, GridColDef, GridValueFormatterParams } from '@mui/x-data-grid'
 import { GetStaticProps, NextPage } from 'next'
 import Breadcrumb from '../../components/layout/Breadcrumb'
 import { FooterContent } from '../../components/layout/footer/Footer'
@@ -6,58 +5,59 @@ import LayoutContainer from '../../components/layout/LayoutContainer'
 import { getDetailedCountries } from '../../lib/prismaDetailedQueries'
 import { getAllSocialMedia } from '../../lib/prismaQueries'
 import { SocialMediaDBEntry, SocialMediaRankingItem } from '../../lib/types/SocialMediaTypes'
+import { Searchable } from '../../lib/types/UiHelperTypes'
 import { generateSearchable } from '../../lib/util'
 
-const columns: GridColDef[] = [
-    {
-        field: 'id',
-        headerName: 'Rank',
-        type: 'number',
-        width: 70
-    },
-    {
-        field: 'name',
-        headerName: 'Name',
-        flex: 1,
-    },
-    {
-        field: 'country',
-        headerName: 'Country',
-        flex: 0.5,
-    },
-    {
-        field: 'totalScore',
-        headerName: 'Total Score',
-        type: 'number',
-        flex: 0.3,
-        valueFormatter: (params: GridValueFormatterParams<number>) => {
-            if (params.value == null) return '';
-            const rounded = Math.round((params.value + Number.EPSILON) * 100) / 100;
-            return `${rounded} %`;
-        },
-    },
-    {
-        field: 'twitterScore',
-        headerName: 'Twitter Score',
-        type: 'number',
-        flex: 0.3,
-        valueFormatter: (params: GridValueFormatterParams<number>) => {
-            if (params.value == null) return '';
-            const rounded = Math.round((params.value + Number.EPSILON) * 100) / 100;
-            return `${rounded} %`;
-        },
-    },
-    {
-        field: 'youtubeScore',
-        headerName: 'YouTube Score',
-        type: 'number',
-        flex: 0.3,
-        valueFormatter: (params: GridValueFormatterParams<number>) => {
-            if (params.value == null) return '';
-            const rounded = Math.round((params.value + Number.EPSILON) * 100) / 100;
-            return `${rounded} %`;
-        },
-    },
+// const columns: GridColDef[] = [
+//     {
+//         field: 'id',
+//         headerName: 'Rank',
+//         type: 'number',
+//         width: 70
+//     },
+//     {
+//         field: 'name',
+//         headerName: 'Name',
+//         flex: 1,
+//     },
+//     {
+//         field: 'country',
+//         headerName: 'Country',
+//         flex: 0.5,
+//     },
+//     {
+//         field: 'totalScore',
+//         headerName: 'Total Score',
+//         type: 'number',
+//         flex: 0.3,
+//         valueFormatter: (params: GridValueFormatterParams<number>) => {
+//             if (params.value == null) return '';
+//             const rounded = Math.round((params.value + Number.EPSILON) * 100) / 100;
+//             return `${rounded} %`;
+//         },
+//     },
+//     {
+//         field: 'twitterScore',
+//         headerName: 'Twitter Score',
+//         type: 'number',
+//         flex: 0.3,
+//         valueFormatter: (params: GridValueFormatterParams<number>) => {
+//             if (params.value == null) return '';
+//             const rounded = Math.round((params.value + Number.EPSILON) * 100) / 100;
+//             return `${rounded} %`;
+//         },
+//     },
+//     {
+//         field: 'youtubeScore',
+//         headerName: 'YouTube Score',
+//         type: 'number',
+//         flex: 0.3,
+//         valueFormatter: (params: GridValueFormatterParams<number>) => {
+//             if (params.value == null) return '';
+//             const rounded = Math.round((params.value + Number.EPSILON) * 100) / 100;
+//             return `${rounded} %`;
+//         },
+//     },
     // {
     //     field: 'fullName',
     //     headerName: 'Full name',
@@ -67,16 +67,14 @@ const columns: GridColDef[] = [
     //     valueGetter: (params: GridValueGetterParams) =>
     //         `${params.row.firstName || ''} ${params.row.lastName || ''}`,
     // },
-];
+// ];
 
-type Props = {
+interface Props {
     stringifiedSocialMediaItems: string
     footerContent: FooterContent[]
 }
 
-const SocialMediaRanking: NextPage<Props> = props => {
-
-    const { stringifiedSocialMediaItems, footerContent } = props;
+const SocialMediaRanking: NextPage<Props> = ({stringifiedSocialMediaItems,footerContent}:Props) => {
 
     // Calculate % values for each social media
 
@@ -112,13 +110,17 @@ const SocialMediaRanking: NextPage<Props> = props => {
             <Breadcrumb />
 
             {/* <div style={{ height: 400, width: '100%' }}> */}
-            <DataGrid
+
+
+            {/* <DataGrid
                 rows={socialMediaTableItems}
                 columns={columns}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
                 autoHeight
-            />
+            /> */}
+
+
             {/* </div> */}
 
             {/* {
@@ -173,8 +175,8 @@ const getMaxMin = (socialMediaList: SocialMediaDBEntry[]) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
-    const countryList = await getDetailedCountries();
-    const searchableCountries = generateSearchable(context.locale, countryList);
+    const detailedCountries = await getDetailedCountries();
+    const searchableCountries: Searchable[] = generateSearchable({ lang: context.locale, array: { type: "Country", data: detailedCountries } });
 
     // SOCIAL MEDIA
     const socialMediaList = await getAllSocialMedia();

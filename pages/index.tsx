@@ -1,5 +1,5 @@
-import { Grid, Stack, useMantineTheme } from '@mantine/core';
-import type { GetStaticPropsContext, NextPage } from 'next';
+import { Grid, Stack } from '@mantine/core';
+import type { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import PremiumList from '../components/container/PremiumList';
 import HeroSection from '../components/elements/index/HeroSection';
@@ -9,12 +9,13 @@ import SubjectCard from '../components/elements/itemcards/SubjectCard';
 import { FooterContent } from '../components/layout/footer/Footer';
 import PopularSection from '../components/layout/index/PopularSection';
 import LayoutContainer from '../components/layout/LayoutContainer';
-import ResponsiveContainer from '../components/layout/ResponsiveContainer';
 import Meta from '../components/partials/Meta';
 import { AD_PAGE_INDEX } from '../lib/appConstants';
 import { getPopularDetailedCountries } from '../lib/prismaDetailedQueries';
 import { getAds, getCountries, getInstitutesByPopularity, getSubjectsByPopularity } from '../lib/prismaQueries';
 import { DetailedCountry, DetailedInstitution, DetailedPremiumAd, DetailedSubject } from '../lib/types/DetailedDatabaseTypes';
+import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/urlConstants';
+import { toLink } from '../lib/util';
 
 interface Props {
   adsStringified: string,
@@ -26,10 +27,7 @@ interface Props {
 
 const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountries, popularInstitutes, footerContent }: Props) => {
 
-
   const ads: DetailedPremiumAd[] = JSON.parse(adsStringified);
-  const theme = useMantineTheme();
-
   const { t } = useTranslation('common');
   const langContent = {
     pageTitle: t('page-title'),
@@ -55,14 +53,12 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
 
       <HeroSection />
 
-      {/* ITEM COL */}
-
-      <Stack spacing={'lg'}>
+      <Stack spacing={0} mb={"xl"}>
 
         <PopularSection
           title={langContent.titlePopularCourses}
           buttonText={langContent.linkCourses}
-          buttonUrl='/subjects'
+          buttonUrl={toLink(URL_SUBJECTS)}
         >
           {
             popularSubjects.map((subject, i) => (
@@ -76,7 +72,7 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
         <PopularSection
           title={langContent.titlePopularInstitutions}
           buttonText={langContent.linkInstitutions}
-          buttonUrl='/institutes'
+          buttonUrl={toLink(URL_INSTITUTIONS)}
           brandColor
         >
           {
@@ -93,8 +89,7 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
         <PopularSection
           title={langContent.titlePopularLocations}
           buttonText={langContent.linkLocations}
-          buttonUrl='/locations'
-
+          buttonUrl={toLink(URL_LOCATIONS)}
         >
           {
             popularCountries.map((country, i) => (
@@ -105,9 +100,7 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
           }
         </PopularSection>
 
-        {/* <ResponsiveContainer> */}
-        <PremiumList premiumAds={ads} />
-        {/* </ResponsiveContainer> */}
+        <PremiumList premiumAds={ads} wrapInContainer />
 
       </Stack>
 
@@ -115,7 +108,7 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
   )
 }
 
-export async function getStaticProps(context: GetStaticPropsContext) {
+export const getStaticProps: GetStaticProps = async (context) => {
 
   // Popular ...
   const popularSubjectsDetailed: DetailedSubject[] = await getSubjectsByPopularity(10);

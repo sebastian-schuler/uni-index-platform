@@ -1,64 +1,5 @@
 import { MantineThemeOverride } from '@mantine/core';
 
-
-// declare module '@mui/material/styles' {
-//   interface Palette {
-//     tertiary: Palette['primary'];
-//   }
-
-//   // allow configuration using `createTheme`
-//   interface PaletteOptions {
-//     tertiary?: PaletteOptions['primary'];
-//   }
-// }
-
-// Create a theme instance.
-
-// const defaultTheme = createTheme();
-
-// let theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: '#FF9100',
-//       contrastText: '#fff',
-//       '500': '#FFA733',
-//     },
-//     secondary: {
-//       main: grey[900],
-//     },
-//     background: {
-//       default: '#F3F4F7',
-//     },
-//     tertiary:{
-//       main: '#AA0000',
-//     },
-//     error: {
-//       main: '#ED254E',
-//     },
-//     common: {
-//       white: '#fff',
-//       black: '#000',
-//     },
-//     text: {
-//       primary: '#212121',
-//     },
-//     mode: 'light',
-//   },
-
-// });
-
-// theme = createTheme(theme,{
-//   // components: {
-//   //   MuiListItemButton: {
-//   //     styleOverrides: {
-//   //       root: {
-
-//   //       }
-//   //     }
-//   //   }
-//   // }
-// });
-
 const appTheme: MantineThemeOverride = {
   colorScheme: 'light',
   colors: {
@@ -67,12 +8,32 @@ const appTheme: MantineThemeOverride = {
     'light': ['#FFFFFF'],
     'dark': ['#212121'],
   },
+  fontFamily: 'roboto, arial, sans-serif',
+  fontSizes: {
+    xs: 10,
+    sm: 12,
+    md: 14,
+    lg: 16,
+    xl: 20,
+  },
   white: '#F3F4F7',
   primaryColor: 'brandOrange',
   primaryShade: 5,
   defaultRadius: 0,
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 32,
+    xl: 64,
+  },
+  breakpoints: {
+    xs: 576,
+    sm: 768,
+    md: 992,
+    lg: 1200,
+    xl: 1400,
+  }
 };
-
-
 
 export default appTheme;

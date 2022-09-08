@@ -1,6 +1,4 @@
-import { Masonry } from '@mui/lab'
-import { Button, Card, CardContent, Grid, Stack, Typography } from '@mui/material'
-import { Box } from '@mui/system'
+
 import { Country, Institution, InstitutionSocialMedia } from '@prisma/client'
 import {
   Chart as ChartJS, Filler, Legend, LineElement, PointElement, RadialLinearScale, Tooltip
@@ -8,15 +6,21 @@ import {
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import { Radar } from 'react-chartjs-2'
+import InstitutionPaper from '../../../../components/elements/institution/InstitutionPaper'
 import Breadcrumb from '../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav'
-import Link from '../../../../components/mui/NextLinkMui'
 import Meta from '../../../../components/partials/Meta'
 import { getCountries, getCountry, getInstitution, getInstitutionPaths, getSocialMedia } from '../../../../lib/prismaQueries'
-import TwitterIcon from '@mui/icons-material/Twitter';
-import FacebookIcon from '@mui/icons-material/Facebook';
+import { Group, Paper, SimpleGrid, Grid, Title, Text, createStyles, useMantineTheme } from '@mantine/core';
+import SocialMediaStatCard from '../../../../components/elements/institution/SocialMediaStatCard'
+import {
+  IconBrandTwitter,
+  IconBrandInstagram,
+  IconBrandFacebook,
+  IconBrandYoutube
+} from '@tabler/icons';
 
 const data = {
   labels: ['Tweet Count %', 'Average Likes %', 'Average Retweets %', 'Average Interaction %', 'Profile completed %'],
@@ -63,19 +67,31 @@ ChartJS.register(
   Legend
 );
 
-type Props = {
+interface Props {
   institution: Institution,
   country: Country,
-  socialMedia: InstitutionSocialMedia,
+  socialMediaStringified: string,
   footerContent: FooterContent[],
 }
 
-const InstitutionSocialMedia: NextPage<Props> = props => {
+const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerContent, socialMediaStringified }: Props) => {
 
-  const { institution, country, footerContent, socialMedia } = props;
+  const theme = useMantineTheme();
+  const socialMedia: InstitutionSocialMedia = JSON.parse(socialMediaStringified);
 
   const facebookLink = socialMedia?.facebook_link;
   const twitterLink = socialMedia?.twitter_link;
+
+  const averagePoints = {
+    facebookAverage: 125,
+    twitterAverage: 5346,
+    instagramAverage: 425,
+    youtubeAverage: 2103,
+  }
+
+  const calculateSocialMediaDifference = (points: number, average: number) => {
+    return points === 0 ? -100 : (points - average) / 100
+  }
 
   return (
     <LayoutContainer footerContent={footerContent}>
@@ -89,62 +105,64 @@ const InstitutionSocialMedia: NextPage<Props> = props => {
 
       <InstitutionNav title={institution.name} />
 
-      <Masonry columns={2} spacing={2}>
-
-        <Card>
-          <CardContent>
-            <Stack>
-
-              <Typography variant='h6' component='h2'>
-                Quick Facts
-              </Typography>
-              <Typography variant='body2' component='p'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              </Typography>
-
-              <Stack direction={"row"} justifyContent={"space-between"} spacing={1}>
-
-                <Stack direction={"column"}>
-                  <Typography variant='overline' component='span' mt={2} lineHeight={1.2}>
-                    Total Score
-                  </Typography>
-                  <Typography variant='h5' component='h2'>
-                    84%
-                  </Typography>
-                </Stack>
-
-                <Stack direction={"column"}>
-                  <Typography variant='overline' component='span' mt={2} lineHeight={1.2}>
-                    National Rank
-                  </Typography>
-                  <Typography variant='h5' component='h2'>
-                    485th
-                  </Typography>
-                </Stack>
-
-                <Stack direction={"column"}>
-                  <Typography variant='overline' component='span' mt={2} lineHeight={1.2}>
-                    Difference to average
-                  </Typography>
-                  <Typography variant='h5' component='h2'>
-                    +12,5%
-                  </Typography>
-                </Stack>
-
-                <Stack direction={"column"}>
-                  <Typography variant='overline' component='span' mt={2} lineHeight={1.2}>
-                    Strongest category
-                    <br></br>
-                    (Tweet Count)
-                  </Typography>
-                  <Typography variant='h5' component='h2'>
-                    86%
-                  </Typography>
-                </Stack>
-
-              </Stack>
+      {/* <InstitutionPaper> */}
 
 
+
+      <Grid mt={"lg"}>
+
+        <Grid.Col md={8}>
+          <InstitutionPaper sx={{ borderRadius: 8 }}>
+            <Title order={2}>Social Media Statistics</Title>
+            <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
+          </InstitutionPaper>
+        </Grid.Col>
+
+        <Grid.Col md={4}>
+          <SimpleGrid cols={2}>
+            <SocialMediaStatCard
+              title='Twitter'
+              value={socialMedia.twitter_points} diff={calculateSocialMediaDifference(socialMedia.twitter_points, averagePoints.twitterAverage)}
+              icon={IconBrandTwitter}
+            />
+            <SocialMediaStatCard
+              title='Youtube'
+              value={socialMedia.youtube_points}
+              diff={calculateSocialMediaDifference(socialMedia.youtube_points, averagePoints.youtubeAverage)}
+              icon={IconBrandYoutube}
+            />
+            <SocialMediaStatCard
+              title='Instagram'
+              value={socialMedia.instagram_points}
+              diff={calculateSocialMediaDifference(socialMedia.instagram_points, averagePoints.instagramAverage)}
+              icon={IconBrandInstagram}
+            />
+            <SocialMediaStatCard
+              title='Facebook'
+              value={socialMedia.facebook_points}
+              diff={calculateSocialMediaDifference(socialMedia.facebook_points, averagePoints.facebookAverage)}
+              icon={IconBrandFacebook}
+            />
+          </SimpleGrid>
+        </Grid.Col>
+
+        <Grid.Col md={8}>
+
+          <InstitutionPaper sx={{ borderRadius: 8 }}>
+
+            <Radar
+              data={data}
+              options={options}
+            />
+
+          </InstitutionPaper>
+        </Grid.Col>
+
+      </Grid>
+
+      {/* </InstitutionPaper> */}
+
+      {/* 
             </Stack>
           </CardContent>
         </Card>
@@ -216,7 +234,7 @@ const InstitutionSocialMedia: NextPage<Props> = props => {
           </CardContent>
         </Card>
 
-      </Masonry>
+      </Masonry> */}
 
     </LayoutContainer>
   )
@@ -226,7 +244,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   let countryUrl = "" + context?.params?.Country;
   let institutionUrl = "" + context?.params?.Institution;
-  let localeDb = "" + context.locale;
 
   const country = await getCountry(countryUrl);
   const institution = await getInstitution(institutionUrl);
@@ -243,7 +260,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     props: {
       institution: institution,
       country: country,
-      socialMedia: socialMedia,
+      socialMediaStringified: JSON.stringify(socialMedia),
       footerContent: footerContent
     }
   }

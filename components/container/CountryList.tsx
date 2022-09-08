@@ -1,17 +1,15 @@
-import { Masonry } from '@mui/lab'
-import { SelectChangeEvent } from '@mui/material'
-import Grid from '@mui/material/Grid'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
+import { Group, SimpleGrid, Stack } from '@mantine/core'
 import useTranslation from 'next-translate/useTranslation'
 import { useEffect, useState } from 'react'
+import { DetailedCountry } from '../../lib/types/DetailedDatabaseTypes'
 import { Searchable } from '../../lib/types/UiHelperTypes'
+import GenericPageHeader from '../elements/GenericPageHeader'
 import CountryCard from '../elements/itemcards/CountryCard'
 import OrderBySelect, { OrderByState, sortSearchableArray } from '../elements/OrderBySelect'
 import Breadcrumb from '../layout/Breadcrumb'
 import SearchBox from '../partials/SearchBox'
 
-type Props = {
+interface Props {
     title: string,
     subtitle: string,
     root: "location" | "institution",
@@ -23,7 +21,7 @@ const CountryList = ({ title, subtitle, root, searchableCountries, children }: P
 
     const [dataList, setDataList] = useState<Searchable[]>(searchableCountries);
 
-    const { t } = useTranslation('common');
+    const { t, lang } = useTranslation('common');
     const langContent = {
         searchLabel: t('countries-search-label'),
         searchPlaceholder: t('countries-search-placeholder'),
@@ -32,80 +30,58 @@ const CountryList = ({ title, subtitle, root, searchableCountries, children }: P
     // Order by
     const [orderBy, setOrderBy] = useState<OrderByState>("relevance");
 
-    const handleOrderChange = (event: SelectChangeEvent) => {
-        setOrderBy(event.target.value as OrderByState);
+    const handleOrderChange = (selected: string | null) => {
+        if (selected && selected !== orderBy)
+            setOrderBy(selected as OrderByState);
     };
 
-    // Searchable
     useEffect(() => {
-        setDataList(searchableCountries);
-        return () => { setDataList([]); }
-    }, [searchableCountries]);
-
-    useEffect(() => {
-        setDataList(sortSearchableArray(dataList, orderBy));
+        setDataList(sortSearchableArray(dataList, orderBy, lang));
     }, [orderBy]);
 
     return (
-        <Grid container spacing={4}>
+        <>
 
-            <Grid item xs={12}>
-                <Breadcrumb />
-            </Grid>
+            <Breadcrumb />
 
-            <Grid item xs={12} sm={12} md={2}>
+            <Stack>
 
-                <SearchBox
-                    label={langContent.searchLabel}
-                    placeholder={langContent.searchPlaceholder}
-                    searchableList={dataList}
-                    setSearchableList={setDataList}
-                />
+                <GenericPageHeader title={title} description={subtitle} />
 
-            </Grid>
-
-            <Grid item
-                xs={12} sm={12} md={10}
-                flexGrow={1}
-                component={'section'}
-            >
-
-                <Stack spacing={4} direction={"row"} justifyContent={"space-between"}>
-
-                    <Stack sx={{ marginBottom: 1 }}>
-                        <Typography
-                            variant="h6"
-                            component="h2"
-                        >
-                            {title}
-                        </Typography>
-                        <Typography
-                            variant="subtitle1"
-                            component="span"
-                        >
-                            {subtitle}
-                        </Typography>
-                    </Stack>
-
+                <Group position='apart' >
+                    <SearchBox
+                        label={langContent.searchLabel}
+                        placeholder={langContent.searchPlaceholder}
+                        searchableList={dataList}
+                        setSearchableList={setDataList}
+                    />
                     <OrderBySelect orderBy={orderBy} handleChange={handleOrderChange} />
-                </Stack>
+                </Group>
 
-                <Masonry columns={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 3 }} spacing={3} sx={{ paddingX: 0, marginBottom: 6 }}>
+                <SimpleGrid
+                    cols={4}
+                    spacing="lg"
+                    breakpoints={[
+                        { maxWidth: 980, cols: 3, spacing: 'md' },
+                        { maxWidth: 755, cols: 2, spacing: 'sm' },
+                        { maxWidth: 600, cols: 1, spacing: 'sm' },
+                    ]}
+                >
                     {
                         dataList.map((searchableCountry, i) => (
                             searchableCountry.visible && (
-
-                                <CountryCard key={i} country={searchableCountry.data} linkType={root} />
-
+                                <CountryCard key={i} country={searchableCountry.data as DetailedCountry} linkType={root} />
                             )
                         ))
                     }
-                </Masonry>
+                </SimpleGrid>
+
                 {
                     children
                 }
-            </Grid>
-        </Grid>
+
+            </Stack>
+        </>
     )
 }
 

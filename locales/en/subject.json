@@ -1,4 +1,7 @@
 {
     "subjects-title": "Subjects",
-    "subjects-title-sub": "Find any subject of your choice."
+    "subjects-title-sub": "Find any subject of your choice.",
+
+    "subjecttype-search-label": "Search for a subject type",
+    "subjecttype-search-placeholder": "e.g. Marketing"
 }

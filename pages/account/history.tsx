@@ -1,12 +1,10 @@
-import { Typography } from '@mui/material'
-import { Box } from '@mui/system'
-import React from 'react'
+import { Title } from '@mantine/core';
 
 const History = () => {
   return (
-    <Box>
-        <Typography variant="h5">History</Typography>
-    </Box>
+    <div>
+      <Title order={5}>History</Title>
+    </div>
   )
 }
 

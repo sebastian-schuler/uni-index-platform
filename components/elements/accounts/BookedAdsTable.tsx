@@ -1,59 +1,27 @@
-import { Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, tableRowClasses } from '@mui/material';
+import { Badge, createStyles, ScrollArea, Table, Title } from '@mantine/core';
 import useTranslation from 'next-translate/useTranslation';
 import React, { memo } from 'react';
 import { PremiumAdDetailed } from '../../../lib/types/AccountHandlingTypes';
 
-interface Column {
-    id: 'id' | 'type' | 'size' | 'booked_until' | 'description';
-    label: string;
-    minWidth?: number;
-    align?: 'right';
-    formatNumber?: (value: number) => string;
-    formatString?: (value: string) => string;
-}
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-        // backgroundColor: theme.palette.secondary.dark,
-        color: theme.palette.primary.main,
-        // borderColor:  theme.palette.primary.dark,
+const useStyles = createStyles((theme) => ({
+    root: {
+        border: `1px solid ${theme.colors.gray[3]}`,
+        borderRadius: theme.radius.md,
+        padding: theme.spacing.md,
     },
-    [`&.${tableCellClasses.body}`]: {
-        // backgroundColor: theme.palette.secondary.dark,
-        // color: theme.palette.common.white,
-        fontSize: 14,
+    progressBar: {
+        '&:not(:first-of-type)': {
+            borderLeft: `3px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white}`,
+        },
     },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-        // backgroundColor: theme.palette.secondary.main,
-    },
-    '&:last-child td, &:last-child th': {
-        border: 0,
-    },
-    [`&.${tableRowClasses.root}:nth-of-type(odd)`]: {
-        // backgroundColor: theme.palette.secondary.dark,
-    },
-}));
-
-type PremiumAdTable = {
-    id: number
-    booked_until: number
-    level: number
-    type: string
-    placement: string[]
-    size: number
-    description: string
-    image_name: string
+interface Props {
+    data: PremiumAdDetailed[]
 }
 
-type Props = {
-    bookedAds: PremiumAdDetailed[]
-}
-
-const BookedAdsTable: React.FC<Props> = props => {
-    const { bookedAds } = props;
+const BookedAdsTable: React.FC<Props> = ({ data }: Props) => {
+    const { classes, theme } = useStyles();
 
     // Language
     const { t, lang } = useTranslation('account');
@@ -71,19 +39,6 @@ const BookedAdsTable: React.FC<Props> = props => {
         adColSize: t('ad-col-size'),
         adColLevel: t('ad-col-level'),
     }
-
-    const tableContent: PremiumAdTable[] = bookedAds.map(ad => {
-        return {
-            id: Number(ad.id),
-            booked_until: Number(ad.booked_until),
-            level: ad.level,
-            type: ad.type,
-            placement: ad.placement,
-            size: ad.size,
-            description: ad.description || "",
-            image_name: ad.image_id || ""
-        }
-    })
 
     const getAdSizeString = (size: number) => {
         switch (size) {
@@ -109,98 +64,50 @@ const BookedAdsTable: React.FC<Props> = props => {
         }
     }
 
-    const columns: readonly Column[] = [
-        { id: 'id', label: 'ID', minWidth: 100 },
-        {
-            id: 'type',
-            label: langContent.adColType,
-            minWidth: 170,
-            formatString: (value: string) => getAdTypeString(value)
-        },
-        {
-            id: 'size',
-            label: langContent.adColSize,
-            minWidth: 100,
-            formatNumber: (value: number) => getAdSizeString(value)
-        },
-        {
-            id: 'booked_until',
-            label: langContent.adColBookedUntil,
-            minWidth: 170,
-            align: 'right',
-            formatNumber: (value: number) => new Date(value).toLocaleDateString('de-DE'), // TODO locale
-        },
-        {
-            id: 'description',
-            label: 'Description',
-            minWidth: 170,
-        }
-    ];
+    const rows = data.map((row) => {
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
+        return (
+            <tr key={Number(row.id)}>
+                <td>
+                    {Number(row.id)}
+                </td>
+                <td>
+                    <Badge>
+                        {getAdTypeString(row.type)}
+                    </Badge>
+                </td>
+                <td>
+                    <Badge>
+                        {getAdSizeString(row.size)}
+                    </Badge>
+                </td>
+                <td>{row.Subject?.name}</td>
+                <td>{row.description}</td>
+                <td>{new Date(Number(row.booked_until)).toLocaleDateString()}</td>
+            </tr>
+        );
+    });
 
     return (
-        <Paper elevation={0} sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow >
-                            {columns.map((column) => (
-                                <StyledTableCell
-                                    key={column.id}
-                                    align={column.align}
-                                    style={{ minWidth: column.minWidth }}
-                                >
-                                    {column.label}
-                                </StyledTableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {tableContent
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, i) => {
-                                return (
-                                    <StyledTableRow hover role="checkbox" tabIndex={-1} key={i}>
-                                        {columns.map((column) => {
-                                            const value = row[column.id];
-                                            return (
-                                                <StyledTableCell key={column.id} align={column.align}>
-                                                    {
-                                                        column.formatNumber && typeof value === 'number' ? column.formatNumber(value) :
-                                                            column.formatString && typeof value === 'string' ? column.formatString(value) :
-                                                                value
-                                                    }
-                                                </StyledTableCell>
-                                            );
-                                        })}
-                                    </StyledTableRow>
-                                );
-                            })}
-                    </TableBody>
+        <>
+            <ScrollArea className={classes.root}>
+                <Title order={6} mb={8}>Booked Ads</Title>
+                <Table sx={{ minWidth: 800 }} verticalSpacing="xs">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Size</th>
+                            <th>Subject Name</th>
+                            <th>Description</th>
+                            <th>Until</th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows}</tbody>
                 </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={bookedAds.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-        </Paper>
-    )
+            </ScrollArea>
+        </>
+    );
 }
 
 export default memo(BookedAdsTable)

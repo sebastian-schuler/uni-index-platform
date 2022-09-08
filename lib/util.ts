@@ -1,8 +1,8 @@
 import { Country, Institution, State, Subject, SubjectType } from "@prisma/client";
-import { DetailedCountry } from "./types/DetailedDatabaseTypes";
+import { DetailedCountry, DetailedSubjectType } from "./types/DetailedDatabaseTypes";
 import { Searchable } from "./types/UiHelperTypes";
 
-type LocalizedNameProps = {
+interface LocalizedNameProps {
     lang: string,
     any?: SubjectType | undefined,
     dbTranslated?: Country
@@ -13,7 +13,7 @@ type LocalizedNameProps = {
 }
 
 // Take in a database object and return its name in the selected locale
-export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, institution, searchable }: LocalizedNameProps) => {
+export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, institution, searchable }: LocalizedNameProps): string => {
 
     if (any !== undefined) {
         if (lang === "de") return "" + any.name_de;
@@ -34,7 +34,13 @@ export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, inst
         return "" + institution.name;
 
     } else if (searchable !== undefined) {
-        return "" + searchable.data.name; // TODO might have to check type of data
+
+        if (searchable.type === "Country")
+            return "" + searchable.data.name;
+        else if (searchable.type === "SubjectType")
+            return "" + getLocalizedName({ lang, any: searchable.data });
+        else
+            return ""
 
     } else {
         return "";
@@ -43,13 +49,25 @@ export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, inst
 }
 
 // Take in an array of database objects and return an array of searchable objects
-export const generateSearchable = (lang: string | undefined, array: DetailedCountry[]) => { // TODO add other objects, eg. states
+interface GenerateSearchableProps {
+    lang: string | undefined
+    array: { type: "Country", data: DetailedCountry[] } | { type: "SubjectType", data: DetailedSubjectType[] }
+}
+export const generateSearchable = ({ lang, array }: GenerateSearchableProps) => { // TODO add other objects, eg. states
     const locale = lang ?? "en";
     const arr: Searchable[] = [];
-    array.forEach((val) => {
-        const name = getLocalizedName({ lang: locale, dbTranslated: val });
-        arr.push({ visible: true, data: val });
-    });
+
+    if (array.type === "Country") {
+        array.data.forEach((val) => {
+            const newSearchable: Searchable = { type: "Country", visible: false, data: val }
+            arr.push(newSearchable);
+        });
+    } else if (array.type === "SubjectType") {
+        array.data.forEach((val) => {
+            const newSearchable: Searchable = { type: "SubjectType", visible: false, data: val }
+            arr.push(newSearchable);
+        });
+    }
     return arr;
 }
 
@@ -60,7 +78,7 @@ export const getDBLocale = (locale: string | undefined) => {
 }
 
 // Generate a static link from given parameters
-export const toLink = (...args: any[]) => {
+export const toLink = (...args: string[]) => {
     let res = "";
     args.forEach((val) => {
         if (val !== undefined)

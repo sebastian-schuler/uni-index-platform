@@ -12,11 +12,11 @@
 
   "breadcrumb-back-to": "Back to {{origin}}",
 
-  "countries-search-label": "Search for a country",
-  "countries-search-placeholder": "e.g. Germany",
-
   "global-search": "Search anything",
   "ad-label": "Ads",
+  
+  "countries-search-label": "Search for a country",
+  "countries-search-placeholder": "e.g. Germany",
 
   "title-popular-courses": "Popular Courses",
   "title-popular-institutions": "Popular Universities",

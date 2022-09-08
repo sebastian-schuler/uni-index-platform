@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/server": "^11.10.0",
+    "@fontsource/roboto": "^4.5.8",
     "@mantine/carousel": "^5.2.5",
     "@mantine/core": "^5.2.5",
     "@mantine/dates": "^5.2.5",

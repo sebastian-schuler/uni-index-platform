@@ -1,13 +1,13 @@
-import { Box, Typography } from '@mui/material'
-import React from 'react'
-import LanguageList from '../../components/layout/nav/LanguageList'
+import { Stack, Title } from '@mantine/core';
+import LanguageSettings from '../../components/elements/accounts/LanguageSettings';
 
 const Settings = () => {
+
   return (
-    <Box>
-        <Typography variant="h5">Settings</Typography>
-        <LanguageList />
-    </Box>
+    <Stack>
+      <Title order={5}>Settings</Title>
+      <LanguageSettings />
+    </Stack>
   )
 }
 

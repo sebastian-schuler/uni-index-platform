@@ -1,7 +1,3 @@
-import { Masonry } from '@mui/lab';
-import { Autocomplete, Button, Card, CardContent, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, styled, TextField, Typography } from '@mui/material';
-import { Box } from '@mui/system';
-import { DatePicker } from '@mui/x-date-pickers';
 import { Subject } from '@prisma/client';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import CreateAdLocationPicker from '../../components/elements/accounts/CreateAdLocationPicker';
@@ -11,11 +7,6 @@ import SmallAd from '../../components/elements/premiumads/SmallAd';
 import { useAuth } from '../../context/SessionContext';
 import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
 import { UserDataProfile } from '../../lib/types/AccountHandlingTypes';
-
-const Input = styled('input')({
-    display: 'none',
-});
-
 
 const CreateAd = () => {
 

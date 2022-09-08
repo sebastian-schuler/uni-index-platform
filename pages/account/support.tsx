@@ -1,23 +1,16 @@
-import { Box, Card, CardContent, Stack } from '@mui/material';
-import Typography from '@mui/material/Typography';
+import { Text, Title } from '@mantine/core';
+import { memo } from 'react';
 import Faq from '../../components/elements/support/Faq';
 
 const Support = () => {
 
   return (
-    <Box>
-
-      <Card>
-        <CardContent>
-          <Stack spacing={2}>
-            <Typography variant="h5">Frequently asked questions</Typography>
-            <Faq />
-          </Stack>
-        </CardContent>
-      </Card>
-
-    </Box>
+    <div>
+      <Title order={5}>Frequently asked questions</Title>
+      <Text>Check if you can find a quicker answer to your question here before messaging us.</Text>
+      <Faq />
+    </div>
   )
 }
 
-export default Support
+export default memo(Support);

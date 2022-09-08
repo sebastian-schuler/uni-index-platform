@@ -1,7 +1,9 @@
-import { Box, Container } from '@mantine/core'
+import { Box } from '@mantine/core'
 import { NextPage } from 'next'
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import Footer, { FooterContent } from './footer/Footer'
+import { HEADER_HEIGHT } from './nav/WebsiteHeader'
+import ResponsiveContainer from './ResponsiveContainer'
 
 type Props = {
     children: ReactNode,
@@ -15,15 +17,15 @@ const LayoutContainer: NextPage<Props> = props => {
     const { children, removeVerticalPadding, removeContainerWrapper, footerContent } = props;
 
     return (
-        <>
-            <Box component={'main'} >
+        <Box sx={{ display: "flex", flexDirection: "column", height: "calc(100vh - " + HEADER_HEIGHT + "px)", marginTop: HEADER_HEIGHT+"px" }}>
+            <Box component={'main'} sx={{ flex: 2 }}>
 
                 {
                     removeContainerWrapper ? children :
                         (
-                            <Container size={"lg"} py={removeVerticalPadding ? 0 : 48}>
+                            <ResponsiveContainer paddingY={!removeVerticalPadding}>
                                 {children}
-                            </Container>
+                            </ResponsiveContainer>
                         )
                 }
 
@@ -31,7 +33,7 @@ const LayoutContainer: NextPage<Props> = props => {
             {
                 <Footer footerContent={footerContent} />
             }
-        </>
+        </Box>
     )
 
 }

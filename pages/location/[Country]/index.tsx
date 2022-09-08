@@ -1,6 +1,4 @@
-import { Masonry } from '@mui/lab';
-import Grid from '@mui/material/Grid';
-import NoSsr from '@mui/material/NoSsr';
+import { Grid, SimpleGrid, Stack, Title } from '@mantine/core';
 import { Country } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
@@ -16,18 +14,17 @@ import Meta from '../../../components/partials/Meta';
 import prisma from '../../../lib/prisma';
 import { getCountries, getCountry, getStatesDetailedByCountry } from '../../../lib/prismaQueries';
 import { DetailedState } from '../../../lib/types/DetailedDatabaseTypes';
-import { getDBLocale, getLocalizedName } from '../../../lib/util';
+import { getLocalizedName } from '../../../lib/util';
 
-type Props = {
+interface Props {
   states: DetailedState[],
   countryInfo: Country,
   footerContent: FooterContent[],
 }
 
-const CountryPage: NextPage<Props> = props => {
+const CountryPage: NextPage<Props> = ({ states, countryInfo, footerContent }:Props) => {
 
   const query = useRouter().query;
-  const { states, countryInfo, footerContent } = props;
 
   // Translations
   const { t, lang } = useTranslation('location');
@@ -55,39 +52,42 @@ const CountryPage: NextPage<Props> = props => {
 
       <Breadcrumb countryInfo={countryInfo} />
 
-      <GenericPageHeader title={localizedCountryName} description={"Ein schönes Land"} />
+      <Stack>
 
-      <Grid container columnSpacing={4}>
+        <GenericPageHeader title={localizedCountryName} description={"Ein schönes Land"} />
 
-        <Grid item xs={12} sm={4} xl={6}>
+        <Grid>
 
-          <Masonry columns={{ xs: 1, sm: 1, md: 1, lg: 2, xl: 2 }} spacing={3} sx={{ paddingX: 0, marginBottom: 6 }}>
-            {
-              states.map((state, i) => (
-                <StateCard key={i} state={state} />
-              ))
-            }
-          </Masonry>
-
-        </Grid>
-
-        <Grid item
-          xs={12} sm={8} xl={6}
-          flexGrow={1}
-          component={'section'}
-        >
-
-          {/* TODO idk if this is good */}
-          <NoSsr>
+          <Grid.Col sm={12}>
+            <Title order={6} mb={2}>Map of Germany</Title>
             <CountryMapContainer
               country={query.Country?.toString() ?? ""}
               stateNames={translatedStates}
             />
-          </NoSsr>
+          </Grid.Col>
+
+          <Grid.Col sm={12}>
+            <Title order={6} mb={2}>List of states</Title>
+            <SimpleGrid
+              cols={4}
+              spacing="lg"
+              breakpoints={[
+                { maxWidth: 980, cols: 3, spacing: 'md' },
+                { maxWidth: 755, cols: 2, spacing: 'sm' },
+                { maxWidth: 600, cols: 1, spacing: 'sm' },
+              ]}
+            >
+              {
+                states.map((state, i) => (
+                  <StateCard key={i} state={state} />
+                ))
+              }
+            </SimpleGrid>
+          </Grid.Col>
 
         </Grid>
 
-      </Grid>
+      </Stack>
 
     </LayoutContainer>
   )
@@ -123,7 +123,6 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 export async function getStaticProps(context: GetStaticPropsContext) {
 
   let countryUrl = "" + context?.params?.Country;
-  let localeDb = getDBLocale(context.locale);
 
   // Get information on the country of this particular page
   const countryInfo = await getCountry(countryUrl);

@@ -1,43 +1,83 @@
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material'
-import Image from 'next/image'
+import { Card, createStyles, Image, Text, Group, Box } from '@mantine/core'
+import Link from 'next/link'
+import path from 'path'
 import React, { memo } from 'react'
-import { PATH_PLACEHOLDER_IMAGES } from '../../../data/urlConstants'
-import { toLink } from '../../../lib/util'
-import Link from '../../mui/NextLinkMui'
+import { PATH_PLACEHOLDER_IMAGES } from '../../../lib/urlConstants'
 
-type Props = {
-    url: string
+const useStyles = createStyles((theme) => ({
+    card: {
+        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
+    },
+
+    title: {
+        display: 'block',
+        marginTop: theme.spacing.md,
+        marginBottom: theme.spacing.xs / 2,
+    },
+
+    body: {
+        padding: theme.spacing.md,
+    },
+}));
+
+interface Props {
+    link: string
     title: string
     headline: string
     subtext: string
     imgUrl: string
-
+    colHeight: number
     disableLink?: boolean
 }
 
-const MediumAd: React.FC<Props> = props => {
+const MediumAd: React.FC<Props> = ({ title, link, headline, subtext, imgUrl, colHeight, disableLink }: Props) => {
 
-    const { url, title, headline, subtext, imgUrl, disableLink } = props;
+    const { classes } = useStyles();
+
+    if (disableLink) {
+        return (
+            <Card component='div' withBorder radius="md" p={0} className={classes.card} title={title} >
+                <Group noWrap spacing={0}>
+                    <Box sx={{ width: "50%" }}>
+                        <Image src={imgUrl || path.join(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} />
+                    </Box>
+                    <div className={classes.body}>
+                        <Text transform="uppercase" color="dimmed" weight={700} size="xs">
+                            Germany
+                        </Text>
+                        <Text className={classes.title} mt="xs" mb="md">
+                            {headline}
+                        </Text>
+                        <Group noWrap spacing="xs">
+                            <Text size="xs">{subtext}</Text>
+                        </Group>
+                    </div>
+                </Group>
+            </Card>
+        )
+    }
 
     return (
-        <Card sx={{}}>
-            <CardActionArea component={disableLink ? "div" : Link} href={disableLink ? "" : url} title={title}>
-                <CardMedia sx={{ height: 140 }}>
-                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                        <Image
-                            src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")}
-                            layout="fill"
-                            objectFit="cover"
-                        />
+        <Link href={link} passHref>
+            <Card component='a' withBorder radius="md" p={0} className={classes.card} title={title} >
+                <Group noWrap spacing={0}>
+                    <Box sx={{ width: "50%" }}>
+                        <Image src={imgUrl || path.join(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} />
+                    </Box>
+                    <div className={classes.body}>
+                        <Text transform="uppercase" color="dimmed" weight={700} size="xs">
+                            Germany
+                        </Text>
+                        <Text className={classes.title} mt="xs" mb="md">
+                            {headline}
+                        </Text>
+                        <Group noWrap spacing="xs">
+                            <Text size="xs">{subtext}</Text>
+                        </Group>
                     </div>
-                </CardMedia>
-                <CardContent>
-                    <Typography variant="subtitle1" component="h3" color="primary.main">
-                        {headline}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-        </Card>
+                </Group>
+            </Card>
+        </Link>
     )
 }
 

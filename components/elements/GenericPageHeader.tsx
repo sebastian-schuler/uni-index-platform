@@ -1,5 +1,5 @@
-import { Stack, Typography } from '@mui/material'
 import React, { memo } from 'react'
+import { Box, Title, Text } from '@mantine/core';
 
 type Props = {
     title: string
@@ -11,21 +11,15 @@ const GenericPageHeader: React.FC<Props> = props => {
     const { title, description } = props;
 
     return (
-        <Stack sx={{ marginBottom: 2 }}>
-            <Typography
-                variant="h6"
-                component="h2"
-            >
+        <Box sx={{ marginBottom: 2 }}>
+            <Title order={1}>
                 {title}
-            </Typography>
-            <Typography
-                variant="subtitle1"
-                component="span"
-            >
+            </Title>
+            <Text>
                 {description}
-            </Typography>
-        </Stack>
+            </Text>
+        </Box>
     )
 }
 
-export default memo(GenericPageHeader)
+export default memo(GenericPageHeader);

@@ -1,6 +1,6 @@
 import { Country, SubjectType } from "@prisma/client";
-import { getCitiesDetailedByState, getCountries, getCountriesByPopularity, getCountryInstitutionCount, getCountrySubjectCount, getSubjectTypes, getSubjectTypeSubjectCount } from "./prismaQueries";
-import { DetailedCity, DetailedCountry, DetailedSubjectType } from "./types/DetailedDatabaseTypes";
+import { getCitiesDetailedByState, getCountries, getCountriesByPopularity, getCountryInstitutionCount, getCountrySubjectCount, getSubjectsDetailedByInstitution, getSubjectTypes, getSubjectTypeSubjectCount } from "./prismaQueries";
+import { DetailedCity, DetailedCountry, DetailedSubject, DetailedSubjectType } from "./types/DetailedDatabaseTypes";
 
 // COUNTRIES
 
@@ -44,6 +44,14 @@ export const getDetailedSubjectTypes = async () => {
 export const getDetailedCities = async (stateUrl:string) => {
     const cities = await getCitiesDetailedByState(stateUrl);
     const detailed:DetailedCity[] = cities;
+    return detailed;
+}
+
+// SUBJECTS
+
+export const getDetailedSubjectsByInstitution = async (institutionId:number) => {
+    const subjects = await getSubjectsDetailedByInstitution(institutionId);
+    const detailed:DetailedSubject[] = subjects;
     return detailed;
 }
 

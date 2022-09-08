@@ -5,13 +5,13 @@ import LayoutContainer from '../components/layout/LayoutContainer'
 import { getGlobalSearchResults } from '../lib/prismaQueries'
 import { LinkableCity, LinkableInstitution, LinkableSubject } from '../lib/types/Linkables'
 
-type Props = {
+interface Props {
     subjects: LinkableSubject[]
     institutions: LinkableInstitution[],
     cities: LinkableCity[],
 }
 
-const Search: NextPage<Props> = props => {
+const Search: NextPage<Props> = ({ subjects, institutions, cities }: Props) => {
 
     return (
         <LayoutContainer>
@@ -21,9 +21,9 @@ const Search: NextPage<Props> = props => {
             <div className='flex flex-col gap-4'>
 
                 // TODO replace with MUI
-                <SearchResultList header='Subjects' resSubject={props.subjects}/>
-                <SearchResultList header='Institutions' resInstitution={props.institutions} />
-                <SearchResultList header='Cities' resCities={props.cities} />
+                <SearchResultList header='Subjects' resSubject={subjects} />
+                <SearchResultList header='Institutions' resInstitution={institutions} />
+                <SearchResultList header='Cities' resCities={cities} />
 
             </div>
 

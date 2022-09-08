@@ -8,7 +8,7 @@ import { FooterContent } from '../../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../../components/layout/LayoutContainer'
 import SubjectNav from '../../../../../components/layout/subnav/SubjectNav'
 import Meta from '../../../../../components/partials/Meta'
-import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../data/urlConstants'
+import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../lib/urlConstants'
 import { getCountries, getCountry, getInstitution, getSubject, getSubjectInstitutionBySubject, getSubjectPaths } from '../../../../../lib/prismaQueries'
 import { getDBLocale, toLink } from '../../../../../lib/util'
 

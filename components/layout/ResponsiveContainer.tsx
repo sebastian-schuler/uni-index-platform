@@ -1,4 +1,4 @@
-import { Box, Container, createStyles, Sx } from '@mantine/core';
+import { Container, createStyles, Sx } from '@mantine/core';
 import React from 'react';
 
 const useStyles = createStyles((theme) => ({
@@ -31,15 +31,18 @@ const useStyles = createStyles((theme) => ({
 interface Props {
     children: React.ReactNode
     paddingY?: boolean
+    skipContainer?: boolean
     sx?: Sx
 }
 
-const ResponsiveContainer: React.FC<Props> = ({ children, paddingY, sx }: Props) => {
+const ResponsiveContainer: React.FC<Props> = ({ children, paddingY, skipContainer, sx }: Props) => {
 
     const { classes } = useStyles();
 
+    if (skipContainer) return (<>{children}</>);
+
     return (
-        <Container size={"lg"} py={paddingY ? 64 : 0} className={classes.container}>
+        <Container size={"lg"} py={paddingY ? "xl" : undefined} className={classes.container} sx={sx}>
             {children}
         </Container >
     )

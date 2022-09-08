@@ -1,31 +1,49 @@
-import { Masonry } from '@mui/lab';
-import { Grid, Stack, Typography } from '@mui/material';
-import { GetStaticPropsContext, NextPage } from 'next';
+import { Group, SimpleGrid, Stack } from '@mantine/core';
+import { GetStaticProps, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import { useEffect, useState } from 'react';
+import GenericPageHeader from '../components/elements/GenericPageHeader';
 import SubjectTypeCard from '../components/elements/itemcards/SubjectTypeCard';
+import OrderBySelect, { OrderByState, sortSearchableArray } from '../components/elements/OrderBySelect';
 import Breadcrumb from '../components/layout/Breadcrumb';
 import { FooterContent } from '../components/layout/footer/Footer';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import Meta from '../components/partials/Meta';
+import SearchBox from '../components/partials/SearchBox';
 import { getDetailedSubjectTypes } from '../lib/prismaDetailedQueries';
 import { getCountries } from '../lib/prismaQueries';
 import { DetailedSubjectType } from '../lib/types/DetailedDatabaseTypes';
+import { Searchable } from '../lib/types/UiHelperTypes';
+import { generateSearchable } from '../lib/util';
 
-type Props = {
-    detailedSubjectTypes: DetailedSubjectType[]
+interface Props {
+    searchableSubjectTypes: Searchable[]
     footerContent: FooterContent[]
 }
 
-const subjects: NextPage<Props> = props => {
-
-    const { detailedSubjectTypes, footerContent } = props;
+const subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Props) => {
 
     const { t, lang } = useTranslation('subject');
     const langContent = {
         pageTitle: t('common:page-title'),
         title: t('subjects-title'),
-        subtitle: t('subjects-title-sub')
+        subtitle: t('subjects-title-sub'),
+        searchLabel: t('subjecttype-search-label'),
+        searchPlaceholder: t('subjecttype-search-placeholder'),
     }
+    const [dataList, setDataList] = useState<Searchable[]>(searchableSubjectTypes);
+
+    // Order by
+    const [orderBy, setOrderBy] = useState<OrderByState>("relevance");
+
+    const handleOrderChange = (selected: string | null) => {
+        if (selected)
+            setOrderBy(selected as OrderByState);
+    };
+
+    useEffect(() => {
+        setDataList(sortSearchableArray(dataList, orderBy, lang));
+    }, [orderBy]);
 
     return (
         <LayoutContainer footerContent={footerContent}>
@@ -37,64 +55,50 @@ const subjects: NextPage<Props> = props => {
 
             <Breadcrumb />
 
-            <Stack sx={{ marginBottom: 1 }}>
-                <Typography
-                    variant="h6"
-                    component="h2"
+            <Stack>
+                <GenericPageHeader title={langContent.title} description={langContent.subtitle} />
+
+                <Group position='apart' >
+                    <SearchBox
+                        label={langContent.searchLabel}
+                        placeholder={langContent.searchPlaceholder}
+                        searchableList={dataList}
+                        setSearchableList={setDataList}
+                    />
+                    <OrderBySelect orderBy={orderBy} handleChange={handleOrderChange} />
+                </Group>
+
+                <SimpleGrid
+                    cols={4}
+                    spacing="lg"
+                    breakpoints={[
+                        { maxWidth: 980, cols: 3, spacing: 'md' },
+                        { maxWidth: 755, cols: 2, spacing: 'sm' },
+                        { maxWidth: 600, cols: 1, spacing: 'sm' },
+                    ]}
                 >
-                    {langContent.title}
-                </Typography>
-                <Typography
-                    variant="subtitle1"
-                    component="span"
-                >
-                    {langContent.subtitle}
-                </Typography>
+
+                    {
+                        dataList.map((searchable, i) => (
+                            searchable.visible && (
+                                <SubjectTypeCard key={i} subjectType={searchable.data as DetailedSubjectType} />
+                            )
+                        ))
+                    }
+
+                </SimpleGrid>
             </Stack>
-
-            <Grid container columnSpacing={4}>
-
-                <Grid item xs={12} sm={4} xl={2}>
-
-                    ffffffffffffffffffffffffffff
-
-                    {/* <SearchBox
-                    label={langContent.searchLabel}
-                    placeholder={langContent.searchPlaceholder}
-                    searchableList={dataList}
-                    setSearchableList={setDataList}
-                /> */}
-
-                </Grid>
-
-                <Grid item
-                    xs={12} sm={8} xl={10}
-                    flexGrow={1}
-                    component={'section'}
-                >
-
-
-                    <Masonry columns={{ xs: 2, sm: 2, md: 2, lg: 2, xl: 3 }} spacing={3} sx={{ paddingX: 0, marginBottom: 6 }}>
-                        {
-                            detailedSubjectTypes.map((subjectType, i) => (
-                                <SubjectTypeCard key={i} subjectType={subjectType} />
-                            ))
-                        }
-                    </Masonry>
-
-                </Grid>
-
-            </Grid>
 
         </LayoutContainer>
     )
 
 }
 
-export async function getStaticProps(context: GetStaticPropsContext) {
+export const getStaticProps: GetStaticProps = async (context) => {
 
     // List of subject categories
     const detailedSubjectTypes = await getDetailedSubjectTypes();
+    const searchableSubjectTypes: Searchable[] = generateSearchable({ lang: context.locale, array: { type: "SubjectType", data: detailedSubjectTypes } });
 
     // Footer Data
     const countryList = await getCountries("asc");
@@ -103,7 +107,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     ]
 
     return {
-        props: { detailedSubjectTypes, footerContent }
+        props: { searchableSubjectTypes, footerContent }
     }
 
 }

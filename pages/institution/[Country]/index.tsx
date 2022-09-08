@@ -1,92 +1,74 @@
-import { Grid, Stack, Typography } from '@mui/material'
-import { Country } from '@prisma/client'
-import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
-import useTranslation from 'next-translate/useTranslation'
-import { useRouter } from 'next/router'
-import { ParsedUrlQuery } from 'querystring'
-import InstitutionCard from '../../../components/elements/itemcards/InstitutionCard'
-import Breadcrumb from '../../../components/layout/Breadcrumb'
-import { FooterContent } from '../../../components/layout/footer/Footer'
-import LayoutContainer from '../../../components/layout/LayoutContainer'
-import Meta from '../../../components/partials/Meta'
-import prisma from '../../../lib/prisma'
-import { getCountries, getCountry, getInstitutesDetailed } from '../../../lib/prismaQueries'
-import { DetailedInstitution } from '../../../lib/types/DetailedDatabaseTypes'
-import { getDBLocale, getLocalizedName } from '../../../lib/util'
+import { Group, SimpleGrid, Stack } from '@mantine/core';
+import { Country } from '@prisma/client';
+import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
+import useTranslation from 'next-translate/useTranslation';
+import { ParsedUrlQuery } from 'querystring';
+import GenericPageHeader from '../../../components/elements/GenericPageHeader';
+import InstitutionCard from '../../../components/elements/itemcards/InstitutionCard';
+import Breadcrumb from '../../../components/layout/Breadcrumb';
+import { FooterContent } from '../../../components/layout/footer/Footer';
+import LayoutContainer from '../../../components/layout/LayoutContainer';
+import Meta from '../../../components/partials/Meta';
+import prisma from '../../../lib/prisma';
+import { getCountries, getCountry, getInstitutesDetailed } from '../../../lib/prismaQueries';
+import { DetailedInstitution } from '../../../lib/types/DetailedDatabaseTypes';
+import { getLocalizedName } from '../../../lib/util';
 
-type Props = {
+interface Props {
   institutions: DetailedInstitution[],
   countryInfo: Country,
   footerContent: FooterContent[],
 }
 
-const index: NextPage<Props> = props => {
+const index: NextPage<Props> = ({ institutions, countryInfo, footerContent }: Props) => {
 
-  const { institutions, countryInfo, footerContent } = props
+  const { lang } = useTranslation('common');
 
-  const { t, lang } = useTranslation('common');
-  const query = useRouter().query;
-
-  const localizedCountryName = getLocalizedName({ lang: lang, dbTranslated: props.countryInfo });
+  const localizedCountryName = getLocalizedName({ lang: lang, dbTranslated: countryInfo });
 
   return (
-    <LayoutContainer footerContent={props.footerContent}>
+    <LayoutContainer footerContent={footerContent}>
 
       <Meta
         title={'Uni Index - ' + localizedCountryName}
         description='Very nice page'
       />
 
-      <Breadcrumb countryInfo={props.countryInfo} />
+      <Breadcrumb countryInfo={countryInfo} />
 
-      <Stack sx={{ marginBottom: 2 }}>
-        <Typography
-          variant="h6"
-          component="h2"
-        >
-          {countryInfo.name}
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          component="span"
-        >
-          Find universities located in {countryInfo.name}
-        </Typography>
-      </Stack>
+      <Stack>
 
-      <Grid container columnSpacing={4}>
+        <GenericPageHeader title={countryInfo.name} description={`Find universities located in ${countryInfo.name}`} />
 
-        <Grid item xs={12} sm={3} xl={2}>
-
-          ffffffffffffffffffffffffffff
-
+        <Group position='apart' >
           {/* <SearchBox
-                    label={langContent.searchLabel}
-                    placeholder={langContent.searchPlaceholder}
-                    searchableList={dataList}
-                    setSearchableList={setDataList}
-                    /> */}
+            label={langContent.searchLabel}
+            placeholder={langContent.searchPlaceholder}
+            searchableList={dataList}
+            setSearchableList={setDataList}
+          />
+          <OrderBySelect orderBy={orderBy} handleChange={handleOrderChange} /> */}
+        </Group>
 
-        </Grid>
-
-        <Grid item
-          xs={12} sm={9} xl={10}
-          flexGrow={1}
-          component={'section'}
+        <SimpleGrid
+          cols={4}
+          spacing="lg"
+          breakpoints={[
+            { maxWidth: 980, cols: 3, spacing: 'md' },
+            { maxWidth: 755, cols: 2, spacing: 'sm' },
+            { maxWidth: 600, cols: 1, spacing: 'sm' },
+          ]}
         >
-          <Grid container spacing={4}>
-            {
-              institutions.map((institution, i) => (
+          {
+            institutions.map((institution, i) => (
+              // searchableCountry.visible && (
+              <InstitutionCard key={i} institution={institution} />
+              // )
+            ))
+          }
+        </SimpleGrid>
 
-                <Grid item key={i} xs={12} sm={6} xl={4}>
-                  <InstitutionCard institution={institution} />
-                </Grid>
-              ))
-            }
-          </Grid>
-        </Grid>
-
-      </Grid>
+      </Stack>
 
     </LayoutContainer>
   )
@@ -122,10 +104,9 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 export async function getStaticProps(context: GetStaticPropsContext) {
 
   let countryUrl = "" + context?.params?.Country;
-  let localeDb = getDBLocale(context.locale);
 
   const countryInfo = await getCountry(countryUrl);
-  const institutions: DetailedInstitution[] = await getInstitutesDetailed({countryUrl: countryUrl});
+  const institutions: DetailedInstitution[] = await getInstitutesDetailed({ countryUrl: countryUrl });
 
   // Footer Data
   // Get all countries
@@ -139,7 +120,5 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   }
 
 }
-
-
 
 export default index

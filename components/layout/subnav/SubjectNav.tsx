@@ -1,7 +1,7 @@
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import React, { memo } from 'react'
-import { URL_INSTITUTION } from '../../../data/urlConstants';
+import { URL_INSTITUTION } from '../../../lib/urlConstants';
 import SubNav from './SubNav';
 
 type Props = {

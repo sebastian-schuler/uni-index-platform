@@ -1,7 +1,7 @@
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import React, { memo } from 'react'
-import { URL_INSTITUTION } from '../../../data/urlConstants';
+import { URL_INSTITUTION } from '../../../lib/urlConstants';
 import SubNav from './SubNav';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 
 const InstitutionNav = ({ title }: Props) => {
 
-    const { t, lang } = useTranslation('institution');
+    const { t } = useTranslation('institution');
     const langContent = {
         profile: t('institution-profile'),
         courses: t('institution-courses'),

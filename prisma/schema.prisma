@@ -94,11 +94,12 @@ model Subject {
 }
 
 model SubjectType {
-  id      Int       @id @default(autoincrement())
-  url     String    @unique(map: "Unique SubjectType URL") @db.VarChar
-  name_en String?   @db.VarChar
-  name_de String?   @db.VarChar
-  Subject Subject[]
+  id               Int       @id @default(autoincrement())
+  url              String    @unique(map: "Unique SubjectType URL") @db.VarChar
+  name_en          String?   @db.VarChar
+  name_de          String?   @db.VarChar
+  popularity_score Int       @default(0)
+  Subject          Subject[]
 }
 
 model User {

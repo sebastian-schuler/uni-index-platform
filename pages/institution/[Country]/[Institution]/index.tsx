@@ -1,56 +1,49 @@
+import { useMantineTheme, Text, Title, Box, Paper } from '@mantine/core';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
-import React from 'react'
+import InstitutionPaper from '../../../../components/elements/institution/InstitutionPaper';
 import Breadcrumb from '../../../../components/layout/Breadcrumb';
-import LayoutContainer from '../../../../components/layout/LayoutContainer'
-import Meta from '../../../../components/partials/Meta';
-import prisma from '../../../../lib/prisma'
-import { getCountries, getCountry, getInstitution, getInstitutionPaths } from '../../../../lib/prismaQueries';
-import { getDBLocale } from '../../../../lib/util';
-import searchWikipedia from '../../../../lib/apis/wikipediaHandler';
-import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav';
 import { FooterContent } from '../../../../components/layout/footer/Footer';
-import { Typography } from '@mui/material';
+import LayoutContainer from '../../../../components/layout/LayoutContainer';
+import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav';
+import Meta from '../../../../components/partials/Meta';
+import searchWikipedia from '../../../../lib/apis/wikipediaHandler';
+import { getCountries, getCountry, getInstitution, getInstitutionPaths } from '../../../../lib/prismaQueries';
 
-type Props = {
-
+interface Props {
   institution: Institution,
   country: Country,
   wikipediaContent: string,
-
-  footerContent: {
-    title: string;
-    data: Country[];
-  }[],
-
+  footerContent: FooterContent[]
 }
 
-const InstitutionPage: NextPage<Props> = props => {
+const InstitutionPage: NextPage<Props> = ({ institution, country, wikipediaContent, footerContent }: Props) => {
 
-  const { t, lang } = useTranslation('common');
+  const theme = useMantineTheme();
+  const { t } = useTranslation('common');
   const langContent = {
     pageTitle: t('common:page-title'),
   }
-  const query = useRouter().query;
 
   return (
-    <LayoutContainer>
+    <LayoutContainer footerContent={footerContent}>
 
       <Meta
         title={langContent.pageTitle + " - "}
         description='Very nice page'
       />
 
-      <Breadcrumb countryInfo={props.country} institutionInfo={props.institution} />
+      <Breadcrumb countryInfo={country} institutionInfo={institution} />
 
-      <InstitutionNav title={props.institution.name} />
+      <InstitutionNav title={institution.name} />
 
-      <Typography variant='h5'>About</Typography>
-      <Typography variant='body1'>{props.wikipediaContent}</Typography>
-      <Typography variant='caption'>Source: Wikipedia</Typography>
+      <InstitutionPaper>
+        <Title order={2}>About</Title>
+        <Text>{wikipediaContent}</Text>
+        <Text size={"sm"} color="dimmed">Source: Wikipedia</Text>
+      </InstitutionPaper>
 
     </LayoutContainer>
   )
@@ -60,7 +53,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   let countryUrl = "" + context?.params?.Country;
   let institutionUrl = "" + context?.params?.Institution;
-  let localeDb = getDBLocale(context.locale);
 
   // Get Wikipedia Data
   const wikiDataRes = await searchWikipedia("Hochschule Kaiserslautern", "" + context.locale)

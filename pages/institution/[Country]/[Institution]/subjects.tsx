@@ -1,34 +1,26 @@
-import { Card, CardActionArea, CardContent, Grid, Typography } from '@mui/material';
-import { Country, Institution, Subject, SubjectType } from '@prisma/client';
+import { Group, SimpleGrid } from '@mantine/core';
+import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
+import InstitutionPaper from '../../../../components/elements/institution/InstitutionPaper';
+import SubjectCard from '../../../../components/elements/itemcards/SubjectCard';
 import Breadcrumb from '../../../../components/layout/Breadcrumb';
 import { FooterContent } from '../../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../../components/layout/LayoutContainer';
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav';
-import Link from '../../../../components/mui/NextLinkMui';
 import Meta from '../../../../components/partials/Meta';
-import { URL_INSTITUTION } from '../../../../data/urlConstants';
-import { getCountries, getCountry, getInstitution, getInstitutionPaths, getSubjectsSubjectTypeByInstitution } from '../../../../lib/prismaQueries';
-import { toLink } from '../../../../lib/util';
+import { getDetailedSubjectsByInstitution } from '../../../../lib/prismaDetailedQueries';
+import { getCountries, getCountry, getInstitution, getInstitutionPaths } from '../../../../lib/prismaQueries';
+import { DetailedSubject } from '../../../../lib/types/DetailedDatabaseTypes';
 
-type Props = {
-
+interface Props {
   institution: Institution,
   country: Country,
   footerContent: FooterContent[],
-  courseList: (Subject & {
-    CourseType: SubjectType;
-  })[]
-
+  detailedSubjects: DetailedSubject[]
 }
 
-const subjects: NextPage<Props> = props => {
-
-  const { institution, country, footerContent, courseList } = props;
-
-  const query = useRouter().query;
+const subjects: NextPage<Props> = ({ institution, country, footerContent, detailedSubjects }: Props) => {
 
   return (
     <LayoutContainer footerContent={footerContent}>
@@ -42,51 +34,40 @@ const subjects: NextPage<Props> = props => {
 
       <InstitutionNav title={institution.name} />
 
-      <Grid container columnSpacing={4}>
-
-        <Grid item xs={12} sm={3} xl={2}>
-          Filter
+      <InstitutionPaper>
+        <Group position='apart' >
           {/* <SearchBox
-    label={langContent.searchLabel}
-    placeholder={langContent.searchPlaceholder}
-    searchableList={dataList}
-    setSearchableList={setDataList}
-    /> */}
-        </Grid>
+                        label={langContent.searchLabel}
+                        placeholder={langContent.searchPlaceholder}
+                        searchableList={dataList}
+                        setSearchableList={setDataList}
+                    />
+                    <OrderBySelect orderBy={orderBy} handleChange={handleOrderChange} /> */}
+        </Group>
 
-        <Grid item
-          xs={12} sm={9} xl={10}
-          flexGrow={1}
-          component={'section'}
+        <SimpleGrid
+          cols={4}
+          spacing="lg"
+          breakpoints={[
+            { maxWidth: 980, cols: 3, spacing: 'md' },
+            { maxWidth: 755, cols: 2, spacing: 'sm' },
+            { maxWidth: 600, cols: 1, spacing: 'sm' },
+          ]}
         >
 
-          <Grid container columnSpacing={4}>
-            {
-              courseList.map((course, i) => (
+          {
+            detailedSubjects.map((subject, i) => (
+              // searchable.visible && (
+              <SubjectCard key={i} subject={subject} />
+              // )
+            ))
+          }
 
-                <Grid key={i} item xs={4} sm={5} xl={3}>
-                  <Card sx={{}}>
-                    <CardActionArea component={Link} href={toLink(URL_INSTITUTION, query.Country, query.Institution, course.url)} title={course.name}>
-                      <CardContent>
-                        <Typography variant="h6" component="div">
-                          {course.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Semester: {course.semester_count}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
+        </SimpleGrid>
 
-              ))
-            }
-          </Grid>
+      </InstitutionPaper>
 
-        </Grid>
-      </Grid>
-
-    </LayoutContainer>
+    </LayoutContainer >
   )
 }
 
@@ -97,7 +78,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   const country = await getCountry(countryUrl);
   const institution = await getInstitution(institutionUrl);
-  const courseList = await getSubjectsSubjectTypeByInstitution(institutionUrl, "asc");
+  const detailedSubjects: DetailedSubject[] = await getDetailedSubjectsByInstitution(institution?.id || 0);
 
   // Footer Data
   // Get all countries
@@ -107,7 +88,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   ]
 
   return {
-    props: { institution: institution, courseList: courseList, country: country, footerContent: footerContent }
+    props: { institution, detailedSubjects, country, footerContent }
   }
 }
 

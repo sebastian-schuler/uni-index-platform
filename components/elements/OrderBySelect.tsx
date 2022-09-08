@@ -1,21 +1,35 @@
+import { createStyles, Select } from '@mantine/core';
+import { IconArrowsSort } from '@tabler/icons';
 import * as React from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Searchable } from '../../lib/types/UiHelperTypes';
+import { getLocalizedName } from '../../lib/util';
+
+const useStyles = createStyles((theme) => ({
+    input: {
+        backgroundColor: theme.colors.light[0],
+    },
+    dropdown: {
+        backgroundColor: theme.colors.light[0],
+    },
+}));
 
 export type OrderByState = "popularity" | "relevance" | "az" | "za";
 
 // Function to sort the data list
-export const sortSearchableArray = (data: Searchable[], orderBy: OrderByState) => {
-    return [...data].sort((a, b) => {
+export const sortSearchableArray = (searchable: Searchable[], orderBy: OrderByState, lang: string) => {
+    return [...searchable].sort((a, b) => {
         if (orderBy === "az") {
-            return a.data.name.localeCompare(b.data.name);
+            const aName = getLocalizedName({ lang: lang, searchable: a});
+            const bName = getLocalizedName({ lang: lang, searchable: b});
+            return aName.localeCompare(bName);
         } else if (orderBy === "za") {
-            return b.data.name.localeCompare(a.data.name);
+            const aName = getLocalizedName({ lang: lang, searchable: a});
+            const bName = getLocalizedName({ lang: lang, searchable: b});
+            return bName.localeCompare(aName);
         } else if (orderBy === "relevance") {
-            return a.data.name.localeCompare(b.data.name); // TODO add relevance sorting
+            const aName = getLocalizedName({ lang: lang, searchable: a});
+            const bName = getLocalizedName({ lang: lang, searchable: b});
+            return aName.localeCompare(bName); // TODO add relevance sorting
         } else if (orderBy === "popularity") {
             return b.data.popularity_score - a.data.popularity_score;
         } else {
@@ -24,33 +38,30 @@ export const sortSearchableArray = (data: Searchable[], orderBy: OrderByState) =
     });
 }
 
-type Props = {
-    orderBy: OrderByState,
-    handleChange: (event: SelectChangeEvent) => void,
+interface Props {
+    orderBy: OrderByState
+    handleChange: (selected: string | null) => void
 }
 
-const OrderBySelect: React.FC<Props> = props => {
-
-    const { orderBy, handleChange } = props;
-
+const OrderBySelect: React.FC<Props> = ({ orderBy, handleChange }: Props) => {
+    const { classes } = useStyles();
     return (
-        <>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-standard-label">Order By</InputLabel>
-                <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
-                    value={orderBy}
-                    onChange={handleChange}
-                    label="Age"
-                >
-                    <MenuItem value={"relevance"}>Relevance</MenuItem>
-                    <MenuItem value={"popularity"}>Popularity</MenuItem>
-                    <MenuItem value={"az"}>A-Z</MenuItem>
-                    <MenuItem value={"za"}>Z-A</MenuItem>
-                </Select>
-            </FormControl>
-        </>
+        <Select
+            label="Order by"
+            radius="md"
+            data={
+                [
+                    { value: 'relevance', label: 'Relevance' },
+                    { value: 'popularity', label: 'Popularity' },
+                    { value: 'az', label: 'A-Z' },
+                    { value: 'za', label: 'Z-A' },
+                ]
+            }
+            value={orderBy}
+            icon={<IconArrowsSort size={14} />}
+            onChange={handleChange}
+            classNames={classes}
+        />
     )
 }
 

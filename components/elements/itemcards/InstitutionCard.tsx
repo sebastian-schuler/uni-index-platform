@@ -26,16 +26,6 @@ const useStyles = createStyles((theme) => ({
     marginBottom: theme.spacing.xs / 2,
   },
 
-  action: {
-    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-    ...theme.fn.hover({
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
-    }),
-  },
-
-  footer: {
-    marginTop: theme.spacing.md,
-  },
 }));
 
 type Props = {
@@ -44,7 +34,7 @@ type Props = {
 
 const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
 
-  const { classes, cx, theme } = useStyles();
+  const { classes } = useStyles();
   const { lang } = useTranslation('common');
 
   // Get list of all countries this institute has locations in
@@ -58,7 +48,7 @@ const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
   // Get the object of the country with most locations
   const mainCountry = countryMap.get(highestCountryCount || "");
 
-  const url = toLink("institution", mainCountry?.url, institution.url);
+  const url = toLink("institution", mainCountry?.url || "", institution.url);
 
   const countryNames = Array.from(countryMap.values()).map(country => getLocalizedName({ lang: lang, dbTranslated: country }));
 

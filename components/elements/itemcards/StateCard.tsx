@@ -1,47 +1,54 @@
-import { Card, CardActionArea, CardContent, Stack, Typography } from '@mui/material'
+import { Card, createStyles, Text } from '@mantine/core'
 import useTranslation from 'next-translate/useTranslation'
+import Link from 'next/link'
 import React from 'react'
-import { URL_LOCATION } from '../../../data/urlConstants'
 import { DetailedState } from '../../../lib/types/DetailedDatabaseTypes'
+import { URL_LOCATION } from '../../../lib/urlConstants'
 import { getLocalizedName, toLink } from '../../../lib/util'
-import Link from '../../mui/NextLinkMui'
 
-type Props = {
+const useStyles = createStyles((theme) => ({
+    card: {
+        position: 'relative',
+        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
+    },
+
+    title: {
+        display: 'block',
+        marginTop: theme.spacing.md,
+        marginBottom: theme.spacing.xs / 2,
+    },
+}));
+
+interface Props {
     state: DetailedState
 }
 
-const StateCard: React.FC<Props> = props => {
+const StateCard: React.FC<Props> = ({ state }: Props) => {
 
-    const { state } = props;
+    const { classes } = useStyles();
     const { lang } = useTranslation('common');
 
     const url = toLink(URL_LOCATION, state.Country.url, state.url);
     const cities = state.City.map(({ name }) => name).join(', ');
 
     return (
-        <Card>
-            <CardActionArea component={Link} href={url} title={""}>
-                <CardContent sx={{ lineHeight: 1 }}>
+        <Link href={url} passHref>
+            <Card component='a' withBorder radius="md" className={classes.card}>
 
-                    <Typography variant="subtitle1" component="h3" color="primary.main" sx={{lineHeight: 1.1, marginBottom: 1}}>
-                        {getLocalizedName({ lang: lang, state: state })}
-                    </Typography>
+                <Text className={classes.title} weight={500}>
+                    {getLocalizedName({ lang: lang, state: state })}
+                </Text>
 
-                    <Stack direction={"row"} color="text.secondary">
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>Total Cities: </Typography>
-                        <Typography variant="body2">
-                            {state._count.City}
-                        </Typography>
-                    </Stack>
+                <Text size="md" color="dimmed" lineClamp={4}>
+                    Total Cities: {state._count.City}
+                </Text>
 
-                    <Stack direction={"column"} color="text.secondary">
-                        <Typography variant="body2" sx={{ fontWeight: 500, lineBreak: "none" }}>Most popular: </Typography>
-                        <Typography variant="body2">{cities}</Typography>
-                    </Stack>
+                <Text size="md" color="dimmed" lineClamp={4}>
+                    Most popular: {cities}
+                </Text>
 
-                </CardContent>
-            </CardActionArea>
-        </Card>
+            </Card>
+        </Link>
     )
 }
 

@@ -11,11 +11,11 @@
 
   "breadcrumb-back-to": "Zurück zu {{origin}}",
 
-  "countries-search-label": "Ein Land suchen",
-  "countries-search-placeholder": "z.B. Deutschland",
-
   "global-search": "Alles durchsuchen",
   "ad-label": "Anzeigen",
+
+  "countries-search-label": "Ein Land suchen",
+  "countries-search-placeholder": "z.B. Deutschland",
 
   "title-popular-courses": "Beliebte Studiengänge",
   "title-popular-institutions": "Beliebte Hochschulen",

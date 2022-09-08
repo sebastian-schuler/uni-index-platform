@@ -42,7 +42,7 @@ export type UserDataProfile = {
 
 export type PremiumAdDetailed = UserAd & {
     Subject: Subject | null;
-}[];
+};
 
 // FORM
 

@@ -1,9 +1,22 @@
-import { Button, Divider, Grid, Stack, Typography } from '@mui/material';
+import { createStyles, Stack, Tabs } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
-import Link from '../../mui/NextLinkMui';
+import GenericPageHeader from '../../elements/GenericPageHeader';
 
-type Props = {
+const useStyles = createStyles((theme) => ({
+
+    tabLabel: {
+        fontSize: theme.fontSizes.lg,
+    },
+
+    root: {
+        backgroundColor: theme.colors.light[0],
+        paddingTop: theme.spacing.xs,
+    },
+    
+  }));
+
+interface Props {
     title: string,
     pageLinkData: {
         name: string;
@@ -17,29 +30,37 @@ type Props = {
 
 const SubNav = ({ title, pageLinkData, backButton }: Props) => {
 
-    const path = useRouter().asPath;
+    const { classes } = useStyles();
+    const router = useRouter();
+    const path = router.asPath;
 
     return (
-        <>
-            {
+        <Stack>
+            {/* {
                 backButton !== undefined ? (
                     <Stack direction={'row'} sx={{ justifyContent: 'space-between' }}>
                         <Typography variant='h5' component={'h1'}>{title}</Typography>
                         <Button variant='outlined' LinkComponent={Link} href={backButton.url}>{backButton.text}</Button>
                     </Stack>
                 ) : <Typography variant='h4' component={'h1'}>{title}</Typography>
-            }
+            } */}
 
-            <Stack direction={'row'} spacing={0} paddingBottom={2}>
-                {
-                    pageLinkData.map((page, i) => (
-                        <Grid item key={i} sx={{ borderBottom: (page.url === path ? 2 : 0), borderColor: 'primary.main' }} >
-                            <Button variant='text' LinkComponent={Link} href={page.url || '#'}>{page.name}</Button>
-                        </Grid>
-                    ))
-                }
-            </Stack>
-        </>
+            <GenericPageHeader title={title} description={""} />
+
+            <Tabs
+                classNames={classes}
+                value={path}
+                onTabChange={(value) => router.push(value as string)}
+            >
+                <Tabs.List>
+                    {
+                        pageLinkData.map((page, i) => (
+                            <Tabs.Tab key={i} value={page.url}>{page.name}</Tabs.Tab>
+                        ))
+                    }
+                </Tabs.List>
+            </Tabs>
+        </Stack>
     )
 }
 

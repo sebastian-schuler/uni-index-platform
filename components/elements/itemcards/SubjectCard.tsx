@@ -4,7 +4,7 @@ import {
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
-import { URL_INSTITUTION } from '../../../data/urlConstants'
+import { URL_INSTITUTION } from '../../../lib/urlConstants'
 import { DetailedSubject } from '../../../lib/types/DetailedDatabaseTypes'
 import { getLocalizedName, toLink } from '../../../lib/util'
 

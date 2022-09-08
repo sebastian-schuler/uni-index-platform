@@ -3,10 +3,11 @@ import useTranslation from 'next-translate/useTranslation'
 import type { AppProps, NextWebVitalsMetric } from 'next/app'
 import { useRouter } from 'next/router'
 import AccountDrawer from '../components/layout/account/AccountDrawer'
+import AccountNavigation from '../components/layout/account/AccountNavigation'
 import WebsiteNavbar from '../components/layout/nav/Navbar'
 import WebsiteHeader from '../components/layout/nav/WebsiteHeader'
 import { AuthProvider } from '../context/SessionContext'
-import { URL_ACCOUNT } from '../data/urlConstants'
+import { URL_ACCOUNT } from '../lib/urlConstants'
 import { toLink } from '../lib/util'
 import '../styles/globals.css'
 import appTheme from '../theme/theme'
@@ -22,7 +23,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <AuthProvider>
-
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
@@ -30,17 +30,16 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
 
         {
-          // asPath.startsWith(toLink(URL_ACCOUNT)) ? (
-          //   <AccountDrawer>
-          //     <Component {...pageProps} />
-          //   </AccountDrawer>
-          // ) : (
+          asPath.startsWith(toLink(URL_ACCOUNT)) ? (
+            <AccountNavigation>
+              <Component {...pageProps} />
+            </AccountNavigation>
+          ) : (
             <>
-              {/* <WebsiteNavbar /> */} 
               <WebsiteHeader />
               <Component {...pageProps} />
             </>
-          // )
+          )
         }
 
       </MantineProvider>

@@ -1,5 +1,3 @@
-import { Avatar, Grid, Paper, Typography } from '@mui/material';
-import { Box } from '@mui/system';
 import { GetServerSideProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import RegisterSteps from '../components/elements/accounts/RegisterSteps';

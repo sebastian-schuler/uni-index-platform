@@ -2,10 +2,9 @@ import { Badge, Card, createStyles, Text } from '@mantine/core'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
-import { URL_LOCATION } from '../../../data/urlConstants'
+import { URL_LOCATION } from '../../../lib/urlConstants'
 import { DetailedCity } from '../../../lib/types/DetailedDatabaseTypes'
 import { toLink } from '../../../lib/util'
-
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -25,17 +24,6 @@ const useStyles = createStyles((theme) => ({
         marginTop: theme.spacing.xl,
         marginBottom: theme.spacing.xs / 2,
     },
-
-    action: {
-        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-        ...theme.fn.hover({
-            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
-        }),
-    },
-
-    footer: {
-        marginTop: theme.spacing.md,
-    },
 }));
 
 type Props = {
@@ -44,7 +32,7 @@ type Props = {
 
 const CityCard: React.FC<Props> = ({ city }: Props) => {
 
-    const { classes, cx, theme } = useStyles();
+    const { classes } = useStyles();
 
     const { t } = useTranslation('common');
     const langContent = {
