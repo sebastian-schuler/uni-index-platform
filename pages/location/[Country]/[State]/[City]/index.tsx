@@ -9,7 +9,7 @@ import Breadcrumb from '../../../../../components/layout/Breadcrumb';
 import { FooterContent } from '../../../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../../../components/layout/LayoutContainer';
 import Meta from '../../../../../components/partials/Meta';
-import { getCityStateCountryByCity, getCityStateCountryPaths, getCountries, getInstitutesDetailed } from '../../../../../lib/prismaQueries';
+import { getCityStateCountryByCity, getCityStateCountryPaths, getCountries, getInstitutionsDetailedByCity } from '../../../../../lib/prismaQueries';
 import { DetailedInstitution } from '../../../../../lib/types/DetailedDatabaseTypes';
 
 interface Props {
@@ -112,9 +112,8 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 export async function getStaticProps(context: GetStaticPropsContext) {
 
   let cityUrl = "" + context?.params?.City;
-
-  const institutes = await getInstitutesDetailed({ cityUrl: cityUrl });
   const cityInfo = await getCityStateCountryByCity(cityUrl);
+  const institutions = cityInfo !== null ? (await getInstitutionsDetailedByCity(cityInfo.id)) : [];
 
   // Footer Data
   // Get all countries
@@ -124,7 +123,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   ]
 
   return {
-    props: { institutionList: institutes, footerContent: footerContent, cityInfo: cityInfo }
+    props: { institutionList: institutions, footerContent: footerContent, cityInfo: cityInfo }
   }
 
 }

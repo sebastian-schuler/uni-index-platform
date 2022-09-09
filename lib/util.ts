@@ -15,30 +15,32 @@ interface LocalizedNameProps {
 // Take in a database object and return its name in the selected locale
 export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, institution, searchable }: LocalizedNameProps): string => {
 
+    const toStr = (name: string | undefined | null): string => name || "";
+
     if (any !== undefined) {
-        if (lang === "de") return "" + any.name_de;
-        else return "" + any.name_en;
+        if (lang === "de") return toStr(any.name_de);
+        else return toStr(any.name_en);
 
     } else if (dbTranslated !== undefined) {
         const translations = dbTranslated.translations as { [key: string]: string };
         return translations['name_' + lang] ?? dbTranslated.name;
 
     } else if (state !== undefined) {
-        if (lang === "en") return "" + state.name_en;
+        if (lang === "en") return toStr(state.name_en);
         else return state.name_native;
 
     } else if (subject !== undefined) {
-        return "" + subject.name;
+        return toStr(subject.name);
 
     } else if (institution !== undefined) {
-        return "" + institution.name;
+        return toStr(institution.name);
 
     } else if (searchable !== undefined) {
 
         if (searchable.type === "Country")
-            return "" + searchable.data.name;
+            return toStr(searchable.data.name);
         else if (searchable.type === "SubjectType")
-            return "" + getLocalizedName({ lang, any: searchable.data });
+            return toStr(getLocalizedName({ lang, any: searchable.data }));
         else
             return ""
 

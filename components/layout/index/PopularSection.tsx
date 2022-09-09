@@ -33,7 +33,7 @@ const PopularSection: React.FC<Props> = props => {
                     brandColor ? <Divider color={"light.0"} sx={{ opacity: 0.7 }} /> : <Divider />
                 }
 
-                <Grid gutter={12} mt={"md"}>{children}</Grid>
+                <Grid gutter={theme.spacing.lg} mt={"md"}>{children}</Grid>
 
             </ResponsiveContainer>
 

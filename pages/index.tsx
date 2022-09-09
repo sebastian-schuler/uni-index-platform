@@ -12,8 +12,8 @@ import LayoutContainer from '../components/layout/LayoutContainer';
 import Meta from '../components/partials/Meta';
 import { AD_PAGE_INDEX } from '../lib/appConstants';
 import { getPopularDetailedCountries } from '../lib/prismaDetailedQueries';
-import { getAds, getCountries, getInstitutesByPopularity, getSubjectsByPopularity } from '../lib/prismaQueries';
-import { DetailedCountry, DetailedInstitution, DetailedPremiumAd, DetailedSubject } from '../lib/types/DetailedDatabaseTypes';
+import { getAds, getCountries, getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/prismaQueries';
+import { DetailedCountry, DetailedInstitution, DetailedUserAd, DetailedSubject } from '../lib/types/DetailedDatabaseTypes';
 import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/urlConstants';
 import { toLink } from '../lib/util';
 
@@ -27,7 +27,7 @@ interface Props {
 
 const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountries, popularInstitutes, footerContent }: Props) => {
 
-  const ads: DetailedPremiumAd[] = JSON.parse(adsStringified);
+  const ads: DetailedUserAd[] = JSON.parse(adsStringified);
   const { t } = useTranslation('common');
   const langContent = {
     pageTitle: t('page-title'),
@@ -112,11 +112,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   // Popular ...
   const popularSubjectsDetailed: DetailedSubject[] = await getSubjectsByPopularity(10);
-  const popularInstitutesDetailed: DetailedInstitution[] = await getInstitutesByPopularity(10);
+  const popularInstitutesDetailed: DetailedInstitution[] = await getInstitutionsByPopularity(10);
   const popularCountriesDetailed: DetailedCountry[] = await getPopularDetailedCountries();
 
   // Ads
-  const ads: DetailedPremiumAd[] = await getAds(AD_PAGE_INDEX);
+  const ads: DetailedUserAd[] = await getAds(AD_PAGE_INDEX);
   const allAds = JSON.stringify(ads);
 
   // Footer Data

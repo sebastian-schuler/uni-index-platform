@@ -3,12 +3,17 @@ import { City, Country, Institution, InstitutionLocation, UserAd, State, Subject
 // Detailed types contain all information for cards
 
 // AD
-export type DetailedPremiumAd = UserAd & {
+export type DetailedUserAd = UserAd & {
     Subject: (Subject & {
         SubjectType: SubjectType;
     }) | null;
     User: User & {
         Institution: Institution & {
+            City: City & {
+                State: State & {
+                    Country: Country;
+                };
+            };
             InstitutionLocation: (InstitutionLocation & {
                 City: City
             })[]
@@ -18,7 +23,7 @@ export type DetailedPremiumAd = UserAd & {
 
 // SUBJECT CARD
 export type DetailedSubject = (Subject & {
-    City: {
+    City: City & {
         State: {
             Country: Country;
         };
@@ -34,8 +39,16 @@ export type DetailedSubjectType = SubjectType & {
 
 // INSTITUTION CARD
 export type DetailedInstitution = (Institution & {
+    City: City & {
+        State: {
+            Country: Country;
+        };
+    };
+    Subject: (Subject & {
+        SubjectType: SubjectType;
+    })[];
     InstitutionLocation: {
-        City: {
+        City: City & {
             State: State & {
                 Country: Country;
             };

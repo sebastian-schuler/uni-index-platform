@@ -140,7 +140,7 @@ const WebsiteHeader = () => {
 
   return (
     <>
-      <Header height={HEADER_HEIGHT} className={classes.header} fixed zIndex={9999}>
+      <Header height={HEADER_HEIGHT} className={classes.header} fixed > 
         <ResponsiveContainer>
           <div className={classes.inner}>
             {/* <MantineLogo size={28} inverted /> */}

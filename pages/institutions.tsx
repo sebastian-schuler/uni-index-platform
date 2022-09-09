@@ -8,7 +8,7 @@ import Meta from '../components/partials/Meta';
 import { AD_PAGE_INSTITUTIONS } from '../lib/appConstants';
 import { getDetailedCountries } from '../lib/prismaDetailedQueries';
 import { getAds } from '../lib/prismaQueries';
-import { DetailedPremiumAd } from '../lib/types/DetailedDatabaseTypes';
+import { DetailedUserAd } from '../lib/types/DetailedDatabaseTypes';
 import { Searchable } from '../lib/types/UiHelperTypes';
 import { generateSearchable } from '../lib/util';
 
@@ -27,7 +27,7 @@ const institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, fo
         pageTitle: t('common:page-title')
     }
 
-    const ads: DetailedPremiumAd[] = JSON.parse(stringifiedAds);
+    const ads: DetailedUserAd[] = JSON.parse(stringifiedAds);
 
     return (
         <>
@@ -60,7 +60,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const searchableCountries = generateSearchable({ lang: context.locale, array: { type: "Country", data: countryList } });
 
     // Ads
-    const ads: DetailedPremiumAd[] = await getAds(AD_PAGE_INSTITUTIONS);
+    const ads: DetailedUserAd[] = await getAds(AD_PAGE_INSTITUTIONS);
     const stringifiedAds = JSON.stringify(ads);
 
     const footerContent: FooterContent[] = [

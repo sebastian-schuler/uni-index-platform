@@ -1,4 +1,4 @@
-import { Grid, SimpleGrid, Stack, Title } from '@mantine/core';
+import { Grid, SimpleGrid, Stack, Title, Box } from '@mantine/core';
 import { Country } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
@@ -60,10 +60,12 @@ const CountryPage: NextPage<Props> = ({ states, countryInfo, footerContent }:Pro
 
           <Grid.Col sm={12}>
             <Title order={6} mb={2}>Map of Germany</Title>
+            <Box sx={{zIndex: 0}}>
             <CountryMapContainer
               country={query.Country?.toString() ?? ""}
               stateNames={translatedStates}
             />
+            </Box>
           </Grid.Col>
 
           <Grid.Col sm={12}>

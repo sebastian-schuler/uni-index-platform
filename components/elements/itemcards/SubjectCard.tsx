@@ -1,42 +1,47 @@
 import {
-  Badge, Card, createStyles, Text
+  Badge, Card, createStyles, Group, List, Stack, Text, ThemeIcon
 } from '@mantine/core'
+import { IconAward, IconCalendar, IconCategory } from '@tabler/icons'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
-import { URL_INSTITUTION } from '../../../lib/urlConstants'
 import { DetailedSubject } from '../../../lib/types/DetailedDatabaseTypes'
+import { URL_INSTITUTION } from '../../../lib/urlConstants'
+import Flags from 'country-flag-icons/react/3x2'
 import { getLocalizedName, toLink } from '../../../lib/util'
 
 const useStyles = createStyles((theme) => ({
+
   card: {
-    position: 'relative',
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
+    transition: "all .2s ease-in-out",
+
+    '&:hover': {
+      transform: "scale(1.05)",
+    }
   },
 
-  rating: {
-    position: 'absolute',
-    top: theme.spacing.xs,
-    right: theme.spacing.xs + 2,
-    pointerEvents: 'none',
+  section: {
+    borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+      }`,
+    padding: theme.spacing.md,
   },
 
-  title: {
-    display: 'block',
-    marginTop: theme.spacing.xl,
-    marginBottom: theme.spacing.xs / 2,
+  like: {
+    color: theme.colors.red[6],
   },
 
-  action: {
-    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-    ...theme.fn.hover({
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
-    }),
+  label: {
+    textTransform: 'uppercase',
+    fontSize: theme.fontSizes.xs,
+    fontWeight: 700,
   },
 
-  footer: {
-    marginTop: theme.spacing.md,
-  },
+  flag: {
+    width: "2rem",
+    opacity: 0.75,
+  }
+
 }));
 
 type Props = {
@@ -45,27 +50,61 @@ type Props = {
 
 const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
 
-  const { classes, cx, theme } = useStyles();
+  const { classes, theme } = useStyles();
   const { lang } = useTranslation('common');
 
   const url = toLink(URL_INSTITUTION, subject.City.State.Country.url, subject.Institution.url, subject.url);
   const country = getLocalizedName({ lang: lang, dbTranslated: subject.City.State.Country });
 
+  const Flag = Flags[subject.City.State.Country.country_code || ""] || Flags["EU"];
+
   return (
     <Link href={url} passHref>
-      <Card component='a' withBorder radius="md" className={classes.card}>
+      <Card component='a' withBorder radius="md" p="md" className={classes.card}>
 
-        <Badge className={classes.rating} variant="outline">
-          {country}
-        </Badge>
+        <Card.Section className={classes.section}>
+          <Group position="apart" noWrap sx={{ alignItems: "start" }}>
+            <Stack spacing={theme.spacing.xs}>
+              <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{lineHeight: 1}}>
+                {subject.name}
+              </Text>
+              <Text sx={{lineHeight: 1.2}}>{subject.Institution.name} | Campus {subject.City.name}</Text>
+            </Stack>
+            <Flag className={classes.flag} />
+          </Group>
 
-        <Text className={classes.title} weight={500}>
-          <Text>{subject.name}</Text>{subject.Institution.name}
-        </Text>
+        </Card.Section>
 
-        <Text size="md" color="dimmed" lineClamp={4}>
-          {subject.degree},{"\n"}{subject.semester_count} Semester
-        </Text>
+        <Card.Section className={classes.section}>
+          <List
+            spacing="sm"
+            size="md"
+            center
+          >
+            <List.Item
+              icon={
+                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                  <IconCategory size={18} />
+                </ThemeIcon>
+              }
+            >{getLocalizedName({ lang: lang, any: subject.SubjectType })}</List.Item>
+            <List.Item
+              icon={
+                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                  <IconAward size={18} />
+                </ThemeIcon>
+              }
+            >{subject.degree}</List.Item>
+            <List.Item
+              icon={
+                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                  <IconCalendar size={18} />
+                </ThemeIcon>
+              }
+            >{subject.semester_count} Semester</List.Item>
+          </List>
+        </Card.Section>
+
 
       </Card>
     </Link>

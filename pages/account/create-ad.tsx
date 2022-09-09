@@ -26,7 +26,7 @@ const CreateAd = () => {
 
     const { token } = useAuth();
     const theme = useMantineTheme();
-    const SECONDARY_AD_HEIGHT = PRIMARY_AD_HEIGHT / 2 - theme.spacing.md / 2;
+    const SECONDARY_AD_HEIGHT = PRIMARY_AD_HEIGHT / 2 - theme.spacing.lg / 2;
 
     // Ad settings
     const [adType, setAdType] = useState<"institution" | "subject">("institution");
@@ -246,22 +246,19 @@ const CreateAd = () => {
                             />
                         </Box>
 
-                        {
-                            adSize === 3 &&
-                            <Box>
-                                <Group position="apart">
-                                    <Text size={"sm"}>Description</Text>
-                                    <HelpPopover helpText='The description placed inside your ad.' size={theme.fontSizes.lg} />
-                                </Group>
-                                <Textarea
-                                    placeholder="Your description"
-                                    radius="md"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    error={description.length > MAX_DESCRIPTION_LENGTH}
-                                />
-                            </Box>
-                        }
+                        <Box>
+                            <Group position="apart">
+                                <Text size={"sm"}>Description</Text>
+                                <HelpPopover helpText='The description placed inside your ad.' size={theme.fontSizes.lg} />
+                            </Group>
+                            <Textarea
+                                placeholder="Your description"
+                                radius="md"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                error={description.length > MAX_DESCRIPTION_LENGTH}
+                            />
+                        </Box>
 
                         {
                             (adSize === 3 || adSize === 2) &&
@@ -356,6 +353,7 @@ const CreateAd = () => {
                         title={getAdHeadline()}
                         link='#'
                         colHeight={PRIMARY_AD_HEIGHT}
+                        adType={adType}
                         imgUrl={imageFilepath}
                         disableLink
                     />
@@ -364,22 +362,28 @@ const CreateAd = () => {
                     <MediumAd
                         headline={getAdHeadline()}
                         subtext='subtext'
+                        description={description === "" ? "[Description]" : description}
                         title={getAdHeadline()}
                         link='#'
                         colHeight={SECONDARY_AD_HEIGHT}
+                        adType={adType}
                         imgUrl={imageFilepath}
                         disableLink
                     />
                     ||
                     adSize === 1 &&
-                    <SmallAd
-                        headline={getAdHeadline()}
-                        subtext='subtext'
-                        title={getAdHeadline()}
-                        link='#'
-                        colHeight={SECONDARY_AD_HEIGHT}
-                        disableLink
-                    />
+                    <Box sx={{ maxWidth: 260 }}>
+                        <SmallAd
+                            headline={getAdHeadline()}
+                            subtext='subtext'
+                            description={description === "" ? "[Description]" : description}
+                            title={getAdHeadline()}
+                            link='#'
+                            adType={adType}
+                            colHeight={SECONDARY_AD_HEIGHT}
+                            disableLink
+                        />
+                    </Box>
                 }
             </Grid.Col>
 

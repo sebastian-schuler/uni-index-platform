@@ -49,7 +49,7 @@ const CountryMap = ({ country, stateNames, data, coordinates, zoomLevel }: Props
     return (
         <div className='h-[600px] w-full'>
 
-            <MapContainer center={[coordinates.lat, coordinates.lng]} zoom={zoomLevel} scrollWheelZoom={false} style={{ height: 600, width: "100%" }} >
+            <MapContainer center={[coordinates.lat, coordinates.lng]} zoom={zoomLevel} scrollWheelZoom={false} style={{ height: 600, width: "100%", zIndex: 5 }} >
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

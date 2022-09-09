@@ -15,6 +15,7 @@ model City {
   name                String                @db.VarChar
   popularity_score    Int                   @default(0)
   State               State                 @relation(fields: [state_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "City inside State")
+  Institution         Institution[]
   InstitutionLocation InstitutionLocation[]
   Subject             Subject[]
 }
@@ -25,6 +26,7 @@ model Country {
   translations     Json?   @db.Json
   name             String  @db.VarChar
   popularity_score Int     @default(0)
+  country_code     String  @db.VarChar(2)
   State            State[]
 }
 
@@ -34,6 +36,8 @@ model Institution {
   url                    String                  @unique(map: "Unique Institution URL") @db.VarChar
   website                String?                 @db.VarChar
   popularity_score       Int                     @default(0)
+  main_location          Int
+  City                   City                    @relation(fields: [main_location], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Institution has main location")
   InstitutionLocation    InstitutionLocation[]
   InstitutionSocialMedia InstitutionSocialMedia?
   Subject                Subject[]

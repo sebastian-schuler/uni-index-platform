@@ -7,7 +7,7 @@ import LayoutContainer from '../components/layout/LayoutContainer'
 import Meta from '../components/partials/Meta'
 import { getDetailedCountries } from '../lib/prismaDetailedQueries'
 import { getAds } from '../lib/prismaQueries'
-import { DetailedPremiumAd } from '../lib/types/DetailedDatabaseTypes'
+import { DetailedUserAd } from '../lib/types/DetailedDatabaseTypes'
 import { Searchable } from '../lib/types/UiHelperTypes'
 import { generateSearchable } from '../lib/util'
 
@@ -25,7 +25,7 @@ const countries: NextPage<Props> = ({ adsStringified, searchableCountries, foote
         subtitle: t('countries-title-sub'),
         pageTitle: t('common:page-title')
     }
-    const ads: DetailedPremiumAd[] = JSON.parse(adsStringified);
+    const ads: DetailedUserAd[] = JSON.parse(adsStringified);
 
     return (
         <LayoutContainer footerContent={footerContent}>
@@ -58,7 +58,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         { title: "Countries", data: searchableCountries, type: "Searchable" },
     ]
 
-    const ads: DetailedPremiumAd[] = await getAds("locations");
+    const ads: DetailedUserAd[] = await getAds("locations");
     const allAds = JSON.stringify(ads);
 
     return {

@@ -1,4 +1,5 @@
-import { Box, Card, createStyles, Group, Image, Text } from '@mantine/core'
+import { Box, Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core'
+import { IconBuilding, IconSchool } from '@tabler/icons'
 import Link from 'next/link'
 import React, { memo } from 'react'
 import { PATH_PLACEHOLDER_IMAGES } from '../../../lib/urlConstants'
@@ -7,6 +8,12 @@ import { toLink } from '../../../lib/util'
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
+        transition: "all .2s ease-in-out",
+        height: "100%",
+
+        '&:hover': {
+            transform: "scale(1.05)",
+        }
     },
 
     title: {
@@ -15,9 +22,14 @@ const useStyles = createStyles((theme) => ({
         marginBottom: theme.spacing.xs / 2,
     },
 
-    body: {
+    section: {
+        borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
         padding: theme.spacing.md,
     },
+
+    icon: {
+        opacity: 0.75,
+    }
 }));
 
 interface Props {
@@ -25,58 +37,63 @@ interface Props {
     title: string
     headline: string
     subtext: string
+    description: string
     imgUrl?: string
     colHeight: number
+    adType: string
     disableLink?: boolean
 }
 
-const MediumAd: React.FC<Props> = ({ title, link, headline, subtext, imgUrl, colHeight, disableLink }: Props) => {
+const MediumAd: React.FC<Props> = ({ title, link, headline, subtext, description, imgUrl, colHeight, adType, disableLink }: Props) => {
 
-    const { classes } = useStyles();
+    const { classes, theme } = useStyles();
 
-    if (disableLink) {
-        return (
-            <Card component='div' withBorder radius="md" shadow="sm" p={0} className={classes.card} title={title} >
-                <Group noWrap spacing={0}>
-                    <Box sx={{ width: "50%" }}>
-                        <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} />
-                    </Box>
-                    <div className={classes.body}>
-                        <Text transform="uppercase" color="dimmed" weight={700} size="xs">
-                            Germany
-                        </Text>
-                        <Text className={classes.title} mt="xs" mb="md">
-                            {headline}
-                        </Text>
-                        <Group noWrap spacing="xs">
-                            <Text size="xs">{subtext}</Text>
+    const AdCard = (
+        <Card component={disableLink ? "div" : "a"} withBorder radius="md" shadow="sm" p={0} className={classes.card} title={title} sx={{ height: colHeight }}>
+
+            <Group noWrap spacing={0} sx={{ alignItems: "start" }}>
+
+                <Box sx={{ width: "50%" }}>
+                    <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} />
+                </Box>
+
+                <Box sx={{ flex: 1, height: "100%" }}>
+
+                    <Card.Section className={classes.section}>
+                        <Group position="apart" noWrap sx={{ alignItems: "start" }}>
+                            <Stack spacing={theme.spacing.xs}>
+                                <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
+                                    {headline}
+                                </Text>
+                                <Text sx={{ lineHeight: 1.2 }}>{subtext}</Text>
+                            </Stack>
+                            <ThemeIcon color={theme.colors.brandOrange[5]} size={"lg"} radius="xl" className={classes.icon}>
+                                {
+                                    adType === "subject" ? <IconSchool size={24} /> : <IconBuilding size={22} />
+                                }
+                            </ThemeIcon>
                         </Group>
-                    </div>
-                </Group>
-            </Card>
-        )
-    }
+                    </Card.Section>
+
+                    <Card.Section px={theme.spacing.md} py={theme.spacing.sm}>
+
+                        <Text size="md" color="dimmed" lineClamp={3} sx={{ flex: 1, lineBreak: "normal", overflowWrap: "break-word", wordBreak: "break-word" }}>
+                            {description}
+                        </Text>
+
+                    </Card.Section>
+
+                </Box>
+
+            </Group>
+        </Card>
+    )
+
+    if (disableLink) return AdCard;
 
     return (
         <Link href={link} passHref>
-            <Card component='a' withBorder radius="md" shadow="sm" p={0} className={classes.card} title={title} >
-                <Group noWrap spacing={0}>
-                    <Box sx={{ width: "50%" }}>
-                        <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} />
-                    </Box>
-                    <div className={classes.body}>
-                        <Text transform="uppercase" color="dimmed" weight={700} size="xs">
-                            Germany
-                        </Text>
-                        <Text className={classes.title} mt="xs" mb="md">
-                            {headline}
-                        </Text>
-                        <Group noWrap spacing="xs">
-                            <Text size="xs">{subtext}</Text>
-                        </Group>
-                    </div>
-                </Group>
-            </Card>
+            {AdCard}
         </Link>
     )
 }
