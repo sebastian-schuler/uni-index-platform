@@ -7,6 +7,7 @@ import { GetServerSidePropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import MantineLink from '../components/elements/MantineLink';
 import ForgotPassword from '../components/layout/account/ForgotPassword';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import { useAuth } from '../context/SessionContext';
@@ -128,20 +129,10 @@ const CustomerLogin: NextPage = () => {
               <ForgotPassword setShowForgotPassword={setShowForgotPassword} /> :
               (
                 <>
-                  <Title
-                    align="center"
-                    sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
-                  >
-                    Welcome back!
-                  </Title>
-                  <Text color="dimmed" size="sm" align="center" mt={5}>
-                    Do not have an account yet?{' '}
-                    <Anchor href={URL_REGISTER} size="sm" className={classes.link}>
-                      Create account
-                    </Anchor>
-                  </Text>
+                  <Title color={theme.colors.brandGray[3]} align={"center"} >Welcome back!</Title>
+                  <Text color={"dimmed"} align={"center"}>Do not have an account yet? <MantineLink label='Create account' url={URL_REGISTER} /></Text>
 
-                  <Paper component='form' withBorder shadow="md" p={30} mt={30} radius="md" sx={{ maxWidth: 400, backgroundColor: theme.colors.light[0] }}>
+                  <Paper component='form' withBorder shadow="md" p={theme.spacing.lg} mt={theme.spacing.lg} radius="md" sx={{ maxWidth: 400, backgroundColor: theme.colors.light[0] }}>
                     <TextInput
                       autoComplete='username'
                       value={username}

@@ -1,6 +1,6 @@
 import { Text, Title } from '@mantine/core';
 import { memo } from 'react';
-import Faq from '../../components/elements/support/Faq';
+import Faq from '../../components/elements/accounts/support/Faq';
 
 const Support = () => {
 

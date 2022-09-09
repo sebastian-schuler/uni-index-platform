@@ -1,15 +1,20 @@
+import { Title, useMantineTheme, Text } from '@mantine/core';
 import { GetServerSideProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import RegisterSteps from '../components/elements/accounts/RegisterSteps';
+import MantineLink from '../components/elements/MantineLink';
+import RegisterSteps from '../components/layout/account/RegisterSteps';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import { getInstitutesForUserAccounts } from '../lib/prismaQueries';
 import { InstitutionRegistrationDBItem, InstitutionRegistrationItem } from '../lib/types/AccountHandlingTypes';
+import { URL_LOGIN } from '../lib/urlConstants';
 
 type Props = {
   registrationInstitutes: InstitutionRegistrationItem[]
 }
 
 const register: NextPage<Props> = props => {
+
+  const theme = useMantineTheme();
 
   const { t } = useTranslation('loginLogout');
   const langContent = {
@@ -18,8 +23,14 @@ const register: NextPage<Props> = props => {
 
   return (
     <LayoutContainer>
+      
+      
+      <Title color={theme.colors.brandGray[3]} align={"center"} >Create new account</Title>
+      <Text color={"dimmed"} align={"center"} pb={theme.spacing.lg}>Already have an account? <MantineLink label='Login' url={URL_LOGIN} /> instead</Text>
 
-      <Grid
+      <RegisterSteps registrationInstitutes={props.registrationInstitutes} />
+
+      {/* <Grid
         container
         sx={{
           marginY: 8,
@@ -32,7 +43,6 @@ const register: NextPage<Props> = props => {
 
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-                {/* <LockOutlinedIcon /> */}
               </Avatar>
               <Typography component="h1" variant="h5">
                 {langContent.signupTitle}
@@ -45,7 +55,7 @@ const register: NextPage<Props> = props => {
 
           </Paper>
         </Grid>
-      </Grid>
+      </Grid> */}
 
     </LayoutContainer>
   )

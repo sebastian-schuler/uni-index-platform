@@ -4,9 +4,9 @@ import { Subject } from '@prisma/client';
 import { IconBuilding, IconSchool, IconUpload, IconX } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import HelpPopover from '../../components/elements/HelpPopover';
-import LargeAd from '../../components/elements/premiumads/LargeAd';
-import MediumAd from '../../components/elements/premiumads/MediumAd';
-import SmallAd from '../../components/elements/premiumads/SmallAd';
+import LargeAd from '../../components/elements/userads/LargeAd';
+import MediumAd from '../../components/elements/userads/MediumAd';
+import SmallAd from '../../components/elements/userads/SmallAd';
 import { useAuth } from '../../context/SessionContext';
 import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
 import { UserDataProfile } from '../../lib/types/AccountHandlingTypes';
@@ -48,12 +48,12 @@ const CreateAd = () => {
     // COST
     const daysBooked = until === null ? 0 : Math.round(Math.abs((Date.now() - (until.getTime())) / (24 * 60 * 60 * 1000))) + 1;
 
-    const getAdTotalCost = ():number => {
+    const getAdTotalCost = (): number => {
         let cost = 0;
         if (adSize === 1) {
             cost = 0.99 * daysBooked;
         } else if (adSize === 2) {
-            cost =  1.99 * daysBooked;
+            cost = 1.99 * daysBooked;
         } else {
             cost = 2.99 * daysBooked;
         }
@@ -280,10 +280,13 @@ const CreateAd = () => {
                                         withAsterisk
                                         accept="image/png,image/jpeg"
                                         sx={{ flex: 1 }}
+                                        rightSection={
+                                            image !== null &&
+                                            <ActionIcon radius="xl" onClick={() => setImage(null)}>
+                                                <IconX size={theme.fontSizes.md} />
+                                            </ActionIcon>
+                                        }
                                     />
-                                    <ActionIcon radius="xl" onClick={() => setImage(null)}>
-                                        <IconX size={theme.fontSizes.md} />
-                                    </ActionIcon>
                                 </Group>
                             </Box>
                         }

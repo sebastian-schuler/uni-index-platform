@@ -1,7 +1,7 @@
 import { Grid, Stack } from '@mantine/core';
 import type { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import PremiumList from '../components/container/PremiumList';
+import PremiumList from '../components/container/AdList';
 import HeroSection from '../components/elements/index/HeroSection';
 import CountryCard from '../components/elements/itemcards/CountryCard';
 import InstitutionCard from '../components/elements/itemcards/InstitutionCard';
@@ -120,7 +120,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const allAds = JSON.stringify(ads);
 
   // Footer Data
-  // Get all countries
   const countryList = await getCountries("asc");
 
   const footerContent: FooterContent[] = [

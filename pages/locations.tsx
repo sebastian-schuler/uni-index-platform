@@ -1,7 +1,7 @@
 import { GetStaticProps, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import CountryList from '../components/container/CountryList'
-import PremiumList from '../components/container/PremiumList'
+import PremiumList from '../components/container/AdList'
 import { FooterContent } from '../components/layout/footer/Footer'
 import LayoutContainer from '../components/layout/LayoutContainer'
 import Meta from '../components/partials/Meta'
@@ -11,13 +11,13 @@ import { DetailedPremiumAd } from '../lib/types/DetailedDatabaseTypes'
 import { Searchable } from '../lib/types/UiHelperTypes'
 import { generateSearchable } from '../lib/util'
 
-type Props = {
+interface Props {
     searchableCountries: Searchable[]
-    ads: string
+    adsStringified: string
     footerContent: FooterContent[]
 }
 
-const countries: NextPage<Props> = props => {
+const countries: NextPage<Props> = ({ adsStringified, searchableCountries, footerContent }: Props) => {
 
     const { t } = useTranslation('location');
     const langContent = {
@@ -25,11 +25,10 @@ const countries: NextPage<Props> = props => {
         subtitle: t('countries-title-sub'),
         pageTitle: t('common:page-title')
     }
-
-    const ads: DetailedPremiumAd[] = JSON.parse(props.ads);
+    const ads: DetailedPremiumAd[] = JSON.parse(adsStringified);
 
     return (
-        <LayoutContainer footerContent={props.footerContent}>
+        <LayoutContainer footerContent={footerContent}>
 
             <Meta
                 title={langContent.pageTitle + ' - ' + langContent.title}
@@ -40,7 +39,7 @@ const countries: NextPage<Props> = props => {
                 title={langContent.title}
                 subtitle={langContent.subtitle}
                 root={"location"}
-                searchableCountries={props.searchableCountries}
+                searchableCountries={searchableCountries}
             >
 
                 <PremiumList premiumAds={ads} />
@@ -63,7 +62,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const allAds = JSON.stringify(ads);
 
     return {
-        props: { searchableCountries: searchableCountries, ads: allAds, footerContent: footerContent }
+        props: {
+            searchableCountries: searchableCountries,
+            adsStringified: allAds,
+            footerContent: footerContent
+        }
     }
 
 }

@@ -2,9 +2,9 @@ import { Box, Divider, Grid, SimpleGrid, Title, useMantineTheme } from '@mantine
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import { DetailedPremiumAd } from '../../lib/types/DetailedDatabaseTypes'
-import LargeAd from '../elements/premiumads/LargeAd'
-import MediumAd from '../elements/premiumads/MediumAd'
-import SmallAd from '../elements/premiumads/SmallAd'
+import LargeAd from '../elements/userads/LargeAd'
+import MediumAd from '../elements/userads/MediumAd'
+import SmallAd from '../elements/userads/SmallAd'
 import ResponsiveContainer from '../layout/ResponsiveContainer'
 
 const PRIMARY_COL_HEIGHT = 400;
