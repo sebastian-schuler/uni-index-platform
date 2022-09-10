@@ -57,6 +57,7 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
 
         <PopularSection
           title={langContent.titlePopularCourses}
+          subtext="The most popular courses on our platform"
           buttonText={langContent.linkCourses}
           buttonUrl={toLink(URL_SUBJECTS)}
         >
@@ -71,6 +72,7 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
 
         <PopularSection
           title={langContent.titlePopularInstitutions}
+          subtext="Universities with the most popular courses"
           buttonText={langContent.linkInstitutions}
           buttonUrl={toLink(URL_INSTITUTIONS)}
           brandColor
@@ -88,6 +90,7 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
 
         <PopularSection
           title={langContent.titlePopularLocations}
+          subtext="Popular countries for studying"
           buttonText={langContent.linkLocations}
           buttonUrl={toLink(URL_LOCATIONS)}
         >

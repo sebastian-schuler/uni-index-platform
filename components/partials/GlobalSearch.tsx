@@ -13,8 +13,11 @@ const useStyles = createStyles((theme) => ({
 
     searchEnterIcon: {
         backgroundColor: theme.colors.brandGray[5],
+        transition: "all .2s ease-in-out",
+
         '&:hover': {
             backgroundColor: theme.colors.brandOrange[5],
+            transform: "scale(0.9)",
         },
     }
 

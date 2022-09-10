@@ -1,9 +1,10 @@
-import { Box, Divider, Grid, SimpleGrid, Title, useMantineTheme } from '@mantine/core'
+import { Box, Divider, Grid, SimpleGrid, Text, Title, useMantineTheme } from '@mantine/core'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import { DetailedUserAd } from '../../lib/types/DetailedDatabaseTypes'
 import { URL_INSTITUTION } from '../../lib/urlConstants'
 import { toLink } from '../../lib/util'
+import MantineLink from '../elements/MantineLink'
 import LargeAd from '../elements/userads/LargeAd'
 import MediumAd from '../elements/userads/MediumAd'
 import SmallAd from '../elements/userads/SmallAd'
@@ -97,7 +98,8 @@ const PremiumList: React.FC<Props> = ({ premiumAds, wrapInContainer }: Props) =>
         <Box>
             <ResponsiveContainer skipContainer={!wrapInContainer}>
 
-                <Title order={3}>{langContent.adLabel}</Title>
+                <Title order={3} size={theme.fontSizes.lg}>{langContent.adLabel}</Title>
+                <Text>Click <MantineLink url='#' label='here' /> to learn more about our ads.</Text>
                 <Divider mt={4} mb={24} />
 
                 <SimpleGrid cols={2} spacing={AD_SPACING} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>

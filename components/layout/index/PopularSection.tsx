@@ -1,19 +1,18 @@
-import { Box, Divider, Grid, Group, Title, useMantineTheme } from '@mantine/core'
+import { Box, Divider, Grid, Group, Stack, Text, Title, useMantineTheme } from '@mantine/core'
 import React from 'react'
 import MantineLink from '../../elements/MantineLink'
 import ResponsiveContainer from '../ResponsiveContainer'
 
-type Props = {
+interface Props {
     title: string
+    subtext?: string
     buttonText: string
     buttonUrl: string
     brandColor?: boolean
     children: React.ReactNode
 }
 
-const PopularSection: React.FC<Props> = props => {
-
-    const { title, buttonText, buttonUrl, brandColor, children } = props;
+const PopularSection: React.FC<Props> = ({ title, subtext, buttonText, buttonUrl, brandColor, children }: Props) => {
 
     const theme = useMantineTheme();
 
@@ -23,9 +22,12 @@ const PopularSection: React.FC<Props> = props => {
             <ResponsiveContainer paddingY>
 
                 <Group mb={"sm"} sx={{ justifyContent: "space-between", alignItems: "flex-end" }}>
-                    <Title order={2} color={brandColor ? 'light.0' : 'dark.0'}>
-                        {title}
-                    </Title>
+                    <Stack spacing={0}>
+                        <Title order={2} color={brandColor ? 'light.0' : 'dark.0'}>
+                            {title}
+                        </Title>
+                        {subtext && <Text color={brandColor ? 'light.0' : 'dark.0'}>{subtext}</Text>}
+                    </Stack>
                     <MantineLink label={buttonText} url={buttonUrl} color={brandColor ? 'light.0' : undefined} />
                 </Group>
 
