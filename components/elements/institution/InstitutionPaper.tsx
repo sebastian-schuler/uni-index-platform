@@ -9,7 +9,7 @@ const InstitutionPaper = ({ children, sx }: Props) => {
     const theme = useMantineTheme();
 
     return (
-        <Paper shadow="xs" p="md" sx={{ ...sx, backgroundColor: theme.colors.light[0] }}>
+        <Paper shadow="sm" px="lg" py="xl" sx={{ ...sx, backgroundColor: theme.colors.light[0] }}>
             {children}
         </Paper>
     )

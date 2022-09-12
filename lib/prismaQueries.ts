@@ -262,6 +262,47 @@ export const getInstitutionsDetailedByCity = async (cityId: number): Promise<Det
     })
 }
 
+export const getInstitutionsDetailedByCountry = async (countryId: string): Promise<DetailedInstitution[]> => {
+    return await prisma.institution.findMany({
+        include: {
+            City: {
+                include: { State: { select: { Country: true } } },
+            },
+            Subject: {
+                include: {
+                    SubjectType: true,
+                }
+            },
+            InstitutionLocation: {
+                select: {
+                    City: {
+                        include: { State: { include: { Country: true } } }
+                    }
+                }
+            },
+            _count: {
+                select: {
+                    Subject: true
+                }
+            }
+        },
+        where: {
+            OR: [
+                {
+                    City: { State: { Country: { id: countryId } } }
+                },
+                {
+                    InstitutionLocation: {
+                        some: {
+                            City: { State: { Country: { id: countryId } } }
+                        }
+                    }
+                }
+            ]
+        }
+    })
+}
+
 export const getCitiesDetailedByState = async (stateUrl: string) => {
     return await prisma.city.findMany({
         where: {

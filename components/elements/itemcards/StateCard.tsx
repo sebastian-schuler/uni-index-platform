@@ -1,4 +1,5 @@
-import { Card, createStyles, Text } from '@mantine/core'
+import { Card, createStyles, Group, List, Stack, Text, ThemeIcon } from '@mantine/core'
+import { IconBuildingSkyscraper, IconSchool } from '@tabler/icons'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
@@ -7,16 +8,28 @@ import { URL_LOCATION } from '../../../lib/urlConstants'
 import { getLocalizedName, toLink } from '../../../lib/util'
 
 const useStyles = createStyles((theme) => ({
+
     card: {
-        position: 'relative',
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
+        transition: "all .2s ease-in-out",
+        height: "100%",
+
+        '&:hover': {
+            transform: "scale(1.05)",
+        }
     },
 
-    title: {
-        display: 'block',
-        marginTop: theme.spacing.md,
-        marginBottom: theme.spacing.xs / 2,
+    section: {
+        borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+        padding: theme.spacing.md,
     },
+
+    label: {
+        textTransform: 'uppercase',
+        fontSize: theme.fontSizes.xs,
+        fontWeight: 700,
+    },
+
 }));
 
 interface Props {
@@ -25,27 +38,48 @@ interface Props {
 
 const StateCard: React.FC<Props> = ({ state }: Props) => {
 
-    const { classes } = useStyles();
+    const { classes, theme } = useStyles();
     const { lang } = useTranslation('common');
 
     const url = toLink(URL_LOCATION, state.Country.url, state.url);
-    const cities = state.City.map(({ name }) => name).join(', ');
+    // const cities = state.City.map(({ name }) => name).join(', ');
 
     return (
         <Link href={url} passHref>
-            <Card component='a' withBorder radius="md" className={classes.card}>
+            <Card component='a' withBorder radius="md" p="md" className={classes.card}>
 
-                <Text className={classes.title} weight={500}>
-                    {getLocalizedName({ lang: lang, state: state })}
-                </Text>
+                <Card.Section className={classes.section}>
+                    <Group position="apart" noWrap sx={{ alignItems: "start" }}>
+                        <Stack spacing={theme.spacing.xs}>
+                            <Text size="lg" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
+                                {getLocalizedName({ lang: lang, state: state })}
+                            </Text>
+                        </Stack>
+                    </Group>
+                </Card.Section>
 
-                <Text size="md" color="dimmed" lineClamp={4}>
-                    Total Cities: {state._count.City}
-                </Text>
-
-                <Text size="md" color="dimmed" lineClamp={4}>
-                    Most popular: {cities}
-                </Text>
+                <Card.Section className={classes.section}>
+                    <List
+                        spacing="sm"
+                        size="md"
+                        center
+                    >
+                        <List.Item
+                            icon={
+                                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                                    <IconBuildingSkyscraper size={18} />
+                                </ThemeIcon>
+                            }
+                        >{state._count.City} cities with universities.</List.Item>
+                        <List.Item
+                            icon={
+                                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                                    <IconSchool size={18} />
+                                </ThemeIcon>
+                            }
+                        >{ } subjects to study</List.Item>
+                    </List>
+                </Card.Section>
 
             </Card>
         </Link>

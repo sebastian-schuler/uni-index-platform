@@ -1,4 +1,3 @@
-import { Grid, Stack, Typography } from '@mui/material'
 import { Country, Institution, Subject } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { useRouter } from 'next/router'
@@ -11,6 +10,8 @@ import Meta from '../../../../../components/partials/Meta'
 import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../lib/urlConstants'
 import { getCountries, getCountry, getInstitution, getSubject, getSubjectInstitutionBySubject, getSubjectPaths } from '../../../../../lib/prismaQueries'
 import { getDBLocale, toLink } from '../../../../../lib/util'
+import InstitutionPaper from '../../../../../components/elements/institution/InstitutionPaper'
+import { Stack, Text } from '@mantine/core'
 
 
 type Props = {
@@ -33,6 +34,10 @@ const SubjectFromInstitutionPage: NextPage<Props> = props => {
 
   const title = subject?.name + " - " + subject?.degree;
 
+  const countryUrl = (query.Country || "") as string;
+  const institutionUrl = (query.Institution || "") as string;
+
+
   return (
     <LayoutContainer footerContent={footerContent}>
 
@@ -50,25 +55,26 @@ const SubjectFromInstitutionPage: NextPage<Props> = props => {
       <SubjectNav
         title={title}
         backButton={{
-          url: toLink(URL_INSTITUTION, query.Country, query.Institution, URL_INSTITUTION_SUBJECTS),
+          url: toLink(URL_INSTITUTION, countryUrl, institutionUrl, URL_INSTITUTION_SUBJECTS),
           text: "Back"
         }}
       />
 
-      <Grid container>
+      <InstitutionPaper>
+        <Stack>
 
-        <Grid item xs={12} sm={6} xl={4} padding={1}>
-          <Stack direction={"row"} justifyContent={"space-between"}>
-            <Typography fontWeight={600}>Semester Count</Typography>
-            <Typography>{subject?.semester_count}</Typography>
+          <Stack spacing={0}>
+            <Text size={"lg"} weight={"bold"}>Study length</Text>
+            <Text>{subject?.semester_count} Semesters</Text>
           </Stack>
-          <Stack direction={"row"} justifyContent={"space-between"}>
-            <Typography fontWeight={600}>Degree</Typography>
-            <Typography>{subject?.degree}</Typography>
-          </Stack>
-        </Grid>
 
-      </Grid>
+          <Stack spacing={0}>
+            <Text size={"lg"} weight={"bold"}>Degree</Text>
+            <Text>{subject?.degree}</Text>
+          </Stack>
+
+        </Stack>
+      </InstitutionPaper>
 
     </LayoutContainer>
   )
@@ -79,7 +85,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   let countryQuery = context?.params?.Country?.toString() || "";
   let institutionQuery = context?.params?.Institution?.toString() || "";
   let subjectQuery = context?.params?.Subject?.toString() || "";
-  let localeDb = getDBLocale(context.locale);
 
   // Get information single objects
   const country: Country | null = await getCountry(countryQuery);

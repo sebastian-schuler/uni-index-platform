@@ -10,6 +10,7 @@ import SmallAd from '../../components/elements/userads/SmallAd';
 import { useAuth } from '../../context/SessionContext';
 import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
 import { UserDataProfile } from '../../lib/types/AccountHandlingTypes';
+import { motion, AnimatePresence } from "framer-motion"
 
 interface SubjectAutofill {
     value: string
@@ -344,6 +345,7 @@ const CreateAd = () => {
 
             <Grid.Col sm={12} md={6}>
                 <Text size={"xl"} color={"dimmed"} weight={"bold"}>Preview</Text>
+
                 {
                     adSize === 3 &&
                     <LargeAd
@@ -385,6 +387,7 @@ const CreateAd = () => {
                         />
                     </Box>
                 }
+
             </Grid.Col>
 
             <Grid.Col span={12}>

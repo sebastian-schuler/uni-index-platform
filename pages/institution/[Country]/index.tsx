@@ -10,7 +10,7 @@ import { FooterContent } from '../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../components/layout/LayoutContainer';
 import Meta from '../../../components/partials/Meta';
 import prisma from '../../../lib/prisma';
-import { getCountries, getCountry, getInstitutesDetailed } from '../../../lib/prismaQueries';
+import { getCountries, getCountry, getInstitutionsDetailedByCountry } from '../../../lib/prismaQueries';
 import { DetailedInstitution } from '../../../lib/types/DetailedDatabaseTypes';
 import { getLocalizedName } from '../../../lib/util';
 
@@ -106,7 +106,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   let countryUrl = "" + context?.params?.Country;
 
   const countryInfo = await getCountry(countryUrl);
-  const institutions: DetailedInstitution[] = await getInstitutesDetailed({ countryUrl: countryUrl });
+  const institutions: DetailedInstitution[] = countryInfo !== null ? (await getInstitutionsDetailedByCountry(countryInfo.id)) : [];
 
   // Footer Data
   // Get all countries

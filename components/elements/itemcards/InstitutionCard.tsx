@@ -25,10 +25,6 @@ const useStyles = createStyles((theme) => ({
     padding: theme.spacing.md,
   },
 
-  like: {
-    color: theme.colors.red[6],
-  },
-
   label: {
     textTransform: 'uppercase',
     fontSize: theme.fontSizes.xs,
@@ -82,7 +78,6 @@ const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
             </Stack>
             <Flag className={classes.flag} />
           </Group>
-
         </Card.Section>
 
         <Card.Section className={classes.section}>

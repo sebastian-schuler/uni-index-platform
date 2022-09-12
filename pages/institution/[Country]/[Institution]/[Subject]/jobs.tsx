@@ -12,6 +12,7 @@ import { getCountries, getCountry, getInstitution, getSubject, getSubjectPaths }
 import { getDBLocale, toLink } from '../../../../../lib/util'
 import { ParsedUrlQuery } from 'querystring'
 import { getJobsFromApi } from '../../../../../lib/apis/jobsHandler'
+import InstitutionPaper from '../../../../../components/elements/institution/InstitutionPaper'
 
 type Props = {
     country: Country,
@@ -26,6 +27,9 @@ const SubjectJobs: NextPage<Props> = props => {
     const query = useRouter().query;
 
     const title = props.subject.name + " - " + props.subject.degree
+
+    const countryUrl = (query.Country || "") as string;
+    const institutionUrl = (query.Institution || "") as string;
 
     return (
         <LayoutContainer footerContent={props.footerContent}>
@@ -44,13 +48,14 @@ const SubjectJobs: NextPage<Props> = props => {
             <SubjectNav
                 title={title}
                 backButton={{
-                    url: toLink(URL_INSTITUTION, query.Country, query.Institution, URL_INSTITUTION_SUBJECTS),
+                    url: toLink(URL_INSTITUTION, countryUrl, institutionUrl, URL_INSTITUTION_SUBJECTS),
                     text: "Back"
                 }}
             />
 
-            <p>Jobs</p>
-
+            <InstitutionPaper>
+                <p>Jobs</p>
+            </InstitutionPaper>
 
         </LayoutContainer>
     )

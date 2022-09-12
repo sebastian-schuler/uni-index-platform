@@ -1,4 +1,5 @@
-import { createStyles, Stack, Tabs } from '@mantine/core';
+import { Button, createStyles, Group, Stack, Tabs, Title } from '@mantine/core';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 import GenericPageHeader from '../../elements/GenericPageHeader';
@@ -11,10 +12,10 @@ const useStyles = createStyles((theme) => ({
 
     root: {
         backgroundColor: theme.colors.light[0],
-        paddingTop: theme.spacing.xs,
+        paddingTop: theme.spacing.lg,
     },
-    
-  }));
+
+}));
 
 interface Props {
     title: string,
@@ -36,16 +37,16 @@ const SubNav = ({ title, pageLinkData, backButton }: Props) => {
 
     return (
         <Stack>
-            {/* {
+            {
                 backButton !== undefined ? (
-                    <Stack direction={'row'} sx={{ justifyContent: 'space-between' }}>
-                        <Typography variant='h5' component={'h1'}>{title}</Typography>
-                        <Button variant='outlined' LinkComponent={Link} href={backButton.url}>{backButton.text}</Button>
-                    </Stack>
-                ) : <Typography variant='h4' component={'h1'}>{title}</Typography>
-            } */}
-
-            <GenericPageHeader title={title} description={""} />
+                    <Group sx={{ justifyContent: 'space-between' }}>
+                        <GenericPageHeader title={title} description={""} />
+                        <Link href={backButton.url}>
+                            <Button component='a' radius={"md"} variant='outline'>{backButton.text}</Button>
+                        </Link>
+                    </Group>
+                ) : <GenericPageHeader title={title} description={""} />
+            }
 
             <Tabs
                 classNames={classes}
