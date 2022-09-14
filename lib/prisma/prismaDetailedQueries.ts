@@ -49,7 +49,7 @@ export const getDetailedCities = async (stateUrl:string) => {
 
 // SUBJECTS
 
-export const getDetailedSubjectsByInstitution = async (institutionId:number) => {
+export const getDetailedSubjectsByInstitution = async (institutionId:string) => {
     const subjects = await getSubjectsDetailedByInstitution(institutionId);
     const detailed:DetailedSubject[] = subjects;
     return detailed;

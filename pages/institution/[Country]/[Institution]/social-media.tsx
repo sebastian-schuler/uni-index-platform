@@ -1,26 +1,23 @@
 
+import { Card, Grid, SimpleGrid, Text, Title, useMantineTheme } from '@mantine/core'
 import { Country, Institution, InstitutionSocialMedia } from '@prisma/client'
+import {
+  IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandYoutube
+} from '@tabler/icons'
 import {
   Chart as ChartJS, Filler, Legend, LineElement, PointElement, RadialLinearScale, Tooltip
 } from 'chart.js'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
-import { ParsedUrlQuery } from 'querystring'
 import { Radar } from 'react-chartjs-2'
+import SocialMediaStatCard from '../../../../components/elements/institution/SocialMediaStatCard'
 import WhitePaper from '../../../../components/elements/institution/WhitePaper'
 import Breadcrumb from '../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav'
 import Meta from '../../../../components/partials/Meta'
-import { getCountries, getCountry, getInstitution, getInstitutionPaths, getSocialMedia } from '../../../../lib/prisma/prismaQueries'
-import { Group, Paper, SimpleGrid, Grid, Title, Text, createStyles, useMantineTheme, Card } from '@mantine/core';
-import SocialMediaStatCard from '../../../../components/elements/institution/SocialMediaStatCard'
-import {
-  IconBrandTwitter,
-  IconBrandInstagram,
-  IconBrandFacebook,
-  IconBrandYoutube
-} from '@tabler/icons';
+import { getCountries, getCountry, getInstitution, getSocialMedia } from '../../../../lib/prisma/prismaQueries'
+import { FacebookResult, InstagramResult, TwitterResult, YoutubeResult } from '../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
 
 const data = {
@@ -78,10 +75,21 @@ interface Props {
 const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerContent, socialMediaStringified }: Props) => {
 
   const theme = useMantineTheme();
-  const socialMedia: InstitutionSocialMedia = JSON.parse(socialMediaStringified);
+  const socialMedia: InstitutionSocialMedia | null = JSON.parse(socialMediaStringified);
 
-  const facebookLink = socialMedia?.facebook_link;
-  const twitterLink = socialMedia?.twitter_link;
+  if(!socialMedia){
+    return(
+      <>No Data</> // TODO handle this
+    )
+  }
+
+  const facebookLink = socialMedia?.facebook_url;
+  const twitterLink = socialMedia?.twitter_url;
+
+  const facebookResults = (socialMedia?.facebook_results as unknown) as FacebookResult;
+  const twitterResults = (socialMedia?.twitter_results as unknown) as TwitterResult;
+  const youtubeResults = (socialMedia?.youtube_results as unknown) as YoutubeResult;
+  const instagramResults = (socialMedia?.instagram_results as unknown) as InstagramResult;
 
   const averagePoints = {
     facebookAverage: 125,
@@ -123,25 +131,25 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
             <SimpleGrid cols={2}>
               <SocialMediaStatCard
                 title='Twitter'
-                value={socialMedia.twitter_points} diff={calculateSocialMediaDifference(socialMedia.twitter_points, averagePoints.twitterAverage)}
+                value={twitterResults.totalScore} diff={calculateSocialMediaDifference(twitterResults.totalScore, averagePoints.twitterAverage)}
                 icon={IconBrandTwitter}
               />
               <SocialMediaStatCard
                 title='Youtube'
-                value={socialMedia.youtube_points}
-                diff={calculateSocialMediaDifference(socialMedia.youtube_points, averagePoints.youtubeAverage)}
+                value={youtubeResults.totalScore}
+                diff={calculateSocialMediaDifference(youtubeResults.totalScore, averagePoints.youtubeAverage)}
                 icon={IconBrandYoutube}
               />
               <SocialMediaStatCard
                 title='Instagram'
-                value={socialMedia.instagram_points}
-                diff={calculateSocialMediaDifference(socialMedia.instagram_points, averagePoints.instagramAverage)}
+                value={instagramResults.totalScore}
+                diff={calculateSocialMediaDifference(instagramResults.totalScore, averagePoints.instagramAverage)}
                 icon={IconBrandInstagram}
               />
               <SocialMediaStatCard
                 title='Facebook'
-                value={socialMedia.facebook_points}
-                diff={calculateSocialMediaDifference(socialMedia.facebook_points, averagePoints.facebookAverage)}
+                value={facebookResults.totalScore}
+                diff={calculateSocialMediaDifference(facebookResults.totalScore, averagePoints.facebookAverage)}
                 icon={IconBrandFacebook}
               />
             </SimpleGrid>
@@ -250,7 +258,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   const country = await getCountry(countryUrl);
   const institution = await getInstitution(institutionUrl);
-  const socialMedia = await getSocialMedia(institution?.id || -1);
+  const socialMedia = institution ? (await getSocialMedia(institution.id)) : null;
 
   // Footer Data
   // Get all countries

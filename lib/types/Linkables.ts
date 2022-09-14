@@ -24,9 +24,11 @@ export type LinkableInstitution = {
 };
 
 export type LinkableSubject = {
-    SubjectType: {
-        url: string;
-    };
+    SubjectHasSubjectTypes: {
+        SubjectType: {
+            url: string;
+        };
+    }[];
     url: string;
     name: string;
 };

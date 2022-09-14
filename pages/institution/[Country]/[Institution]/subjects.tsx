@@ -79,7 +79,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   const country = await getCountry(countryUrl);
   const institution = await getInstitution(institutionUrl);
-  const detailedSubjects: DetailedSubject[] = await getDetailedSubjectsByInstitution(institution?.id || 0);
+  const detailedSubjects: DetailedSubject[] = institution ? (await getDetailedSubjectsByInstitution(institution.id)) : [];
 
   // Footer Data
   // Get all countries

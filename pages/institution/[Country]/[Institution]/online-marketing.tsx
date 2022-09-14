@@ -8,27 +8,25 @@ import Meta from '../../../../components/partials/Meta'
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries'
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
 
-type Props = {
-
+interface Props {
   institution: Institution,
   country: Country,
   footerContent: FooterContent[],
-
 }
 
-const InstitutionOnlineMarketing: NextPage<Props> = props => {
+const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, footerContent }: Props) => {
 
   return (
-    <LayoutContainer footerContent={props.footerContent}>
+    <LayoutContainer footerContent={footerContent}>
 
       <Meta
         title={'Uni Index - '}
         description='Very nice page'
       />
 
-      <Breadcrumb countryInfo={props.country} institutionInfo={props.institution} />
+      <Breadcrumb countryInfo={country} institutionInfo={institution} />
 
-      <InstitutionNav title={props.institution.name} />
+      <InstitutionNav title={institution.name} />
 
     </LayoutContainer>
   )
@@ -38,7 +36,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   let countryUrl = "" + context?.params?.Country;
   let institutionUrl = "" + context?.params?.Institution;
-  let localeDb = "" + context.locale;
 
   const country = await getCountry(countryUrl);
   const institution = await getInstitution(institutionUrl);
@@ -57,9 +54,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 }
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
-
   const paths = await getStaticPathsInstitution(locales || []);
-
   return {
     paths: paths,
     fallback: false

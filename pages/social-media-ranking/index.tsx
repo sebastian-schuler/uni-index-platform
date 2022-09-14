@@ -7,18 +7,18 @@ import { FooterContent } from '../../components/layout/footer/Footer'
 import LayoutContainer from '../../components/layout/LayoutContainer'
 import { getDetailedCountries } from '../../lib/prisma/prismaDetailedQueries'
 import { getAllSocialMedia } from '../../lib/prisma/prismaQueries'
-import { SocialMediaDBEntry, SocialMediaRankingItem } from '../../lib/types/SocialMediaTypes'
+import { SocialMediaDBEntry } from '../../lib/types/SocialMediaTypes'
 import { Searchable } from '../../lib/types/UiHelperTypes'
 import { generateSearchable } from '../../lib/util'
 
 interface Props {
-    stringifiedSocialMediaItems: string
+    stringifiedSocialMediaList: string
     footerContent: FooterContent[]
 }
 
-const SocialMediaRanking: NextPage<Props> = ({ stringifiedSocialMediaItems, footerContent }: Props) => {
+const SocialMediaRanking: NextPage<Props> = ({ stringifiedSocialMediaList, footerContent }: Props) => {
 
-    const socialMediaList: SocialMediaRankingItem[] = JSON.parse(stringifiedSocialMediaItems);
+    const socialMediaList: SocialMediaDBEntry[] = JSON.parse(stringifiedSocialMediaList);
 
     return (
         <LayoutContainer footerContent={footerContent}>
@@ -46,21 +46,21 @@ const getMaxMin = (socialMediaList: SocialMediaDBEntry[]) => {
     let youtubeMax = -1;
     let youtubeMin = -1;
 
-    socialMediaList.forEach(socialMedia => {
+    // socialMediaList.forEach(socialMedia => {
 
-        if (socialMedia.twitter_points > twitterMax || twitterMax === -1) {
-            twitterMax = socialMedia.twitter_points;
-        } else if (socialMedia.twitter_points < twitterMin || twitterMin === -1) {
-            twitterMin = socialMedia.twitter_points;
-        }
+    //     if (socialMedia.twitter_points > twitterMax || twitterMax === -1) {
+    //         twitterMax = socialMedia.twitter_points;
+    //     } else if (socialMedia.twitter_points < twitterMin || twitterMin === -1) {
+    //         twitterMin = socialMedia.twitter_points;
+    //     }
 
-        if (socialMedia.youtube_points > youtubeMax || youtubeMax === -1) {
-            youtubeMax = socialMedia.youtube_points;
-        } else if (socialMedia.youtube_points < youtubeMin || youtubeMin === -1) {
-            youtubeMin = socialMedia.youtube_points;
-        }
+    //     if (socialMedia.youtube_points > youtubeMax || youtubeMax === -1) {
+    //         youtubeMax = socialMedia.youtube_points;
+    //     } else if (socialMedia.youtube_points < youtubeMin || youtubeMin === -1) {
+    //         youtubeMin = socialMedia.youtube_points;
+    //     }
 
-    })
+    // })
 
     return {
         twitterMax,
@@ -78,19 +78,21 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     // SOCIAL MEDIA
     const socialMediaList = await getAllSocialMedia();
+    const stringifiedSocialMediaList = JSON.stringify(socialMediaList);
 
-    const socialMediaMinMax = getMaxMin(socialMediaList);
+    // const socialMediaMinMax = getMaxMin(socialMediaList);
+    // const socialMediaRankingItems: SocialMediaRankingItem[] = socialMediaList.map(socialMedia => {
+    //     return {
+    //         ...socialMedia,
+    //         facebookScore: 0,
+    //         twitterScore: (socialMedia.twitt / socialMediaMinMax.twitterMax) * 100,
+    //         youtubeScore: (socialMedia.youtube_points / socialMediaMinMax.youtubeMax) * 100,
+    //         instagramScore: 0,
+    //     }
+    // }).sort((a, b) => Number(b.total_score) - Number(a.total_score));
+    // const stringifiedSocialMediaItems = JSON.stringify(socialMediaRankingItems);
 
-    const socialMediaRankingItems: SocialMediaRankingItem[] = socialMediaList.map(socialMedia => {
-        return {
-            ...socialMedia,
-            facebookScore: 0,
-            twitterScore: (socialMedia.twitter_points / socialMediaMinMax.twitterMax) * 100,
-            youtubeScore: (socialMedia.youtube_points / socialMediaMinMax.youtubeMax) * 100,
-            instagramScore: 0,
-        }
-    }).sort((a, b) => Number(b.total_score) - Number(a.total_score));
-    const stringifiedSocialMediaItems = JSON.stringify(socialMediaRankingItems);
+    
 
     const footerContent: FooterContent[] = [
         { title: "Countries", data: searchableCountries, type: "Searchable" },
@@ -98,7 +100,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     return {
         props: {
-            stringifiedSocialMediaItems,
+            stringifiedSocialMediaList,
             footerContent
         }
     }

@@ -11,8 +11,24 @@ export type SocialMediaDBEntry = InstitutionSocialMedia & {
 }
 
 export type SocialMediaRankingItem = SocialMediaDBEntry & {
-    twitterScore: number;
-    youtubeScore: number;
-    facebookScore: number;
-    instagramScore: number;
+    twitterResult: TwitterResult;
+    facebookResult: FacebookResult;
+    instagramResult: InstagramResult;
+    youtubeResult: YoutubeResult;
+}
+
+export interface TwitterResult {
+    totalScore: number;
+}
+
+export interface YoutubeResult {
+    totalScore: number;
+}
+
+export interface FacebookResult {
+    totalScore: number;
+}
+
+export interface InstagramResult {
+    totalScore: number;
 }

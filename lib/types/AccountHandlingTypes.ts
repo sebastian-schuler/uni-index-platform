@@ -2,17 +2,18 @@ import { Country, Institution, UserAd, Subject } from "@prisma/client";
 
 // Type used in getStaticProps on the server
 export type InstitutionRegistrationDBItem = {
-    id: number;
+    id: string;
     name: string;
     User: {
         _count: {
-            UserSessionID: number;
+            UserSession: number;
         };
-    } | null;
+    }[];
 };
+
 // Type used on the client on the registration page for the institution picker
 export type InstitutionRegistrationItem = {
-    id: number;
+    id: string;
     name: string;
     hasAccount: boolean;
 };
@@ -25,7 +26,9 @@ export type UserDataResponse = {
     subjects?: Subject[]
     ads?: PremiumAdDetailed[]
 } | { status: "NO_USER" | "NO_AUTH" | "NOT_VALID" } | null; // status: is taken from UserDataStatus and is split to check for success
-export type UserInstitutionLimited = { id: bigint, email: string, display_name: string | null; };
+
+export type UserInstitutionLimited = { id: string, email: string };
+
 export type UserDataProfile = {
     user: UserInstitutionLimited,
     lifetime: Date,

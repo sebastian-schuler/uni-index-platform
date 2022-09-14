@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { keys } from '@mantine/utils';
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons';
-import { SocialMediaRankingItem } from '../../lib/types/SocialMediaTypes';
+import { SocialMediaDBEntry, SocialMediaRankingItem } from '../../lib/types/SocialMediaTypes';
 import { getLocalizedName, toLink } from '../../lib/util';
 import useTranslation from 'next-translate/useTranslation';
 import MantineLink from './MantineLink';
@@ -107,7 +107,7 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 }
 
 interface Props {
-    socialMediaList: SocialMediaRankingItem[]
+    socialMediaList: SocialMediaDBEntry[]
 }
 
 const SocialMediaRankingTable = ({ socialMediaList }: Props) => {

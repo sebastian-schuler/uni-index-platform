@@ -1,9 +1,9 @@
 import { Subject } from '@prisma/client';
-import prisma from './prisma';
-import { InstitutionRegistrationDBItem } from "../types/AccountHandlingTypes";
+import { InstitutionRegistrationDBItem } from '../types/AccountHandlingTypes';
 import { DetailedInstitution, DetailedSubject, DetailedUserAd } from '../types/DetailedDatabaseTypes';
 import { LinkableCity, LinkableInstitution, LinkableSubject } from "../types/Linkables";
 import { SocialMediaDBEntry } from '../types/SocialMediaTypes';
+import prisma from './prisma';
 
 type OrderBy = "asc" | "desc";
 
@@ -29,12 +29,16 @@ export const getSubjectTypes = async () => {
 // ================= POPULARITY GETTER FUNCTIONS =============
 // ===========================================================
 
-// Return some subjects, ordered by popularity
+// Return some subjects, ordered by popularity 
 export const getSubjectsByPopularity = async (takeCount: number): Promise<DetailedSubject[]> => {
     return await prisma.subject.findMany({
         take: takeCount,
         include: {
-            SubjectType: true,
+            SubjectHasSubjectTypes: {
+                include: {
+                    SubjectType: true
+                }
+            },
             Institution: true,
             City: {
                 include: {
@@ -60,7 +64,11 @@ export const getInstitutionsByPopularity = async (takeCount: number): Promise<De
             },
             Subject: {
                 include: {
-                    SubjectType: true,
+                    SubjectHasSubjectTypes: {
+                        include: {
+                            SubjectType: true
+                        }
+                    },
                 }
             },
             InstitutionLocation: {
@@ -127,11 +135,15 @@ export const getCountrySubjectCount = async (id: string) => {
 }
 
 // Return the amount of subjects of a specific type
-export const getSubjectTypeSubjectCount = async (typeUrl: string) => {
+export const getSubjectTypeSubjectCount = async (subjectCategoryUrl: string) => {
     return await prisma.subject.count({
         where: {
-            SubjectType: {
-                url: typeUrl
+            SubjectHasSubjectTypes: {
+                some: {
+                    SubjectType: {
+                        url: subjectCategoryUrl
+                    }
+                }
             }
         }
     })
@@ -145,7 +157,11 @@ export const getSubjectTypeSubjectCount = async (typeUrl: string) => {
 export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string): Promise<DetailedSubject[]> => {
     return await prisma.subject.findMany({
         include: {
-            SubjectType: true,
+            SubjectHasSubjectTypes: {
+                include: {
+                    SubjectType: true
+                }
+            },
             Institution: true,
             City: {
                 include: {
@@ -156,19 +172,27 @@ export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string):
             }
         },
         where: {
-            SubjectType: {
-                url: subjectCategoryUrl
+            SubjectHasSubjectTypes: {
+                some: {
+                    SubjectType: {
+                        url: subjectCategoryUrl
+                    }
+                }
             }
         }
     });
 }
 
-// Return DetailedSubjects, where institutionId is parameter
-export const getSubjectsDetailedByInstitution = async (institutionId: number): Promise<DetailedSubject[]> => {
+// Return DetailedSubjects, where institutionId is parameter : Promise<DetailedSubject[]>
+export const getSubjectsDetailedByInstitution = async (institutionId: string) => {
 
     return await prisma.subject.findMany({
         include: {
-            SubjectType: true,
+            SubjectHasSubjectTypes: {
+                include: {
+                    SubjectType: true
+                }
+            },
             Institution: true,
             City: {
                 include: {
@@ -217,7 +241,11 @@ export const getStatesDetailedByCountry = async (countryUrl: string) => {
     });
 }
 
-export const getInstitutionsDetailedByCity = async (cityId: number): Promise<DetailedInstitution[]> => {
+/**
+ * 
+ * @param cityId 
+ */
+export const getInstitutionsDetailedByCity = async (cityId: string): Promise<DetailedInstitution[]> => {
     return await prisma.institution.findMany({
         include: {
             City: {
@@ -225,7 +253,11 @@ export const getInstitutionsDetailedByCity = async (cityId: number): Promise<Det
             },
             Subject: {
                 include: {
-                    SubjectType: true,
+                    SubjectHasSubjectTypes: {
+                        include: {
+                            SubjectType: true
+                        }
+                    },
                 }
             },
             InstitutionLocation: {
@@ -270,7 +302,11 @@ export const getInstitutionsDetailedByCountry = async (countryId: string): Promi
             },
             Subject: {
                 include: {
-                    SubjectType: true,
+                    SubjectHasSubjectTypes: {
+                        include: {
+                            SubjectType: true
+                        }
+                    },
                 }
             },
             InstitutionLocation: {
@@ -408,13 +444,20 @@ export const getInstitutesByCity = async (cityUrl: string, orderBy: OrderBy) => 
     })
 }
 
-// Return Ads
+/**
+ * 
+ * @param placementLocation 
+ */
 export const getAds = async (placementLocation: string): Promise<DetailedUserAd[]> => {
     return await prisma.userAd.findMany({
         include: {
             Subject: {
                 include: {
-                    SubjectType: true
+                    SubjectHasSubjectTypes: {
+                        include: {
+                            SubjectType: true
+                        }
+                    },
                 }
             },
             User: {
@@ -433,9 +476,6 @@ export const getAds = async (placementLocation: string): Promise<DetailedUserAd[
                 { placement: { has: "all" } },
                 { placement: { has: placementLocation } },
             ],
-        },
-        orderBy: {
-            level: "desc"
         }
     });
 }
@@ -463,11 +503,13 @@ export const getSubjectInstitutionBySubject = async (subjectUrl: string, institu
 
     const institutionId = (await getInstitutionIdByUrl(institutionUrl))?.id ?? null;
 
+    if (institutionId !== null) return null;
+
     return await prisma.subject.findUnique({
         where: {
             url_institution_id: {
                 url: subjectUrl,
-                institution_id: institutionId || -1
+                institution_id: institutionId || ""
             }
         },
         include: {
@@ -574,7 +616,11 @@ export const getSubjectPaths = async () => {
 export const getSubjectSubjectTypePaths = async () => {
     return await prisma.subject.findMany({
         include: {
-            SubjectType: true
+            SubjectHasSubjectTypes: {
+                include: {
+                    SubjectType: true
+                }
+            }
         }
     });
 }
@@ -620,7 +666,7 @@ export const getInstitution = async (institutionUrl: string) => {
     });
 }
 
-export const getSocialMedia = async (institutionId: number) => {
+export const getSocialMedia = async (institutionId: string) => {
     return await prisma.institutionSocialMedia.findUnique({
         where: {
             institution_id: institutionId
@@ -685,9 +731,9 @@ export const getUserLogin = async (email: string) => {
     })
 }
 
-export const addUserSession = async (token: string, userId: bigint, validUntil: number) => {
+export const addUserSession = async (token: string, userId: string, validUntil: number) => {
 
-    return await prisma.userSessionID.create({
+    return await prisma.userSession.create({
         data: {
             token: token,
             user_id: userId,
@@ -698,14 +744,14 @@ export const addUserSession = async (token: string, userId: bigint, validUntil: 
 }
 
 export const removeUserSession = async (token: string) => {
-    return await prisma.userSessionID.delete({
+    return await prisma.userSession.delete({
         where: { token: token }
     });
 }
 
 export const getUserFromToken = async (token: string) => {
 
-    return await prisma.userSessionID.findUnique({
+    return await prisma.userSession.findUnique({
         where: {
             token: token
         },
@@ -724,7 +770,7 @@ export const getUserFromToken = async (token: string) => {
 
 export const getSessionByToken = async (token: string) => {
 
-    return await prisma.userSessionID.findUnique({
+    return await prisma.userSession.findUnique({
         where: {
             token: token
         }
@@ -732,13 +778,14 @@ export const getSessionByToken = async (token: string) => {
 
 }
 
-export const addNewUser = async (email: string, password: string, institution_id: number) => {
+export const addNewUser = async (email: string, password: string, institution_id: string, date_registered: number) => {
 
     return await prisma.user.create({
         data: {
             email: email,
             password: password,
             institution_id: institution_id,
+            date_registered: date_registered
         }
     })
 
@@ -754,7 +801,7 @@ export const getUserCountByEmail = async (email: string) => {
 
 }
 
-export const getUserCountByInstitution = async (institutionID: number) => {
+export const getUserCountByInstitution = async (institutionID: string) => {
 
     return await prisma.user.count({
         where: {
@@ -764,14 +811,14 @@ export const getUserCountByInstitution = async (institutionID: number) => {
 
 }
 
-export const getAdsByUser = async (userId: bigint) => {
+export const getAdsByUser = async (userId: string) => {
     return await prisma.userAd.findMany({
         include: { Subject: true, },
         where: { user_id: userId }
     })
 }
 
-// Used for registration
+// Used for registration: 
 export const getInstitutesForUserAccounts = async (): Promise<InstitutionRegistrationDBItem[]> => {
     return await prisma.institution.findMany({
         select: {
@@ -780,7 +827,7 @@ export const getInstitutesForUserAccounts = async (): Promise<InstitutionRegistr
             User: {
                 select: {
                     _count: {
-                        select: { UserSessionID: true }
+                        select: { UserSession: true }
                     }
                 }
             }
@@ -788,7 +835,7 @@ export const getInstitutesForUserAccounts = async (): Promise<InstitutionRegistr
     })
 }
 
-export const getInstitutionByUser = async (institutionId: number) => {
+export const getInstitutionByUser = async (institutionId: string) => {
     return await prisma.user.findUnique({
         include: {
             Institution: {
@@ -814,13 +861,12 @@ export const getInstitutionByUser = async (institutionId: number) => {
 }
 
 export const addNewAd = async (
-    level: number, booked_until: number, type: string, size: number,
-    placement: string[], user_id: number, subject_id: number, description: string, image_id: string
+    booked_until: number, type: string, size: number, date_booked: number,
+    placement: string[], user_id: string, subject_id: string, description: string, image_id: string
 ) => {
 
     return await prisma.userAd.create({
         data: {
-            level: level,
             booked_until: booked_until,
             type: type,
             size: size,
@@ -829,13 +875,14 @@ export const addNewAd = async (
             subject_id: subject_id,
             description: description,
             image_id: image_id,
+            date_booked: date_booked
         }
     })
 
 }
 
 // Used for creating subject ads
-export const getSubjectsByInstitute = async (institutionId: bigint) => {
+export const getSubjectsByInstitute = async (institutionId: string) => {
 
     return await prisma.user.findUnique({
         select: { Institution: { include: { Subject: true } } },
@@ -854,7 +901,15 @@ export const getGlobalSearchResults = async (searchTerm: string) => {
         select: {
             url: true,
             name: true,
-            SubjectType: { select: { url: true } }
+            SubjectHasSubjectTypes: {
+                select: {
+                    SubjectType: {
+                        select: {
+                            url: true
+                        }
+                    }
+                }
+            }
         },
         where: { name: { search: searchTerm } }
     });
@@ -922,7 +977,7 @@ export const getAllSocialMedia = async (): Promise<SocialMediaDBEntry[]> => {
     return await prisma.institutionSocialMedia.findMany({
         include: {
             Institution: {
-                include:{
+                include: {
                     City: {
                         include: {
                             State: {

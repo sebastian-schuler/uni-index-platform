@@ -114,8 +114,8 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
 export const getStaticProps: GetStaticProps = async (context) => {
 
   // Popular ...
-  const popularSubjectsDetailed: DetailedSubject[] = await getSubjectsByPopularity(10);
-  const popularInstitutesDetailed: DetailedInstitution[] = await getInstitutionsByPopularity(10);
+  const popularSubjectsDetailed: DetailedSubject[] = await getSubjectsByPopularity(9);
+  const popularInstitutesDetailed: DetailedInstitution[] = await getInstitutionsByPopularity(9);
   const popularCountriesDetailed: DetailedCountry[] = await getPopularDetailedCountries();
 
   // Ads

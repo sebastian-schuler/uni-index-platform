@@ -21,7 +21,7 @@ export default async function handler(
     let status: RegisterStatus = null;
 
     // Check if institutionID is taken
-    const typedInstitutionId: number = Number(institutionID);
+    const typedInstitutionId: string = institutionID;
     const institutionCount = await getUserCountByInstitution(typedInstitutionId);
     if (institutionCount > 0) {
         status = 'INSTITUTION_TAKEN';
@@ -61,7 +61,7 @@ export default async function handler(
 
     // LOGIN NEW USER
     status = 'SUCCESS';
-    const createdUser = await addNewUser(typedEmail, hash, typedInstitutionId);
+    const createdUser = await addNewUser(typedEmail, hash, typedInstitutionId, Date.now());
     // Create new random string as token
     let token = crypto.randomBytes(40).toString('hex');
     // Set lifetime of token

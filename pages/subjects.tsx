@@ -1,6 +1,6 @@
 import { Group, SimpleGrid, Stack } from '@mantine/core';
 import { Reorder } from 'framer-motion';
-import { GetStaticProps, GetStaticPropsContext, NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useEffect, useState } from 'react';
 import GenericPageHeader from '../components/elements/GenericPageHeader';

@@ -53,7 +53,11 @@ const InstitutionSelect: React.FC<Props> = ({ registrationInstitutes, selectedIn
 
     const handleInstitutionChange = (value: string) => {
 
+        console.log(value)
+
         const selectedInstitution = institutionList.find((item) => item.value === value)?.item || null;
+
+        console.log(selectedInstitution);
 
         setSelectedInstitutionId(value);
         setSelectedInstitution(selectedInstitution);
@@ -64,6 +68,8 @@ const InstitutionSelect: React.FC<Props> = ({ registrationInstitutes, selectedIn
             setInstitutionError("Institution not found");
         } else if (selectedInstitution.hasAccount) {
             setInstitutionError(langContent.errorInstitutionTaken);
+        } else {
+            setInstitutionError("");
         }
     }
 

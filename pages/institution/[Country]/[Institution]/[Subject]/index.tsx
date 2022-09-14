@@ -1,17 +1,17 @@
+import { Stack, Text } from '@mantine/core'
 import { Country, Institution, Subject } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
+import WhitePaper from '../../../../../components/elements/institution/WhitePaper'
 import Breadcrumb from '../../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../../components/layout/LayoutContainer'
 import SubjectNav from '../../../../../components/layout/subnav/SubjectNav'
 import Meta from '../../../../../components/partials/Meta'
+import { getCountries, getCountry, getInstitution, getSubjectInstitutionBySubject, getSubjectPaths } from '../../../../../lib/prisma/prismaQueries'
 import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../lib/url-helper/urlConstants'
-import { getCountries, getCountry, getInstitution, getSubject, getSubjectInstitutionBySubject, getSubjectPaths } from '../../../../../lib/prisma/prismaQueries'
-import { getDBLocale, toLink } from '../../../../../lib/util'
-import WhitePaper from '../../../../../components/elements/institution/WhitePaper'
-import { Stack, Text } from '@mantine/core'
+import { toLink } from '../../../../../lib/util'
 
 
 type Props = {

@@ -1,9 +1,8 @@
 import {
-  Anchor, Box, Button,
+  Anchor, Button,
   Center, Checkbox, createStyles, Group, Paper, PasswordInput, Stack, Text, TextInput, Title, useMantineTheme
 } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons';
-import { GetServerSidePropsContext, NextPage } from 'next';
+import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';

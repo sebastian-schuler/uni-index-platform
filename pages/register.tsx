@@ -30,33 +30,6 @@ const register: NextPage<Props> = props => {
 
       <RegisterSteps registrationInstitutes={props.registrationInstitutes} />
 
-      {/* <Grid
-        container
-        sx={{
-          marginY: 8,
-        }}
-      >
-
-        <Grid item xs={0} sm={1} md={2} xl={3} />
-        <Grid item component="form" xs={12} sm={10} md={8} xl={6} noValidate sx={{}}>
-          <Paper elevation={1} sx={{ padding: 4 }}>
-
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                {langContent.signupTitle}
-              </Typography>
-            </Box>
-
-            <Box sx={{ marginTop: 2 }}>
-              <RegisterSteps registrationInstitutes={props.registrationInstitutes} />
-            </Box>
-
-          </Paper>
-        </Grid>
-      </Grid> */}
-
     </LayoutContainer>
   )
 }
@@ -65,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const dbResultInstitutes: InstitutionRegistrationDBItem[] = await getInstitutesForUserAccounts();
   const registrationInstitutes: InstitutionRegistrationItem[] = dbResultInstitutes.map(institute => {
-    return { id: institute.id, name: institute.name, hasAccount: institute.User === null ? false : true }
+    return { id: institute.id, name: institute.name, hasAccount: institute.User.length === 0 ? false : true } // TODO check if ok with length
   });
 
   return {

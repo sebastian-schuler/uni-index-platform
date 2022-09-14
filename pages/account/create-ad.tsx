@@ -10,7 +10,6 @@ import SmallAd from '../../components/elements/userads/SmallAd';
 import { useAuth } from '../../context/SessionContext';
 import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
 import { UserDataProfile } from '../../lib/types/AccountHandlingTypes';
-import { motion, AnimatePresence } from "framer-motion"
 
 interface SubjectAutofill {
     value: string
