@@ -11,10 +11,10 @@ import PopularSection from '../components/layout/index/PopularSection';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import Meta from '../components/partials/Meta';
 import { AD_PAGE_INDEX } from '../lib/appConstants';
-import { getPopularDetailedCountries } from '../lib/prismaDetailedQueries';
-import { getAds, getCountries, getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/prismaQueries';
+import { getPopularDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
+import { getAds, getCountries, getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/prisma/prismaQueries';
 import { DetailedCountry, DetailedInstitution, DetailedUserAd, DetailedSubject } from '../lib/types/DetailedDatabaseTypes';
-import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/urlConstants';
+import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
 import { toLink } from '../lib/util';
 
 interface Props {

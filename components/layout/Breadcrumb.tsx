@@ -4,7 +4,7 @@ import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
-import { URL_INSTITUTION, URL_INSTITUTIONS, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SUBJECT, URL_SUBJECTS } from '../../lib/urlConstants';
+import { URL_INSTITUTION, URL_INSTITUTIONS, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SOCIAL_MEDIA_RANKING, URL_SUBJECT, URL_SUBJECTS } from '../../lib/url-helper/urlConstants';
 import { getLocalizedName, toLink } from '../../lib/util';
 import MantineLink from '../elements/MantineLink';
 
@@ -160,6 +160,12 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
         links.push({
             name: langContent.search + ": '" + query.q + "'",
             url: toLink(URL_SEARCH)
+        });
+
+    } else if (route.startsWith(toLink(URL_SOCIAL_MEDIA_RANKING))) {
+        links.push({
+            name: "Social Media Ranking",
+            url: toLink(URL_SOCIAL_MEDIA_RANKING)
         });
     }
 

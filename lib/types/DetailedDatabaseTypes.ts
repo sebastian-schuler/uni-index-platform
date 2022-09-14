@@ -78,11 +78,8 @@ export type DetailedState = State & {
 
 // CITY CARD
 export type DetailedCity = City & {
-    State: {
-        Country: {
-            url: string;
-        };
-        url: string;
+    State: State & {
+        Country: Country
     };
     _count: {
         InstitutionLocation: number;

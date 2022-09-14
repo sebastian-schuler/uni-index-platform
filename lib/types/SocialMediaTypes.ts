@@ -1,7 +1,13 @@
-import { Institution, InstitutionSocialMedia } from "@prisma/client";
+import { City, Country, Institution, InstitutionSocialMedia, State } from "@prisma/client";
 
 export type SocialMediaDBEntry = InstitutionSocialMedia & {
-    Institution: Institution;
+    Institution: Institution & {
+        City: City & {
+            State: State & {
+                Country: Country;
+            }
+        }
+    };
 }
 
 export type SocialMediaRankingItem = SocialMediaDBEntry & {

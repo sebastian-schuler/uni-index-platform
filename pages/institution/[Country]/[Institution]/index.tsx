@@ -1,16 +1,16 @@
-import { useMantineTheme, Text, Title, Box, Paper } from '@mantine/core';
+import { Text, Title, useMantineTheme } from '@mantine/core';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import { ParsedUrlQuery } from 'querystring';
-import InstitutionPaper from '../../../../components/elements/institution/InstitutionPaper';
+import WhitePaper from '../../../../components/elements/institution/WhitePaper';
 import Breadcrumb from '../../../../components/layout/Breadcrumb';
 import { FooterContent } from '../../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../../components/layout/LayoutContainer';
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav';
 import Meta from '../../../../components/partials/Meta';
 import searchWikipedia from '../../../../lib/apis/wikipediaHandler';
-import { getCountries, getCountry, getInstitution, getInstitutionPaths } from '../../../../lib/prismaQueries';
+import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries';
+import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions';
 
 interface Props {
   institution: Institution,
@@ -39,11 +39,11 @@ const InstitutionPage: NextPage<Props> = ({ institution, country, wikipediaConte
 
       <InstitutionNav title={institution.name} />
 
-      <InstitutionPaper>
+      <WhitePaper>
         <Title order={2}>About</Title>
         <Text>{wikipediaContent}</Text>
         <Text size={"sm"} color="dimmed">Source: Wikipedia</Text>
-      </InstitutionPaper>
+      </WhitePaper>
 
     </LayoutContainer>
   )
@@ -54,11 +54,11 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   let countryUrl = "" + context?.params?.Country;
   let institutionUrl = "" + context?.params?.Institution;
 
-  // Get Wikipedia Data
-  const wikiDataRes = await searchWikipedia("Hochschule Kaiserslautern", "" + context.locale)
-
   const country = await getCountry(countryUrl);
   const institution = await getInstitution(institutionUrl);
+
+  // Get Wikipedia Data
+  const wikiDataRes = institution ? (await searchWikipedia(institution.name, "" + context.locale)) : "";
 
   // Footer Data
   // Get all countries
@@ -76,30 +76,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 // All available Paths
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
-  const institutions = await getInstitutionPaths();
-
-  let paths: {
-    params: ParsedUrlQuery;
-    locale?: string | undefined;
-  }[] = [];
-
-  // Add locale to every possible path
-  locales?.forEach((locale) => {
-    institutions.forEach((institution) => {
-
-      // Iterate every Institution but also every InstitutionLocation (unis can have multiple locations, even in different countries)
-      institution.Subject.forEach((subject) => {
-        paths.push({
-          params: {
-            Country: subject.City?.State.Country.url,
-            Institution: institution.url
-          },
-          locale,
-        });
-      })
-
-    })
-  });
+  const paths = await getStaticPathsInstitution(locales || []);
 
   return {
     paths: paths,

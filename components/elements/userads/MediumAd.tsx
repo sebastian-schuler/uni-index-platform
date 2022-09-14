@@ -2,7 +2,7 @@ import { Box, Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@
 import { IconBuilding, IconSchool } from '@tabler/icons'
 import Link from 'next/link'
 import React, { memo } from 'react'
-import { PATH_PLACEHOLDER_IMAGES } from '../../../lib/urlConstants'
+import { PATH_PLACEHOLDER_IMAGES } from '../../../lib/url-helper/urlConstants'
 import { toLink } from '../../../lib/util'
 
 const useStyles = createStyles((theme) => ({

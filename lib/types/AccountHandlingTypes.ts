@@ -58,6 +58,6 @@ export type FormErrorLogin = {
 
 // STATUS TYPES
 
-export type RegisterStatus = "SUCCESS" | "INSTITUTION_TAKEN" | "INVALID_PASSWORD" | "INVALID_DISPLAYNAME" | "INVALID_EMAIL" | "EMAIL_TAKEN" | "ERROR" | null;
+export type RegisterStatus = "SUCCESS" | "INSTITUTION_TAKEN" | "INVALID_PASSWORD" | "INVALID_EMAIL" | "EMAIL_TAKEN" | "ERROR" | null;
 
 export type LoginStatus = "SUCCESS" | "NO_AUTH" | "NO_USER" | "ERROR" | null;

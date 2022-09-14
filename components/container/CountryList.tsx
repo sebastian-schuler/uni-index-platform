@@ -1,4 +1,4 @@
-import { Group, SimpleGrid, Stack, Transition } from '@mantine/core'
+import { Group, SimpleGrid, Space, Stack, Transition } from '@mantine/core'
 import useTranslation from 'next-translate/useTranslation'
 import { useEffect, useState } from 'react'
 import { DetailedCountry } from '../../lib/types/DetailedDatabaseTypes'
@@ -49,6 +49,8 @@ const CountryList = ({ title, subtitle, root, searchableCountries, children }: P
 
                 <GenericPageHeader title={title} description={subtitle} />
 
+                <Space h="md" />
+
                 <Group position='apart' >
                     <SearchBox
                         label={langContent.searchLabel}
@@ -80,6 +82,8 @@ const CountryList = ({ title, subtitle, root, searchableCountries, children }: P
                         }
                     </SimpleGrid>
                 </Reorder.Group>
+
+                <Space h="lg" />
 
                 {
                     children

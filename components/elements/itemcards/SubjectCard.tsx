@@ -1,13 +1,11 @@
-import {
-  Badge, Card, createStyles, Group, List, Stack, Text, ThemeIcon
-} from '@mantine/core'
+import { Card, createStyles, Group, List, Stack, Text, ThemeIcon } from '@mantine/core'
 import { IconAward, IconCalendar, IconCategory } from '@tabler/icons'
+import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
 import { DetailedSubject } from '../../../lib/types/DetailedDatabaseTypes'
-import { URL_INSTITUTION } from '../../../lib/urlConstants'
-import Flags from 'country-flag-icons/react/3x2'
+import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants'
 import { getLocalizedName, toLink } from '../../../lib/util'
 
 const useStyles = createStyles((theme) => ({
@@ -25,10 +23,6 @@ const useStyles = createStyles((theme) => ({
     borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
       }`,
     padding: theme.spacing.md,
-  },
-
-  like: {
-    color: theme.colors.red[6],
   },
 
   label: {
@@ -60,7 +54,7 @@ const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
 
   return (
     <Link href={url} passHref>
-      <Card component='a' withBorder radius="md" p="md" className={classes.card}>
+      <Card component='a' withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
 
         <Card.Section className={classes.section}>
           <Group position="apart" noWrap sx={{ alignItems: "start" }}>

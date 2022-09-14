@@ -13,6 +13,8 @@ export const URL_LOCATIONS = "locations";
 
 export const URL_SEARCH= "search";
 
+export const URL_SOCIAL_MEDIA_RANKING = "social-media-ranking";
+
 // ACCOUNT AREA URLS
 
 export const URL_LOGIN= "login";

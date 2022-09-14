@@ -1,25 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import {
-    AppShell,
-    Navbar,
-    Header,
-    Footer,
-    Aside,
-    Transition,
-    Title,
-    MediaQuery,
-    Burger,
-    useMantineTheme,
-    createStyles
+    AppShell, Burger, createStyles, Header, MediaQuery, Title, Transition, useMantineTheme
 } from '@mantine/core';
-import AccountNavDrawer from './AccountNavDrawer';
-import { getUserDataFromApi } from '../../../lib/accountHandling/AccountApiHandler';
-import { toLink } from '../../../lib/util';
-import { useAuth } from '../../../context/SessionContext';
-import { UserDataProfile } from '../../../lib/types/AccountHandlingTypes';
-import { URL_LOGIN } from '../../../lib/urlConstants';
-import { useRouter } from 'next/router';
 import { useMediaQuery } from '@mantine/hooks';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../../../context/SessionContext';
+import { getUserDataFromApi } from '../../../lib/accountHandling/AccountApiHandler';
+import { UserDataProfile } from '../../../lib/types/AccountHandlingTypes';
+import { URL_LOGIN } from '../../../lib/url-helper/urlConstants';
+import { toLink } from '../../../lib/util';
+import AccountNavDrawer from './AccountNavDrawer';
 
 
 const useStyles = createStyles((theme, _params, getRef) => {
@@ -41,7 +31,7 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
     const [opened, setOpened] = useState(false);
 
     const router = useRouter();
-    const { token } = useAuth();
+    const { token, deleteAuthToken } = useAuth();
     const [userData, setUserData] = useState<UserDataProfile>(null);
 
     const username = userData?.user.display_name !== null && userData?.user.display_name !== undefined && userData.user.display_name !== "" ? userData.user.display_name :
@@ -55,6 +45,7 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
         const getData = async () => {
             const userDataRes = await getUserDataFromApi({ profile: true });
             if (userDataRes === null || userDataRes.status !== "SUCCESS") {
+                deleteAuthToken();
                 router.replace(toLink(URL_LOGIN));
                 return;
             }

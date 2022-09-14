@@ -2,7 +2,7 @@ import { Box, Divider, Grid, SimpleGrid, Text, Title, useMantineTheme } from '@m
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import { DetailedUserAd } from '../../lib/types/DetailedDatabaseTypes'
-import { URL_INSTITUTION } from '../../lib/urlConstants'
+import { URL_INSTITUTION } from '../../lib/url-helper/urlConstants'
 import { toLink } from '../../lib/util'
 import MantineLink from '../elements/MantineLink'
 import LargeAd from '../elements/userads/LargeAd'

@@ -7,12 +7,12 @@ import { FooterContent } from '../../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../../components/layout/LayoutContainer'
 import SubjectNav from '../../../../../components/layout/subnav/SubjectNav'
 import Meta from '../../../../../components/partials/Meta'
-import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../lib/urlConstants'
-import { getCountries, getCountry, getInstitution, getSubject, getSubjectPaths } from '../../../../../lib/prismaQueries'
+import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../lib/url-helper/urlConstants'
+import { getCountries, getCountry, getInstitution, getSubject, getSubjectPaths } from '../../../../../lib/prisma/prismaQueries'
 import { getDBLocale, toLink } from '../../../../../lib/util'
 import { ParsedUrlQuery } from 'querystring'
 import { getJobsFromApi } from '../../../../../lib/apis/jobsHandler'
-import InstitutionPaper from '../../../../../components/elements/institution/InstitutionPaper'
+import WhitePaper from '../../../../../components/elements/institution/WhitePaper'
 
 type Props = {
     country: Country,
@@ -53,9 +53,9 @@ const SubjectJobs: NextPage<Props> = props => {
                 }}
             />
 
-            <InstitutionPaper>
+            <WhitePaper>
                 <p>Jobs</p>
-            </InstitutionPaper>
+            </WhitePaper>
 
         </LayoutContainer>
     )

@@ -6,9 +6,10 @@ import Breadcrumb from '../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
 import Meta from '../../../../components/partials/Meta'
-import prisma from '../../../../lib/prisma'
-import { getCountries, getCountry, getInstitution, getInstitutionPaths } from '../../../../lib/prismaQueries'
+import prisma from '../../../../lib/prisma/prisma'
+import { getCountries, getCountry, getInstitution, getInstitutionPaths } from '../../../../lib/prisma/prismaQueries'
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav'
+import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
 
 type Props = {
 
@@ -60,30 +61,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
-  const institutions = await getInstitutionPaths();
-
-  let paths: {
-    params: ParsedUrlQuery;
-    locale?: string | undefined;
-  }[] = [];
-
-  // Add locale to every possible path
-  locales?.forEach((locale) => {
-    institutions.forEach((institution) => {
-
-      // Iterate every Institution but also every InstitutionLocation (unis can have multiple locations, even in different countries)
-      institution.Subject.forEach((course) => {
-        paths.push({
-          params: {
-            Country: course.City?.State.Country.url,
-            Institution: institution.url
-          },
-          locale,
-        });
-      })
-
-    })
-  });
+  const paths = await getStaticPathsInstitution(locales || []);
 
   return {
     paths: paths,

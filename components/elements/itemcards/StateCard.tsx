@@ -4,7 +4,7 @@ import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
 import { DetailedState } from '../../../lib/types/DetailedDatabaseTypes'
-import { URL_LOCATION } from '../../../lib/urlConstants'
+import { URL_LOCATION } from '../../../lib/url-helper/urlConstants'
 import { getLocalizedName, toLink } from '../../../lib/util'
 
 const useStyles = createStyles((theme) => ({
@@ -46,7 +46,7 @@ const StateCard: React.FC<Props> = ({ state }: Props) => {
 
     return (
         <Link href={url} passHref>
-            <Card component='a' withBorder radius="md" p="md" className={classes.card}>
+            <Card component='a' withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
 
                 <Card.Section className={classes.section}>
                     <Group position="apart" noWrap sx={{ alignItems: "start" }}>

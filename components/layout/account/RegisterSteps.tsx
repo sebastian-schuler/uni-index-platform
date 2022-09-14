@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useAuth } from '../../../context/SessionContext';
-import { isDisplayNameValid, isEmailValid, isPasswordValid } from '../../../lib/regex';
+import { isDisplayNameValid, isEmailValid, isPasswordValid } from '../../../lib/accountHandling/regex';
 import { InstitutionRegistrationItem, RegisterStatus } from '../../../lib/types/AccountHandlingTypes';
 import { Stepper, Button, Group, Paper, Box, Grid, Text, Title, TextInput, Autocomplete, useMantineTheme, Stack, Center, PasswordInput } from '@mantine/core';
 import BrandPaper from '../BrandPaper';
@@ -23,8 +23,15 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
 
     // Stepper
     const [active, setActive] = useState(0);
+    const [registerResult, setRegisterResult] = useState<RegisterStatus>(null);
     const nextStep = () => {
+        if (active === 2) {
+            // If the user is on the last step, submit the form
+            submitRegistration();
+        }
+        // Go to next step
         setActive((current) => (current < 3 ? current + 1 : current));
+
     };
     const prevStep = () => {
         setActive((current) => (current > 0 ? current - 1 : current));
@@ -99,10 +106,8 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
         }).then((t) => t.json());
 
         const status = res.status as RegisterStatus;
+        setRegisterResult(status);
         switch (status) {
-            case 'INVALID_DISPLAYNAME':
-                setDisplayNameError(langContent.errorDisplayNameInvalid);
-                break;
             case 'INVALID_EMAIL':
                 setEmailError(langContent.errorEmailInvalid);
                 break;
@@ -116,11 +121,10 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
                 setInstitutionError(langContent.errorInstitutionTaken);
                 break;
             case 'SUCCESS':
-                // setActiveStep((prevActiveStep) => prevActiveStep + 1);
                 setTimeout(() => {
                     setAuthToken(res.token, res.lifetime);
                     router.replace('/account');
-                }, 3000);
+                }, 5000);
                 break;
         }
     }
@@ -183,10 +187,19 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
 
                     </Stepper.Step>
                     <Stepper.Step label="Confirm" description="Check if data is correct">
-                        Step 3 content: Get full access
+
+                        <Text>{email}</Text>
+                        <Text>{password}</Text>
+                        <Text>{selectedInstitution?.name}</Text>
+
                     </Stepper.Step>
                     <Stepper.Completed>
-                        Completed, click back button to get to previous step
+                        {
+                            registerResult === null && "Waiting for response"
+                        }
+                        {
+                            registerResult === "SUCCESS" && "Successfully registered, you will be redirected in a few seconds"
+                        }
                     </Stepper.Completed>
                 </Stepper>
 
@@ -202,7 +215,7 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
                         onClick={nextStep}
                         disabled={isNextDisabled() || active === 3}
                     >
-                        {active >= 2 ? "Finish" :  "Next"}
+                        {active >= 2 ? "Finish" : "Next"}
                     </Button>
                 </Group>
 

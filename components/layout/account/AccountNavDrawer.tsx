@@ -1,6 +1,7 @@
 import { Button, createStyles, Group, Navbar } from '@mantine/core';
-import { IconArticle, IconHelp, IconHistory, IconHome, IconLogout, IconPencilPlus, IconSettings } from '@tabler/icons';
+import { IconArticle, IconDashboard, IconHelp, IconHistory, IconHome, IconLogout, IconPencilPlus, IconSettings } from '@tabler/icons';
 import useTranslation from 'next-translate/useTranslation';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useAuth } from '../../../context/SessionContext';
@@ -18,6 +19,13 @@ const useStyles = createStyles((theme, _params, getRef) => {
             paddingBottom: theme.spacing.md,
             marginBottom: theme.spacing.md * 1.5,
             borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
+                }`,
+        },
+
+        homepageLink: {
+            paddingTop: theme.spacing.md,
+            marginTop: theme.spacing.md * 1.5,
+            borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
                 }`,
         },
 
@@ -78,7 +86,7 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedUsername, displaye
     const { deleteAuthToken } = useAuth();
     const { t } = useTranslation("account");
     const langContent = {
-        mniHome: t("menu-item-home"),
+        mniDashboard: t("menu-item-dashboard"),
         mniNewAd: t("menu-item-newad"),
         mniManageAds: t('menu-item-manageads'),
         mniHistory: t('menu-item-history'),
@@ -90,7 +98,7 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedUsername, displaye
     }
 
     const data = [
-        { link: '/account', label: langContent.mniHome, icon: IconHome },
+        { link: '/account', label: langContent.mniDashboard, icon: IconDashboard },
         { link: '/account/create-ad', label: langContent.mniNewAd, icon: IconPencilPlus },
         { link: '/account/manage-ads', label: langContent.mniManageAds, icon: IconArticle },
         { link: '/account/history', label: langContent.mniHistory, icon: IconHistory },
@@ -130,6 +138,19 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedUsername, displaye
                     />
                 </Group>
                 {links}
+                <Group className={classes.homepageLink} position="apart">
+                    <Link href={"/"} passHref>
+                    <Button
+                        component='a'
+                        className={classes.link}
+                        variant="subtle"
+                        fullWidth
+                    >
+                        <IconHome className={classes.linkIcon} stroke={1.5} />
+                        <span>Uni-Index Homepage</span>
+                    </Button>
+                    </Link>
+                </Group>
             </Navbar.Section>
 
             <Navbar.Section className={classes.footer}>

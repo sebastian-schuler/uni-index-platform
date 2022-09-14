@@ -19,16 +19,16 @@ export type OrderByState = "popularity" | "relevance" | "az" | "za";
 export const sortSearchableArray = (searchable: Searchable[], orderBy: OrderByState, lang: string) => {
     return [...searchable].sort((a, b) => {
         if (orderBy === "az") {
-            const aName = getLocalizedName({ lang: lang, searchable: a});
-            const bName = getLocalizedName({ lang: lang, searchable: b});
+            const aName = getLocalizedName({ lang: lang, searchable: a });
+            const bName = getLocalizedName({ lang: lang, searchable: b });
             return aName.localeCompare(bName);
         } else if (orderBy === "za") {
-            const aName = getLocalizedName({ lang: lang, searchable: a});
-            const bName = getLocalizedName({ lang: lang, searchable: b});
+            const aName = getLocalizedName({ lang: lang, searchable: a });
+            const bName = getLocalizedName({ lang: lang, searchable: b });
             return bName.localeCompare(aName);
         } else if (orderBy === "relevance") {
-            const aName = getLocalizedName({ lang: lang, searchable: a});
-            const bName = getLocalizedName({ lang: lang, searchable: b});
+            const aName = getLocalizedName({ lang: lang, searchable: a });
+            const bName = getLocalizedName({ lang: lang, searchable: b });
             return aName.localeCompare(bName); // TODO add relevance sorting
         } else if (orderBy === "popularity") {
             return b.data.popularity_score - a.data.popularity_score;
@@ -61,6 +61,9 @@ const OrderBySelect: React.FC<Props> = ({ orderBy, handleChange }: Props) => {
             icon={<IconArrowsSort size={14} />}
             onChange={handleChange}
             classNames={classes}
+            transition="pop-top-left"
+            transitionDuration={100}
+            transitionTimingFunction="ease"
         />
     )
 }

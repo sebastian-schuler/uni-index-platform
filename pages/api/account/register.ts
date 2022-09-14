@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { addNewUser, addUserSession, getUserCountByEmail, getUserCountByInstitution } from '../../../lib/prismaQueries';
-import { isDisplayNameValid, isEmailValid, isPasswordValid } from '../../../lib/regex';
+import { addNewUser, addUserSession, getUserCountByEmail, getUserCountByInstitution } from '../../../lib/prisma/prismaQueries';
+import { isDisplayNameValid, isEmailValid, isPasswordValid } from '../../../lib/accountHandling/regex';
 import { RegisterStatus } from '../../../lib/types/AccountHandlingTypes';
 import { addDays } from '../../../lib/util';
 
@@ -49,23 +49,9 @@ export default async function handler(
     }
 
     // Password security check
-    // min 8, max 64 letters
-    // 2 UPPER case
-    // 1 SPECIAL Character
-    // 3 LOWER case
-    // 2 DIGITS
     const typedPassword: string = password;
     if (!isPasswordValid(typedPassword)) {
         status = 'INVALID_PASSWORD';
-        res.json({ status: status });
-        return;
-    }
-
-    // Check DisplayName
-    // either 0 letters or max 32 min 4
-    const typedDisplayName: string = displayName;
-    if (typedDisplayName.length > 0 && !isDisplayNameValid(typedDisplayName)) {
-        status = 'INVALID_DISPLAYNAME';
         res.json({ status: status });
         return;
     }
@@ -75,7 +61,7 @@ export default async function handler(
 
     // LOGIN NEW USER
     status = 'SUCCESS';
-    const createdUser = await addNewUser(typedEmail, hash, typedDisplayName, typedInstitutionId);
+    const createdUser = await addNewUser(typedEmail, hash, typedInstitutionId);
     // Create new random string as token
     let token = crypto.randomBytes(40).toString('hex');
     // Set lifetime of token

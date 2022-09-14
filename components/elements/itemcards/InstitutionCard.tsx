@@ -66,7 +66,7 @@ const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
   return (
     <Link href={url} passHref>
 
-      <Card component='a' withBorder radius="md" p="md" className={classes.card}>
+      <Card component='a' withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
 
         <Card.Section className={classes.section}>
           <Group position="apart" noWrap sx={{ alignItems: "start" }}>

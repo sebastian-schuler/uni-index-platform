@@ -12,7 +12,7 @@ import ForgotPassword from '../components/layout/account/ForgotPassword';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import { useAuth } from '../context/SessionContext';
 import { LoginStatus } from '../lib/types/AccountHandlingTypes';
-import { URL_REGISTER } from '../lib/urlConstants';
+import { URL_REGISTER } from '../lib/url-helper/urlConstants';
 
 const useStyles = createStyles((theme) => ({
   title: {

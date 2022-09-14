@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import BookedAdsTable from '../../components/elements/accounts/BookedAdsTable';
 import { Center, Loader, Group, Navbar, Title, Box, SimpleGrid, Grid, Card, Text, Anchor } from '@mantine/core';
 import { useAuth } from '../../context/SessionContext';
-import { URL_LOGIN } from '../../lib/urlConstants';
+import { URL_LOGIN } from '../../lib/url-helper/urlConstants';
 import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
 import { PremiumAdDetailed, UserDataProfile } from '../../lib/types/AccountHandlingTypes';
 import { toLink } from '../../lib/util';
@@ -20,7 +20,6 @@ const AccountPage = () => {
   }
 
   // If a token exists, assume its valid and redirect to account page, it will be checked there anyway to get data
-  const { token, deleteAuthToken } = useAuth();
   const [userData, setUserData] = useState<UserDataProfile>(null);
   const [userBookedAds, setUserBookedAds] = useState<PremiumAdDetailed[]>([]);
 
@@ -29,6 +28,7 @@ const AccountPage = () => {
     const getData = async () => {
       const userDataRes = await getUserDataFromApi({ profile: true, userAds: true });
       if (userDataRes === null || userDataRes.status !== "SUCCESS") return;
+      console.log(userDataRes)
       setUserData(userDataRes.profile || null);
       setUserBookedAds(userDataRes.ads || []);
     }

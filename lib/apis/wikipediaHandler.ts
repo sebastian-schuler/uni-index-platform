@@ -8,6 +8,7 @@ function searchWikipedia(searchQuery: string, locale: string) {
             
             // In wikipedias wiki language == title == is a header, we want to find the first one and take the excerpt until that header
             let firstHeader = extract.search(/==(.)+==/g)
+            
             firstHeader = firstHeader == -1 ? extract.length : firstHeader;
             return extract.substring(0,firstHeader).trim();
 

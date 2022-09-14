@@ -1,6 +1,6 @@
 import { Country, SubjectType } from "@prisma/client";
 import { getCitiesDetailedByState, getCountries, getCountriesByPopularity, getCountryInstitutionCount, getCountrySubjectCount, getSubjectsDetailedByInstitution, getSubjectTypes, getSubjectTypeSubjectCount } from "./prismaQueries";
-import { DetailedCity, DetailedCountry, DetailedSubject, DetailedSubjectType } from "./types/DetailedDatabaseTypes";
+import { DetailedCity, DetailedCountry, DetailedSubject, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
 
 // COUNTRIES
 

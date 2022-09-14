@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
 import { DetailedCountry } from '../../../lib/types/DetailedDatabaseTypes'
-import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_LOCATION } from '../../../lib/urlConstants'
+import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_LOCATION } from '../../../lib/url-helper/urlConstants'
 import { getLocalizedName, toLink } from '../../../lib/util'
 
 const useStyles = createStyles((theme) => ({
@@ -57,7 +57,7 @@ const CountryCard: React.FC<Props> = ({ country, linkType }: Props) => {
     return (
         <Link href={link} passHref>
 
-            <Card component='a' withBorder p="lg" radius="md" className={classes.card}>
+            <Card component='a' withBorder p="lg" radius="md" shadow={"sm"} className={classes.card}>
                 <Card.Section>
                     <Image src={toLink(PATH_COUNTRY_IMAGES, country.url + ".jpg")} alt={name} height={180} />
                 </Card.Section>

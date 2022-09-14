@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next'
 import SearchResultList from '../components/elements/search/SearchResultList'
 import Breadcrumb from '../components/layout/Breadcrumb'
 import LayoutContainer from '../components/layout/LayoutContainer'
-import { getGlobalSearchResults } from '../lib/prismaQueries'
+import { getGlobalSearchResults } from '../lib/prisma/prismaQueries'
 import { LinkableCity, LinkableInstitution, LinkableSubject } from '../lib/types/Linkables'
 
 interface Props {

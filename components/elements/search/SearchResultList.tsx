@@ -1,8 +1,8 @@
 import React from 'react'
-import { URL_INSTITUTION, URL_LOCATION, URL_SUBJECT } from '../../../lib/urlConstants'
+import { URL_INSTITUTION, URL_LOCATION, URL_SUBJECT } from '../../../lib/url-helper/urlConstants'
 import { LinkableCity, LinkableInstitution, LinkableSubject } from '../../../lib/types/Linkables'
 import { toLink } from '../../../lib/util'
-import InternalLink from '../InternalLink'
+import MantineLink from '../MantineLink'
 
 type Props = {
     header: string
@@ -11,7 +11,7 @@ type Props = {
     resInstitution?: LinkableInstitution[]
 }
 
-// TODO turn it into MUI component
+// TODO turn it into Mantine component
 const SearchResultList: React.FC<Props> = props => {
 
     let outputList = <></>;
@@ -24,7 +24,7 @@ const SearchResultList: React.FC<Props> = props => {
         outputList = <> {
             props.resCities.map((item, i) => (
                 <div key={i}>
-                    <InternalLink title='' href={toLink(URL_LOCATION, item.State.Country.url, item.State.url, item.url)}>{item.name}</InternalLink>
+                    <MantineLink label={item.name} url={toLink(URL_LOCATION, item.State.Country.url, item.State.url, item.url)} />
                 </div>
             ))
         }</>;
@@ -37,7 +37,7 @@ const SearchResultList: React.FC<Props> = props => {
         outputList = <> {
             props.resSubject.map((item, i) => (
                 <div key={i}>
-                    <InternalLink title='' href={toLink(URL_SUBJECT, item.SubjectType.url, item.url)}>{item.name}</InternalLink>
+                    <MantineLink label={item.name} url={toLink(URL_SUBJECT, item.SubjectType.url, item.url)} />
                 </div>
             ))
         }</>;
@@ -51,7 +51,7 @@ const SearchResultList: React.FC<Props> = props => {
         outputList = <> {
             filteredList.map((item, i) => (
                 <div key={i}>
-                    <InternalLink title='' href={toLink(URL_INSTITUTION, item.InstitutionLocation[0].City.State.Country.url, item.url)}>{item.name}</InternalLink>
+                    <MantineLink label={item.name} url={toLink(URL_INSTITUTION, item.InstitutionLocation[0].City.State.Country.url, item.url)} />
                 </div>
             ))
         }</>;

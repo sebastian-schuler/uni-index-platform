@@ -6,14 +6,14 @@ import {
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import { Radar } from 'react-chartjs-2'
-import InstitutionPaper from '../../../../components/elements/institution/InstitutionPaper'
+import WhitePaper from '../../../../components/elements/institution/WhitePaper'
 import Breadcrumb from '../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav'
 import Meta from '../../../../components/partials/Meta'
-import { getCountries, getCountry, getInstitution, getInstitutionPaths, getSocialMedia } from '../../../../lib/prismaQueries'
-import { Group, Paper, SimpleGrid, Grid, Title, Text, createStyles, useMantineTheme } from '@mantine/core';
+import { getCountries, getCountry, getInstitution, getInstitutionPaths, getSocialMedia } from '../../../../lib/prisma/prismaQueries'
+import { Group, Paper, SimpleGrid, Grid, Title, Text, createStyles, useMantineTheme, Card } from '@mantine/core';
 import SocialMediaStatCard from '../../../../components/elements/institution/SocialMediaStatCard'
 import {
   IconBrandTwitter,
@@ -21,6 +21,7 @@ import {
   IconBrandFacebook,
   IconBrandYoutube
 } from '@tabler/icons';
+import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
 
 const data = {
   labels: ['Tweet Count %', 'Average Likes %', 'Average Retweets %', 'Average Interaction %', 'Profile completed %'],
@@ -107,58 +108,60 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
 
       {/* <InstitutionPaper> */}
 
+      <WhitePaper>
 
+        <Grid mt={"lg"}>
 
-      <Grid mt={"lg"}>
+          <Grid.Col md={8}>
+            <Card>
+              <Title order={2}>Social Media Statistics</Title>
+              <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
+            </Card>
+          </Grid.Col>
 
-        <Grid.Col md={8}>
-          <InstitutionPaper sx={{ borderRadius: 8 }}>
-            <Title order={2}>Social Media Statistics</Title>
-            <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
-          </InstitutionPaper>
-        </Grid.Col>
+          <Grid.Col md={4}>
+            <SimpleGrid cols={2}>
+              <SocialMediaStatCard
+                title='Twitter'
+                value={socialMedia.twitter_points} diff={calculateSocialMediaDifference(socialMedia.twitter_points, averagePoints.twitterAverage)}
+                icon={IconBrandTwitter}
+              />
+              <SocialMediaStatCard
+                title='Youtube'
+                value={socialMedia.youtube_points}
+                diff={calculateSocialMediaDifference(socialMedia.youtube_points, averagePoints.youtubeAverage)}
+                icon={IconBrandYoutube}
+              />
+              <SocialMediaStatCard
+                title='Instagram'
+                value={socialMedia.instagram_points}
+                diff={calculateSocialMediaDifference(socialMedia.instagram_points, averagePoints.instagramAverage)}
+                icon={IconBrandInstagram}
+              />
+              <SocialMediaStatCard
+                title='Facebook'
+                value={socialMedia.facebook_points}
+                diff={calculateSocialMediaDifference(socialMedia.facebook_points, averagePoints.facebookAverage)}
+                icon={IconBrandFacebook}
+              />
+            </SimpleGrid>
+          </Grid.Col>
 
-        <Grid.Col md={4}>
-          <SimpleGrid cols={2}>
-            <SocialMediaStatCard
-              title='Twitter'
-              value={socialMedia.twitter_points} diff={calculateSocialMediaDifference(socialMedia.twitter_points, averagePoints.twitterAverage)}
-              icon={IconBrandTwitter}
-            />
-            <SocialMediaStatCard
-              title='Youtube'
-              value={socialMedia.youtube_points}
-              diff={calculateSocialMediaDifference(socialMedia.youtube_points, averagePoints.youtubeAverage)}
-              icon={IconBrandYoutube}
-            />
-            <SocialMediaStatCard
-              title='Instagram'
-              value={socialMedia.instagram_points}
-              diff={calculateSocialMediaDifference(socialMedia.instagram_points, averagePoints.instagramAverage)}
-              icon={IconBrandInstagram}
-            />
-            <SocialMediaStatCard
-              title='Facebook'
-              value={socialMedia.facebook_points}
-              diff={calculateSocialMediaDifference(socialMedia.facebook_points, averagePoints.facebookAverage)}
-              icon={IconBrandFacebook}
-            />
-          </SimpleGrid>
-        </Grid.Col>
+          <Grid.Col md={8}>
 
-        <Grid.Col md={8}>
+            <WhitePaper sx={{ borderRadius: 8 }}>
 
-          <InstitutionPaper sx={{ borderRadius: 8 }}>
+              <Radar
+                data={data}
+                options={options}
+              />
 
-            <Radar
-              data={data}
-              options={options}
-            />
+            </WhitePaper>
+          </Grid.Col>
 
-          </InstitutionPaper>
-        </Grid.Col>
+        </Grid>
 
-      </Grid>
+      </WhitePaper>
 
       {/* </InstitutionPaper> */}
 
@@ -269,30 +272,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
-  const institutions = await getInstitutionPaths();
-
-  let paths: {
-    params: ParsedUrlQuery;
-    locale?: string | undefined;
-  }[] = [];
-
-  // Add locale to every possible path
-  locales?.forEach((locale) => {
-    institutions.forEach((institution) => {
-
-      // Iterate every Institution but also every InstitutionLocation (unis can have multiple locations, even in different countries)
-      institution.Subject.forEach((subject) => {
-        paths.push({
-          params: {
-            Country: subject.City?.State.Country.url,
-            Institution: institution.url
-          },
-          locale,
-        });
-      })
-
-    })
-  });
+  const paths = await getStaticPathsInstitution(locales || []);
 
   return {
     paths: paths,

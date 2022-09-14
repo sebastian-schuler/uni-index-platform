@@ -2,16 +2,17 @@ import { Group, SimpleGrid } from '@mantine/core';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import InstitutionPaper from '../../../../components/elements/institution/InstitutionPaper';
+import WhitePaper from '../../../../components/elements/institution/WhitePaper';
 import SubjectCard from '../../../../components/elements/itemcards/SubjectCard';
 import Breadcrumb from '../../../../components/layout/Breadcrumb';
 import { FooterContent } from '../../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../../components/layout/LayoutContainer';
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav';
 import Meta from '../../../../components/partials/Meta';
-import { getDetailedSubjectsByInstitution } from '../../../../lib/prismaDetailedQueries';
-import { getCountries, getCountry, getInstitution, getInstitutionPaths } from '../../../../lib/prismaQueries';
+import { getDetailedSubjectsByInstitution } from '../../../../lib/prisma/prismaDetailedQueries';
+import { getCountries, getCountry, getInstitution, getInstitutionPaths } from '../../../../lib/prisma/prismaQueries';
 import { DetailedSubject } from '../../../../lib/types/DetailedDatabaseTypes';
+import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions';
 
 interface Props {
   institution: Institution,
@@ -34,7 +35,7 @@ const subjects: NextPage<Props> = ({ institution, country, footerContent, detail
 
       <InstitutionNav title={institution.name} />
 
-      <InstitutionPaper>
+      <WhitePaper>
         <Group position='apart' >
           {/* <SearchBox
                         label={langContent.searchLabel}
@@ -65,7 +66,7 @@ const subjects: NextPage<Props> = ({ institution, country, footerContent, detail
 
         </SimpleGrid>
 
-      </InstitutionPaper>
+      </WhitePaper>
 
     </LayoutContainer >
   )
@@ -94,30 +95,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
-  const institutions = await getInstitutionPaths();
-
-  let paths: {
-    params: ParsedUrlQuery;
-    locale?: string | undefined;
-  }[] = [];
-
-  // Add locale to every possible path
-  locales?.forEach((locale) => {
-    institutions.forEach((institution) => {
-
-      // Iterate every Institution but also every InstitutionLocation (unis can have multiple locations, even in different countries)
-      institution.Subject.forEach((subject) => {
-        paths.push({
-          params: {
-            Country: subject.City?.State.Country.url,
-            Institution: institution.url
-          },
-          locale,
-        });
-      })
-
-    })
-  });
+  const paths = await getStaticPathsInstitution(locales || []);
 
   return {
     paths: paths,

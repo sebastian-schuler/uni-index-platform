@@ -4,7 +4,7 @@ import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { memo } from 'react';
 import { Searchable } from '../../../lib/types/UiHelperTypes';
-import { URL_LOGIN, URL_REGISTER } from '../../../lib/urlConstants';
+import { URL_LOGIN, URL_REGISTER } from '../../../lib/url-helper/urlConstants';
 import { getLocalizedName, toLink } from '../../../lib/util';
 import MantineLink from '../../elements/MantineLink';
 import ResponsiveContainer from '../ResponsiveContainer';

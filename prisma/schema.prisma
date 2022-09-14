@@ -109,7 +109,6 @@ model SubjectType {
 model User {
   id             BigInt          @id(map: "UserInstitution_pkey") @default(autoincrement())
   email          String          @unique(map: "Unique User Email") @db.VarChar
-  display_name   String?         @db.VarChar
   password       String          @db.VarChar
   institution_id Int             @unique(map: "Unique Institution ID in User")
   Institution    Institution     @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User belongs to Institution")

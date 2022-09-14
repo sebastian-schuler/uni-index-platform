@@ -6,8 +6,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown } from '@tabler/icons';
 import Link from 'next/link';
 import ResponsiveContainer from '../ResponsiveContainer';
+import HeaderAccountMenu from './HeaderAccountMenu';
 
-export const HEADER_HEIGHT = 60;
+export const HEADER_HEIGHT = 64;
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -67,15 +68,6 @@ const useStyles = createStyles((theme) => ({
     marginRight: 5,
   },
 
-  settingsButton: {
-    '&:hover': {
-      backgroundColor: theme.fn.lighten(
-        theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background || "",
-        0.1
-      ),
-    },
-  }
-
 }));
 
 interface LinkProps {
@@ -92,9 +84,10 @@ const WebsiteHeader = () => {
 
   const links: NestedLinkProps[] = [
     { parent: { label: "Home", link: "/" }, children: [] },
-    { parent: { label: "Locations", link: "/locations" }, children: [] },
+    { parent: { label: "Universities", link: "/locations" }, children: [] },
     { parent: { label: "Subjects", link: "/subjects" }, children: [] },
     { parent: { label: "Institutions", link: "/institutions" }, children: [] },
+    { parent: { label: "Social-Media Ranking", link: "/social-media-ranking" }, children: [] },
   ]
 
   const [opened, { toggle }] = useDisclosure(false);
@@ -110,10 +103,7 @@ const WebsiteHeader = () => {
         <Menu key={link.parent.label} trigger="hover" exitTransitionDuration={0}>
           <Menu.Target>
             <Link key={link.parent.label} href={link.parent.link}>
-              <Anchor
-                className={classes.link}
-              // onClick={(event) => event.preventDefault()}
-              >
+              <Anchor className={classes.link}>
                 <Center>
                   <span className={classes.linkLabel}>{link.parent.label}</span>
                   <IconChevronDown size={12} stroke={1.5} />
@@ -128,10 +118,7 @@ const WebsiteHeader = () => {
 
     return (
       <Link key={link.parent.label} href={link.parent.link}>
-        <Anchor
-          className={classes.link}
-        // onClick={(event) => event.preventDefault()}
-        >
+        <Anchor className={classes.link}>
           {link.parent.label}
         </Anchor>
       </Link>
@@ -140,15 +127,15 @@ const WebsiteHeader = () => {
 
   return (
     <>
-      <Header height={HEADER_HEIGHT} className={classes.header} fixed > 
+      <Header height={HEADER_HEIGHT} className={classes.header} fixed >
         <ResponsiveContainer>
           <div className={classes.inner}>
-            {/* <MantineLogo size={28} inverted /> */}
-            <Text size={'xl'}>Uni-Index</Text>
-            <Group spacing={16} className={classes.links}>
+            <Text size={'xl'} weight={"bolder"}>Uni-Index</Text>
+            <Group spacing={4} className={classes.links}>
               <Group spacing={4}>
                 {items}
               </Group>
+              <HeaderAccountMenu />
             </Group>
             <Burger
               opened={opened}

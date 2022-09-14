@@ -1,22 +1,32 @@
-import { Card, createStyles, Text } from '@mantine/core'
+import { Card, createStyles, Group, List, Stack, Text, ThemeIcon } from '@mantine/core'
+import { IconSchool } from '@tabler/icons'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
 import { DetailedSubjectType } from '../../../lib/types/DetailedDatabaseTypes'
-import { URL_SUBJECT } from '../../../lib/urlConstants'
+import { URL_SUBJECT } from '../../../lib/url-helper/urlConstants'
 import { getLocalizedName, toLink } from '../../../lib/util'
 
 const useStyles = createStyles((theme) => ({
     card: {
-        position: 'relative',
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
+        transition: "all .2s ease-in-out",
+        height: "100%",
+
+        '&:hover': {
+            transform: "scale(1.05)",
+        }
     },
 
     title: {
-        display: 'block',
-        marginTop: theme.spacing.md,
-        marginBottom: theme.spacing.xs / 2,
+        fontFamily: `Greycliff CF, ${theme.fontFamily}`,
     },
+
+    section: {
+        borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+        padding: theme.spacing.md,
+    },
+
 }));
 
 interface Props {
@@ -25,30 +35,40 @@ interface Props {
 
 const SubjectTypeCard: React.FC<Props> = ({ subjectType }: Props) => {
 
-    const { classes } = useStyles();
+    const { classes, theme } = useStyles();
     const { lang } = useTranslation('common');
 
     const url = toLink(URL_SUBJECT, subjectType.url);
 
     return (
         <Link href={url} passHref>
-            <Card component='a' withBorder radius="md" className={classes.card}>
+            <Card component='a' withBorder radius="md" shadow={"sm"} className={classes.card}>
 
-                {/* <Card.Section>
-                <Image src={toLink(PATH_COUNTRY_IMAGES, country.url + ".jpg")} fit="cover" height={130} />
-            </Card.Section> */}
+                <Card.Section className={classes.section}>
+                    <Group position="apart" noWrap sx={{ alignItems: "start" }}>
+                        <Stack spacing={theme.spacing.xs}>
+                            <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
+                                {getLocalizedName({ lang: lang, any: subjectType })}
+                            </Text>
+                        </Stack>
+                    </Group>
+                </Card.Section>
 
-                <Text className={classes.title} weight={500}>
-                    {getLocalizedName({ lang: lang, any: subjectType })}
-                </Text>
-
-                <Text size="md" color="dimmed" lineClamp={4}>
-                    Total Subjects: {subjectType.subjectCount}
-                </Text>
-
-                <Text size="md" color="dimmed" lineClamp={4}>
-                    Most popular:
-                </Text>
+                <Card.Section className={classes.section}>
+                    <List
+                        spacing="sm"
+                        size="md"
+                        center
+                    >
+                        <List.Item
+                            icon={
+                                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                                    <IconSchool size={18} />
+                                </ThemeIcon>
+                            }
+                        >{subjectType.subjectCount} Subject</List.Item>
+                    </List>
+                </Card.Section>
 
             </Card>
         </Link>

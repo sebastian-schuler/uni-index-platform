@@ -1,9 +1,9 @@
 import { Subject } from '@prisma/client';
-import prisma from '../lib/prisma';
-import { InstitutionRegistrationDBItem } from "./types/AccountHandlingTypes";
-import { DetailedInstitution, DetailedSubject, DetailedUserAd } from './types/DetailedDatabaseTypes';
-import { LinkableCity, LinkableInstitution, LinkableSubject } from "./types/Linkables";
-import { SocialMediaDBEntry } from './types/SocialMediaTypes';
+import prisma from './prisma';
+import { InstitutionRegistrationDBItem } from "../types/AccountHandlingTypes";
+import { DetailedInstitution, DetailedSubject, DetailedUserAd } from '../types/DetailedDatabaseTypes';
+import { LinkableCity, LinkableInstitution, LinkableSubject } from "../types/Linkables";
+import { SocialMediaDBEntry } from '../types/SocialMediaTypes';
 
 type OrderBy = "asc" | "desc";
 
@@ -310,11 +310,8 @@ export const getCitiesDetailedByState = async (stateUrl: string) => {
         },
         include: {
             State: {
-                select: {
-                    url: true,
-                    Country: {
-                        select: { url: true }
-                    }
+                include: {
+                    Country: true
                 }
             },
             _count: {
@@ -529,6 +526,7 @@ export const getCityStateCountryByCity = async (cityUrl: string) => {
 export const getInstitutionPaths = async () => {
     return await prisma.institution.findMany({
         select: {
+            City: { select: { State: { select: { Country: true } } } },
             url: true,
             Subject: {
                 select: {
@@ -715,7 +713,6 @@ export const getUserFromToken = async (token: string) => {
             lifetime: true,
             User: {
                 select: {
-                    display_name: true,
                     email: true,
                     id: true,
                 }
@@ -735,13 +732,12 @@ export const getSessionByToken = async (token: string) => {
 
 }
 
-export const addNewUser = async (email: string, password: string, display_name: string, institution_id: number) => {
+export const addNewUser = async (email: string, password: string, institution_id: number) => {
 
     return await prisma.user.create({
         data: {
             email: email,
             password: password,
-            display_name: display_name,
             institution_id: institution_id,
         }
     })
@@ -925,7 +921,17 @@ export const getAllSocialMedia = async (): Promise<SocialMediaDBEntry[]> => {
 
     return await prisma.institutionSocialMedia.findMany({
         include: {
-            Institution: true,
+            Institution: {
+                include:{
+                    City: {
+                        include: {
+                            State: {
+                                include: { Country: true }
+                            }
+                        }
+                    }
+                }
+            }
         }
     })
 

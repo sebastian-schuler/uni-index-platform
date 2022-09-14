@@ -10,8 +10,8 @@ import Breadcrumb from '../../../../components/layout/Breadcrumb';
 import { FooterContent } from '../../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../../components/layout/LayoutContainer';
 import Meta from '../../../../components/partials/Meta';
-import prisma from '../../../../lib/prisma';
-import { getCitiesDetailedByState, getCountries, getCountryByState, getState } from '../../../../lib/prismaQueries';
+import prisma from '../../../../lib/prisma/prisma';
+import { getCitiesDetailedByState, getCountries, getCountryByState, getState } from '../../../../lib/prisma/prismaQueries';
 import { DetailedCity } from '../../../../lib/types/DetailedDatabaseTypes';
 import { getLocalizedName } from '../../../../lib/util';
 

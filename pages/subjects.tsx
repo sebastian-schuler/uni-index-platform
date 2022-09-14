@@ -1,4 +1,5 @@
 import { Group, SimpleGrid, Stack } from '@mantine/core';
+import { Reorder } from 'framer-motion';
 import { GetStaticProps, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useEffect, useState } from 'react';
@@ -10,8 +11,8 @@ import { FooterContent } from '../components/layout/footer/Footer';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import Meta from '../components/partials/Meta';
 import SearchBox from '../components/partials/SearchBox';
-import { getDetailedSubjectTypes } from '../lib/prismaDetailedQueries';
-import { getCountries } from '../lib/prismaQueries';
+import { getDetailedSubjectTypes } from '../lib/prisma/prismaDetailedQueries';
+import { getCountries } from '../lib/prisma/prismaQueries';
 import { DetailedSubjectType } from '../lib/types/DetailedDatabaseTypes';
 import { Searchable } from '../lib/types/UiHelperTypes';
 import { generateSearchable } from '../lib/util';
@@ -68,25 +69,29 @@ const subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
                     <OrderBySelect orderBy={orderBy} handleChange={handleOrderChange} />
                 </Group>
 
-                <SimpleGrid
-                    cols={4}
-                    spacing="lg"
-                    breakpoints={[
-                        { maxWidth: 980, cols: 3, spacing: 'md' },
-                        { maxWidth: 755, cols: 2, spacing: 'sm' },
-                        { maxWidth: 600, cols: 1, spacing: 'sm' },
-                    ]}
-                >
+                <Reorder.Group values={dataList} onReorder={setDataList} as={"div"}>
+                    <SimpleGrid
+                        cols={4}
+                        spacing="lg"
+                        breakpoints={[
+                            { maxWidth: 980, cols: 3, spacing: 'md' },
+                            { maxWidth: 755, cols: 2, spacing: 'sm' },
+                            { maxWidth: 600, cols: 1, spacing: 'sm' },
+                        ]}
+                    >
 
-                    {
-                        dataList.map((searchable, i) => (
-                            searchable.visible && (
-                                <SubjectTypeCard key={i} subjectType={searchable.data as DetailedSubjectType} />
-                            )
-                        ))
-                    }
+                        {
+                            dataList.map((searchable, i) => (
+                                searchable.visible && (
+                                    <Reorder.Item key={searchable.data.id} as={"div"} value={searchable}>
+                                        <SubjectTypeCard key={i} subjectType={searchable.data as DetailedSubjectType} />
+                                    </Reorder.Item>
+                                )
+                            ))
+                        }
 
-                </SimpleGrid>
+                    </SimpleGrid>
+                </Reorder.Group>
             </Stack>
 
         </LayoutContainer>
