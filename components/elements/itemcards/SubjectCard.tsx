@@ -13,6 +13,7 @@ const useStyles = createStyles((theme) => ({
   card: {
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
     transition: "all .2s ease-in-out",
+    height: "100%",
 
     '&:hover': {
       transform: "scale(1.05)",
@@ -48,9 +49,17 @@ const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
   const { lang } = useTranslation('common');
 
   const url = toLink(URL_INSTITUTION, subject.City.State.Country.url, subject.Institution.url, subject.url);
-  const country = getLocalizedName({ lang: lang, dbTranslated: subject.City.State.Country });
+  // const country = getLocalizedName({ lang: lang, dbTranslated: subject.City.State.Country });
 
   const Flag = Flags[subject.City.State.Country.country_code || ""] || Flags["EU"];
+
+  // Append subject type names to string
+  const subjectTypeNames = subject.SubjectHasSubjectTypes.map((type) => getLocalizedName({ lang: lang, any: type.SubjectType}) );
+  let subjectType = "";
+  for(let i = 0; i < 2 && i < subjectTypeNames.length; i++) {
+    subjectType += subjectTypeNames[i] + " / ";
+  }
+  subjectType = subjectType.slice(0, -3);
 
   return (
     <Link href={url} passHref>
@@ -81,7 +90,7 @@ const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
                   <IconCategory size={18} />
                 </ThemeIcon>
               }
-            >{getLocalizedName({ lang: lang, any: subject.SubjectType })}</List.Item>
+            >{subjectType}</List.Item>
             <List.Item
               icon={
                 <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
@@ -95,7 +104,7 @@ const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
                   <IconCalendar size={18} />
                 </ThemeIcon>
               }
-            >{subject.semester_count} Semester</List.Item>
+            >{subject.duration} {subject.duration_type}</List.Item>
           </List>
         </Card.Section>
 

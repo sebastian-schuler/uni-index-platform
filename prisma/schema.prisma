@@ -35,7 +35,7 @@ model Institution {
   id                     String                  @id(map: "Institution2_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name                   String                  @unique(map: "Institution name unique") @db.VarChar
   url                    String                  @unique(map: "Institution url unique") @db.VarChar
-  website                String?                 @db.VarChar
+  website                String                  @unique(map: "Institution website unique") @db.VarChar
   main_location          String                  @db.Uuid
   popularity_score       Int                     @default(0)
   City                   City                    @relation(fields: [main_location], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Institution main location in city")
@@ -60,12 +60,16 @@ model InstitutionSocialMedia {
   facebook_url      String?     @db.VarChar
   youtube_url       String?     @db.VarChar
   instagram_url     String?     @db.VarChar
-  last_update       String      @db.VarChar
-  total_score       Decimal     @default(0) @db.Decimal
-  twitter_results   Json?       @db.Json
-  facebook_results  Json?       @db.Json
-  youtube_results   Json?       @db.Json
-  instagram_results Json?       @db.Json
+  total_score       Int         @default(0)
+  last_update       BigInt
+  twitter_results   String?     @db.VarChar
+  facebook_results  String?     @db.VarChar
+  youtube_results   String?     @db.VarChar
+  instagram_results String?     @db.VarChar
+  twitter_scores    String?     @db.VarChar
+  facebook_scores   String?     @db.VarChar
+  youtube_scores    String?     @db.VarChar
+  instagram_scores  String?     @db.VarChar
   Institution       Institution @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "institution has social media stats")
 }
 
@@ -87,14 +91,16 @@ model Subject {
   institution_id         String                   @db.Uuid
   city_id                String                   @db.Uuid
   name                   String                   @db.VarChar
-  semester_count         Int?
-  semester_count_type    String?                  @db.VarChar
-  degree                 String?                  @db.VarChar
-  admission              String?                  @db.VarChar
-  website                String?                  @db.VarChar
+  duration               Int
+  duration_type          String                   @db.VarChar
+  degree                 String                   @db.VarChar
+  admission              String                   @db.VarChar
+  website                String                   @db.VarChar
+  is_further_education   Boolean
   popularity_score       Int                      @default(0)
-  City                   City                     @relation(fields: [city_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "subject at city")
-  Institution            Institution              @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "subject belongs to institution")
+  file_index             Int                      @unique(map: "Subject has unique index in file")
+  Institution            Institution              @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Subject belongs to Institution")
+  City                   City                     @relation(fields: [city_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Subject is located in City")
   SubjectHasSubjectTypes SubjectHasSubjectTypes[]
   UserAd                 UserAd[]
 
@@ -104,9 +110,10 @@ model Subject {
 model SubjectType {
   id                     Int                      @id @default(autoincrement())
   url                    String                   @unique(map: "Unique SubjectType URL") @db.VarChar
-  name_en                String?                  @db.VarChar
-  name_de                String?                  @db.VarChar
+  name_en                String                   @db.VarChar
+  name_native            String                   @unique(map: "Unique SubjectType Native Name") @db.VarChar
   popularity_score       Int                      @default(0)
+  native_lang            String                   @db.VarChar
   SubjectHasSubjectTypes SubjectHasSubjectTypes[]
 }
 

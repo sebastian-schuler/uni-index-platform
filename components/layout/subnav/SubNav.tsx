@@ -1,4 +1,4 @@
-import { Button, createStyles, Group, Stack, Tabs, Title } from '@mantine/core';
+import { Button, createStyles, Group, Stack, Tabs } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo } from 'react';

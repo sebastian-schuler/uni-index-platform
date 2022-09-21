@@ -6,8 +6,8 @@ import Breadcrumb from '../../components/layout/Breadcrumb'
 import { FooterContent } from '../../components/layout/footer/Footer'
 import LayoutContainer from '../../components/layout/LayoutContainer'
 import { getDetailedCountries } from '../../lib/prisma/prismaDetailedQueries'
-import { getAllSocialMedia } from '../../lib/prisma/prismaQueries'
-import { SocialMediaDBEntry } from '../../lib/types/SocialMediaTypes'
+import { getAllSocialMedia, getSocialMediaRanking } from '../../lib/prisma/prismaQueries'
+import { SocialMediaDBEntry, SocialMediaRankingEntry } from '../../lib/types/SocialMediaTypes'
 import { Searchable } from '../../lib/types/UiHelperTypes'
 import { generateSearchable } from '../../lib/util'
 
@@ -18,7 +18,7 @@ interface Props {
 
 const SocialMediaRanking: NextPage<Props> = ({ stringifiedSocialMediaList, footerContent }: Props) => {
 
-    const socialMediaList: SocialMediaDBEntry[] = JSON.parse(stringifiedSocialMediaList);
+    const socialMediaList: SocialMediaRankingEntry[] = JSON.parse(stringifiedSocialMediaList);
 
     return (
         <LayoutContainer footerContent={footerContent}>
@@ -77,7 +77,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const searchableCountries: Searchable[] = generateSearchable({ lang: context.locale, array: { type: "Country", data: detailedCountries } });
 
     // SOCIAL MEDIA
-    const socialMediaList = await getAllSocialMedia();
+    const socialMediaList = await getSocialMediaRanking();
     const stringifiedSocialMediaList = JSON.stringify(socialMediaList);
 
     // const socialMediaMinMax = getMaxMin(socialMediaList);

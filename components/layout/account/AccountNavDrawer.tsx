@@ -78,10 +78,9 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 interface Props {
     opened: boolean;
-    displayedUsername: string;
     displayedEmail: string;
 }
-const AccountNavDrawer: React.FC<Props> = ({ opened, displayedUsername, displayedEmail }: Props) => {
+const AccountNavDrawer: React.FC<Props> = ({ opened, displayedEmail }: Props) => {
 
     const { deleteAuthToken } = useAuth();
     const { t } = useTranslation("account");
@@ -133,7 +132,7 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedUsername, displaye
                 <Group className={classes.header} position="apart">
                     {/* <MantineLogo size={28} /> */}
                     <UserButton
-                        name={displayedUsername}
+                        
                         email={displayedEmail}
                     />
                 </Group>

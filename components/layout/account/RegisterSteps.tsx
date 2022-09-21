@@ -1,15 +1,13 @@
-import Trans from 'next-translate/Trans';
+import { Box, Button, Center, Group, PasswordInput, Stack, Stepper, Text, TextInput, useMantineTheme } from '@mantine/core';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useAuth } from '../../../context/SessionContext';
-import { isDisplayNameValid, isEmailValid, isPasswordValid } from '../../../lib/accountHandling/regex';
+import { isEmailValid, isPasswordValid } from '../../../lib/accountHandling/regex';
 import { InstitutionRegistrationItem, RegisterStatus } from '../../../lib/types/AccountHandlingTypes';
-import { Stepper, Button, Group, Paper, Box, Grid, Text, Title, TextInput, Autocomplete, useMantineTheme, Stack, Center, PasswordInput } from '@mantine/core';
-import BrandPaper from '../BrandPaper';
-import { IconAt, IconSchool } from '@tabler/icons';
-import PasswordStrengthField from '../../elements/accounts/register/PasswordStrengthField';
 import InstitutionSelect from '../../elements/accounts/register/InstitutionSelect';
+import PasswordStrengthField from '../../elements/accounts/register/PasswordStrengthField';
+import BrandPaper from '../BrandPaper';
 
 interface Props {
     registrationInstitutes: InstitutionRegistrationItem[]
@@ -49,7 +47,6 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
     // Form Errors
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const [displayNameError, setDisplayNameError] = useState("");
     const [institutionError, setInstitutionError] = useState("");
 
     // Language
@@ -85,7 +82,7 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
         if (active === 1 && (
             email.length === 0 || password.length === 0 || password !== passwordConfirm ||
             !isEmailValid(email) || !isPasswordValid(password) ||
-            emailError.length > 0 || passwordError.length > 0 || displayNameError.length > 0)
+            emailError.length > 0 || passwordError.length > 0 )
         ) return true;
         else return false;
     }

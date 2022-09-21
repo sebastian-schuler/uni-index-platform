@@ -1,5 +1,5 @@
 import { Card, createStyles, Group, List, Stack, Text, ThemeIcon } from '@mantine/core'
-import { SubjectType } from '@prisma/client'
+import { Subject, SubjectHasSubjectTypes, SubjectType } from '@prisma/client'
 import { IconBuilding, IconCategory, IconSchool } from '@tabler/icons'
 import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
@@ -53,13 +53,15 @@ const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
   // Count countries
   // const countryCounts = getUniqueCountryCounts(countryList);
   // Get the country with the most locations
-  
+
   const mainCountry = institution.City.State.Country;
 
   const url = toLink("institution", mainCountry?.url || "", institution.url);
   const cities = institution.InstitutionLocation.map(lc => lc.City);
 
-  const biggestSubjectTypes = getUniqueSubjectTypeCounts(institution.Subject.map(s => s.SubjectType), lang, 3)
+  // TODO count subject types
+  const biggestSubjectTypes = getUniqueSubjectTypeCounts({ list: institution.Subject, lang: lang, itemCount: 3 });
+  // const biggestSubjectTypes: string[] = [];
 
   const Flag = Flags[mainCountry?.country_code || ""] || Flags["EU"];
 
@@ -71,10 +73,10 @@ const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
         <Card.Section className={classes.section}>
           <Group position="apart" noWrap sx={{ alignItems: "start" }}>
             <Stack spacing={theme.spacing.xs}>
-              <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{lineHeight: 1}}>
+              <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
                 {institution.name}
               </Text>
-              <Text sx={{lineHeight: 1.2}}>{institution.City.name}</Text>
+              <Text sx={{ lineHeight: 1.2 }}>{institution.City.name}</Text>
             </Stack>
             <Flag className={classes.flag} />
           </Group>
@@ -120,17 +122,50 @@ const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
 //   return Object.entries(countries.reduce((acc, o) => (acc[o.id] = (acc[o.id] || 0) + 1, acc), {}));
 // }
 
-const getUniqueSubjectTypeCounts = (subjectTypes: SubjectType[], lang: string, itemCount: number): string[] => {
+interface LargestSubjectTypeProps {
 
-  const map = subjectTypes.reduce((acc, o) => {
-    const localized = getLocalizedName({ lang: lang, any: o });
-    return (acc[localized] = (acc[localized] || 0) + 1, acc)
-  }, {});
+  list: (
+    (Subject & {
+      SubjectHasSubjectTypes: (SubjectHasSubjectTypes & {
+        SubjectType: SubjectType;
+      })[];
+    })[]
+  );
+  lang: string;
+  itemCount: number;
 
-  const arr: [string, number][] = Object.entries(map);
-  arr.sort((a, b) => b[1] - a[1])
+}
 
-  return arr.map(val => val[0]).slice(0, itemCount);
+const getUniqueSubjectTypeCounts = ({ list, lang, itemCount }: LargestSubjectTypeProps): string[] => {
+
+  // Find all types of subjects
+  const typeList: SubjectType[] = [];
+  for (const item of list) {
+    for (const type of item.SubjectHasSubjectTypes) {
+      typeList.push(type.SubjectType);
+    }
+  }
+
+  // Count types
+  const counts: Map<number, number> = new Map();
+  for (const item of typeList) {
+    if (counts.has(item.id)) {
+      counts.set(item.id, (counts.get(item.id) || 1) + 1);
+    } else {
+      counts.set(item.id, 1);
+    }
+  }
+
+  // Sort by count
+  const sorted = [...counts].map(([id, count]) => ({ id, count })).sort((a, b) => b.count - a.count);
+
+  // Get the top 3
+  const result: string[] = [];
+  for (let i = 0; i < itemCount && i < sorted.length; i++) {
+    result.push(getLocalizedName({ lang: lang, any: typeList.find(type => type.id === sorted[i].id) }));
+  }
+
+  return [...result];
 }
 
 // const getMainCountry = (countryCounts: [string, number][], countries: Map<string, Country>): Country | undefined => {

@@ -1,16 +1,14 @@
 import {
     Anchor, Box, Button,
-    Center, createStyles, Group, Paper, Stack, Text, TextInput, Title, useMantineTheme
+    Center, createStyles, Group, Paper, Text, TextInput, Title, useMantineTheme
 } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons';
 import { useState } from 'react';
-import LayoutContainer from '../LayoutContainer';
 
 const useStyles = createStyles((theme) => ({
     title: {
         fontSize: 26,
         fontWeight: 900,
-        fontFamily: `Greycliff CF, ${theme.fontFamily}`,
     },
 
     controls: {
@@ -24,10 +22,6 @@ const useStyles = createStyles((theme) => ({
             width: '100%',
             textAlign: 'center',
         },
-    },
-
-    link: {
-        color: theme.colors.brandOrange[5],
     }
 }));
 

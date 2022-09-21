@@ -1,4 +1,5 @@
-import { Group, SimpleGrid, Space, Stack, Transition } from '@mantine/core'
+import { Group, SimpleGrid, Space, Stack } from '@mantine/core'
+import { Reorder } from "framer-motion"
 import useTranslation from 'next-translate/useTranslation'
 import { useEffect, useState } from 'react'
 import { DetailedCountry } from '../../lib/types/DetailedDatabaseTypes'
@@ -8,7 +9,6 @@ import CountryCard from '../elements/itemcards/CountryCard'
 import OrderBySelect, { OrderByState, sortSearchableArray } from '../elements/OrderBySelect'
 import Breadcrumb from '../layout/Breadcrumb'
 import SearchBox from '../partials/SearchBox'
-import { AnimatePresence, Reorder, motion } from "framer-motion"
 
 interface Props {
     title: string,

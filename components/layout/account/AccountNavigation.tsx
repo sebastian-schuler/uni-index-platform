@@ -34,9 +34,6 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
     const { token, deleteAuthToken } = useAuth();
     const [userData, setUserData] = useState<UserDataProfile>(null);
 
-    const username = userData?.user.display_name !== null && userData?.user.display_name !== undefined && userData.user.display_name !== "" ? userData.user.display_name :
-        (userData?.institution?.name || "");
-
     // Check SM breakpoint to animate drawer
     const isSmallBreakpoint = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`, false, { getInitialValueInEffect: false })
 
@@ -67,9 +64,9 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
             navbar={
                 isSmallBreakpoint ?
                     <Transition mounted={opened} transition="fade" duration={400} timingFunction="ease">
-                        {(styles) => <div style={styles}><AccountNavDrawer displayedUsername={username} displayedEmail={userData?.user.email || ""} opened={opened} /> </div>}
+                        {(styles) => <div style={styles}><AccountNavDrawer displayedEmail={userData?.user.email || ""} opened={opened} /> </div>}
                     </Transition> :
-                    <AccountNavDrawer displayedUsername={username} displayedEmail={userData?.user.email || ""} opened={opened} />
+                    <AccountNavDrawer displayedEmail={userData?.user.email || ""} opened={opened} />
             }
             header={
                 <Header height={70} p="md" className={classes.header}>

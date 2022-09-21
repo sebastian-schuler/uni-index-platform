@@ -114,9 +114,11 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
 export const getStaticProps: GetStaticProps = async (context) => {
 
   // Popular ...
-  const popularSubjectsDetailed: DetailedSubject[] = await getSubjectsByPopularity(9);
-  const popularInstitutesDetailed: DetailedInstitution[] = await getInstitutionsByPopularity(9);
+  const popularSubjectsDetailed: DetailedSubject[] = await getSubjectsByPopularity(6);
+  const popularInstitutesDetailed: DetailedInstitution[] = await getInstitutionsByPopularity(6);
   const popularCountriesDetailed: DetailedCountry[] = await getPopularDetailedCountries();
+
+  // TODO - in detailed institution we get all subjects and all types, but we connect subjects twice I think? check!
 
   // Ads
   const ads: DetailedUserAd[] = await getAds(AD_PAGE_INDEX);

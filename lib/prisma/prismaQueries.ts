@@ -1,8 +1,9 @@
 import { Subject } from '@prisma/client';
+import { notEqual } from 'node:assert';
 import { InstitutionRegistrationDBItem } from '../types/AccountHandlingTypes';
 import { DetailedInstitution, DetailedSubject, DetailedUserAd } from '../types/DetailedDatabaseTypes';
 import { LinkableCity, LinkableInstitution, LinkableSubject } from "../types/Linkables";
-import { SocialMediaDBEntry } from '../types/SocialMediaTypes';
+import { SocialMediaDBEntry, SocialMediaRankingEntry } from '../types/SocialMediaTypes';
 import prisma from './prisma';
 
 type OrderBy = "asc" | "desc";
@@ -987,6 +988,37 @@ export const getAllSocialMedia = async (): Promise<SocialMediaDBEntry[]> => {
                     }
                 }
             }
+        }
+    })
+
+}
+
+//
+export const getSocialMediaRanking = async (): Promise<SocialMediaRankingEntry[]> => {
+
+    return await prisma.institutionSocialMedia.findMany({
+        select: {
+            institution_id: true,
+            total_score: true,
+            last_update: true,
+            Institution: {
+                select: {
+                    name: true,
+                    url: true,
+                    City: {
+                        select: {
+                            State: {
+                                select: {
+                                    Country: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        orderBy: {
+            total_score: 'desc'
         }
     })
 

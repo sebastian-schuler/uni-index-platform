@@ -47,7 +47,7 @@ const subjects: NextPage<Props> = ({ institution, country, footerContent, detail
         </Group>
 
         <SimpleGrid
-          cols={4}
+          cols={3}
           spacing="lg"
           breakpoints={[
             { maxWidth: 980, cols: 3, spacing: 'md' },

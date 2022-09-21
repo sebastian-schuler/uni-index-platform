@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { keys } from '@mantine/utils';
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons';
-import { SocialMediaDBEntry, SocialMediaRankingItem } from '../../lib/types/SocialMediaTypes';
+import { SocialMediaDBEntry, SocialMediaRankingEntry, SocialMediaRankingItem } from '../../lib/types/SocialMediaTypes';
 import { getLocalizedName, toLink } from '../../lib/util';
 import useTranslation from 'next-translate/useTranslation';
 import MantineLink from './MantineLink';
@@ -107,7 +107,7 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 }
 
 interface Props {
-    socialMediaList: SocialMediaDBEntry[]
+    socialMediaList: SocialMediaRankingEntry[]
 }
 
 const SocialMediaRankingTable = ({ socialMediaList }: Props) => {
@@ -120,7 +120,7 @@ const SocialMediaRankingTable = ({ socialMediaList }: Props) => {
             name: item.Institution.name,
             country: getLocalizedName({ lang: lang, dbTranslated: item.Institution.City.State.Country }),
             totalscore: item.total_score + "",
-            url: toLink(URL_INSTITUTION, item.Institution.City.State.Country.url, item.Institution.url),
+            url: toLink(URL_INSTITUTION, item.Institution.City.State.Country.url, item.Institution.url, "social-media"),
         }
     })
 

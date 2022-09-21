@@ -65,7 +65,7 @@ const SubjectFromInstitutionPage: NextPage<Props> = props => {
 
           <Stack spacing={0}>
             <Text size={"lg"} weight={"bold"}>Study length</Text>
-            <Text>{subject?.semester_count} Semesters</Text>
+            <Text>{subject?.duration} Semesters</Text>
           </Stack>
 
           <Stack spacing={0}>

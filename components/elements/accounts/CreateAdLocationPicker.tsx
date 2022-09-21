@@ -22,6 +22,8 @@ function union(a: readonly number[], b: readonly number[]) {
     return [...a, ...not(b, a)];
 }
 
+// TODO remake this
+
 const CreateAdLocationPicker = () => {
     const [checked, setChecked] = React.useState<readonly number[]>([]);
     const [left, setLeft] = React.useState<readonly number[]>([0, 1, 2, 3]);

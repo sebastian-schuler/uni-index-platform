@@ -18,10 +18,9 @@ const useStyles = createStyles((theme) => ({
 
 interface UserButtonProps extends UnstyledButtonProps {
     image?: string;
-    name: string;
     email: string;
 }
-const UserButton = ({ image, name, email }: UserButtonProps) => {
+const UserButton = ({ image, email }: UserButtonProps) => {
     const { classes } = useStyles();
 
     return (
@@ -31,9 +30,9 @@ const UserButton = ({ image, name, email }: UserButtonProps) => {
                     <Avatar src={image} radius="xl" />
                 </MediaQuery>
                 <div style={{ flex: 1 }}>
-                    <Text size="sm" weight={500}>
+                    {/* <Text size="sm" weight={500}>
                         {name}
-                    </Text>
+                    </Text> */}
                     <Text color="dimmed" size="xs">
                         {email}
                     </Text>

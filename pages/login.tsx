@@ -14,25 +14,6 @@ import { LoginStatus } from '../lib/types/AccountHandlingTypes';
 import { URL_REGISTER } from '../lib/url-helper/urlConstants';
 
 const useStyles = createStyles((theme) => ({
-  title: {
-    fontSize: 26,
-    fontWeight: 900,
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-  },
-
-  controls: {
-    [theme.fn.smallerThan('xs')]: {
-      flexDirection: 'column-reverse',
-    },
-  },
-
-  control: {
-    [theme.fn.smallerThan('xs')]: {
-      width: '100%',
-      textAlign: 'center',
-    },
-  },
-
   link: {
     color: theme.colors.brandOrange[5],
   }

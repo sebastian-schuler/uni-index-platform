@@ -2,6 +2,8 @@ function searchWikipedia(searchQuery: string, locale: string) {
 
     return getTitles(searchQuery, locale).then((searchRes) => {
 
+        if(searchRes.query.search.length === 0) return "";
+
         return getContent(searchRes.query.search[0].title, locale).then((contentRes) => {
 
             const extract: string = contentRes.query.pages[0].extract;

@@ -1,5 +1,5 @@
 
-import { Card, Grid, SimpleGrid, Text, Title, useMantineTheme } from '@mantine/core'
+import { Button, Card, Grid, Group, SimpleGrid, Stack, Text, ThemeIcon, Title, useMantineTheme } from '@mantine/core'
 import { Country, Institution, InstitutionSocialMedia } from '@prisma/client'
 import {
   IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandYoutube
@@ -11,13 +11,14 @@ import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { Radar } from 'react-chartjs-2'
 import SocialMediaStatCard from '../../../../components/elements/institution/SocialMediaStatCard'
 import WhitePaper from '../../../../components/elements/institution/WhitePaper'
+import MantineLink from '../../../../components/elements/MantineLink'
 import Breadcrumb from '../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav'
 import Meta from '../../../../components/partials/Meta'
 import { getCountries, getCountry, getInstitution, getSocialMedia } from '../../../../lib/prisma/prismaQueries'
-import { FacebookResult, InstagramResult, TwitterResult, YoutubeResult } from '../../../../lib/types/SocialMediaTypes'
+import { FacebookResult, InstagramResult, TwitterResult, TwitterScore, YoutubeChannelData, YoutubeScore } from '../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
 
 const data = {
@@ -77,19 +78,26 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
   const theme = useMantineTheme();
   const socialMedia: InstitutionSocialMedia | null = JSON.parse(socialMediaStringified);
 
-  if(!socialMedia){
-    return(
+  if (socialMedia === null || socialMedia === undefined) {
+    return (
       <>No Data</> // TODO handle this
     )
   }
 
-  const facebookLink = socialMedia?.facebook_url;
-  const twitterLink = socialMedia?.twitter_url;
+  const facebookLink = socialMedia.facebook_url;
+  const twitterLink = socialMedia.twitter_url;
 
-  const facebookResults = (socialMedia?.facebook_results as unknown) as FacebookResult;
-  const twitterResults = (socialMedia?.twitter_results as unknown) as TwitterResult;
-  const youtubeResults = (socialMedia?.youtube_results as unknown) as YoutubeResult;
-  const instagramResults = (socialMedia?.instagram_results as unknown) as InstagramResult;
+  const instagramLink = socialMedia.instagram_url;
+
+  const twitterScore = socialMedia.twitter_scores !== null ? JSON.parse(socialMedia.twitter_scores) as TwitterScore : null;
+  const youtubeScore = socialMedia.youtube_scores !== null ? JSON.parse(socialMedia.youtube_scores) as YoutubeScore : null;
+
+  // const facebookResults = (socialMedia?.facebook_results as unknown) as FacebookResult;
+  // const twitterResults = (socialMedia?.twitter_results as unknown) as TwitterResult;
+  const youtubeData = socialMedia.youtube_results !== null ? JSON.parse(socialMedia.youtube_results) as YoutubeChannelData : null;
+  // const instagramResults = (socialMedia?.instagram_results as unknown) as InstagramResult;
+  const youtubeLink = "https://www.youtube.com/channel/" + youtubeData?.id;
+  console.log(youtubeLink)
 
   const averagePoints = {
     facebookAverage: 125,
@@ -131,16 +139,17 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
             <SimpleGrid cols={2}>
               <SocialMediaStatCard
                 title='Twitter'
-                value={twitterResults.totalScore} diff={calculateSocialMediaDifference(twitterResults.totalScore, averagePoints.twitterAverage)}
+                value={twitterScore?.total || 0}
+                diff={calculateSocialMediaDifference(twitterScore?.total || 0, averagePoints.twitterAverage)}
                 icon={IconBrandTwitter}
               />
               <SocialMediaStatCard
                 title='Youtube'
-                value={youtubeResults.totalScore}
-                diff={calculateSocialMediaDifference(youtubeResults.totalScore, averagePoints.youtubeAverage)}
+                value={youtubeScore?.total || 0}
+                diff={calculateSocialMediaDifference(youtubeScore?.total || 0, averagePoints.youtubeAverage)}
                 icon={IconBrandYoutube}
               />
-              <SocialMediaStatCard
+              {/* <SocialMediaStatCard
                 title='Instagram'
                 value={instagramResults.totalScore}
                 diff={calculateSocialMediaDifference(instagramResults.totalScore, averagePoints.instagramAverage)}
@@ -151,8 +160,49 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
                 value={facebookResults.totalScore}
                 diff={calculateSocialMediaDifference(facebookResults.totalScore, averagePoints.facebookAverage)}
                 icon={IconBrandFacebook}
-              />
+              /> */}
             </SimpleGrid>
+
+            <Card>
+              <Stack>
+                {
+                  youtubeLink &&
+                  <Group>
+                    <ThemeIcon color={"blue"} size={24} radius="xl">
+                      <IconBrandYoutube size={18} />
+                    </ThemeIcon>
+                    <MantineLink url={youtubeLink} label={youtubeLink} external/>
+                  </Group>
+                }
+                {
+                  twitterLink &&
+                  <Group>
+                    <ThemeIcon color={"blue"} size={24} radius="xl">
+                      <IconBrandTwitter size={18} />
+                    </ThemeIcon>
+                    <MantineLink url={twitterLink} label={twitterLink} external/>
+                  </Group>
+                }
+                {
+                  facebookLink &&
+                  <Group>
+                    <ThemeIcon color={"darkblue"} size={24} radius="xl">
+                      <IconBrandFacebook size={18} />
+                    </ThemeIcon>
+                    <MantineLink url={facebookLink} label={facebookLink} external/>
+                  </Group>
+                }
+                {
+                  instagramLink &&
+                  <Group>
+                    <ThemeIcon color={"pink"} size={24} radius="xl">
+                      <IconBrandInstagram size={18} />
+                    </ThemeIcon>
+                    <MantineLink url={instagramLink} label={instagramLink} external/>
+                  </Group>
+                }
+              </Stack>
+            </Card>
           </Grid.Col>
 
           <Grid.Col md={8}>
@@ -209,23 +259,7 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
               </Typography>
             </Box>
 
-            <Stack>
 
-              {
-                twitterLink &&
-                <Button width={"fit-content"} variant="text" component={Link} href={twitterLink} startIcon={<TwitterIcon />}>
-                  {twitterLink}
-                </Button>
-              }
-
-              {
-                facebookLink &&
-                <Button width={"fit-content"} variant="text" component={Link} href={facebookLink} startIcon={<FacebookIcon />}>
-                  {facebookLink}
-                </Button>
-              }
-
-            </Stack>
 
           </CardContent>
         </Card>
