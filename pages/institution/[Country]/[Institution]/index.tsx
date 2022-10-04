@@ -2,7 +2,7 @@ import { Text, Title, useMantineTheme } from '@mantine/core';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import WhitePaper from '../../../../components/elements/institution/WhitePaper';
+import WhitePaper from '../../../../components/elements/socialmedia/WhitePaper';
 import Breadcrumb from '../../../../components/layout/Breadcrumb';
 import { FooterContent } from '../../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../../components/layout/LayoutContainer';

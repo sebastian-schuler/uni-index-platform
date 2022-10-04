@@ -12,7 +12,7 @@ import { getCountries, getCountry, getInstitution, getSubject, getSubjectPaths }
 import { getDBLocale, toLink } from '../../../../../lib/util'
 import { ParsedUrlQuery } from 'querystring'
 import { getJobsFromApi } from '../../../../../lib/apis/jobsHandler'
-import WhitePaper from '../../../../../components/elements/institution/WhitePaper'
+import WhitePaper from '../../../../../components/elements/socialmedia/WhitePaper'
 
 type Props = {
     country: Country,

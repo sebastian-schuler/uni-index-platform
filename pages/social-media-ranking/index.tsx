@@ -1,13 +1,13 @@
 import { Space, Title } from '@mantine/core'
 import { GetStaticProps, NextPage } from 'next'
-import WhitePaper from '../../components/elements/institution/WhitePaper'
+import WhitePaper from '../../components/elements/socialmedia/WhitePaper'
 import SocialMediaRankingTable from '../../components/elements/SocialMediaRankingTable'
 import Breadcrumb from '../../components/layout/Breadcrumb'
 import { FooterContent } from '../../components/layout/footer/Footer'
 import LayoutContainer from '../../components/layout/LayoutContainer'
 import { getDetailedCountries } from '../../lib/prisma/prismaDetailedQueries'
-import { getAllSocialMedia, getSocialMediaRanking } from '../../lib/prisma/prismaQueries'
-import { SocialMediaDBEntry, SocialMediaRankingEntry } from '../../lib/types/SocialMediaTypes'
+import { getSocialMediaRanking } from '../../lib/prisma/prismaQueries'
+import { SocialMediaRankingEntry, TotalScore } from '../../lib/types/SocialMediaTypes'
 import { Searchable } from '../../lib/types/UiHelperTypes'
 import { generateSearchable } from '../../lib/util'
 
@@ -39,38 +39,6 @@ const SocialMediaRanking: NextPage<Props> = ({ stringifiedSocialMediaList, foote
     )
 }
 
-const getMaxMin = (socialMediaList: SocialMediaDBEntry[]) => {
-
-    let twitterMax = -1;
-    let twitterMin = -1;
-    let youtubeMax = -1;
-    let youtubeMin = -1;
-
-    // socialMediaList.forEach(socialMedia => {
-
-    //     if (socialMedia.twitter_points > twitterMax || twitterMax === -1) {
-    //         twitterMax = socialMedia.twitter_points;
-    //     } else if (socialMedia.twitter_points < twitterMin || twitterMin === -1) {
-    //         twitterMin = socialMedia.twitter_points;
-    //     }
-
-    //     if (socialMedia.youtube_points > youtubeMax || youtubeMax === -1) {
-    //         youtubeMax = socialMedia.youtube_points;
-    //     } else if (socialMedia.youtube_points < youtubeMin || youtubeMin === -1) {
-    //         youtubeMin = socialMedia.youtube_points;
-    //     }
-
-    // })
-
-    return {
-        twitterMax,
-        twitterMin,
-        youtubeMax,
-        youtubeMin
-    }
-
-}
-
 export const getStaticProps: GetStaticProps = async (context) => {
 
     const detailedCountries = await getDetailedCountries();
@@ -78,21 +46,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     // SOCIAL MEDIA
     const socialMediaList = await getSocialMediaRanking();
+    socialMediaList.sort((a, b) => {
+        const parsedScoreA = JSON.parse(a.total_score) as TotalScore;
+        const parsedScoreB = JSON.parse(b.total_score) as TotalScore;
+        return parsedScoreB.data.total - parsedScoreA.data.total;
+    });
+
     const stringifiedSocialMediaList = JSON.stringify(socialMediaList);
-
-    // const socialMediaMinMax = getMaxMin(socialMediaList);
-    // const socialMediaRankingItems: SocialMediaRankingItem[] = socialMediaList.map(socialMedia => {
-    //     return {
-    //         ...socialMedia,
-    //         facebookScore: 0,
-    //         twitterScore: (socialMedia.twitt / socialMediaMinMax.twitterMax) * 100,
-    //         youtubeScore: (socialMedia.youtube_points / socialMediaMinMax.youtubeMax) * 100,
-    //         instagramScore: 0,
-    //     }
-    // }).sort((a, b) => Number(b.total_score) - Number(a.total_score));
-    // const stringifiedSocialMediaItems = JSON.stringify(socialMediaRankingItems);
-
-    
 
     const footerContent: FooterContent[] = [
         { title: "Countries", data: searchableCountries, type: "Searchable" },

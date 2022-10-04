@@ -12,9 +12,9 @@ const nextConfig = {
   compiler: {
     emotion: true,
   },
-  experimental: {
-    forceSwcTransforms: true, // required for emotion?
-  },
+  // experimental: {
+  //   forceSwcTransforms: true, // required for emotion?
+  // },
 };
 
 // module.exports = nextConfig;

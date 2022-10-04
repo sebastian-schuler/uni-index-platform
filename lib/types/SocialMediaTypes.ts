@@ -21,7 +21,7 @@ export type SocialMediaRankingEntry = {
         url: string;
     };
     institution_id: string;
-    total_score: number;
+    total_score: string;
     last_update: bigint;
 }
 
@@ -36,25 +36,7 @@ export interface TwitterResult {
     totalScore: number;
 }
 
-export interface TwitterScore {
-    total: number
-    follower: number
-    following: number
-    tweets: number
-    listed: number
-    likes: number
-    verifiedMultiplier: number
-    websitelinkMultiplier: number
-}
-
 // -------------- YOUTUBE --------------
-
-export interface YoutubeScore {
-    total: number
-    subs: number
-    views: number
-    videos: number
-}
 
 export type YoutubeChannelData = YoutubeChannelStatistics & {
     videos: YoutubeVideo[]
@@ -101,4 +83,44 @@ export interface FacebookResult {
 
 export interface InstagramResult {
     totalScore: number;
+}
+
+// -------------- RATINGS --------------
+
+export type YoutubeScore = {
+    total: number
+    subs: number
+    views: number
+    videos: number
+    averageLikes: number
+    averageViews: number
+    averageComments: number
+    descriptionGood: number
+    videosHaveTags: number
+}
+
+export type TwitterScore = {
+    total: number
+    follower: number
+    following: number
+    tweets: number
+    listed: number
+    averageLikes: number
+    averageInteraction: number
+    verifiedMultiplier: number
+    websitelinkMultiplier: number
+}
+
+export interface TotalScore {
+    data: TotalScoreSet
+    percentData: TotalScoreSet
+}
+
+export interface TotalScoreSet {
+    total: number
+    totalContentOutput: number
+    profilesCompleted: number
+    averageInteraction: number
+    averageImpressions: number
+    totalReach: number
 }

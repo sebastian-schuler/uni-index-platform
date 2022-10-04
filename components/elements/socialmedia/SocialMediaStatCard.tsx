@@ -1,4 +1,4 @@
-import { createStyles, Group, Paper, Text, useMantineTheme } from '@mantine/core';
+import { Card, createStyles, Group, Paper, Text, useMantineTheme } from '@mantine/core';
 import {
     IconArrowDownRight, IconArrowUpRight, TablerIcon, IconArrowLeft
 } from '@tabler/icons';
@@ -7,6 +7,7 @@ import {
 const useStyles = createStyles((theme) => ({
     root: {
         backgroundColor: theme.colors.light[0],
+        border: `1px solid ${theme.colors.gray[2]}`,
     },
 
     value: {
@@ -47,7 +48,7 @@ const SocialMediaStatCard = ({ title, value, diff, icon }: Props) => {
     const DiffIcon = diff > 0 ? IconArrowUpRight : (diff < 0 ? IconArrowDownRight : IconArrowLeft);
 
     return (
-        <Paper withBorder p="md" radius="md" key={title} className={classes.root}>
+        <Card p="md" radius="sm" shadow="xs" key={title} className={classes.root}>
             <Group position="apart">
                 <Text size="xs" color="dimmed" className={classes.title}>
                     {title}
@@ -56,14 +57,14 @@ const SocialMediaStatCard = ({ title, value, diff, icon }: Props) => {
             </Group>
 
             <Group align="flex-end" spacing="xs" mt={25}>
-                <Text className={classes.value}>{value}</Text>
+                <Text className={classes.value}>{value.toFixed(0)}</Text>
                 <Text
                     color={diff > 0 ? 'teal' : (diff < 0 ? 'red' : 'gray')}
                     size="sm"
                     weight={500}
                     className={classes.diff}
                 >
-                    <span>{diff}%</span>
+                    <span>{diff.toFixed(2)}%</span>
                     <DiffIcon size={16} stroke={1.5} />
                 </Text>
             </Group>
@@ -71,7 +72,7 @@ const SocialMediaStatCard = ({ title, value, diff, icon }: Props) => {
             <Text size="xs" color="dimmed" mt={7}>
                 Compared to average
             </Text>
-        </Paper>
+        </Card>
     )
 }
 

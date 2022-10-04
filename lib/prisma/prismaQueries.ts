@@ -184,8 +184,8 @@ export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string):
     });
 }
 
-// Return DetailedSubjects, where institutionId is parameter : Promise<DetailedSubject[]>
-export const getSubjectsDetailedByInstitution = async (institutionId: string) => {
+// Return DetailedSubjects, where institutionId is parameter
+export const getSubjectsDetailedByInstitution = async (institutionId: string): Promise<DetailedSubject[]> => {
 
     return await prisma.subject.findMany({
         include: {
@@ -205,6 +205,37 @@ export const getSubjectsDetailedByInstitution = async (institutionId: string) =>
         },
         where: {
             institution_id: institutionId
+        }
+    });
+}
+
+/**
+ * Return a single DetailedSubject, by subject url and institution id
+ * @param subjectUrl 
+ * @param institutionId 
+ */
+export const getSubjectDetailedByUrl = async (subjectUrl: string, institutionId: string): Promise<DetailedSubject | null> => {
+    return await prisma.subject.findUnique({
+        include: {
+            SubjectHasSubjectTypes: {
+                include: {
+                    SubjectType: true
+                }
+            },
+            Institution: true,
+            City: {
+                include: {
+                    State: {
+                        select: { Country: true }
+                    }
+                }
+            }
+        },
+        where: {
+            url_institution_id: {
+                url: subjectUrl,
+                institution_id: institutionId,
+            }
         }
     });
 }
@@ -989,6 +1020,16 @@ export const getAllSocialMedia = async (): Promise<SocialMediaDBEntry[]> => {
                 }
             }
         }
+    })
+
+}
+
+export const getCountrySocialmedia = async (countryId: string) => {
+
+    return await prisma.countrySocialMedia.findUnique({
+        where: {
+            country_id: countryId
+        },
     })
 
 }

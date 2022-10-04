@@ -2,7 +2,7 @@ import { Group, SimpleGrid } from '@mantine/core';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import WhitePaper from '../../../../components/elements/institution/WhitePaper';
+import WhitePaper from '../../../../components/elements/socialmedia/WhitePaper';
 import SubjectCard from '../../../../components/elements/itemcards/SubjectCard';
 import Breadcrumb from '../../../../components/layout/Breadcrumb';
 import { FooterContent } from '../../../../components/layout/footer/Footer';

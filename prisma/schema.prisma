@@ -22,13 +22,14 @@ model City {
 }
 
 model Country {
-  id               String  @id @db.VarChar(3)
-  url              String  @unique(map: "Unique Country URL ") @db.VarChar
-  translations     Json?   @db.Json
-  name             String  @db.VarChar
-  popularity_score Int     @default(0)
-  country_code     String  @db.VarChar(2)
-  State            State[]
+  id                 String              @id @db.VarChar(3)
+  url                String              @unique(map: "Unique Country URL ") @db.VarChar
+  translations       Json?               @db.Json
+  name               String              @db.VarChar
+  popularity_score   Int                 @default(0)
+  country_code       String              @db.VarChar(2)
+  CountrySocialMedia CountrySocialMedia?
+  State              State[]
 }
 
 model Institution {
@@ -60,7 +61,6 @@ model InstitutionSocialMedia {
   facebook_url      String?     @db.VarChar
   youtube_url       String?     @db.VarChar
   instagram_url     String?     @db.VarChar
-  total_score       Int         @default(0)
   last_update       BigInt
   twitter_results   String?     @db.VarChar
   facebook_results  String?     @db.VarChar
@@ -70,6 +70,7 @@ model InstitutionSocialMedia {
   facebook_scores   String?     @db.VarChar
   youtube_scores    String?     @db.VarChar
   instagram_scores  String?     @db.VarChar
+  total_score       String      @db.VarChar
   Institution       Institution @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "institution has social media stats")
 }
 
@@ -165,4 +166,21 @@ model UserSession {
   user_id  String @db.Uuid
   lifetime BigInt
   User     User   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "session belongs to user")
+}
+
+model CountrySocialMedia {
+  country_id            String  @id @db.VarChar
+  last_update           BigInt
+  total_score           Decimal @default(0) @db.Decimal
+  avg_total_score       Decimal @default(0) @db.Decimal
+  total_twitter_score   Decimal @default(0) @db.Decimal
+  avg_twitter_score     Decimal @default(0) @db.Decimal
+  total_youtube_score   Decimal @default(0) @db.Decimal
+  avg_youtube_score     Decimal @default(0) @db.Decimal
+  total_instagram_score Decimal @default(0) @db.Decimal
+  avg_instagram_score   Decimal @default(0) @db.Decimal
+  total_facebook_score  Decimal @default(0) @db.Decimal
+  avg_facebook_score    Decimal @default(0) @db.Decimal
+  average_percentages   String  @db.VarChar
+  Country               Country @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SocialMediaCountry id of country")
 }

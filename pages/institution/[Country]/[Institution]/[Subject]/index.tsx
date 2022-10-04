@@ -3,32 +3,26 @@ import { Country, Institution, Subject } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
-import WhitePaper from '../../../../../components/elements/institution/WhitePaper'
+import WhitePaper from '../../../../../components/elements/socialmedia/WhitePaper'
 import Breadcrumb from '../../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../../components/layout/LayoutContainer'
 import SubjectNav from '../../../../../components/layout/subnav/SubjectNav'
 import Meta from '../../../../../components/partials/Meta'
-import { getCountries, getCountry, getInstitution, getSubjectInstitutionBySubject, getSubjectPaths } from '../../../../../lib/prisma/prismaQueries'
+import { getCountries, getCountry, getInstitution, getSubjectDetailedByUrl, getSubjectInstitutionBySubject, getSubjectPaths } from '../../../../../lib/prisma/prismaQueries'
+import { DetailedSubject } from '../../../../../lib/types/DetailedDatabaseTypes'
 import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../lib/url-helper/urlConstants'
 import { toLink } from '../../../../../lib/util'
 
 
-type Props = {
-
+interface Props {
   country: Country,
   institution: Institution,
-  subject: Subject & {
-    Institution: Institution
-  },
-
+  subject: DetailedSubject,
   footerContent: FooterContent[],
-
 }
 
-const SubjectFromInstitutionPage: NextPage<Props> = props => {
-
-  const { country, institution, subject, footerContent } = props;
+const SubjectFromInstitutionPage: NextPage<Props> = ({ country, institution, subject, footerContent }: Props) => {
 
   const query = useRouter().query;
 
@@ -73,6 +67,21 @@ const SubjectFromInstitutionPage: NextPage<Props> = props => {
             <Text>{subject?.degree}</Text>
           </Stack>
 
+          <Stack spacing={0}>
+            <Text size={"lg"} weight={"bold"}>Length ({subject?.duration_type})</Text>
+            <Text>{subject?.duration}</Text>
+          </Stack>
+
+          <Stack spacing={0}>
+            <Text size={"lg"} weight={"bold"}>Admission</Text>
+            <Text>{subject?.admission}</Text>
+          </Stack>
+
+          <Stack spacing={0}>
+            <Text size={"lg"} weight={"bold"}>Website</Text>
+            <Text>{subject?.website}</Text>
+          </Stack>
+
         </Stack>
       </WhitePaper>
 
@@ -82,14 +91,14 @@ const SubjectFromInstitutionPage: NextPage<Props> = props => {
 
 export async function getStaticProps(context: GetStaticPropsContext) {
 
-  let countryQuery = context?.params?.Country?.toString() || "";
-  let institutionQuery = context?.params?.Institution?.toString() || "";
-  let subjectQuery = context?.params?.Subject?.toString() || "";
+  let countryUrl = context?.params?.Country?.toString() || "";
+  let institutionUrl = context?.params?.Institution?.toString() || "";
+  let subjectUrl = context?.params?.Subject?.toString() || "";
 
   // Get information single objects
-  const country: Country | null = await getCountry(countryQuery);
-  const institution: Institution | null = await getInstitution(institutionQuery);
-  const subjectInfo = await getSubjectInstitutionBySubject(subjectQuery, institutionQuery);
+  const country: Country | null = await getCountry(countryUrl);
+  const institution: Institution | null = await getInstitution(institutionUrl);
+  const subjectInfo: DetailedSubject | null = institution && (await getSubjectDetailedByUrl(subjectUrl, institution.id));
 
   // Footer Data
   // Get all countries

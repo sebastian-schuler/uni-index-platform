@@ -1,100 +1,112 @@
 
-import { Button, Card, Grid, Group, SimpleGrid, Stack, Text, ThemeIcon, Title, useMantineTheme } from '@mantine/core'
-import { Country, Institution, InstitutionSocialMedia } from '@prisma/client'
+import { Card, createStyles, Group, SimpleGrid, Stack, Text, ThemeIcon, Title } from '@mantine/core'
+import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client'
 import {
   IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandYoutube
 } from '@tabler/icons'
-import {
-  Chart as ChartJS, Filler, Legend, LineElement, PointElement, RadialLinearScale, Tooltip
-} from 'chart.js'
+
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
-import { Radar } from 'react-chartjs-2'
-import SocialMediaStatCard from '../../../../components/elements/institution/SocialMediaStatCard'
-import WhitePaper from '../../../../components/elements/institution/WhitePaper'
+
+import useTranslation from 'next-translate/useTranslation'
 import MantineLink from '../../../../components/elements/MantineLink'
+import SocialMediaRadar from '../../../../components/elements/socialmedia/SocialMediaRadar'
+import SocialMediaStatCard from '../../../../components/elements/socialmedia/SocialMediaStatCard'
+import WhitePaper from '../../../../components/elements/socialmedia/WhitePaper'
 import Breadcrumb from '../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav'
 import Meta from '../../../../components/partials/Meta'
-import { getCountries, getCountry, getInstitution, getSocialMedia } from '../../../../lib/prisma/prismaQueries'
-import { FacebookResult, InstagramResult, TwitterResult, TwitterScore, YoutubeChannelData, YoutubeScore } from '../../../../lib/types/SocialMediaTypes'
+import { getCountries, getCountry, getCountrySocialmedia, getInstitution, getSocialMedia } from '../../../../lib/prisma/prismaQueries'
+import { TotalScore, TotalScoreSet, TwitterScore, YoutubeChannelData, YoutubeScore } from '../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
+import { getLocalizedName } from '../../../../lib/util'
 
-const data = {
-  labels: ['Tweet Count %', 'Average Likes %', 'Average Retweets %', 'Average Interaction %', 'Profile completed %'],
-  datasets: [
-    {
-      label: 'Hochschule Kaiserslautern',
-      data: [55, 23, 13, 20, 80],
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgba(255, 99, 132, 1)',
-      borderWidth: 1,
-    },
-    {
-      label: 'Universities in Germany on average',
-      data: [20, 27, 15, 40, 90],
-      backgroundColor: 'rgba(99, 255, 132, 0.2)',
-      borderColor: 'rgba(99, 255, 132, 1)',
-      borderWidth: 1,
-    },
-  ],
-
-};
-
-const options = {
-  scales: {
-    r: {
-      angleLines: {
-        display: false
-      },
-      min: 0,
-      max: 100,
-      ticks: {
-        stepSize: 20
-      }
-    }
-  }
+const shortenLink = (link: string) => {
+  link = link.replace(/((http)?s?:\/\/)(www.)?/i, "");
+  return link;
 }
 
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-);
+const useStyles = createStyles((theme) => ({
+  card: {
+    backgroundColor: theme.colors.light[0],
+    borderRadius: theme.radius.sm,
+    border: `1px solid ${theme.colors.gray[2]}`,
+  },
+  title: {
+    fontSize: theme.fontSizes.sm,
+    fontWeight: 700,
+    textTransform: 'uppercase',
+  },
+}));
 
 interface Props {
   institution: Institution,
   country: Country,
-  socialMediaStringified: string,
+  institutionSMString: string,
+  countrySMString: string,
   footerContent: FooterContent[],
 }
 
-const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerContent, socialMediaStringified }: Props) => {
+const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerContent, institutionSMString, countrySMString }: Props) => {
 
-  const theme = useMantineTheme();
-  const socialMedia: InstitutionSocialMedia | null = JSON.parse(socialMediaStringified);
+  const { classes, theme } = useStyles();
+  const { t, lang } = useTranslation('common');
 
-  if (socialMedia === null || socialMedia === undefined) {
+  const institutionSM: InstitutionSocialMedia | null = JSON.parse(institutionSMString);
+  const countrySM: CountrySocialMedia | null = JSON.parse(countrySMString);
+
+  if (institutionSM === null || institutionSM === undefined || countrySM === null || countrySM === undefined) {
     return (
-      <>No Data</> // TODO handle this
+      <LayoutContainer footerContent={footerContent}>
+        <Meta
+          title={'Uni Index - '}
+          description=''
+        />
+        <Breadcrumb countryInfo={country} institutionInfo={institution} />
+        <InstitutionNav title={institution.name} />
+        <WhitePaper>
+          <Text>No data</Text>
+        </WhitePaper>
+      </LayoutContainer>
     )
   }
 
-  const facebookLink = socialMedia.facebook_url;
-  const twitterLink = socialMedia.twitter_url;
+  const facebookLink = institutionSM.facebook_url;
+  const twitterLink = institutionSM.twitter_url;
+  const instagramLink = institutionSM.instagram_url;
 
-  const instagramLink = socialMedia.instagram_url;
+  const twitterScore = institutionSM.twitter_scores !== null ? JSON.parse(institutionSM.twitter_scores) as TwitterScore : null;
+  const youtubeScore = institutionSM.youtube_scores !== null ? JSON.parse(institutionSM.youtube_scores) as YoutubeScore : null;
 
-  const twitterScore = socialMedia.twitter_scores !== null ? JSON.parse(socialMedia.twitter_scores) as TwitterScore : null;
-  const youtubeScore = socialMedia.youtube_scores !== null ? JSON.parse(socialMedia.youtube_scores) as YoutubeScore : null;
+  // Graph data
+  const totalScore = JSON.parse(institutionSM.total_score) as TotalScore;
+  const countryScore = JSON.parse(countrySM.average_percentages) as TotalScoreSet;
+  const graphLabels = [
+    'Total reach %',
+    'Total content output %',
+    'Average impressions %',
+    'Average interaction %',
+    'Profiles completed %',
+  ]
+  const graphDataInstitution = [
+    totalScore.percentData.totalReach,
+    totalScore.percentData.totalContentOutput,
+    totalScore.percentData.averageImpressions,
+    totalScore.percentData.averageInteraction,
+    totalScore.percentData.profilesCompleted,
+  ]
+  const graphDataCountry = [
+    countryScore.totalReach,
+    countryScore.totalContentOutput,
+    countryScore.averageImpressions,
+    countryScore.averageInteraction,
+    countryScore.profilesCompleted,
+  ]
 
   // const facebookResults = (socialMedia?.facebook_results as unknown) as FacebookResult;
   // const twitterResults = (socialMedia?.twitter_results as unknown) as TwitterResult;
-  const youtubeData = socialMedia.youtube_results !== null ? JSON.parse(socialMedia.youtube_results) as YoutubeChannelData : null;
+  const youtubeData = institutionSM.youtube_results !== null ? JSON.parse(institutionSM.youtube_results) as YoutubeChannelData : null;
   // const instagramResults = (socialMedia?.instagram_results as unknown) as InstagramResult;
   const youtubeLink = "https://www.youtube.com/channel/" + youtubeData?.id;
   console.log(youtubeLink)
@@ -126,16 +138,26 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
 
       <WhitePaper>
 
-        <Grid mt={"lg"}>
+        <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
 
-          <Grid.Col md={8}>
-            <Card>
+          <Stack>
+            <Card shadow={"xs"} className={classes.card}>
               <Title order={2}>Social Media Statistics</Title>
               <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
             </Card>
-          </Grid.Col>
 
-          <Grid.Col md={4}>
+            <Card shadow={"xs"} className={classes.card}>
+              <SocialMediaRadar
+                countryName={getLocalizedName({ lang: lang, dbTranslated: country })}
+                institutionName={getLocalizedName({ lang: lang, institution: institution })}
+                labels={graphLabels}
+                dataInstitution={graphDataInstitution}
+                dataCountry={graphDataCountry}
+              />
+            </Card>
+          </Stack>
+
+          <Stack>
             <SimpleGrid cols={2}>
               <SocialMediaStatCard
                 title='Twitter'
@@ -149,29 +171,33 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
                 diff={calculateSocialMediaDifference(youtubeScore?.total || 0, averagePoints.youtubeAverage)}
                 icon={IconBrandYoutube}
               />
-              {/* <SocialMediaStatCard
+              <SocialMediaStatCard
                 title='Instagram'
-                value={instagramResults.totalScore}
-                diff={calculateSocialMediaDifference(instagramResults.totalScore, averagePoints.instagramAverage)}
+                value={0}
+                diff={calculateSocialMediaDifference(0, averagePoints.instagramAverage)}
                 icon={IconBrandInstagram}
               />
               <SocialMediaStatCard
                 title='Facebook'
-                value={facebookResults.totalScore}
-                diff={calculateSocialMediaDifference(facebookResults.totalScore, averagePoints.facebookAverage)}
+                value={0}
+                diff={calculateSocialMediaDifference(0, averagePoints.facebookAverage)}
                 icon={IconBrandFacebook}
-              /> */}
+              />
             </SimpleGrid>
 
-            <Card>
+            <Card shadow={"xs"} className={classes.card}>
+
               <Stack>
+                <Text size="xs" color="dimmed" className={classes.title}>
+                  Social Media Links
+                </Text>
                 {
                   youtubeLink &&
                   <Group>
                     <ThemeIcon color={"blue"} size={24} radius="xl">
                       <IconBrandYoutube size={18} />
                     </ThemeIcon>
-                    <MantineLink url={youtubeLink} label={youtubeLink} external/>
+                    <MantineLink url={youtubeLink} label={shortenLink(youtubeLink)} external />
                   </Group>
                 }
                 {
@@ -180,7 +206,7 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
                     <ThemeIcon color={"blue"} size={24} radius="xl">
                       <IconBrandTwitter size={18} />
                     </ThemeIcon>
-                    <MantineLink url={twitterLink} label={twitterLink} external/>
+                    <MantineLink url={twitterLink} label={shortenLink(twitterLink)} external />
                   </Group>
                 }
                 {
@@ -189,7 +215,7 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
                     <ThemeIcon color={"darkblue"} size={24} radius="xl">
                       <IconBrandFacebook size={18} />
                     </ThemeIcon>
-                    <MantineLink url={facebookLink} label={facebookLink} external/>
+                    <MantineLink url={facebookLink} label={shortenLink(facebookLink)} external />
                   </Group>
                 }
                 {
@@ -198,88 +224,17 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
                     <ThemeIcon color={"pink"} size={24} radius="xl">
                       <IconBrandInstagram size={18} />
                     </ThemeIcon>
-                    <MantineLink url={instagramLink} label={instagramLink} external/>
+                    <MantineLink url={instagramLink} label={shortenLink(instagramLink)} external />
                   </Group>
                 }
               </Stack>
             </Card>
-          </Grid.Col>
 
-          <Grid.Col md={8}>
+          </Stack>
 
-            <WhitePaper sx={{ borderRadius: 8 }}>
-
-              <Radar
-                data={data}
-                options={options}
-              />
-
-            </WhitePaper>
-          </Grid.Col>
-
-        </Grid>
+        </SimpleGrid>
 
       </WhitePaper>
-
-      {/* </InstitutionPaper> */}
-
-      {/* 
-            </Stack>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent>
-
-            <Box marginBottom={2}>
-              <Typography variant='h6' component='h3'>
-                Comparison to average in Germany
-              </Typography>
-              <Typography variant='body2' component='p'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              </Typography>
-            </Box>
-            <Radar
-              data={data}
-              options={options}
-            />
-
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent>
-
-            <Box marginBottom={2}>
-              <Typography variant='h6' component='h3'>
-                Social Media Links
-              </Typography>
-              <Typography variant='body2' component='p'>
-                Social Media pages that we analyzed for this institution.
-              </Typography>
-            </Box>
-
-
-
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent>
-
-            <Box marginBottom={2}>
-              <Typography variant='h6' component='h3'>
-                How are scores calculated?
-              </Typography>
-              <Typography variant='body2' component='p'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rhoncus, lectus at rhoncus pulvinar, diam libero tincidunt justo, nec ultrices neque nunc quis lectus. Phasellus at urna ac metus euismod eleifend a sit amet dolor. Integer velit lorem, eleifend eu luctus at, rutrum ut dolor. Curabitur sem risus, cursus sed justo vel, scelerisque maximus arcu. Nunc eu velit non quam interdum gravida eget ut nunc. Praesent ultrices erat ac sapien pulvinar, vitae efficitur sem rhoncus. Pellentesque laoreet, arcu et mattis facilisis, lacus odio maximus purus, ac tincidunt quam quam at mauris. Curabitur cursus rutrum porttitor.
-              </Typography>
-            </Box>
-
-          </CardContent>
-        </Card>
-
-      </Masonry> */}
 
     </LayoutContainer>
   )
@@ -293,6 +248,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   const country = await getCountry(countryUrl);
   const institution = await getInstitution(institutionUrl);
   const socialMedia = institution ? (await getSocialMedia(institution.id)) : null;
+  const countrySocialMedia = country ? (await getCountrySocialmedia(country.id)) : null;
 
   // Footer Data
   // Get all countries
@@ -305,7 +261,8 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     props: {
       institution: institution,
       country: country,
-      socialMediaStringified: JSON.stringify(socialMedia),
+      institutionSMString: JSON.stringify(socialMedia),
+      countrySMString: JSON.stringify(countrySocialMedia),
       footerContent: footerContent
     }
   }

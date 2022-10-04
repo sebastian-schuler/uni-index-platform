@@ -18,7 +18,7 @@ export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, inst
     const toStr = (name: string | undefined | null): string => name || "";
 
     if (any !== undefined) {
-        if (lang === "de") return toStr(any.name_de);
+        if (lang === "de") return toStr(any.name_native);
         else return toStr(any.name_en);
 
     } else if (dbTranslated !== undefined) {

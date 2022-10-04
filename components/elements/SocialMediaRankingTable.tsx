@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { keys } from '@mantine/utils';
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons';
-import { SocialMediaDBEntry, SocialMediaRankingEntry, SocialMediaRankingItem } from '../../lib/types/SocialMediaTypes';
+import { SocialMediaDBEntry, SocialMediaRankingEntry, SocialMediaRankingItem, TotalScore, TotalScoreSet } from '../../lib/types/SocialMediaTypes';
 import { getLocalizedName, toLink } from '../../lib/util';
 import useTranslation from 'next-translate/useTranslation';
 import MantineLink from './MantineLink';
@@ -115,11 +115,14 @@ const SocialMediaRankingTable = ({ socialMediaList }: Props) => {
     const { t, lang } = useTranslation('common');
 
     const data: RowData[] = socialMediaList.map((item, i) => {
+
+        const parsedScore = JSON.parse(item.total_score) as TotalScore;
+
         return {
             rank: (i + 1) + "",
             name: item.Institution.name,
             country: getLocalizedName({ lang: lang, dbTranslated: item.Institution.City.State.Country }),
-            totalscore: item.total_score + "",
+            totalscore: parsedScore.data.total.toFixed(0),
             url: toLink(URL_INSTITUTION, item.Institution.City.State.Country.url, item.Institution.url, "social-media"),
         }
     })
@@ -152,6 +155,10 @@ const SocialMediaRankingTable = ({ socialMediaList }: Props) => {
             <td>{row.totalscore}</td>
         </tr>
     ));
+
+    const getTotalScore = () => {
+
+    }
 
     return (
         <ScrollArea>

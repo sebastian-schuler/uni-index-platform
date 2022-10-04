@@ -183,4 +183,4 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
     )
 }
 
-export default memo(Breadcrumb)
+export default memo(Breadcrumb);
