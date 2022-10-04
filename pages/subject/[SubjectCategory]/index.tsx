@@ -10,7 +10,8 @@ import { FooterContent } from '../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../components/layout/LayoutContainer';
 import Meta from '../../../components/partials/Meta';
 import prisma from '../../../lib/prisma/prisma';
-import { getCountries, getSubjectsDetailedByCategory, getSubjectType } from '../../../lib/prisma/prismaQueries';
+import { getSubjectsDetailedByCategory } from '../../../lib/prisma/prismaDetailedQueries';
+import { getCountries, getSubjectType } from '../../../lib/prisma/prismaQueries';
 import { DetailedSubject } from '../../../lib/types/DetailedDatabaseTypes';
 import { getDBLocale, getLocalizedName } from '../../../lib/util';
 

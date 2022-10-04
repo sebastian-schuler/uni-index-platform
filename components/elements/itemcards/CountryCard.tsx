@@ -75,48 +75,26 @@ const CountryCard: React.FC<Props> = ({ country, linkType }: Props) => {
                 </Card.Section>
 
                 <Card.Section className={classes.section}>
-                    <List
-                        spacing="sm"
-                        size="md"
-                        center
-                    >
-                        <List.Item
-                            icon={
-                                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
-                                    <IconBuilding size={18} />
-                                </ThemeIcon>
-                            }
-                        >{country.institutionCount} Universities</List.Item>
-                        <List.Item
-                            icon={
-                                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
-                                    <IconSchool size={18} />
-                                </ThemeIcon>
-                            }
-                        >{country.subjectCount} Subjects</List.Item>
-                    </List>
+                    <Stack spacing={"sm"}>
+
+                        <Group noWrap>
+                            <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                                <IconBuilding size={18} />
+                            </ThemeIcon>
+                            <Text>{country.institutionCount} Universities</Text>
+                        </Group>
+
+                        <Group noWrap>
+                            <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                                <IconSchool size={18} />
+                            </ThemeIcon>
+                            <Text>{country.subjectCount} Subjects</Text>
+                        </Group>
+
+                    </Stack>
                 </Card.Section>
 
             </Card>
-            {/* <Card component='a' withBorder radius="md" className={classes.card}>
-
-                <Card.Section>
-                    <Image src={toLink(PATH_COUNTRY_IMAGES, country.url + ".jpg")} fit="cover" height={130} />
-                </Card.Section>
-
-                <Text className={classes.title} weight={500}>
-                    {name}
-                </Text>
-
-                <Text size="md" color="dimmed" lineClamp={4}>
-                    {langContent.universityLabel}
-                </Text>
-
-                <Text size="md" color="dimmed" lineClamp={4}>
-                    {langContent.courseLabel}
-                </Text>
-
-            </Card> */}
         </Link>
     )
 }

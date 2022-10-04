@@ -54,9 +54,9 @@ const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
   const Flag = Flags[subject.City.State.Country.country_code || ""] || Flags["EU"];
 
   // Append subject type names to string
-  const subjectTypeNames = subject.SubjectHasSubjectTypes.map((type) => getLocalizedName({ lang: lang, any: type.SubjectType}) );
+  const subjectTypeNames = subject.SubjectHasSubjectTypes.map((type) => getLocalizedName({ lang: lang, any: type.SubjectType }));
   let subjectType = "";
-  for(let i = 0; i < 2 && i < subjectTypeNames.length; i++) {
+  for (let i = 0; i < 2 && i < subjectTypeNames.length; i++) {
     subjectType += subjectTypeNames[i] + " / ";
   }
   subjectType = subjectType.slice(0, -3);
@@ -68,10 +68,10 @@ const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
         <Card.Section className={classes.section}>
           <Group position="apart" noWrap sx={{ alignItems: "start" }}>
             <Stack spacing={theme.spacing.xs}>
-              <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{lineHeight: 1}}>
+              <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
                 {subject.name}
               </Text>
-              <Text sx={{lineHeight: 1.2}}>{subject.Institution.name} | Campus {subject.City.name}</Text>
+              <Text sx={{ lineHeight: 1.2 }}>{subject.Institution.name} | Campus {subject.City.name}</Text>
             </Stack>
             <Flag className={classes.flag} />
           </Group>
@@ -79,33 +79,30 @@ const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
         </Card.Section>
 
         <Card.Section className={classes.section}>
-          <List
-            spacing="sm"
-            size="md"
-            center
-          >
-            <List.Item
-              icon={
-                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
-                  <IconCategory size={18} />
-                </ThemeIcon>
-              }
-            >{subjectType}</List.Item>
-            <List.Item
-              icon={
-                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
-                  <IconAward size={18} />
-                </ThemeIcon>
-              }
-            >{subject.degree}</List.Item>
-            <List.Item
-              icon={
-                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
-                  <IconCalendar size={18} />
-                </ThemeIcon>
-              }
-            >{subject.duration} {subject.duration_type}</List.Item>
-          </List>
+          <Stack spacing={"sm"}>
+
+            <Group noWrap>
+              <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                <IconCategory size={18} />
+              </ThemeIcon>
+              <Text>{subjectType}</Text>
+            </Group>
+
+            <Group noWrap>
+              <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                <IconAward size={18} />
+              </ThemeIcon>
+              <Text>{subject.degree}</Text>
+            </Group>
+
+            <Group noWrap>
+              <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                <IconCalendar size={18} />
+              </ThemeIcon>
+              <Text>{subject.duration} {subject.duration_type}</Text>
+            </Group>
+
+          </Stack>
         </Card.Section>
 
 

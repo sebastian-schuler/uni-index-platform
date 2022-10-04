@@ -59,26 +59,23 @@ const StateCard: React.FC<Props> = ({ state }: Props) => {
                 </Card.Section>
 
                 <Card.Section className={classes.section}>
-                    <List
-                        spacing="sm"
-                        size="md"
-                        center
-                    >
-                        <List.Item
-                            icon={
-                                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
-                                    <IconBuildingSkyscraper size={18} />
-                                </ThemeIcon>
-                            }
-                        >{state._count.City} cities with universities.</List.Item>
-                        <List.Item
-                            icon={
-                                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
-                                    <IconSchool size={18} />
-                                </ThemeIcon>
-                            }
-                        >{ } subjects to study</List.Item>
-                    </List>
+                    <Stack spacing={"sm"}>
+
+                        <Group noWrap>
+                            <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                                <IconBuildingSkyscraper size={18} />
+                            </ThemeIcon>
+                            <Text>{state._count.City} cities with universities.</Text>
+                        </Group>
+
+                        <Group noWrap>
+                            <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                                <IconSchool size={18} />
+                            </ThemeIcon>
+                            <Text>{ } subjects to study</Text>
+                        </Group>
+
+                    </Stack>
                 </Card.Section>
 
             </Card>

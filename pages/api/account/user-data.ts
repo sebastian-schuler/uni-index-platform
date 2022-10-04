@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { getAdsByUser, getInstitutionByUser, getSubjectsByInstitute, getUserFromToken } from '../../../lib/prisma/prismaQueries';
+import { getAdsByUser, getInstitutionByUser, getSubjectsByInstitute, getUserFromToken } from '../../../lib/prisma/prismaUserAccounts';
 import { UserDataProfile } from '../../../lib/types/AccountHandlingTypes';
 
 export type UserDataStatus = "SUCCESS" | "NO_USER" | "NO_AUTH" | "NOT_VALID" | null;

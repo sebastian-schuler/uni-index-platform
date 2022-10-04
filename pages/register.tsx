@@ -4,7 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 import MantineLink from '../components/elements/MantineLink';
 import RegisterSteps from '../components/layout/account/RegisterSteps';
 import LayoutContainer from '../components/layout/LayoutContainer';
-import { getInstitutesForUserAccounts } from '../lib/prisma/prismaQueries';
+import { getInstitutesForUserAccounts } from '../lib/prisma/prismaUserAccounts';
 import { InstitutionRegistrationDBItem, InstitutionRegistrationItem } from '../lib/types/AccountHandlingTypes';
 import { URL_LOGIN } from '../lib/url-helper/urlConstants';
 

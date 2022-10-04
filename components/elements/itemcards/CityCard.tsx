@@ -56,19 +56,16 @@ const CityCard: React.FC<Props> = ({ city }: Props) => {
                 </Card.Section>
 
                 <Card.Section className={classes.section}>
-                    <List
-                        spacing="sm"
-                        size="md"
-                        center
-                    >
-                        <List.Item
-                            icon={
-                                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
-                                    <IconBuilding size={18} />
-                                </ThemeIcon>
-                            }
-                        >{langContent.universityLabel}</List.Item>
-                    </List>
+                    <Stack spacing={"sm"}>
+
+                        <Group noWrap>
+                            <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                                <IconBuilding size={18} />
+                            </ThemeIcon>
+                            <Text>{langContent.universityLabel}</Text>
+                        </Group>
+
+                    </Stack>
                 </Card.Section>
 
             </Card>

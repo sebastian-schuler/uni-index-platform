@@ -1,5 +1,5 @@
 import { ParsedUrlQuery } from "querystring";
-import { getInstitutionPaths } from "../prisma/prismaQueries";
+import { getInstitutionPaths } from "../prisma/prismaUrlPaths";
 
 interface StaticPathsResult {
     params: ParsedUrlQuery;

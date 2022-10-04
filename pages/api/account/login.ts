@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { addUserSession, getUserLogin } from '../../../lib/prisma/prismaQueries';
+import { addUserSession, getUserLogin } from '../../../lib/prisma/prismaUserAccounts';
 import { LoginStatus } from '../../../lib/types/AccountHandlingTypes';
 import { addDays } from '../../../lib/util';
 

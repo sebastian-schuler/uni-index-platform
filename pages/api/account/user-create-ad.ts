@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import formidable from 'formidable';
 import * as fs from 'node:fs';
 import path from 'node:path';
-import { addNewAd, getSessionByToken, removeUserSession } from '../../../lib/prisma/prismaQueries';
+import { getSessionByToken, removeUserSession } from '../../../lib/prisma/prismaUserAccounts';
 
 export const config = {
     api: {

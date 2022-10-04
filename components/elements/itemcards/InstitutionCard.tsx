@@ -78,40 +78,41 @@ const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
               </Text>
               <Text sx={{ lineHeight: 1.2 }}>{institution.City.name}</Text>
             </Stack>
-            <Flag className={classes.flag} />
+            <Stack>
+              <Flag className={classes.flag} />
+              <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                <IconBuilding size={18} />
+              </ThemeIcon>
+            </Stack>
           </Group>
         </Card.Section>
 
         <Card.Section className={classes.section}>
-          <List
-            spacing="sm"
-            size="md"
-            center
-          >
-            <List.Item
-              icon={
-                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
-                  <IconBuilding size={18} />
-                </ThemeIcon>
-              }
-            >{cities.length} campus location{cities.length > 1 ? "s" : ""}</List.Item>
-            <List.Item
-              icon={
-                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
-                  <IconSchool size={18} />
-                </ThemeIcon>
-              }
-            >{institution.Subject.length} subjects</List.Item>
-            <List.Item
-              icon={
-                <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
-                  <IconCategory size={18} />
-                </ThemeIcon>
-              }
-            >{biggestSubjectTypes.join(", ")}</List.Item>
-          </List>
-        </Card.Section>
+          <Stack spacing={"sm"}>
 
+            <Group noWrap>
+              <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                <IconBuilding size={18} />
+              </ThemeIcon>
+              <Text>{cities.length} campus location{cities.length > 1 ? "s" : ""}</Text>
+            </Group>
+
+            <Group noWrap>
+              <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                <IconSchool size={18} />
+              </ThemeIcon>
+              <Text>{institution.Subject.length} subjects</Text>
+            </Group>
+
+            <Group noWrap>
+              <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                <IconCategory size={18} />
+              </ThemeIcon>
+              <Text>{biggestSubjectTypes.join(", ")}</Text>
+            </Group>
+
+          </Stack>
+        </Card.Section>
 
       </Card>
     </Link>

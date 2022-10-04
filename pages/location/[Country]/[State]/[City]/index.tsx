@@ -9,7 +9,9 @@ import Breadcrumb from '../../../../../components/layout/Breadcrumb';
 import { FooterContent } from '../../../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../../../components/layout/LayoutContainer';
 import Meta from '../../../../../components/partials/Meta';
-import { getCityStateCountryByCity, getCityStateCountryPaths, getCountries, getInstitutionsDetailedByCity } from '../../../../../lib/prisma/prismaQueries';
+import { getInstitutionsDetailedByCity } from '../../../../../lib/prisma/prismaDetailedQueries';
+import { getCityStateCountryByCity, getCountries } from '../../../../../lib/prisma/prismaQueries';
+import { getCityStateCountryPaths } from '../../../../../lib/prisma/prismaUrlPaths';
 import { DetailedInstitution } from '../../../../../lib/types/DetailedDatabaseTypes';
 
 interface Props {

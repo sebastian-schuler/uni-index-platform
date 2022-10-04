@@ -12,7 +12,8 @@ import { FooterContent } from '../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../components/layout/LayoutContainer';
 import Meta from '../../../components/partials/Meta';
 import prisma from '../../../lib/prisma/prisma';
-import { getCountries, getCountry, getStatesDetailedByCountry } from '../../../lib/prisma/prismaQueries';
+import { getStatesDetailedByCountry } from '../../../lib/prisma/prismaDetailedQueries';
+import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
 import { DetailedState } from '../../../lib/types/DetailedDatabaseTypes';
 import { getLocalizedName } from '../../../lib/util';
 

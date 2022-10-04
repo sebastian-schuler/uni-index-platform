@@ -11,7 +11,8 @@ import { FooterContent } from '../../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../../components/layout/LayoutContainer';
 import Meta from '../../../../components/partials/Meta';
 import prisma from '../../../../lib/prisma/prisma';
-import { getCitiesDetailedByState, getCountries, getCountryByState, getState } from '../../../../lib/prisma/prismaQueries';
+import { getCitiesDetailedByState } from '../../../../lib/prisma/prismaDetailedQueries';
+import {getCountries, getCountryByState, getState } from '../../../../lib/prisma/prismaQueries';
 import { DetailedCity } from '../../../../lib/types/DetailedDatabaseTypes';
 import { getLocalizedName } from '../../../../lib/util';
 

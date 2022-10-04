@@ -8,11 +8,12 @@ import LayoutContainer from '../../../../../components/layout/LayoutContainer'
 import SubjectNav from '../../../../../components/layout/subnav/SubjectNav'
 import Meta from '../../../../../components/partials/Meta'
 import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../lib/url-helper/urlConstants'
-import { getCountries, getCountry, getInstitution, getSubject, getSubjectPaths } from '../../../../../lib/prisma/prismaQueries'
+import { getCountries, getCountry, getInstitution, getSubject } from '../../../../../lib/prisma/prismaQueries'
 import { getDBLocale, toLink } from '../../../../../lib/util'
 import { ParsedUrlQuery } from 'querystring'
 import { getJobsFromApi } from '../../../../../lib/apis/jobsHandler'
 import WhitePaper from '../../../../../components/elements/socialmedia/WhitePaper'
+import { getSubjectPaths } from '../../../../../lib/prisma/prismaUrlPaths'
 
 type Props = {
     country: Country,

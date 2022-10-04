@@ -1,16 +1,12 @@
 
+import { Box, Center, Grid, Loader } from '@mantine/core';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import BookedAdsTable from '../../components/elements/accounts/BookedAdsTable';
-import { Center, Loader, Group, Navbar, Title, Box, SimpleGrid, Grid, Card, Text, Anchor } from '@mantine/core';
-import { useAuth } from '../../context/SessionContext';
-import { URL_LOGIN } from '../../lib/url-helper/urlConstants';
-import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
-import { PremiumAdDetailed, UserDataProfile } from '../../lib/types/AccountHandlingTypes';
-import { toLink } from '../../lib/util';
 import IndexAvailableActions from '../../components/elements/accounts/IndexAvailableActions';
 import GroupedStats from '../../components/elements/GroupedStats';
+import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
+import { PremiumAdDetailed, UserDataProfile } from '../../lib/types/AccountHandlingTypes';
 
 const AccountPage = () => {
 
