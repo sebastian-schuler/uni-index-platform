@@ -3,6 +3,7 @@ import type { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import PremiumList from '../components/container/AdList';
 import HeroSection from '../components/elements/index/HeroSection';
+import SocialMediaSection from '../components/elements/index/SocialMediaSection';
 import CountryCard from '../components/elements/itemcards/CountryCard';
 import InstitutionCard from '../components/elements/itemcards/InstitutionCard';
 import SubjectCard from '../components/elements/itemcards/SubjectCard';
@@ -53,6 +54,8 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
       />
 
       <HeroSection />
+
+      <SocialMediaSection />
 
       <Stack spacing={0} mb={"xl"}>
 
@@ -126,7 +129,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const allAds = JSON.stringify(ads);
 
   // Footer Data
-  const countryList = await getCountries("asc");
+  const countryList = await getCountries();
 
   const footerContent: FooterContent[] = [
     { title: "Countries", data: countryList, type: "Country" },

@@ -21,7 +21,7 @@ interface Props {
   footerContent: FooterContent[],
 }
 
-const index: NextPage<Props> = ({ institutions, countryInfo, footerContent }: Props) => {
+const InstitutionCountryIndex: NextPage<Props> = ({ institutions, countryInfo, footerContent }: Props) => {
 
   const { lang } = useTranslation('common');
 
@@ -122,4 +122,4 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
 }
 
-export default index
+export default InstitutionCountryIndex;

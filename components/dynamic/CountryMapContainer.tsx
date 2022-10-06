@@ -42,10 +42,6 @@ const CountryMapContainer = ({ country, stateNames }: Props) => {
 
   }
 
-  if (data === undefined) {
-    return <></>;
-  }
-
   const Map = React.useMemo(() => dynamic(
     () => import('../dynamic/CountryMap'),
     {
@@ -53,6 +49,10 @@ const CountryMapContainer = ({ country, stateNames }: Props) => {
       ssr: false // prevent server-side render
     }
   ), [lang]);
+
+  if (data === undefined) {
+    return <></>;
+  }
 
   return <Map
     country={country}

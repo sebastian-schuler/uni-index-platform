@@ -1,16 +1,8 @@
-import React from 'react'
-import { Center, Loader, Group, UnstyledButton, Title, Box, SimpleGrid, Grid, Card, Text, Anchor, createStyles } from '@mantine/core';
+import { Card, createStyles, Group, SimpleGrid, Text, UnstyledButton } from '@mantine/core';
 
 import {
-    IconCreditCard,
-    IconBuildingBank,
-    IconRepeat,
-    IconReceiptRefund,
-    IconReceipt,
-    IconReceiptTax,
-    IconReport,
-    IconCashBanknote,
-    IconCoin,
+    IconBuildingBank, IconCashBanknote,
+    IconCoin, IconCreditCard, IconReceipt, IconReceiptRefund, IconReceiptTax, IconRepeat, IconReport
 } from '@tabler/icons';
 
 const useStyles = createStyles((theme) => ({

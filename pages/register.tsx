@@ -12,7 +12,7 @@ type Props = {
   registrationInstitutes: InstitutionRegistrationItem[]
 }
 
-const register: NextPage<Props> = props => {
+const Register: NextPage<Props> = props => {
 
   const theme = useMantineTheme();
 
@@ -46,4 +46,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-export default register
+export default Register;

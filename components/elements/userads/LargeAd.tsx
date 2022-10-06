@@ -53,7 +53,7 @@ const LargeAd: React.FC<Props> = ({ link, title, headline, subtext, imgUrl, desc
         <Card component={disableLink ? "div" : "a"} withBorder radius="md" shadow="sm" className={classes.card} title={title} sx={{ height: colHeight }}>
 
             <Card.Section>
-                <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={LARGE_AD_HEIGHT / 2} />
+                <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={LARGE_AD_HEIGHT / 2} alt={""} />
             </Card.Section>
 
             <Card.Section className={classes.section}>

@@ -17,7 +17,7 @@ interface Props {
     footerContent: FooterContent[]
 }
 
-const countries: NextPage<Props> = ({ adsStringified, searchableCountries, footerContent }: Props) => {
+const Locations: NextPage<Props> = ({ adsStringified, searchableCountries, footerContent }: Props) => {
 
     const { t } = useTranslation('location');
     const langContent = {
@@ -71,4 +71,4 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 }
 
-export default countries
+export default Locations;

@@ -22,7 +22,7 @@ interface Props {
     footerContent: FooterContent[]
 }
 
-const subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Props) => {
+const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Props) => {
 
     const { t, lang } = useTranslation('subject');
     const langContent = {
@@ -43,8 +43,8 @@ const subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
     };
 
     useEffect(() => {
-        setDataList(sortSearchableArray(dataList, orderBy, lang));
-    }, [orderBy]);
+        setDataList(d => sortSearchableArray(d, orderBy, lang) );
+    }, [orderBy, lang]);
 
     return (
         <LayoutContainer footerContent={footerContent}>
@@ -106,7 +106,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const searchableSubjectTypes: Searchable[] = generateSearchable({ lang: context.locale, array: { type: "SubjectType", data: detailedSubjectTypes } });
 
     // Footer Data
-    const countryList = await getCountries("asc");
+    const countryList = await getCountries();
     const footerContent: FooterContent[] = [
         { title: "Countries", data: countryList, type: "Country" },
     ]
@@ -117,4 +117,4 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 }
 
-export default subjects
+export default Subjects;

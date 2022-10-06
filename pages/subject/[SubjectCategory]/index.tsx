@@ -118,7 +118,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   // Footer Data
   // Get all countries
-  const countryList = await getCountries("asc");
+  const countryList = await getCountries();
   const footerContent: FooterContent[] = [
     { title: "Countries", data: countryList, type: "Country" },
   ]

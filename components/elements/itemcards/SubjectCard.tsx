@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
 import { DetailedSubject } from '../../../lib/types/DetailedDatabaseTypes'
-import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants'
+import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../lib/url-helper/urlConstants'
 import { getLocalizedName, toLink } from '../../../lib/util'
 
 const useStyles = createStyles((theme) => ({
@@ -48,7 +48,7 @@ const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
   const { classes, theme } = useStyles();
   const { lang } = useTranslation('common');
 
-  const url = toLink(URL_INSTITUTION, subject.City.State.Country.url, subject.Institution.url, subject.url);
+  const url = toLink(URL_INSTITUTION, subject.City.State.Country.url, subject.Institution.url, URL_INSTITUTION_SUBJECTS, subject.url);
   // const country = getLocalizedName({ lang: lang, dbTranslated: subject.City.State.Country });
 
   const Flag = Flags[subject.City.State.Country.country_code || ""] || Flags["EU"];
@@ -85,21 +85,21 @@ const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
               <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
                 <IconCategory size={18} />
               </ThemeIcon>
-              <Text>{subjectType}</Text>
+              <Text sx={{ lineHeight: 1.2 }}>{subjectType}</Text>
             </Group>
 
             <Group noWrap>
               <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
                 <IconAward size={18} />
               </ThemeIcon>
-              <Text>{subject.degree}</Text>
+              <Text sx={{ lineHeight: 1.2 }}>{subject.degree}</Text>
             </Group>
 
             <Group noWrap>
               <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
                 <IconCalendar size={18} />
               </ThemeIcon>
-              <Text>{subject.duration} {subject.duration_type}</Text>
+              <Text sx={{ lineHeight: 1.2 }}>{subject.duration} {subject.duration_type}</Text>
             </Group>
 
           </Stack>

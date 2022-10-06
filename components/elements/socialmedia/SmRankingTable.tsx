@@ -1,21 +1,14 @@
-import { useState } from 'react';
 import {
-    createStyles,
-    Table,
-    ScrollArea,
-    UnstyledButton,
-    Group,
-    Text,
-    Center,
-    TextInput,
+    Center, createStyles, Group, ScrollArea, Table, Text, TextInput, UnstyledButton
 } from '@mantine/core';
 import { keys } from '@mantine/utils';
-import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons';
-import { SocialMediaDBEntry, SocialMediaRankingEntry, SocialMediaRankingItem, TotalScore, TotalScoreSet } from '../../lib/types/SocialMediaTypes';
-import { getLocalizedName, toLink } from '../../lib/util';
+import { IconChevronDown, IconChevronUp, IconSearch, IconSelector } from '@tabler/icons';
 import useTranslation from 'next-translate/useTranslation';
-import MantineLink from './MantineLink';
-import { URL_INSTITUTION } from '../../lib/url-helper/urlConstants';
+import { useState } from 'react';
+import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes';
+import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants';
+import { getLocalizedName, toLink } from '../../../lib/util';
+import MantineLink from '../MantineLink';
 
 const useStyles = createStyles((theme) => ({
     th: {
@@ -39,7 +32,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface RowData {
-    rank: string;
+    rank: number;
     name: string;
     country: string;
     totalscore: string;
@@ -60,30 +53,44 @@ interface ThProps {
 
 function filterData(data: RowData[], search: string) {
     const query = search.toLowerCase().trim();
-    return data.filter((item) =>
-        keys(data[0]).some((key) => item[key].toLowerCase().includes(query))
+    const filtered = data.filter((item) =>
+        keys(data[0]).some((key) => {
+            if (key === "rank")
+                return item[key].toString().toLowerCase().includes(query);
+            else
+                return item[key].toLowerCase().includes(query);
+        })
     );
+    console.log(filtered)
+    return filtered;
 }
 
 function sortData(
     data: RowData[],
     payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
 ) {
-    const { sortBy } = payload;
+    const { sortBy, search, reversed } = payload;
 
     if (!sortBy) {
-        return filterData(data, payload.search);
+        return filterData(data, search);
     }
 
     return filterData(
         [...data].sort((a, b) => {
-            if (payload.reversed) {
-                return b[sortBy].localeCompare(a[sortBy]);
-            }
 
-            return a[sortBy].localeCompare(b[sortBy]);
+            if (sortBy === "rank") {
+                if (reversed)
+                    return a.rank - b.rank;
+                else
+                    return b.rank - a.rank;
+            } else {
+                if (reversed)
+                    return b[sortBy].localeCompare(a[sortBy]);
+                else
+                    return a[sortBy].localeCompare(b[sortBy]);
+            }
         }),
-        payload.search
+        search
     );
 }
 
@@ -107,23 +114,21 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 }
 
 interface Props {
-    socialMediaList: SocialMediaRankingEntry[]
+    socialMediaList: SmRankingEntryMinified[]
 }
 
-const SocialMediaRankingTable = ({ socialMediaList }: Props) => {
+const SmRankingTable = ({ socialMediaList }: Props) => {
 
     const { t, lang } = useTranslation('common');
 
     const data: RowData[] = socialMediaList.map((item, i) => {
 
-        const parsedScore = JSON.parse(item.total_score) as TotalScore;
-
         return {
-            rank: (i + 1) + "",
+            rank: (i + 1),
             name: item.Institution.name,
-            country: getLocalizedName({ lang: lang, dbTranslated: item.Institution.City.State.Country }),
-            totalscore: parsedScore.data.total.toFixed(0),
-            url: toLink(URL_INSTITUTION, item.Institution.City.State.Country.url, item.Institution.url, "social-media"),
+            country: getLocalizedName({ lang: lang, dbTranslated: item.Institution.Country }),
+            totalscore: item.total_score.toFixed(0),
+            url: toLink(URL_INSTITUTION, item.Institution.Country.url, item.Institution.url, "social-media"),
         }
     })
 
@@ -226,4 +231,4 @@ const SocialMediaRankingTable = ({ socialMediaList }: Props) => {
     );
 }
 
-export default SocialMediaRankingTable
+export default SmRankingTable;

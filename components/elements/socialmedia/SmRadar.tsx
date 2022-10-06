@@ -36,7 +36,7 @@ interface Props {
     dataCountry: number[]
 }
 
-const SocialMediaRadar: React.FC<Props> = ({ institutionName, countryName, labels, dataInstitution, dataCountry }: Props) => {
+const SmRadar: React.FC<Props> = ({ institutionName, countryName, labels, dataInstitution, dataCountry }: Props) => {
 
     const data = {
         labels: labels,
@@ -68,4 +68,4 @@ const SocialMediaRadar: React.FC<Props> = ({ institutionName, countryName, label
     )
 }
 
-export default SocialMediaRadar
+export default SmRadar;

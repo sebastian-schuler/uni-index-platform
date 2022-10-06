@@ -12,7 +12,7 @@ import { getCountries, getCountry, getInstitution, getSubject } from '../../../.
 import { getDBLocale, toLink } from '../../../../../lib/util'
 import { ParsedUrlQuery } from 'querystring'
 import { getJobsFromApi } from '../../../../../lib/apis/jobsHandler'
-import WhitePaper from '../../../../../components/elements/socialmedia/WhitePaper'
+import WhitePaper from '../../../../../components/WhitePaper'
 import { getSubjectPaths } from '../../../../../lib/prisma/prismaUrlPaths'
 
 type Props = {
@@ -78,7 +78,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
     // Footer Data
     // Get all countries
-    const countryList = await getCountries("asc");
+    const countryList = await getCountries();
     const footerContent: FooterContent[] = [
         { title: "Countries", data: countryList, type: "Country" },
     ]

@@ -1,7 +1,8 @@
-import { Card, createStyles, Group, Paper, Text, useMantineTheme } from '@mantine/core';
+import { Card, createStyles, Group, Text, useMantineTheme } from '@mantine/core';
 import {
-    IconArrowDownRight, IconArrowUpRight, TablerIcon, IconArrowLeft
+    IconArrowDownRight, IconArrowLeft, IconArrowUpRight, TablerIcon
 } from '@tabler/icons';
+import { memo } from 'react';
 
 
 const useStyles = createStyles((theme) => ({
@@ -40,7 +41,7 @@ interface Props {
     icon: TablerIcon
 }
 
-const SocialMediaStatCard = ({ title, value, diff, icon }: Props) => {
+const SmStatCard = ({ title, value, diff, icon }: Props) => {
 
     const theme = useMantineTheme();
     const Icon = icon;
@@ -76,4 +77,4 @@ const SocialMediaStatCard = ({ title, value, diff, icon }: Props) => {
     )
 }
 
-export default SocialMediaStatCard
+export default memo(SmStatCard)

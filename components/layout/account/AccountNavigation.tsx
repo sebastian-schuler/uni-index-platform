@@ -50,7 +50,7 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
         }
         getData();
         return () => { }
-    }, [token]);
+    }, [token,deleteAuthToken,router]);
 
     return (
         <AppShell

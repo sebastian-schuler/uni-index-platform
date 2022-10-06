@@ -37,7 +37,6 @@ const SearchResultList: React.FC<Props> = props => {
         outputList = <> {
             props.resSubject.map((item, i) => (
                 <div key={i}>
-                    // TODO get subject type here
                     {/* <MantineLink label={item.name} url={toLink(URL_SUBJECT, item.SubjectType.url, item.url)} /> */}
                 </div>
             ))

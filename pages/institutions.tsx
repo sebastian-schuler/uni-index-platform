@@ -18,7 +18,7 @@ interface Props {
     footerContent: FooterContent[],
 }
 
-const institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, footerContent }: Props) => {
+const Institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, footerContent }: Props) => {
 
     const { t } = useTranslation('institution');
     const langContent = {
@@ -77,4 +77,4 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 }
 
-export default institutions
+export default Institutions;

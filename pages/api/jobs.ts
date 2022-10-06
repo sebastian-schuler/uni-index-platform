@@ -5,7 +5,7 @@ import { getJobParameters } from "../../lib/apis/jobsHandler";
 let tokenExpiration: Date;
 let token: string;
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const jobsHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // Get token, it lasts for 60 min
   if (tokenExpiration === undefined || new Date() >= tokenExpiration || token === undefined) {
@@ -49,3 +49,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json(jsonData)
 }
 
+export default jobsHandler;

@@ -9,12 +9,10 @@ type OrderBy = "asc" | "desc";
 // ===========================================================
 
 // Return all countries, ordered by localized name
-export const getCountries = async (orderBy: OrderBy) => {
+export const getCountries = async () => {
     return await prisma.country.findMany({
-        orderBy: {
-            "name": orderBy
-        }
-    })
+        orderBy: { name: "asc" }
+    });
 }
 
 // Return all subject types, ordered by localized name

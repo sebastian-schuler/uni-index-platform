@@ -2,7 +2,7 @@ import { Text, Title, useMantineTheme } from '@mantine/core';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import WhitePaper from '../../../../components/elements/socialmedia/WhitePaper';
+import WhitePaper from '../../../../components/WhitePaper';
 import Breadcrumb from '../../../../components/layout/Breadcrumb';
 import { FooterContent } from '../../../../components/layout/footer/Footer';
 import LayoutContainer from '../../../../components/layout/LayoutContainer';
@@ -62,7 +62,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   // Footer Data
   // Get all countries
-  const countryList = await getCountries("asc");
+  const countryList = await getCountries();
   const footerContent: FooterContent[] = [
     { title: "Countries", data: countryList, type: "Country" },
   ]

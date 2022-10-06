@@ -54,7 +54,7 @@ const MediumAd: React.FC<Props> = ({ title, link, headline, subtext, description
             <Group noWrap spacing={0} sx={{ alignItems: "start" }}>
 
                 <Box sx={{ width: "50%" }}>
-                    <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} />
+                    <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} alt={""} />
                 </Box>
 
                 <Box sx={{ flex: 1, height: "100%" }}>

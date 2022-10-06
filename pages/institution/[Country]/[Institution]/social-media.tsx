@@ -9,9 +9,10 @@ import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 
 import useTranslation from 'next-translate/useTranslation'
 import MantineLink from '../../../../components/elements/MantineLink'
-import SocialMediaRadar from '../../../../components/elements/socialmedia/SocialMediaRadar'
-import SocialMediaStatCard from '../../../../components/elements/socialmedia/SocialMediaStatCard'
-import WhitePaper from '../../../../components/elements/socialmedia/WhitePaper'
+import SocialMediaIconLink from '../../../../components/elements/socialmedia/SmIconLink'
+import SocialMediaRadar from '../../../../components/elements/socialmedia/SmRadar'
+import SocialMediaStatCard from '../../../../components/elements/socialmedia/SmStatCard'
+import WhitePaper from '../../../../components/WhitePaper'
 import Breadcrumb from '../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
@@ -194,39 +195,19 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
                 </Text>
                 {
                   youtubeLink &&
-                  <Group>
-                    <ThemeIcon color={"blue"} size={24} radius="xl">
-                      <IconBrandYoutube size={18} />
-                    </ThemeIcon>
-                    <MantineLink url={youtubeLink} label={shortenLink(youtubeLink)} external />
-                  </Group>
+                  <SocialMediaIconLink type='youtube' url={youtubeLink} label title={`Youtube channel of ${institution.name}`} />
                 }
                 {
                   twitterLink &&
-                  <Group>
-                    <ThemeIcon color={"blue"} size={24} radius="xl">
-                      <IconBrandTwitter size={18} />
-                    </ThemeIcon>
-                    <MantineLink url={twitterLink} label={shortenLink(twitterLink)} external />
-                  </Group>
+                  <SocialMediaIconLink type='twitter' url={twitterLink} label title={`Twitter profile of ${institution.name}`} />
                 }
                 {
                   facebookLink &&
-                  <Group>
-                    <ThemeIcon color={"darkblue"} size={24} radius="xl">
-                      <IconBrandFacebook size={18} />
-                    </ThemeIcon>
-                    <MantineLink url={facebookLink} label={shortenLink(facebookLink)} external />
-                  </Group>
+                  <SocialMediaIconLink type='facebook' url={facebookLink} label title={`Facebook profile of ${institution.name}`} />
                 }
                 {
                   instagramLink &&
-                  <Group>
-                    <ThemeIcon color={"pink"} size={24} radius="xl">
-                      <IconBrandInstagram size={18} />
-                    </ThemeIcon>
-                    <MantineLink url={instagramLink} label={shortenLink(instagramLink)} external />
-                  </Group>
+                  <SocialMediaIconLink type='instagram' url={instagramLink} label title={`Instagram profile of ${institution.name}`} />
                 }
               </Stack>
             </Card>
@@ -253,7 +234,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   // Footer Data
   // Get all countries
-  const countryList = await getCountries("asc");
+  const countryList = await getCountries();
   const footerContent: FooterContent[] = [
     { title: "Countries", data: countryList, type: "Country" },
   ]

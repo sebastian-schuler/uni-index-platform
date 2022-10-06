@@ -10,19 +10,28 @@ export type SocialMediaDBEntry = InstitutionSocialMedia & {
     };
 }
 
-export type SocialMediaRankingEntry = {
+// export type SocialMediaRankingEntry = {
+//     Institution: {
+//         City: {
+//             State: {
+//                 Country: Country
+//             };
+//         };
+//         name: string;
+//         url: string;
+//     };
+//     institution_id: string;
+//     total_score: string;
+//     last_update: bigint;
+// }
+
+export type SmRankingEntryMinified = {
     Institution: {
-        City: {
-            State: {
-                Country: Country
-            };
-        };
-        name: string;
-        url: string;
-    };
-    institution_id: string;
-    total_score: string;
-    last_update: bigint;
+        name: string
+        url: string
+        Country: Country
+    }
+    total_score: number
 }
 
 export type SocialMediaRankingItem = SocialMediaDBEntry & {

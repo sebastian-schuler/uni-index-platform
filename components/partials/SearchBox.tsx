@@ -40,7 +40,7 @@ const SearchBox: NextPage<Props> = ({ label, placeholder, searchableList, setSea
             });
         }
         setSearchableList(newSearchableList);
-    }, [searchTerm]);
+    }, [searchTerm, lang, setSearchableList, searchableList]);
 
     return (
         <TextInput

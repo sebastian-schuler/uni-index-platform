@@ -263,11 +263,19 @@ export const getStatesDetailedByCountry = async (countryUrl: string): Promise<De
 
 // ===========================================================
 // ================= INSTITUTION =============
-// ===========================================================
+// =========================================================== 
 
 export const getInstitutionsDetailedByCountry = async (countryId: string): Promise<DetailedInstitution[]> => {
     return await prisma.institution.findMany({
         include: {
+            InstitutionSocialMedia: {
+                select: {
+                    facebook_url: true,
+                    instagram_url: true,
+                    twitter_url: true,
+                    youtube_url: true,
+                }
+            },
             City: {
                 include: { State: { select: { Country: true } } },
             },
@@ -317,6 +325,14 @@ export const getInstitutionsDetailedByCountry = async (countryId: string): Promi
 export const getInstitutionsDetailedByCity = async (cityId: string): Promise<DetailedInstitution[]> => {
     return await prisma.institution.findMany({
         include: {
+            InstitutionSocialMedia: {
+                select: {
+                    facebook_url: true,
+                    instagram_url: true,
+                    twitter_url: true,
+                    youtube_url: true,
+                }
+            },
             City: {
                 include: { State: { select: { Country: true } } },
             },

@@ -1,17 +1,17 @@
 import { Group, SimpleGrid } from '@mantine/core';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
-import SubjectCard from '../../../../components/elements/itemcards/SubjectCard';
-import WhitePaper from '../../../../components/elements/socialmedia/WhitePaper';
-import Breadcrumb from '../../../../components/layout/Breadcrumb';
-import { FooterContent } from '../../../../components/layout/footer/Footer';
-import LayoutContainer from '../../../../components/layout/LayoutContainer';
-import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav';
-import Meta from '../../../../components/partials/Meta';
-import { getDetailedSubjectsByInstitution } from '../../../../lib/prisma/prismaDetailedQueries';
-import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries';
-import { DetailedSubject } from '../../../../lib/types/DetailedDatabaseTypes';
-import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions';
+import SubjectCard from '../../../../../components/elements/itemcards/SubjectCard';
+import WhitePaper from '../../../../../components/WhitePaper';
+import Breadcrumb from '../../../../../components/layout/Breadcrumb';
+import { FooterContent } from '../../../../../components/layout/footer/Footer';
+import LayoutContainer from '../../../../../components/layout/LayoutContainer';
+import InstitutionNav from '../../../../../components/layout/subnav/InstitutionNav';
+import Meta from '../../../../../components/partials/Meta';
+import { getDetailedSubjectsByInstitution } from '../../../../../lib/prisma/prismaDetailedQueries';
+import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
+import { DetailedSubject } from '../../../../../lib/types/DetailedDatabaseTypes';
+import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions';
 
 interface Props {
   institution: Institution,
@@ -82,7 +82,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   // Footer Data
   // Get all countries
-  const countryList = await getCountries("asc");
+  const countryList = await getCountries();
   const footerContent: FooterContent[] = [
     { title: "Countries", data: countryList, type: "Country" },
   ]

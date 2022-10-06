@@ -1,13 +1,14 @@
 import { Space, Title } from '@mantine/core'
 import { GetStaticProps, NextPage } from 'next'
-import WhitePaper from '../../components/elements/socialmedia/WhitePaper'
-import SocialMediaRankingTable from '../../components/elements/SocialMediaRankingTable'
+import WhitePaper from '../../components/WhitePaper'
+import SocialMediaRankingTable from '../../components/elements/socialmedia/SmRankingTable'
 import Breadcrumb from '../../components/layout/Breadcrumb'
 import { FooterContent } from '../../components/layout/footer/Footer'
 import LayoutContainer from '../../components/layout/LayoutContainer'
 import { getDetailedCountries } from '../../lib/prisma/prismaDetailedQueries'
+import { getCountries } from '../../lib/prisma/prismaQueries'
 import { getSocialMediaRanking } from '../../lib/prisma/prismaSocialMedia'
-import { SocialMediaRankingEntry, TotalScore } from '../../lib/types/SocialMediaTypes'
+import { SmRankingEntryMinified, TotalScore } from '../../lib/types/SocialMediaTypes'
 import { Searchable } from '../../lib/types/UiHelperTypes'
 import { generateSearchable } from '../../lib/util'
 
@@ -18,7 +19,7 @@ interface Props {
 
 const SocialMediaRanking: NextPage<Props> = ({ stringifiedSocialMediaList, footerContent }: Props) => {
 
-    const socialMediaList: SocialMediaRankingEntry[] = JSON.parse(stringifiedSocialMediaList);
+    const socialMediaList: SmRankingEntryMinified[] = JSON.parse(stringifiedSocialMediaList);
 
     return (
         <LayoutContainer footerContent={footerContent}>
@@ -41,21 +42,32 @@ const SocialMediaRanking: NextPage<Props> = ({ stringifiedSocialMediaList, foote
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
-    const detailedCountries = await getDetailedCountries();
-    const searchableCountries: Searchable[] = generateSearchable({ lang: context.locale, array: { type: "Country", data: detailedCountries } });
+    const countries = await getCountries();
 
     // SOCIAL MEDIA
     const socialMediaList = await getSocialMediaRanking();
-    socialMediaList.sort((a, b) => {
-        const parsedScoreA = JSON.parse(a.total_score) as TotalScore;
-        const parsedScoreB = JSON.parse(b.total_score) as TotalScore;
-        return parsedScoreB.data.total - parsedScoreA.data.total;
+
+    const parsedSocialMedia:SmRankingEntryMinified[] = socialMediaList.map((item) => {
+        const parsedScore = JSON.parse(item.total_score) as TotalScore;
+        const total = parsedScore.data.total;
+        return{
+            Institution: {
+                name: item.Institution.name,
+                url: item.Institution.url,
+                Country: item.Institution.City.State.Country,
+            },
+            total_score: total
+        }
     });
 
-    const stringifiedSocialMediaList = JSON.stringify(socialMediaList);
+    parsedSocialMedia.sort((a, b) => {
+        return b.total_score - a.total_score;
+    });
+
+    const stringifiedSocialMediaList = JSON.stringify(parsedSocialMedia);
 
     const footerContent: FooterContent[] = [
-        { title: "Countries", data: searchableCountries, type: "Searchable" },
+        { title: "Countries", data: countries, type: "Country" },
     ]
 
     return {

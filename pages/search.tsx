@@ -20,7 +20,6 @@ const Search: NextPage<Props> = ({ subjects, institutions, cities }: Props) => {
 
             <div className='flex flex-col gap-4'>
 
-                // TODO replace with MUI
                 <SearchResultList header='Subjects' resSubject={subjects} />
                 <SearchResultList header='Institutions' resInstitution={institutions} />
                 <SearchResultList header='Cities' resCities={cities} />
@@ -30,8 +29,6 @@ const Search: NextPage<Props> = ({ subjects, institutions, cities }: Props) => {
         </LayoutContainer>
     )
 }
-
-export default Search
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
@@ -46,3 +43,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 }
+
+export default Search

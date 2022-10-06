@@ -37,8 +37,8 @@ const CountryList = ({ title, subtitle, root, searchableCountries, children }: P
     };
 
     useEffect(() => {
-        setDataList(sortSearchableArray(dataList, orderBy, lang));
-    }, [orderBy]);
+        setDataList(d => sortSearchableArray(d, orderBy, lang));
+    }, [orderBy, lang]);
 
     return (
         <>

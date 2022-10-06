@@ -35,9 +35,12 @@ interface Props {
     setInstitutionError: (error: string) => void
 }
 
-const InstitutionSelect: React.FC<Props> = ({ registrationInstitutes, selectedInstitutionId, setSelectedInstitutionId, setSelectedInstitution, institutionError, setInstitutionError }: Props) => {
+const InstitutionSelect: React.FC<Props> = (
+    { registrationInstitutes, selectedInstitutionId, setSelectedInstitutionId, setSelectedInstitution, institutionError, setInstitutionError }: Props
+) => {
 
     const theme = useMantineTheme();
+    AutoCompleteItem.displayName = 'AutoCompleteItem';
 
     const { t } = useTranslation('loginLogout');
     const langContent = {

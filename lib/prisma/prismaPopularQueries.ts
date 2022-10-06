@@ -31,6 +31,14 @@ export const getInstitutionsByPopularity = async (takeCount: number): Promise<De
     return await prisma.institution.findMany({
         take: takeCount,
         include: {
+            InstitutionSocialMedia: {
+                select: {
+                    facebook_url: true,
+                    instagram_url: true,
+                    twitter_url: true,
+                    youtube_url: true,
+                }
+            },
             City: {
                 include: { State: { select: { Country: true } } },
             },

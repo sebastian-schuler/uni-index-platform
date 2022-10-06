@@ -46,23 +46,29 @@ export type DetailedInstitution = (Institution & {
     City: City & {
         State: {
             Country: Country;
-        };
-    };
-    Subject: (Subject & {
+        }
+    }
+    Subject?: (Subject & {
         SubjectHasSubjectTypes: (SubjectHasSubjectTypes & {
-            SubjectType: SubjectType;
-        })[];
-    })[];
+            SubjectType: SubjectType
+        })[]
+    })[]
     InstitutionLocation: {
         City: City & {
             State: State & {
-                Country: Country;
-            };
-        };
-    }[];
+                Country: Country
+            }
+        }
+    }[]
+    InstitutionSocialMedia: {
+        facebook_url: string | null
+        twitter_url: string | null
+        instagram_url: string | null
+        youtube_url: string | null
+    } | null
     _count: {
-        Subject: number;
-    };
+        Subject: number
+    }
 });
 
 // COUNTRY CARD

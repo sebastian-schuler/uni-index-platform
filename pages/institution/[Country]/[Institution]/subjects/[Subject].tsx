@@ -1,9 +1,10 @@
-import { Stack, Text } from '@mantine/core'
+import { Anchor, Stack, Text } from '@mantine/core'
 import { Country, Institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
-import WhitePaper from '../../../../../components/elements/socialmedia/WhitePaper'
+import MantineLink from '../../../../../components/elements/MantineLink'
+import WhitePaper from '../../../../../components/WhitePaper'
 import Breadcrumb from '../../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../../components/layout/LayoutContainer'
@@ -81,7 +82,7 @@ const SubjectFromInstitutionPage: NextPage<Props> = ({ country, institution, sub
 
           <Stack spacing={0}>
             <Text size={"lg"} weight={"bold"}>Website</Text>
-            <Text>{subject?.website}</Text>
+            <MantineLink label={subject?.website} url={subject?.website} external/>
           </Stack>
 
         </Stack>
@@ -104,7 +105,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   // Footer Data
   // Get all countries
-  const countryList = await getCountries("asc");
+  const countryList = await getCountries();
   const footerContent: FooterContent[] = [
     { title: "Countries", data: countryList, type: "Country" },
   ]
