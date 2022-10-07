@@ -1,5 +1,5 @@
 import { SERVER_URL } from "../config";
-import { addParameter } from "../util";
+import { addParameter } from "../util/util";
 
 type JobAPIParameters = {
     was?: string,

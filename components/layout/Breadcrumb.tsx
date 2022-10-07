@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 import { URL_INSTITUTION, URL_INSTITUTIONS, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SOCIAL_MEDIA_RANKING, URL_SUBJECT, URL_SUBJECTS } from '../../lib/url-helper/urlConstants';
-import { getLocalizedName, toLink } from '../../lib/util';
+import { getLocalizedName, toLink } from '../../lib/util/util';
 import MantineLink from '../elements/MantineLink';
 
 type Props = {

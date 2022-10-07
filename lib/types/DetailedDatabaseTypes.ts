@@ -36,6 +36,22 @@ export type DetailedSubject = (Subject & {
     })[];
 });
 
+export type SubjectCardData = {
+    countryId: string
+    fullUrl: string
+    subjectTypes: string
+    name: string
+    degree: string
+    duration: number
+    durationType: string
+    Institution: {
+        name: string
+    },
+    City: {
+        name: string
+    }
+};
+
 // SUBJECT TYPE CARD
 export type DetailedSubjectType = SubjectType & {
     subjectCount: number;
@@ -48,7 +64,7 @@ export type DetailedInstitution = (Institution & {
             Country: Country;
         }
     }
-    Subject?: (Subject & {
+    Subject: (Subject & {
         SubjectHasSubjectTypes: (SubjectHasSubjectTypes & {
             SubjectType: SubjectType
         })[]
@@ -70,6 +86,27 @@ export type DetailedInstitution = (Institution & {
         Subject: number
     }
 });
+
+export type InstitutionCardData = {
+    mainCountryId: string
+    Institution: {
+        url: string
+        name: string
+        nameBrackets: string
+        City: {
+            name: string
+        }
+    }
+    campusCount: number
+    subjectCount: number
+    biggestSubjectTypes: string[]
+    InstitutionSocialMedia: {
+        facebook_url: string | null
+        twitter_url: string | null
+        instagram_url: string | null
+        youtube_url: string | null
+    } | null
+};
 
 // COUNTRY CARD
 export type DetailedCountry = Country & {

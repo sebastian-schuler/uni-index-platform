@@ -14,7 +14,7 @@ import prisma from '../../../../lib/prisma/prisma';
 import { getCitiesDetailedByState } from '../../../../lib/prisma/prismaDetailedQueries';
 import {getCountries, getCountryByState, getState } from '../../../../lib/prisma/prismaQueries';
 import { DetailedCity } from '../../../../lib/types/DetailedDatabaseTypes';
-import { getLocalizedName } from '../../../../lib/util';
+import { getLocalizedName } from '../../../../lib/util/util';
 
 interface Props {
     cityList: DetailedCity[],

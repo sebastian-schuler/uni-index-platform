@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { isDisplayNameValid, isEmailValid, isPasswordValid } from '../../../lib/accountHandling/regex';
+import { isEmailValid, isPasswordValid } from '../../../lib/accountHandling/regex';
 import { addNewUser, addUserSession, getUserCountByEmail, getUserCountByInstitution } from '../../../lib/prisma/prismaUserAccounts';
 import { RegisterStatus } from '../../../lib/types/AccountHandlingTypes';
-import { addDays } from '../../../lib/util';
+import { addDays } from '../../../lib/util/util';
 
 export default async function handler(
     req: NextApiRequest,

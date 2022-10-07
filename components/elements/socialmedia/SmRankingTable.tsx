@@ -7,7 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useState } from 'react';
 import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes';
 import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants';
-import { getLocalizedName, toLink } from '../../../lib/util';
+import { getLocalizedName, toLink } from '../../../lib/util/util';
 import MantineLink from '../MantineLink';
 
 const useStyles = createStyles((theme) => ({

@@ -1,27 +1,36 @@
-import { Box, SimpleGrid } from '@mantine/core'
+import { Box, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import React from 'react'
+import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes'
 import ResponsiveContainer from '../../layout/ResponsiveContainer'
 import SmIndexTopRanking from '../socialmedia/SmIndexTopRanking'
 
-interface Props{
-
+interface Props {
+  socialMediaList: SmRankingEntryMinified[]
 }
 
-const SocialMediaSection:React.FC<Props> = ({}:Props) => {
+const SocialMediaSection: React.FC<Props> = ({ socialMediaList }: Props) => {
 
   return (
-    <ResponsiveContainer>
-        <SimpleGrid cols={2}>
+    <ResponsiveContainer paddingY>
 
-            <Box> 
-                <SmIndexTopRanking />
-            </Box>
+      <Stack spacing={0}>
+        <Title order={2} color={'dark.0'}>
+          Social Media Ranking
+        </Title>
+        <Text>We looked at every institutions social media pages.</Text>
+      </Stack>
 
-            <Box>
-                Highlighted Social Media Profiles
-            </Box>
+      <SimpleGrid cols={2} mt={'md'}>
 
-        </SimpleGrid>
+        <Box>
+          <SmIndexTopRanking socialMediaList={socialMediaList} />
+        </Box>
+
+        <Box>
+          Highlighted Social Media Profiles
+        </Box>
+
+      </SimpleGrid>
     </ResponsiveContainer>
   )
 

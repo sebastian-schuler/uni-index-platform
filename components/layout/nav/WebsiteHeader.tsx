@@ -102,8 +102,8 @@ const WebsiteHeader = () => {
       return (
         <Menu key={link.parent.label} trigger="hover" exitTransitionDuration={0}>
           <Menu.Target>
-            <Link key={link.parent.label} href={link.parent.link}>
-              <Anchor className={classes.link}>
+            <Link key={link.parent.label} href={link.parent.link} passHref>
+              <Anchor component='a' className={classes.link}>
                 <Center>
                   <span className={classes.linkLabel}>{link.parent.label}</span>
                   <IconChevronDown size={12} stroke={1.5} />
@@ -117,8 +117,8 @@ const WebsiteHeader = () => {
     }
 
     return (
-      <Link key={link.parent.label} href={link.parent.link}>
-        <Anchor className={classes.link}>
+      <Link key={link.parent.label} href={link.parent.link} passHref>
+        <Anchor component='a' className={classes.link}>
           {link.parent.label}
         </Anchor>
       </Link>

@@ -1,11 +1,11 @@
-import { Card, createStyles, Group, List, Stack, Text, ThemeIcon } from '@mantine/core'
+import { Card, createStyles, Group, Stack, Text, ThemeIcon } from '@mantine/core'
 import { IconBuildingSkyscraper, IconSchool } from '@tabler/icons'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
 import { DetailedState } from '../../../lib/types/DetailedDatabaseTypes'
 import { URL_LOCATION } from '../../../lib/url-helper/urlConstants'
-import { getLocalizedName, toLink } from '../../../lib/util'
+import { getLocalizedName, toLink } from '../../../lib/util/util'
 
 const useStyles = createStyles((theme) => ({
 

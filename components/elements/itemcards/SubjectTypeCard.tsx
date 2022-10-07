@@ -5,7 +5,7 @@ import Link from 'next/link'
 import React from 'react'
 import { DetailedSubjectType } from '../../../lib/types/DetailedDatabaseTypes'
 import { URL_SUBJECT } from '../../../lib/url-helper/urlConstants'
-import { getLocalizedName, toLink } from '../../../lib/util'
+import { getLocalizedName, toLink } from '../../../lib/util/util'
 
 const useStyles = createStyles((theme) => ({
     card: {

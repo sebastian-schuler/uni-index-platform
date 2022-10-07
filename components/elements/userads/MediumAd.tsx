@@ -3,7 +3,7 @@ import { IconBuilding, IconSchool } from '@tabler/icons'
 import Link from 'next/link'
 import React, { memo } from 'react'
 import { PATH_PLACEHOLDER_IMAGES } from '../../../lib/url-helper/urlConstants'
-import { toLink } from '../../../lib/util'
+import { toLink } from '../../../lib/util/util'
 
 const useStyles = createStyles((theme) => ({
     card: {

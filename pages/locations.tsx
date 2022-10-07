@@ -9,7 +9,7 @@ import { getDetailedCountries } from '../lib/prisma/prismaDetailedQueries'
 import { getAds } from '../lib/prisma/prismaQueries'
 import { DetailedUserAd } from '../lib/types/DetailedDatabaseTypes'
 import { Searchable } from '../lib/types/UiHelperTypes'
-import { generateSearchable } from '../lib/util'
+import { generateSearchable } from '../lib/util/util'
 
 interface Props {
     searchableCountries: Searchable[]

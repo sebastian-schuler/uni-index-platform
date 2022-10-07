@@ -1,12 +1,11 @@
-import { Card, createStyles, Group, List, Stack, Text, ThemeIcon } from '@mantine/core'
+import { Card, createStyles, Group, Stack, Text, ThemeIcon } from '@mantine/core'
+import { Country } from '@prisma/client'
 import { IconAward, IconCalendar, IconCategory } from '@tabler/icons'
 import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
-import { DetailedSubject } from '../../../lib/types/DetailedDatabaseTypes'
-import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../lib/url-helper/urlConstants'
-import { getLocalizedName, toLink } from '../../../lib/util'
+import { SubjectCardData } from '../../../lib/types/DetailedDatabaseTypes'
 
 const useStyles = createStyles((theme) => ({
 
@@ -40,38 +39,28 @@ const useStyles = createStyles((theme) => ({
 }));
 
 type Props = {
-  subject: DetailedSubject
+  data: SubjectCardData
+  country: Country | undefined
 }
 
-const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
+const SubjectCard: React.FC<Props> = ({ data, country}: Props) => {
 
   const { classes, theme } = useStyles();
   const { lang } = useTranslation('common');
 
-  const url = toLink(URL_INSTITUTION, subject.City.State.Country.url, subject.Institution.url, URL_INSTITUTION_SUBJECTS, subject.url);
-  // const country = getLocalizedName({ lang: lang, dbTranslated: subject.City.State.Country });
-
-  const Flag = Flags[subject.City.State.Country.country_code || ""] || Flags["EU"];
-
-  // Append subject type names to string
-  const subjectTypeNames = subject.SubjectHasSubjectTypes.map((type) => getLocalizedName({ lang: lang, any: type.SubjectType }));
-  let subjectType = "";
-  for (let i = 0; i < 2 && i < subjectTypeNames.length; i++) {
-    subjectType += subjectTypeNames[i] + " / ";
-  }
-  subjectType = subjectType.slice(0, -3);
+  const Flag = Flags[country?.country_code || ""] || Flags["EU"];
 
   return (
-    <Link href={url} passHref>
+    <Link href={data.fullUrl} passHref>
       <Card component='a' withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
 
         <Card.Section className={classes.section}>
           <Group position="apart" noWrap sx={{ alignItems: "start" }}>
             <Stack spacing={theme.spacing.xs}>
               <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
-                {subject.name}
+                {data.name}
               </Text>
-              <Text sx={{ lineHeight: 1.2 }}>{subject.Institution.name} | Campus {subject.City.name}</Text>
+              <Text sx={{ lineHeight: 1.2 }}>{data.Institution.name} | Campus {data.City.name}</Text>
             </Stack>
             <Flag className={classes.flag} />
           </Group>
@@ -85,21 +74,21 @@ const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
               <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
                 <IconCategory size={18} />
               </ThemeIcon>
-              <Text sx={{ lineHeight: 1.2 }}>{subjectType}</Text>
+              <Text sx={{ lineHeight: 1.2 }}>{data.subjectTypes}</Text>
             </Group>
 
             <Group noWrap>
               <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
                 <IconAward size={18} />
               </ThemeIcon>
-              <Text sx={{ lineHeight: 1.2 }}>{subject.degree}</Text>
+              <Text sx={{ lineHeight: 1.2 }}>{data.degree}</Text>
             </Group>
 
             <Group noWrap>
               <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
                 <IconCalendar size={18} />
               </ThemeIcon>
-              <Text sx={{ lineHeight: 1.2 }}>{subject.duration} {subject.duration_type}</Text>
+              <Text sx={{ lineHeight: 1.2 }}>{data.duration} {data.durationType}</Text>
             </Group>
 
           </Stack>
@@ -111,4 +100,4 @@ const SubjectCard: React.FC<Props> = ({ subject }: Props) => {
   );
 }
 
-export default SubjectCard
+export default SubjectCard;

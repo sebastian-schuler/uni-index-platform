@@ -1,48 +1,57 @@
-import { Anchor, createStyles, ScrollArea, Table } from '@mantine/core';
-import React from 'react'
+import { createStyles, ScrollArea, Table, Title } from '@mantine/core';
+import useTranslation from 'next-translate/useTranslation';
+import React from 'react';
+import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes';
+import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants';
+import { toLink } from '../../../lib/util/util';
+import WhiteCard from '../../layout/WhiteCard';
+import WhitePaper from '../../WhitePaper';
+import MantineLink from '../MantineLink';
 
 const useStyles = createStyles((theme) => ({
 
 }));
 
-const SmIndexTopRanking = () => {
+interface Props {
+    socialMediaList: SmRankingEntryMinified[]
+}
+
+const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList }: Props) => {
 
     const { classes, theme } = useStyles();
+    const { lang } = useTranslation();
 
-    // const rows = data.map((row) => {
+    const rows = socialMediaList.map((row, i) => {
 
-    //     return (
-    //         <tr key={row.title}>
-    //             <td>
-    //                 <Anchor<'a'> size="sm" onClick={(event) => event.preventDefault()}>
-    //                     {row.title}
-    //                 </Anchor>
-    //             </td>
-    //             <td>
-    //                 <Anchor<'a'> size="sm" onClick={(event) => event.preventDefault()}>
-    //                     {row.author}
-    //                 </Anchor>
-    //             </td>
-    //             <td>{Intl.NumberFormat().format(totalReviews)}</td>
-    //         </tr>
-    //     );
-    // });
+        const url = toLink(URL_INSTITUTION, row.Institution.Country.url, row.Institution.url, "social-media");
+
+        return (
+            <tr key={row.Institution.name + i}>
+                <td>
+                    <MantineLink label={row.Institution.name} url={url} />
+                </td>
+                <td>{row.Institution.Country.name}</td>
+                <td>{Math.round(row.total_score).toLocaleString(lang)}</td>
+            </tr>
+        );
+    });
 
     return (
-        <ScrollArea>
-            <Table sx={{ minWidth: 800 }} verticalSpacing="xs">
+        // <ScrollArea>
+        <WhiteCard>
+            <Title order={4} size={theme.fontSizes.lg} mb={"md"}>Top 5 Institutions</Title>
+            <Table sx={{ minWidth: 100 }} verticalSpacing="xs">
                 <thead>
                     <tr>
-                        <th>Book title</th>
-                        <th>Year</th>
-                        <th>Author</th>
-                        <th>Reviews</th>
-                        <th>Reviews distribution</th>
+                        <th>University</th>
+                        <th>Country</th>
+                        <th>Score</th>
                     </tr>
                 </thead>
-                {/* <tbody>{rows}</tbody> */}
+                <tbody>{rows}</tbody>
             </Table>
-        </ScrollArea>
+        </WhiteCard>
+        // </ScrollArea>
     );
 }
 

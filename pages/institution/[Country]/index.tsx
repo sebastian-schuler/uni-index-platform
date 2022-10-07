@@ -12,16 +12,18 @@ import Meta from '../../../components/partials/Meta';
 import prisma from '../../../lib/prisma/prisma';
 import { getInstitutionsDetailedByCountry } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
-import { DetailedInstitution } from '../../../lib/types/DetailedDatabaseTypes';
-import { getLocalizedName } from '../../../lib/util';
+import { DetailedInstitution, InstitutionCardData } from '../../../lib/types/DetailedDatabaseTypes';
+import { convertInstitutionToCardData } from '../../../lib/util/conversionUtil';
+import { getLocalizedName } from '../../../lib/util/util';
 
 interface Props {
-  institutions: DetailedInstitution[],
+  institutionData: InstitutionCardData[],
   countryInfo: Country,
+  countryList: Country[],
   footerContent: FooterContent[],
 }
 
-const InstitutionCountryIndex: NextPage<Props> = ({ institutions, countryInfo, footerContent }: Props) => {
+const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, countryInfo, countryList, footerContent }: Props) => {
 
   const { lang } = useTranslation('common');
 
@@ -61,9 +63,9 @@ const InstitutionCountryIndex: NextPage<Props> = ({ institutions, countryInfo, f
           ]}
         >
           {
-            institutions.map((institution, i) => (
+            institutionData.map((institute, i) => (
               // searchableCountry.visible && (
-              <InstitutionCard key={i} institution={institution} />
+              <InstitutionCard key={i} data={institute} country={countryList.find(c => c.id === institute.mainCountryId)} />
               // )
             ))
           }
@@ -104,20 +106,29 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
 export async function getStaticProps(context: GetStaticPropsContext) {
 
-  let countryUrl = "" + context?.params?.Country;
+  const countryUrl = "" + context?.params?.Country;
+  const lang = context.locale || "en";
 
   const countryInfo = await getCountry(countryUrl);
   const institutions: DetailedInstitution[] = countryInfo !== null ? (await getInstitutionsDetailedByCountry(countryInfo.id)) : [];
 
+  // Convert to CardData to lower size
+  const institutionData: InstitutionCardData[] = institutions.map(inst => convertInstitutionToCardData(inst, lang));
+
   // Footer Data
   // Get all countries
-  const countryList = await getCountries("asc");
+  const countryList = await getCountries();
   const footerContent: FooterContent[] = [
     { title: "Countries", data: countryList, type: "Country" },
   ]
 
   return {
-    props: { institutions: institutions, countryInfo: countryInfo, footerContent: footerContent }
+    props: {
+      institutionData,
+      countryInfo,
+      countryList,
+      footerContent,
+    }
   }
 
 }

@@ -15,7 +15,7 @@ import { getDetailedSubjectTypes } from '../lib/prisma/prismaDetailedQueries';
 import { getCountries } from '../lib/prisma/prismaQueries';
 import { DetailedSubjectType } from '../lib/types/DetailedDatabaseTypes';
 import { Searchable } from '../lib/types/UiHelperTypes';
-import { generateSearchable } from '../lib/util';
+import { generateSearchable } from '../lib/util/util';
 
 interface Props {
     searchableSubjectTypes: Searchable[]

@@ -1,4 +1,5 @@
 import { Grid, Stack } from '@mantine/core';
+import { Country } from '@prisma/client';
 import type { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import PremiumList from '../components/container/AdList';
@@ -15,19 +16,24 @@ import { AD_PAGE_INDEX } from '../lib/appConstants';
 import { getPopularDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
 import { getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/prisma/prismaPopularQueries';
 import { getAds, getCountries } from '../lib/prisma/prismaQueries';
-import { DetailedCountry, DetailedInstitution, DetailedUserAd, DetailedSubject } from '../lib/types/DetailedDatabaseTypes';
+import { getSocialMediaRanking } from '../lib/prisma/prismaSocialMedia';
+import { DetailedCountry, DetailedInstitution, DetailedSubject, DetailedUserAd, InstitutionCardData, SubjectCardData } from '../lib/types/DetailedDatabaseTypes';
+import { SmRankingEntryMinified } from '../lib/types/SocialMediaTypes';
 import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
-import { toLink } from '../lib/util';
+import { convertInstitutionToCardData, convertSubjectToCardData, minifySmRankingItem } from '../lib/util/conversionUtil';
+import { toLink } from '../lib/util/util';
 
 interface Props {
   adsStringified: string,
-  popularSubjects: DetailedSubject[],
-  popularInstitutes: DetailedInstitution[],
+  institutionData: InstitutionCardData[],
+  subjectData: SubjectCardData[],
+  countryList: Country[],
+  socialMediaList: SmRankingEntryMinified[],
   popularCountries: DetailedCountry[],
   footerContent: FooterContent[],
 }
 
-const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountries, popularInstitutes, footerContent }: Props) => {
+const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, countryList, socialMediaList, popularCountries, footerContent }: Props) => {
 
   const ads: DetailedUserAd[] = JSON.parse(adsStringified);
   const { t } = useTranslation('common');
@@ -55,7 +61,7 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
 
       <HeroSection />
 
-      <SocialMediaSection />
+      <SocialMediaSection socialMediaList={socialMediaList} />
 
       <Stack spacing={0} mb={"xl"}>
 
@@ -66,9 +72,9 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
           buttonUrl={toLink(URL_SUBJECTS)}
         >
           {
-            popularSubjects.map((subject, i) => (
+            subjectData.map((subject, i) => (
               <Grid.Col key={i} sm={12} md={6} lg={4} sx={{ width: "100%" }}>
-                <SubjectCard subject={subject} />
+                <SubjectCard data={subject} country={countryList.find(c => c.id === subject.countryId)} />
               </Grid.Col>
             ))
           }
@@ -82,12 +88,12 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
           brandColor
         >
           {
-            popularInstitutes.map((institute, i) => (
-              institute.InstitutionLocation.length !== 0 && (
-                <Grid.Col key={i} sm={12} md={6} lg={4} sx={{ width: "100%" }}>
-                  <InstitutionCard institution={institute} />
-                </Grid.Col>
-              )
+            institutionData.map((institute, i) => (
+              // institute.InstitutionLocation.length !== 0 && (
+              <Grid.Col key={i} sm={12} md={6} lg={4} sx={{ width: "100%" }}>
+                <InstitutionCard data={institute} country={countryList.find(c => c.id === institute.mainCountryId)} />
+              </Grid.Col>
+              // )
             ))
           }
         </PopularSection>
@@ -117,16 +123,27 @@ const Home: NextPage<Props> = ({ adsStringified, popularSubjects, popularCountri
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
+  const lang = context.locale || "en";
+
   // Popular ...
   const popularSubjectsDetailed: DetailedSubject[] = await getSubjectsByPopularity(6);
   const popularInstitutesDetailed: DetailedInstitution[] = await getInstitutionsByPopularity(6);
   const popularCountriesDetailed: DetailedCountry[] = await getPopularDetailedCountries();
 
-  // TODO - in detailed institution we get all subjects and all types, but we connect subjects twice I think? check!
+  // Convert to CardData to lower size
+  const institutionData: InstitutionCardData[] = popularInstitutesDetailed.map(inst => convertInstitutionToCardData(inst, lang));
+  const subjectData: SubjectCardData[] = popularSubjectsDetailed.map(subj => convertSubjectToCardData(subj, lang));
+
+  // SOCIAL MEDIA
+  const rawSocialMediaList = await getSocialMediaRanking();
+  let socialMediaList: SmRankingEntryMinified[] = rawSocialMediaList.map((item) => minifySmRankingItem(item));
+  socialMediaList = socialMediaList.sort((a, b) => {
+    return b.total_score - a.total_score;
+  }).slice(0, 5);
 
   // Ads
   const ads: DetailedUserAd[] = await getAds(AD_PAGE_INDEX);
-  const allAds = JSON.stringify(ads);
+  const adsStringified = JSON.stringify(ads);
 
   // Footer Data
   const countryList = await getCountries();
@@ -137,11 +154,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
-      adsStringified: allAds,
-      popularSubjects: popularSubjectsDetailed,
-      popularInstitutes: popularInstitutesDetailed,
+      adsStringified,
+      institutionData,
+      subjectData,
+      countryList,
+      socialMediaList,
       popularCountries: popularCountriesDetailed,
-      footerContent: footerContent,
+      footerContent,
     }
   }
 

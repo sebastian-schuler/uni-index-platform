@@ -1,4 +1,4 @@
-import { SocialMediaDBEntry, SocialMediaRankingEntry } from '../types/SocialMediaTypes';
+import { SmRankingEntry, SocialMediaDBEntry } from '../types/SocialMediaTypes';
 import prisma from './prisma';
 
 
@@ -37,7 +37,7 @@ export const getCountrySocialmedia = async (countryId: string) => {
 }
 
 //
-export const getSocialMediaRanking = async (): Promise<SocialMediaRankingEntry[]> => {
+export const getSocialMediaRanking = async (): Promise<SmRankingEntry[]> => {
 
     return await prisma.institutionSocialMedia.findMany({
         select: {
@@ -64,7 +64,6 @@ export const getSocialMediaRanking = async (): Promise<SocialMediaRankingEntry[]
             total_score: 'desc'
         }
     })
-
 }
 
 export const getSocialMedia = async (institutionId: string) => {

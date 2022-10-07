@@ -4,7 +4,7 @@ import { NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import { memo, useEffect, useState } from 'react'
 import { Searchable } from '../../lib/types/UiHelperTypes'
-import { getLocalizedName } from '../../lib/util'
+import { getLocalizedName } from '../../lib/util/util'
 
 const useStyles = createStyles((theme) => ({
     input: {

@@ -1,4 +1,4 @@
-import { Card, createStyles, Group, Image, List, Stack, Text, ThemeIcon } from '@mantine/core'
+import { Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core'
 import { IconBuilding, IconSchool } from '@tabler/icons'
 import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
@@ -6,7 +6,7 @@ import Link from 'next/link'
 import React from 'react'
 import { DetailedCountry } from '../../../lib/types/DetailedDatabaseTypes'
 import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_LOCATION } from '../../../lib/url-helper/urlConstants'
-import { getLocalizedName, toLink } from '../../../lib/util'
+import { getLocalizedName, toLink } from '../../../lib/util/util'
 
 const useStyles = createStyles((theme) => ({
     card: {

@@ -1,5 +1,5 @@
 
-import { Card, createStyles, Group, SimpleGrid, Stack, Text, ThemeIcon, Title } from '@mantine/core'
+import { Card, createStyles, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client'
 import {
   IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandYoutube
@@ -8,21 +8,20 @@ import {
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 
 import useTranslation from 'next-translate/useTranslation'
-import MantineLink from '../../../../components/elements/MantineLink'
 import SocialMediaIconLink from '../../../../components/elements/socialmedia/SmIconLink'
 import SocialMediaRadar from '../../../../components/elements/socialmedia/SmRadar'
 import SocialMediaStatCard from '../../../../components/elements/socialmedia/SmStatCard'
-import WhitePaper from '../../../../components/WhitePaper'
 import Breadcrumb from '../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav'
 import Meta from '../../../../components/partials/Meta'
+import WhitePaper from '../../../../components/WhitePaper'
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../lib/prisma/prismaSocialMedia'
 import { TotalScore, TotalScoreSet, TwitterScore, YoutubeChannelData, YoutubeScore } from '../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
-import { getLocalizedName } from '../../../../lib/util'
+import { getLocalizedName } from '../../../../lib/util/util'
 
 const shortenLink = (link: string) => {
   link = link.replace(/((http)?s?:\/\/)(www.)?/i, "");

@@ -1,12 +1,13 @@
-import { Anchor, Card, createStyles, Group, List, SimpleGrid, Stack, Text, ThemeIcon } from '@mantine/core'
-import { Subject, SubjectHasSubjectTypes, SubjectType } from '@prisma/client'
+import { Anchor, Card, createStyles, Group, Stack, Text, ThemeIcon } from '@mantine/core'
+import { Country } from '@prisma/client'
 import { IconBuilding, IconCategory, IconSchool } from '@tabler/icons'
 import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React, { memo } from 'react'
-import { DetailedInstitution } from '../../../lib/types/DetailedDatabaseTypes'
-import { getLocalizedName, toLink } from '../../../lib/util'
+import { InstitutionCardData } from '../../../lib/types/DetailedDatabaseTypes'
+import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants'
+import { toLink } from '../../../lib/util/util'
 import SocialMediaIconLink from '../socialmedia/SmIconLink'
 
 const useStyles = createStyles((theme) => ({
@@ -43,37 +44,22 @@ const useStyles = createStyles((theme) => ({
 }));
 
 type Props = {
-  institution: DetailedInstitution
+  data: InstitutionCardData
+  country: Country | undefined
 }
 
-const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
+const InstitutionCard: React.FC<Props> = ({ data, country }: Props) => {
 
   const { classes, theme } = useStyles();
   const { lang } = useTranslation('common');
 
-  // Get list of all countries this institute has locations in
-  // const countryList = institution.InstitutionLocation.map(location => location.City.State.Country);
-  // const countryMap = new Map(countryList.map(country => [country.id, country]));
-  // Count countries
-  // const countryCounts = getUniqueCountryCounts(countryList);
-  // Get the country with the most locations
+  const youtubeLink = data.InstitutionSocialMedia?.youtube_url;
+  const facebookLink = data.InstitutionSocialMedia?.facebook_url;
+  const twitterLink = data.InstitutionSocialMedia?.twitter_url;
+  const instagramLink = data.InstitutionSocialMedia?.instagram_url;
 
-  const youtubeLink = institution.InstitutionSocialMedia?.youtube_url;
-  const facebookLink = institution.InstitutionSocialMedia?.facebook_url;
-  const twitterLink = institution.InstitutionSocialMedia?.twitter_url;
-  const instagramLink = institution.InstitutionSocialMedia?.instagram_url;
-
-  const mainCountry = institution.City.State.Country;
-
-  const url = toLink("institution", mainCountry?.url || "", institution.url);
-  const cities = institution.InstitutionLocation.map(lc => lc.City);
-
-  const { name, nameBrackets } = getBracketedName(getLocalizedName({ lang: lang, institution: institution }));
-
-  // TODO count subject types
-  const biggestSubjectTypes = getUniqueSubjectTypeCounts({ list: institution.Subject || [], lang: lang, itemCount: 3 });
-
-  const Flag = Flags[mainCountry?.country_code || ""] || Flags["EU"];
+  const url = toLink(URL_INSTITUTION, country?.url || "", data.Institution.url);
+  const Flag = Flags[country?.country_code || ""] || Flags["EU"];
 
   return (
 
@@ -88,29 +74,29 @@ const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
             <Link href={url} passHref>
               <Anchor color={"brandOrange.5"}>
                 <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
-                  {name} <Text size={"xs"}>{nameBrackets}</Text>
+                  {data.Institution.name} <Text size={"xs"}>{data.Institution.nameBrackets}</Text>
                 </Text>
               </Anchor>
             </Link>
 
-            <Text sx={{ lineHeight: 1.2 }}>{institution.City.name}</Text>
+            <Text sx={{ lineHeight: 1.2 }}>{data.Institution.City.name}</Text>
 
             <Group spacing={"xs"}>
               {
                 youtubeLink &&
-                <SocialMediaIconLink type='youtube' url={youtubeLink} title={`Youtube channel of ${institution.name}`} gray />
+                <SocialMediaIconLink type='youtube' url={youtubeLink} title={`Youtube channel of ${data.Institution.name}`} gray />
               }
               {
                 twitterLink &&
-                <SocialMediaIconLink type='twitter' url={twitterLink} title={`Twitter profile of ${institution.name}`} gray />
+                <SocialMediaIconLink type='twitter' url={twitterLink} title={`Twitter profile of ${data.Institution.name}`} gray />
               }
               {
                 facebookLink &&
-                <SocialMediaIconLink type='facebook' url={facebookLink} title={`Facebook profile of ${institution.name}`} gray />
+                <SocialMediaIconLink type='facebook' url={facebookLink} title={`Facebook profile of ${data.Institution.name}`} gray />
               }
               {
                 instagramLink &&
-                <SocialMediaIconLink type='instagram' url={instagramLink} title={`Instagram profile of ${institution.name}`} gray />
+                <SocialMediaIconLink type='instagram' url={instagramLink} title={`Instagram profile of ${data.Institution.name}`} gray />
               }
             </Group>
           </Stack>
@@ -129,21 +115,21 @@ const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
             <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
               <IconBuilding size={18} />
             </ThemeIcon>
-            <Text sx={{ lineHeight: 1.2 }}>{cities.length} campus location{cities.length > 1 ? "s" : ""}</Text>
+            <Text sx={{ lineHeight: 1.2 }}>{data.campusCount} campus location{data.campusCount > 1 ? "s" : ""}</Text>
           </Group>
 
           <Group noWrap>
             <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
               <IconSchool size={18} />
             </ThemeIcon>
-            <Text sx={{ lineHeight: 1.2 }}>{institution._count.Subject} subjects</Text>
+            <Text sx={{ lineHeight: 1.2 }}>{data.subjectCount} subjects</Text>
           </Group>
 
           <Group noWrap>
             <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
               <IconCategory size={18} />
             </ThemeIcon>
-            <Text sx={{ lineHeight: 1.2 }}>{biggestSubjectTypes.join(", ")}</Text>
+            <Text sx={{ lineHeight: 1.2 }}>{data.biggestSubjectTypes.join(", ")}</Text>
           </Group>
 
         </Stack>
@@ -151,59 +137,6 @@ const InstitutionCard: React.FC<Props> = ({ institution }: Props) => {
 
     </Card>
   )
-}
-
-interface LargestSubjectTypeProps {
-
-  list: (
-    (Subject & {
-      SubjectHasSubjectTypes: (SubjectHasSubjectTypes & {
-        SubjectType: SubjectType;
-      })[];
-    })[]
-  );
-  lang: string;
-  itemCount: number;
-
-}
-
-const getUniqueSubjectTypeCounts = ({ list, lang, itemCount }: LargestSubjectTypeProps): string[] => {
-
-  // Find all types of subjects
-  const typeList: SubjectType[] = [];
-  for (const item of list) {
-    for (const type of item.SubjectHasSubjectTypes) {
-      typeList.push(type.SubjectType);
-    }
-  }
-
-  // Count types
-  const counts: Map<number, number> = new Map();
-  for (const item of typeList) {
-    if (counts.has(item.id)) {
-      counts.set(item.id, (counts.get(item.id) || 1) + 1);
-    } else {
-      counts.set(item.id, 1);
-    }
-  }
-
-  // Sort by count
-  const sorted = [...counts].map(([id, count]) => ({ id, count })).sort((a, b) => b.count - a.count);
-
-  // Get the top 3
-  const result: string[] = [];
-  for (let i = 0; i < itemCount && i < sorted.length; i++) {
-    result.push(getLocalizedName({ lang: lang, any: typeList.find(type => type.id === sorted[i].id) }));
-  }
-
-  return [...result];
-}
-
-const getBracketedName = (name: string) => {
-  let newName = name;
-  const nameBrackets = name.match(/\(.*\)/gi)?.[0] || "";
-  if (nameBrackets !== "") newName = name.replace(nameBrackets, "").trim();
-  return { name: newName, nameBrackets: nameBrackets };
 }
 
 export default memo(InstitutionCard);

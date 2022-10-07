@@ -15,7 +15,7 @@ import { getCountries, getCountry, getInstitution } from '../../../../../lib/pri
 import { getSubjectPaths } from '../../../../../lib/prisma/prismaUrlPaths'
 import { DetailedSubject } from '../../../../../lib/types/DetailedDatabaseTypes'
 import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../lib/url-helper/urlConstants'
-import { toLink } from '../../../../../lib/util'
+import { toLink } from '../../../../../lib/util/util'
 
 
 interface Props {

@@ -1,6 +1,7 @@
-import { Country, Institution, State, Subject, SubjectType } from "@prisma/client";
-import { DetailedCountry, DetailedSubjectType } from "./types/DetailedDatabaseTypes";
-import { Searchable } from "./types/UiHelperTypes";
+import { Country, Institution, State, Subject, SubjectHasSubjectTypes, SubjectType } from "@prisma/client";
+import { DetailedCountry, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
+import { SmRankingEntry, SmRankingEntryMinified, TotalScore } from "../types/SocialMediaTypes";
+import { Searchable } from "../types/UiHelperTypes";
 
 interface LocalizedNameProps {
     lang: string,
@@ -114,4 +115,62 @@ export const addDays = (date: Date, days: number) => {
 // Combine classnames into one
 export function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
+}
+
+/**
+ * Split a name into the actual name, and whatever is in brackets
+ * @param name 
+ */
+export const getBracketedName = (name: string) => {
+    let newName = name;
+    const nameBrackets = name.match(/\(.*\)/gi)?.[0] || "";
+    if (nameBrackets !== "") newName = name.replace(nameBrackets, "").trim();
+    return { name: newName, nameBrackets: nameBrackets };
+}
+
+/**
+ * Get n amount of unique subject types, ordered by occurences
+ * @param param0 
+ */
+interface LargestSubjectTypeProps {
+    list: (
+        (Subject & {
+            SubjectHasSubjectTypes: (SubjectHasSubjectTypes & {
+                SubjectType: SubjectType;
+            })[];
+        })[]
+    );
+    lang: string;
+    itemCount: number;
+}
+export const getUniqueSubjectTypeCounts = ({ list, lang, itemCount }: LargestSubjectTypeProps): string[] => {
+
+    // Find all types of subjects
+    const typeList: SubjectType[] = [];
+    for (const item of list) {
+        for (const type of item.SubjectHasSubjectTypes) {
+            typeList.push(type.SubjectType);
+        }
+    }
+
+    // Count types
+    const counts: Map<number, number> = new Map();
+    for (const item of typeList) {
+        if (counts.has(item.id)) {
+            counts.set(item.id, (counts.get(item.id) || 1) + 1);
+        } else {
+            counts.set(item.id, 1);
+        }
+    }
+
+    // Sort by count
+    const sorted = [...counts].map(([id, count]) => ({ id, count })).sort((a, b) => b.count - a.count);
+
+    // Get the top 3
+    const result: string[] = [];
+    for (let i = 0; i < itemCount && i < sorted.length; i++) {
+        result.push(getLocalizedName({ lang: lang, any: typeList.find(type => type.id === sorted[i].id) }));
+    }
+
+    return [...result];
 }

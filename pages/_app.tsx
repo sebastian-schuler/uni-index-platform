@@ -6,7 +6,7 @@ import AccountNavigation from '../components/layout/account/AccountNavigation'
 import WebsiteHeader from '../components/layout/nav/WebsiteHeader'
 import { AuthProvider } from '../context/SessionContext'
 import { URL_ACCOUNT } from '../lib/url-helper/urlConstants'
-import { toLink } from '../lib/util'
+import { toLink } from '../lib/util/util'
 import '../styles/globals.css'
 import appTheme from '../theme/theme'
 

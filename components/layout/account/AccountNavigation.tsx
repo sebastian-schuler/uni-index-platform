@@ -8,7 +8,7 @@ import { useAuth } from '../../../context/SessionContext';
 import { getUserDataFromApi } from '../../../lib/accountHandling/AccountApiHandler';
 import { UserDataProfile } from '../../../lib/types/AccountHandlingTypes';
 import { URL_LOGIN } from '../../../lib/url-helper/urlConstants';
-import { toLink } from '../../../lib/util';
+import { toLink } from '../../../lib/util/util';
 import AccountNavDrawer from './AccountNavDrawer';
 
 

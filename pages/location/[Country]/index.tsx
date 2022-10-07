@@ -15,7 +15,7 @@ import prisma from '../../../lib/prisma/prisma';
 import { getStatesDetailedByCountry } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
 import { DetailedState } from '../../../lib/types/DetailedDatabaseTypes';
-import { getLocalizedName } from '../../../lib/util';
+import { getLocalizedName } from '../../../lib/util/util';
 
 interface Props {
   states: DetailedState[],

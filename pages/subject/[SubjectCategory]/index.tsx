@@ -1,5 +1,5 @@
 import { Group, SimpleGrid, Stack } from '@mantine/core';
-import { SubjectType } from '@prisma/client';
+import { Country, SubjectType } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { ParsedUrlQuery } from 'querystring';
@@ -12,16 +12,18 @@ import Meta from '../../../components/partials/Meta';
 import prisma from '../../../lib/prisma/prisma';
 import { getSubjectsDetailedByCategory } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getSubjectType } from '../../../lib/prisma/prismaQueries';
-import { DetailedSubject } from '../../../lib/types/DetailedDatabaseTypes';
-import { getDBLocale, getLocalizedName } from '../../../lib/util';
+import { DetailedSubject, SubjectCardData } from '../../../lib/types/DetailedDatabaseTypes';
+import { convertSubjectToCardData } from '../../../lib/util/conversionUtil';
+import { getDBLocale, getLocalizedName } from '../../../lib/util/util';
 
 interface Props {
   subjectTypeInfo: SubjectType,
-  subjects: DetailedSubject[],
+  subjectData: SubjectCardData[],
+  countryList: Country[],
   footerContent: FooterContent[],
 }
 
-const SubjectCategoryPage: NextPage<Props> = ({ subjectTypeInfo, subjects, footerContent }: Props) => {
+const SubjectCategoryPage: NextPage<Props> = ({ subjectTypeInfo, subjectData, countryList, footerContent }: Props) => {
 
   const { t, lang } = useTranslation('subject');
   const langContent = {
@@ -65,9 +67,9 @@ const SubjectCategoryPage: NextPage<Props> = ({ subjectTypeInfo, subjects, foote
           ]}
         >
           {
-            subjects.map((subject, i) => (
+            subjectData.map((subject, i) => (
               // searchableCountry.visible && (
-                <SubjectCard key={i} subject={subject} />
+              <SubjectCard key={i} data={subject} country={countryList.find(c => c.id === subject.countryId)} />
               // )
             ))
           }
@@ -108,13 +110,14 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
 export async function getStaticProps(context: GetStaticPropsContext) {
 
-  let subjectCategory = "" + context?.params?.SubjectCategory;
-  let localeDb = getDBLocale(context.locale);
+  const subjectCategory = "" + context?.params?.SubjectCategory;
+  const lang = context.locale || "en";
 
   const subjectTypeInfo: SubjectType | null = await getSubjectType(subjectCategory)
 
   // Get all courses of this category
   const subjects: DetailedSubject[] = await getSubjectsDetailedByCategory(subjectCategory);
+  const subjectData: SubjectCardData[] = subjects.map(subj => convertSubjectToCardData(subj, lang));
 
   // Footer Data
   // Get all countries
@@ -124,7 +127,12 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   ]
 
   return {
-    props: { subjectTypeInfo: subjectTypeInfo, subjects: subjects, footerContent: footerContent }
+    props: {
+      subjectTypeInfo,
+      subjectData,
+      countryList,
+      footerContent,
+    }
   }
 
 }

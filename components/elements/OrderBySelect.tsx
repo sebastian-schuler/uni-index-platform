@@ -2,7 +2,7 @@ import { createStyles, Select } from '@mantine/core';
 import { IconArrowsSort } from '@tabler/icons';
 import * as React from 'react';
 import { Searchable } from '../../lib/types/UiHelperTypes';
-import { getLocalizedName } from '../../lib/util';
+import { getLocalizedName } from '../../lib/util/util';
 
 const useStyles = createStyles((theme) => ({
     input: {
