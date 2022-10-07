@@ -1,6 +1,6 @@
-import { DetailedInstitution, DetailedSubject, InstitutionCardData, SubjectCardData } from "../types/DetailedDatabaseTypes";
+import { CountryCardData, DetailedCountry, DetailedInstitution, DetailedSubject, InstitutionCardData, SubjectCardData } from "../types/DetailedDatabaseTypes";
 import { SmRankingEntry, SmRankingEntryMinified, TotalScore } from "../types/SocialMediaTypes";
-import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from "../url-helper/urlConstants";
+import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_INSTITUTION_SUBJECTS, URL_LOCATION } from "../url-helper/urlConstants";
 import { getBracketedName, getLocalizedName, getUniqueSubjectTypeCounts, toLink } from "./util";
 
 /**
@@ -9,7 +9,7 @@ import { getBracketedName, getLocalizedName, getUniqueSubjectTypeCounts, toLink 
  */
 export const minifySmRankingItem = (item: SmRankingEntry): SmRankingEntryMinified => {
     const parsedScore = JSON.parse(item.total_score) as TotalScore;
-    const total = parsedScore.data.total;
+    const total = parsedScore.all.total;
     return {
         Institution: {
             name: item.Institution.name,
@@ -57,7 +57,7 @@ export const convertSubjectToCardData = (subj: DetailedSubject, lang: string): S
     const subjectTypeNames = subj.SubjectHasSubjectTypes.map((type) => getLocalizedName({ lang: lang, any: type.SubjectType }));
     let subjectType = "";
     for (let i = 0; i < 2 && i < subjectTypeNames.length; i++) {
-      subjectType += subjectTypeNames[i] + " / ";
+        subjectType += subjectTypeNames[i] + " / ";
     }
     subjectType = subjectType.slice(0, -3);
 
@@ -78,3 +78,16 @@ export const convertSubjectToCardData = (subj: DetailedSubject, lang: string): S
     }
 }
 
+export const convertCountryToCardData = (country: DetailedCountry, lang: string, linkType: "location" | "institution"): CountryCardData => {
+
+    const url = linkType === 'location' ? toLink(URL_LOCATION, country.url) : toLink(URL_INSTITUTION, country.url);
+
+    return {
+        name: getLocalizedName({ lang: lang, dbTranslated: country }),
+        url: url,
+        imgSrc: toLink(PATH_COUNTRY_IMAGES, country.url + ".jpg"),
+        countryCode: country.country_code,
+        subjectCount: country.subjectCount,
+        institutionCount: country.institutionCount,
+    }
+}

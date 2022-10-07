@@ -110,19 +110,22 @@ export type YoutubeScore = {
 
 export type TwitterScore = {
     total: number
-    follower: number
+    followers: number
     following: number
     tweets: number
     listed: number
     averageLikes: number
+    averageRetweets: number
     averageInteraction: number
     verifiedMultiplier: number
     websitelinkMultiplier: number
 }
 
 export interface TotalScore {
-    data: TotalScoreSet
+    all: TotalScoreSet
     percentData: TotalScoreSet
+    youtubeOnly: TotalScoreSet
+    twitterOnly: TotalScoreSet
 }
 
 export interface TotalScoreSet {

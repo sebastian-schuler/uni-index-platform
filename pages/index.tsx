@@ -17,23 +17,23 @@ import { getPopularDetailedCountries } from '../lib/prisma/prismaDetailedQueries
 import { getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/prisma/prismaPopularQueries';
 import { getAds, getCountries } from '../lib/prisma/prismaQueries';
 import { getSocialMediaRanking } from '../lib/prisma/prismaSocialMedia';
-import { DetailedCountry, DetailedInstitution, DetailedSubject, DetailedUserAd, InstitutionCardData, SubjectCardData } from '../lib/types/DetailedDatabaseTypes';
+import { CountryCardData, DetailedCountry, DetailedInstitution, DetailedSubject, DetailedUserAd, InstitutionCardData, SubjectCardData } from '../lib/types/DetailedDatabaseTypes';
 import { SmRankingEntryMinified } from '../lib/types/SocialMediaTypes';
 import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
-import { convertInstitutionToCardData, convertSubjectToCardData, minifySmRankingItem } from '../lib/util/conversionUtil';
+import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmRankingItem } from '../lib/util/conversionUtil';
 import { toLink } from '../lib/util/util';
 
 interface Props {
   adsStringified: string,
   institutionData: InstitutionCardData[],
   subjectData: SubjectCardData[],
+  countryData: CountryCardData[],
   countryList: Country[],
   socialMediaList: SmRankingEntryMinified[],
-  popularCountries: DetailedCountry[],
   footerContent: FooterContent[],
 }
 
-const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, countryList, socialMediaList, popularCountries, footerContent }: Props) => {
+const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, countryData, countryList, socialMediaList, footerContent }: Props) => {
 
   const ads: DetailedUserAd[] = JSON.parse(adsStringified);
   const { t } = useTranslation('common');
@@ -105,9 +105,9 @@ const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, c
           buttonUrl={toLink(URL_LOCATIONS)}
         >
           {
-            popularCountries.map((country, i) => (
+            countryData.map((country, i) => (
               <Grid.Col key={i} sm={12} md={6} lg={4} sx={{ width: "100%" }}>
-                <CountryCard country={country} linkType={"location"} />
+                <CountryCard data={country} />
               </Grid.Col>
             ))
           }
@@ -133,6 +133,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   // Convert to CardData to lower size
   const institutionData: InstitutionCardData[] = popularInstitutesDetailed.map(inst => convertInstitutionToCardData(inst, lang));
   const subjectData: SubjectCardData[] = popularSubjectsDetailed.map(subj => convertSubjectToCardData(subj, lang));
+  const countryData: CountryCardData[] = popularCountriesDetailed.map(country => convertCountryToCardData(country, lang, "location"));
 
   // SOCIAL MEDIA
   const rawSocialMediaList = await getSocialMediaRanking();
@@ -159,7 +160,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       subjectData,
       countryList,
       socialMediaList,
-      popularCountries: popularCountriesDetailed,
+      countryData,
       footerContent,
     }
   }

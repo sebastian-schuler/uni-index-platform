@@ -114,6 +114,15 @@ export type DetailedCountry = Country & {
     subjectCount: number;
 };
 
+export type CountryCardData = {
+    name: string
+    url: string
+    imgSrc: string
+    countryCode: string
+    institutionCount: number
+    subjectCount: number
+}
+
 // STATE CARD
 export type DetailedState = State & {
     City: City[];
