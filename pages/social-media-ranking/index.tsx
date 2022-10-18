@@ -1,9 +1,10 @@
 import { Space, Title } from '@mantine/core'
+import { Country } from '@prisma/client'
 import { GetStaticProps, NextPage } from 'next'
-import SocialMediaRankingTable from '../../components/elements/socialmedia/SmRankingTable'
 import Breadcrumb from '../../components/layout/Breadcrumb'
 import { FooterContent } from '../../components/layout/footer/Footer'
 import LayoutContainer from '../../components/layout/LayoutContainer'
+import SmRankingTable from '../../components/layout/socialmedia/SmRankingTable'
 import WhitePaper from '../../components/WhitePaper'
 import { getCountries } from '../../lib/prisma/prismaQueries'
 import { getSocialMediaRanking } from '../../lib/prisma/prismaSocialMedia'
@@ -11,11 +12,12 @@ import { SmRankingEntryMinified } from '../../lib/types/SocialMediaTypes'
 import { minifySmRankingItem } from '../../lib/util/conversionUtil'
 
 interface Props {
+    countries: Country[],
     socialMediaList: SmRankingEntryMinified[]
     footerContent: FooterContent[]
 }
 
-const SocialMediaRanking: NextPage<Props> = ({ socialMediaList, footerContent }: Props) => {
+const SocialMediaRanking: NextPage<Props> = ({ countries, socialMediaList, footerContent }: Props) => {
 
     return (
         <LayoutContainer footerContent={footerContent}>
@@ -27,8 +29,10 @@ const SocialMediaRanking: NextPage<Props> = ({ socialMediaList, footerContent }:
             <WhitePaper py={"lg"}>
 
                 <Space h="lg" />
-
-                <SocialMediaRankingTable socialMediaList={socialMediaList} />
+                <SmRankingTable
+                    countries={countries}
+                    socialMediaList={socialMediaList}
+                />
 
             </WhitePaper>
 
@@ -42,7 +46,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     // SOCIAL MEDIA
     const rawSocialMediaList = await getSocialMediaRanking();
-    const socialMediaList:SmRankingEntryMinified[] = rawSocialMediaList.map((item) => minifySmRankingItem(item));
+    let socialMediaList: SmRankingEntryMinified[] = rawSocialMediaList.map((item) => minifySmRankingItem(item));
+    socialMediaList = socialMediaList.filter((item) => item.total_score > 0);
     socialMediaList.sort((a, b) => {
         return b.total_score - a.total_score;
     });
@@ -53,6 +58,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     return {
         props: {
+            countries,
             socialMediaList,
             footerContent
         }

@@ -24,7 +24,7 @@ const SearchResultList: React.FC<Props> = props => {
         outputList = <> {
             props.resCities.map((item, i) => (
                 <div key={i}>
-                    <MantineLink label={item.name} url={toLink(URL_LOCATION, item.State.Country.url, item.State.url, item.url)} />
+                    <MantineLink label={item.name} url={toLink(URL_LOCATION, item.State.Country.url, item.State.url, item.url)} type="internal" />
                 </div>
             ))
         }</>;
@@ -51,7 +51,7 @@ const SearchResultList: React.FC<Props> = props => {
         outputList = <> {
             filteredList.map((item, i) => (
                 <div key={i}>
-                    <MantineLink label={item.name} url={toLink(URL_INSTITUTION, item.InstitutionLocation[0].City.State.Country.url, item.url)} />
+                    <MantineLink label={item.name} url={toLink(URL_INSTITUTION, item.InstitutionLocation[0].City.State.Country.url, item.url)} type="internal" />
                 </div>
             ))
         }</>;

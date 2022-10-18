@@ -1,4 +1,4 @@
-import { Card, createStyles } from '@mantine/core'
+import { Card, createStyles, Sx } from '@mantine/core'
 import React from 'react'
 
 const useStyles = createStyles((theme) => ({
@@ -11,14 +11,15 @@ const useStyles = createStyles((theme) => ({
 
 interface Props {
     children: React.ReactNode
+    sx?: Sx
 }
 
-const WhiteCard: React.FC<Props> = ({ children }: Props) => {
+const WhiteCard: React.FC<Props> = ({ children, sx }: Props) => {
 
     const { classes } = useStyles();
 
     return (
-        <Card withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
+        <Card withBorder radius="md" p="md" shadow={"sm"} className={classes.card} sx={sx}>
             {children}
         </Card>
     )

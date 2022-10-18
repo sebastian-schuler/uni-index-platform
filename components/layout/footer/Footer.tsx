@@ -84,7 +84,7 @@ const Footer: NextPage<Props> = props => {
                                         {
 
                                             footerList.content.map((item, j) => (
-                                                <MantineLink key={item.name + j} label={item.name} url={item.url} />
+                                                <MantineLink key={item.name + j} label={item.name} url={item.url} type="internal" />
                                             ))
 
                                         }

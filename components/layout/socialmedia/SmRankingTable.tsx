@@ -2,13 +2,14 @@ import {
     Center, createStyles, Group, ScrollArea, Table, Text, TextInput, UnstyledButton
 } from '@mantine/core';
 import { keys } from '@mantine/utils';
+import { Country } from '@prisma/client';
 import { IconChevronDown, IconChevronUp, IconSearch, IconSelector } from '@tabler/icons';
 import useTranslation from 'next-translate/useTranslation';
 import { useState } from 'react';
 import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes';
 import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants';
 import { getLocalizedName, toLink } from '../../../lib/util/util';
-import MantineLink from '../MantineLink';
+import MantineLink from '../../elements/MantineLink';
 
 const useStyles = createStyles((theme) => ({
     th: {
@@ -35,7 +36,9 @@ interface RowData {
     rank: number;
     name: string;
     country: string;
-    totalscore: string;
+    totalscore: number;
+    youtubeScore: number;
+    twitterScore: number;
     url: string;
 }
 
@@ -55,13 +58,12 @@ function filterData(data: RowData[], search: string) {
     const query = search.toLowerCase().trim();
     const filtered = data.filter((item) =>
         keys(data[0]).some((key) => {
-            if (key === "rank")
+            if (key === "rank" || key === "youtubeScore" || key === "twitterScore" || key === "totalscore")
                 return item[key].toString().toLowerCase().includes(query);
             else
                 return item[key].toLowerCase().includes(query);
         })
     );
-    console.log(filtered)
     return filtered;
 }
 
@@ -78,11 +80,11 @@ function sortData(
     return filterData(
         [...data].sort((a, b) => {
 
-            if (sortBy === "rank") {
+            if (sortBy === "rank" || sortBy === "youtubeScore" || sortBy === "twitterScore" || sortBy === "totalscore") {
                 if (reversed)
-                    return a.rank - b.rank;
+                    return a[sortBy] - b[sortBy];
                 else
-                    return b.rank - a.rank;
+                    return b[sortBy] - a[sortBy];
             } else {
                 if (reversed)
                     return b[sortBy].localeCompare(a[sortBy]);
@@ -115,20 +117,23 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 
 interface Props {
     socialMediaList: SmRankingEntryMinified[]
+    countries: Country[]
 }
 
-const SmRankingTable = ({ socialMediaList }: Props) => {
+const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) => {
 
     const { t, lang } = useTranslation('common');
 
     const data: RowData[] = socialMediaList.map((item, i) => {
-
+        const country = countries.find(c => c.id === item.Institution.countryId);
         return {
             rank: (i + 1),
             name: item.Institution.name,
-            country: getLocalizedName({ lang: lang, dbTranslated: item.Institution.Country }),
-            totalscore: item.total_score.toFixed(0),
-            url: toLink(URL_INSTITUTION, item.Institution.Country.url, item.Institution.url, "social-media"),
+            country: getLocalizedName({ lang: lang, dbTranslated: country }),
+            totalscore: item.total_score,
+            youtubeScore: item.yt_total_score,
+            twitterScore: item.tw_total_score,
+            url: toLink(URL_INSTITUTION, country?.url || "", item.Institution.url, "social-media"),
         }
     })
 
@@ -154,16 +159,14 @@ const SmRankingTable = ({ socialMediaList }: Props) => {
         <tr key={row.name}>
             <td>{row.rank}</td>
             <td>
-                <MantineLink label={row.name} url={row.url} />
+                <MantineLink label={row.name} url={row.url} type="internal" />
             </td>
             <td>{row.country}</td>
-            <td>{row.totalscore}</td>
+            <td>{row.totalscore.toFixed(0)}</td>
+            <td>{row.twitterScore.toFixed(0)}</td>
+            <td>{row.youtubeScore.toFixed(0)}</td>
         </tr>
     ));
-
-    const getTotalScore = () => {
-
-    }
 
     return (
         <ScrollArea>
@@ -210,6 +213,20 @@ const SmRankingTable = ({ socialMediaList }: Props) => {
                             onSort={() => setSorting('totalscore')}
                         >
                             Total Score
+                        </Th>
+                        <Th
+                            sorted={sortBy === 'twitterScore'}
+                            reversed={reverseSortDirection}
+                            onSort={() => setSorting('twitterScore')}
+                        >
+                            Twitter Score
+                        </Th>
+                        <Th
+                            sorted={sortBy === 'youtubeScore'}
+                            reversed={reverseSortDirection}
+                            onSort={() => setSorting('youtubeScore')}
+                        >
+                            Youtube Score
                         </Th>
                     </tr>
                 </thead>

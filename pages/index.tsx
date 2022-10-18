@@ -16,9 +16,9 @@ import { AD_PAGE_INDEX } from '../lib/appConstants';
 import { getPopularDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
 import { getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/prisma/prismaPopularQueries';
 import { getAds, getCountries } from '../lib/prisma/prismaQueries';
-import { getSocialMediaRanking } from '../lib/prisma/prismaSocialMedia';
+import { getAllSocialMedia, getSocialMediaRanking } from '../lib/prisma/prismaSocialMedia';
 import { CountryCardData, DetailedCountry, DetailedInstitution, DetailedSubject, DetailedUserAd, InstitutionCardData, SubjectCardData } from '../lib/types/DetailedDatabaseTypes';
-import { SmRankingEntryMinified } from '../lib/types/SocialMediaTypes';
+import { SmRankingEntry, SmRankingEntryMinified, TotalScore, TotalScoreSet } from '../lib/types/SocialMediaTypes';
 import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
 import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmRankingItem } from '../lib/util/conversionUtil';
 import { toLink } from '../lib/util/util';
@@ -30,12 +30,15 @@ interface Props {
   countryData: CountryCardData[],
   countryList: Country[],
   socialMediaList: SmRankingEntryMinified[],
+  highestTwitterStringified: string,
+  highestYoutubeStringified: string,
   footerContent: FooterContent[],
 }
 
-const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, countryData, countryList, socialMediaList, footerContent }: Props) => {
+const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, countryData, countryList, socialMediaList, highestTwitterStringified, highestYoutubeStringified, footerContent }: Props) => {
 
   const ads: DetailedUserAd[] = JSON.parse(adsStringified);
+
   const { t } = useTranslation('common');
   const langContent = {
     pageTitle: t('page-title'),
@@ -61,7 +64,11 @@ const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, c
 
       <HeroSection />
 
-      <SocialMediaSection socialMediaList={socialMediaList} />
+      <SocialMediaSection
+        socialMediaList={socialMediaList}
+        highestTwitterStringified={highestTwitterStringified}
+        highestYoutubeStringified={highestYoutubeStringified}
+      />
 
       <Stack spacing={0} mb={"xl"}>
 
@@ -70,6 +77,7 @@ const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, c
           subtext="The most popular courses on our platform"
           buttonText={langContent.linkCourses}
           buttonUrl={toLink(URL_SUBJECTS)}
+          brandColor
         >
           {
             subjectData.map((subject, i) => (
@@ -85,7 +93,6 @@ const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, c
           subtext="Universities with the most popular courses"
           buttonText={langContent.linkInstitutions}
           buttonUrl={toLink(URL_INSTITUTIONS)}
-          brandColor
         >
           {
             institutionData.map((institute, i) => (
@@ -103,6 +110,7 @@ const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, c
           subtext="Popular countries for studying"
           buttonText={langContent.linkLocations}
           buttonUrl={toLink(URL_LOCATIONS)}
+          brandColor
         >
           {
             countryData.map((country, i) => (
@@ -113,7 +121,10 @@ const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, c
           }
         </PopularSection>
 
-        <PremiumList premiumAds={ads} wrapInContainer />
+        <PremiumList
+          premiumAds={ads}
+          wrapInContainer
+        />
 
       </Stack>
 
@@ -135,14 +146,33 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const subjectData: SubjectCardData[] = popularSubjectsDetailed.map(subj => convertSubjectToCardData(subj, lang));
   const countryData: CountryCardData[] = popularCountriesDetailed.map(country => convertCountryToCardData(country, lang, "location"));
 
-  // SOCIAL MEDIA
-  const rawSocialMediaList = await getSocialMediaRanking();
-  let socialMediaList: SmRankingEntryMinified[] = rawSocialMediaList.map((item) => minifySmRankingItem(item));
-  socialMediaList = socialMediaList.sort((a, b) => {
+  // === SOCIAL MEDIA ===
+  const socialMediaRankingList = await getSocialMediaRanking();
+  const socialMediaList = await getAllSocialMedia();
+
+  // Sort by total score, get top 5
+  let socialMediaTopList: SmRankingEntryMinified[] = socialMediaRankingList.map((item) => minifySmRankingItem(item));
+  socialMediaTopList = socialMediaTopList.sort((a, b) => {
     return b.total_score - a.total_score;
   }).slice(0, 5);
 
-  // Ads
+  // Highest Twitter score
+  socialMediaList.sort((a, b) => {
+    const aScore = a.youtube_scores ? (JSON.parse(a.youtube_scores) as TotalScoreSet).total : 0;
+    const bScore = b.youtube_scores ? (JSON.parse(b.youtube_scores) as TotalScoreSet).total : 0;
+    return bScore - aScore;
+  });
+  const highestYoutubeStringified = JSON.stringify(socialMediaList[0]);
+
+  // Highest Twitter score
+  socialMediaList.sort((a, b) => {
+    const aScore = a.twitter_scores ? (JSON.parse(a.twitter_scores) as TotalScoreSet).total : 0;
+    const bScore = b.twitter_scores ? (JSON.parse(b.twitter_scores) as TotalScoreSet).total : 0;
+    return bScore - aScore;
+  });
+  const highestTwitterStringified = JSON.stringify(socialMediaList[0]);
+
+  // === ADS ===
   const ads: DetailedUserAd[] = await getAds(AD_PAGE_INDEX);
   const adsStringified = JSON.stringify(ads);
 
@@ -159,7 +189,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
       institutionData,
       subjectData,
       countryList,
-      socialMediaList,
+      socialMediaList: socialMediaTopList,
+      highestTwitterStringified,
+      highestYoutubeStringified,
       countryData,
       footerContent,
     }

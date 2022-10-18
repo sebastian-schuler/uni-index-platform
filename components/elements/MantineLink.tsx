@@ -4,24 +4,30 @@ import Link from 'next/link'
 interface Props {
     url: string
     label: string
+    type: "internal" | "external" | "scroll"
     color?: DefaultMantineColor
-    external?: boolean
 }
 
-const MantineLink = ({ url, label, color, external }: Props) => {
+const MantineLink = ({ url, label, color, type }: Props) => {
 
     return (
-
-        external ? (
+        type === "external" && (
             <Anchor component="a" href={url} color={color ? color : "brandOrange.5"} target={"_blank"}>
                 {label}
             </Anchor>
-        ) :
+        ) ||
+        type === "internal" && (
             <Link href={url} passHref>
                 <Anchor component="a" color={color ? color : "brandOrange.5"}>
                     {label}
                 </Anchor >
             </Link >
+        ) || 
+        type === "scroll" && (
+            <Anchor component="a" href={url} color={color ? color : "brandOrange.5"}>
+                {label}
+            </Anchor>
+        ) || <></>
     )
 }
 

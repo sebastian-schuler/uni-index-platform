@@ -1,6 +1,6 @@
 import { City, Country, Institution, InstitutionSocialMedia, State } from "@prisma/client";
 
-export type SocialMediaDBEntry = InstitutionSocialMedia & {
+export interface SocialMediaDBEntry extends InstitutionSocialMedia {
     Institution: Institution & {
         City: City & {
             State: State & {
@@ -10,7 +10,7 @@ export type SocialMediaDBEntry = InstitutionSocialMedia & {
     };
 }
 
-export type SmRankingEntry = {
+export interface SmRankingEntry {
     Institution: {
         City: {
             State: {
@@ -25,33 +25,24 @@ export type SmRankingEntry = {
     last_update: bigint;
 }
 
-export type SmRankingEntryMinified = {
+export interface SmRankingEntryMinified {
     Institution: {
         name: string
         url: string
-        Country: Country
+        countryId: string
     }
-    total_score: number
-}
-
-export type SocialMediaRankingItem = SocialMediaDBEntry & {
-    twitterData: TwitterResult;
-    facebookData: FacebookResult;
-    instagramData: InstagramResult;
-    youtubeData: YoutubeChannelData;
-}
-
-export interface TwitterResult {
-    totalScore: number;
+    total_score: number,
+    yt_total_score: number,
+    tw_total_score: number,
 }
 
 // -------------- YOUTUBE --------------
 
-export type YoutubeChannelData = YoutubeChannelStatistics & {
+export interface YoutubeChannelData extends YoutubeChannelStatistics {
     videos: YoutubeVideo[]
 }
 
-export type YoutubeChannelStatistics = {
+export interface YoutubeChannelStatistics {
     id: string
     institutionId: string
     channelName: string
@@ -71,7 +62,7 @@ export type YoutubeChannelStatistics = {
     },
 }
 
-export type YoutubeVideo = {
+export interface YoutubeVideo {
     description: string
     title: string
     tags: string[]
@@ -96,7 +87,7 @@ export interface InstagramResult {
 
 // -------------- RATINGS --------------
 
-export type YoutubeScore = {
+export interface YoutubeResults {
     total: number
     subs: number
     views: number
@@ -108,7 +99,7 @@ export type YoutubeScore = {
     videosHaveTags: number
 }
 
-export type TwitterScore = {
+export interface TwitterResults {
     total: number
     followers: number
     following: number

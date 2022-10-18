@@ -14,9 +14,11 @@ export const minifySmRankingItem = (item: SmRankingEntry): SmRankingEntryMinifie
         Institution: {
             name: item.Institution.name,
             url: item.Institution.url,
-            Country: item.Institution.City.State.Country,
+            countryId: item.Institution.City.State.Country.id,
         },
-        total_score: total
+        total_score: total,
+        yt_total_score: parsedScore.youtubeOnly.total,
+        tw_total_score: parsedScore.twitterOnly.total,
     }
 }
 

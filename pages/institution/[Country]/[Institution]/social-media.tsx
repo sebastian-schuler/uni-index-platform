@@ -1,16 +1,13 @@
 
-import { Card, createStyles, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { Card, createStyles, List, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client'
-import {
-  IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandYoutube
-} from '@tabler/icons'
+
 
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 
 import useTranslation from 'next-translate/useTranslation'
-import SocialMediaIconLink from '../../../../components/elements/socialmedia/SmIconLink'
-import SocialMediaRadar from '../../../../components/elements/socialmedia/SmRadar'
-import SocialMediaStatCard from '../../../../components/elements/socialmedia/SmStatCard'
+import SmOverviewSection from '../../../../components/layout/socialmedia/SmOverviewSection'
+
 import Breadcrumb from '../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
@@ -19,14 +16,14 @@ import Meta from '../../../../components/partials/Meta'
 import WhitePaper from '../../../../components/WhitePaper'
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../lib/prisma/prismaSocialMedia'
-import { TotalScore, TotalScoreSet, TwitterScore, YoutubeChannelData, YoutubeScore } from '../../../../lib/types/SocialMediaTypes'
+import { TotalScore, TotalScoreSet, TwitterResults, YoutubeChannelData, YoutubeResults } from '../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
 import { getLocalizedName } from '../../../../lib/util/util'
-
-const shortenLink = (link: string) => {
-  link = link.replace(/((http)?s?:\/\/)(www.)?/i, "");
-  return link;
-}
+import SmTwitterSection from '../../../../components/layout/socialmedia/SmTwitterSection'
+import SocialMediaIconLink from '../../../../components/elements/socialmedia/SmIconLink'
+import MantineLink from '../../../../components/elements/MantineLink'
+import SmHeaderSection from '../../../../components/layout/socialmedia/SmHeaderSection'
+import SmYoutubeSection from '../../../../components/layout/socialmedia/SmYoutubeSection'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -38,6 +35,11 @@ const useStyles = createStyles((theme) => ({
     fontSize: theme.fontSizes.sm,
     fontWeight: 700,
     textTransform: 'uppercase',
+  },
+  cardSection: {
+    padding: theme.spacing.md,
+    borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+    marginTop: theme.spacing.sm,
   },
 }));
 
@@ -73,55 +75,24 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
     )
   }
 
-  const facebookLink = institutionSM.facebook_url;
-  const twitterLink = institutionSM.twitter_url;
-  const instagramLink = institutionSM.instagram_url;
+  const institutionScore = JSON.parse(institutionSM.total_score) as TotalScore;
 
-  const twitterScore = institutionSM.twitter_scores !== null ? JSON.parse(institutionSM.twitter_scores) as TwitterScore : null;
-  const youtubeScore = institutionSM.youtube_scores !== null ? JSON.parse(institutionSM.youtube_scores) as YoutubeScore : null;
+  // Country data
+  const countryScore = JSON.parse(countrySM.avg_total_score) as TotalScoreSet;
+  const countryTwitterScore = JSON.parse(countrySM.avg_twitter_score) as TotalScoreSet;
+  const countryYoutubeScore = JSON.parse(countrySM.avg_youtube_score) as TotalScoreSet;
+  const countryPercentScore = JSON.parse(countrySM.avg_total_score_percent) as TotalScoreSet;
+  const countryTwitterResults = JSON.parse(countrySM.avg_twitter_results) as TwitterResults;
+  const countryYoutubeResults = JSON.parse(countrySM.avg_youtube_results) as YoutubeResults;
 
-  // Graph data
-  const totalScore = JSON.parse(institutionSM.total_score) as TotalScore;
-  const countryScore = JSON.parse(countrySM.average_percentages) as TotalScoreSet;
-  const graphLabels = [
-    'Total reach %',
-    'Total content output %',
-    'Average impressions %',
-    'Average interaction %',
-    'Profiles completed %',
-  ]
-  const graphDataInstitution = [
-    totalScore.percentData.totalReach,
-    totalScore.percentData.totalContentOutput,
-    totalScore.percentData.averageImpressions,
-    totalScore.percentData.averageInteraction,
-    totalScore.percentData.profilesCompleted,
-  ]
-  const graphDataCountry = [
-    countryScore.totalReach,
-    countryScore.totalContentOutput,
-    countryScore.averageImpressions,
-    countryScore.averageInteraction,
-    countryScore.profilesCompleted,
-  ]
-
+  // Institution data
+  const twitterResult = institutionSM.twitter_scores !== null ? JSON.parse(institutionSM.twitter_scores) as TwitterResults : null;
+  const youtubeResult = institutionSM.youtube_scores !== null ? JSON.parse(institutionSM.youtube_scores) as YoutubeResults : null;
   // const facebookResults = (socialMedia?.facebook_results as unknown) as FacebookResult;
   // const twitterResults = (socialMedia?.twitter_results as unknown) as TwitterResult;
   const youtubeData = institutionSM.youtube_results !== null ? JSON.parse(institutionSM.youtube_results) as YoutubeChannelData : null;
   // const instagramResults = (socialMedia?.instagram_results as unknown) as InstagramResult;
-  const youtubeLink = "https://www.youtube.com/channel/" + youtubeData?.id;
-  console.log(youtubeLink)
-
-  const averagePoints = {
-    facebookAverage: 125,
-    twitterAverage: 5346,
-    instagramAverage: 425,
-    youtubeAverage: 2103,
-  }
-
-  const calculateSocialMediaDifference = (points: number, average: number) => {
-    return points === 0 ? -100 : (points - average) / 100
-  }
+  // const youtubeLink = youtubeData ? "https://www.youtube.com/channel/" + youtubeData.id : null;
 
   return (
     <LayoutContainer footerContent={footerContent}>
@@ -135,86 +106,47 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
 
       <InstitutionNav title={institution.name} />
 
-      {/* <InstitutionPaper> */}
-
       <WhitePaper>
+        <Stack spacing={"lg"}>
 
-        <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+          <SmHeaderSection
+            institutionSM={institutionSM}
+            institution={institution}
+            classes={classes}
+          />
 
-          <Stack>
-            <Card shadow={"xs"} className={classes.card}>
-              <Title order={2}>Social Media Statistics</Title>
-              <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
-            </Card>
+          <SmOverviewSection
+            country={country}
+            institution={institution}
+            countrySocialMedia={countrySM}
+            institutionScore={institutionScore}
+            countryPercentScore={countryPercentScore}
+            countryTwitterScore={countryTwitterScore}
+            countryYoutubeScore={countryYoutubeScore}
+            twitterScore={twitterResult}
+            youtubeScore={youtubeResult}
+            classes={classes}
+          />
 
-            <Card shadow={"xs"} className={classes.card}>
-              <SocialMediaRadar
-                countryName={getLocalizedName({ lang: lang, dbTranslated: country })}
-                institutionName={getLocalizedName({ lang: lang, institution: institution })}
-                labels={graphLabels}
-                dataInstitution={graphDataInstitution}
-                dataCountry={graphDataCountry}
-              />
-            </Card>
-          </Stack>
+          {
+            twitterResult !== null &&
+            <SmTwitterSection
+              twitterResult={twitterResult}
+              countryTwitterResults={countryTwitterResults}
+              classes={classes}
+            />
+          }
 
-          <Stack>
-            <SimpleGrid cols={2}>
-              <SocialMediaStatCard
-                title='Twitter'
-                value={twitterScore?.total || 0}
-                diff={calculateSocialMediaDifference(twitterScore?.total || 0, averagePoints.twitterAverage)}
-                icon={IconBrandTwitter}
-              />
-              <SocialMediaStatCard
-                title='Youtube'
-                value={youtubeScore?.total || 0}
-                diff={calculateSocialMediaDifference(youtubeScore?.total || 0, averagePoints.youtubeAverage)}
-                icon={IconBrandYoutube}
-              />
-              <SocialMediaStatCard
-                title='Instagram'
-                value={0}
-                diff={calculateSocialMediaDifference(0, averagePoints.instagramAverage)}
-                icon={IconBrandInstagram}
-              />
-              <SocialMediaStatCard
-                title='Facebook'
-                value={0}
-                diff={calculateSocialMediaDifference(0, averagePoints.facebookAverage)}
-                icon={IconBrandFacebook}
-              />
-            </SimpleGrid>
+          {
+            youtubeResult !== null &&
+            <SmYoutubeSection
+              youtubeResult={youtubeResult}
+              countryYoutubeResults={countryYoutubeResults}
+              classes={classes}
+            />
+          }
 
-            <Card shadow={"xs"} className={classes.card}>
-
-              <Stack>
-                <Text size="xs" color="dimmed" className={classes.title}>
-                  Social Media Links
-                </Text>
-                {
-                  youtubeLink &&
-                  <SocialMediaIconLink type='youtube' url={youtubeLink} label title={`Youtube channel of ${institution.name}`} />
-                }
-                {
-                  twitterLink &&
-                  <SocialMediaIconLink type='twitter' url={twitterLink} label title={`Twitter profile of ${institution.name}`} />
-                }
-                {
-                  facebookLink &&
-                  <SocialMediaIconLink type='facebook' url={facebookLink} label title={`Facebook profile of ${institution.name}`} />
-                }
-                {
-                  instagramLink &&
-                  <SocialMediaIconLink type='instagram' url={instagramLink} label title={`Instagram profile of ${institution.name}`} />
-                }
-              </Stack>
-            </Card>
-
-          </Stack>
-
-        </SimpleGrid>
-
+        </Stack>
       </WhitePaper>
 
     </LayoutContainer>

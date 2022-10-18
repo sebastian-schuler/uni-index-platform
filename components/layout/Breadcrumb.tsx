@@ -175,7 +175,7 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
             {
                 links.map((link, i) => (
                     i !== links.length - 1 ? (
-                        <MantineLink key={i} label={link.name} url={link.url} />
+                        <MantineLink key={i} label={link.name} url={link.url} type="internal" />
                     ) : <Text key={i}>{link.name}</Text>
                 ))
             }

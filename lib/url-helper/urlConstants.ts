@@ -24,3 +24,4 @@ export const URL_ACCOUNT= "account";
 // IMAGES
 export const PATH_COUNTRY_IMAGES = "images/thumbnails/countries";
 export const PATH_PLACEHOLDER_IMAGES = "images/placeholders";
+export const PATH_INSTITUTION_SCREENSHOTS = "images/screenshots";

@@ -48,7 +48,7 @@ interface Props {
     gray?: boolean
 }
 
-const SocialMediaIconLink: React.FC<Props> = ({ type, url, label, size, iconSize, title, gray }: Props) => {
+const SmIconLink: React.FC<Props> = ({ type, url, label, size, iconSize, title, gray }: Props) => {
 
     const { classes, theme } = useStyles();
 
@@ -157,4 +157,4 @@ const shortenLink = (link: string) => {
     return link;
 }
 
-export default SocialMediaIconLink
+export default SmIconLink

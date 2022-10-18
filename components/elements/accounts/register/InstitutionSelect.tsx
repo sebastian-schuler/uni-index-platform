@@ -56,11 +56,7 @@ const InstitutionSelect: React.FC<Props> = (
 
     const handleInstitutionChange = (value: string) => {
 
-        console.log(value)
-
         const selectedInstitution = institutionList.find((item) => item.value === value)?.item || null;
-
-        console.log(selectedInstitution);
 
         setSelectedInstitutionId(value);
         setSelectedInstitution(selectedInstitution);

@@ -1,4 +1,4 @@
-import { createStyles, ScrollArea, Table, Title } from '@mantine/core';
+import { createStyles, ScrollArea, Table, Text, Title } from '@mantine/core';
 import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
 import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes';
@@ -28,7 +28,7 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList }: Props) => {
         return (
             <tr key={row.Institution.name + i}>
                 <td>
-                    <MantineLink label={row.Institution.name} url={url} />
+                    <MantineLink label={row.Institution.name} url={url} type="internal" />
                 </td>
                 <td>{row.Institution.Country.name}</td>
                 <td>{Math.round(row.total_score).toLocaleString(lang)}</td>
@@ -37,9 +37,8 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList }: Props) => {
     });
 
     return (
-        // <ScrollArea>
-        <WhiteCard>
-            <Title order={4} size={theme.fontSizes.lg} mb={"md"}>Top 5 Institutions</Title>
+        <WhiteCard sx={{ height: "100%" }}>
+            <Title order={4} size={theme.fontSizes.lg} mb={"md"}>Top Institutions</Title>
             <Table sx={{ minWidth: 100 }} verticalSpacing="xs">
                 <thead>
                     <tr>
@@ -50,8 +49,8 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList }: Props) => {
                 </thead>
                 <tbody>{rows}</tbody>
             </Table>
+            <Text mt={"md"}>You can find our entire social media ranking <MantineLink label='here' type='internal' url='social-media-ranking' />.</Text>
         </WhiteCard>
-        // </ScrollArea>
     );
 }
 

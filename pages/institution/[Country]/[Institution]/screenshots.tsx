@@ -1,3 +1,4 @@
+import { Image, SimpleGrid, Text } from '@mantine/core'
 import { Country, Institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import Breadcrumb from '../../../../components/layout/Breadcrumb'
@@ -5,8 +6,11 @@ import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav'
 import Meta from '../../../../components/partials/Meta'
+import WhitePaper from '../../../../components/WhitePaper'
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries'
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
+import { PATH_INSTITUTION_SCREENSHOTS } from '../../../../lib/url-helper/urlConstants'
+import { toLink } from '../../../../lib/util/util'
 
 interface Props {
   institution: Institution,
@@ -15,6 +19,8 @@ interface Props {
 }
 
 const InstitutionScreenshots: NextPage<Props> = ({ institution, country, footerContent }: Props) => {
+
+  const imageSrc = toLink(PATH_INSTITUTION_SCREENSHOTS, institution.id + ".jpg")
 
   return (
     <LayoutContainer footerContent={footerContent}>
@@ -27,6 +33,10 @@ const InstitutionScreenshots: NextPage<Props> = ({ institution, country, footerC
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
 
       <InstitutionNav title={institution.name} />
+
+      <WhitePaper>
+          <Image src={imageSrc} alt={""} fit={"scale-down"} />
+      </WhitePaper>
 
     </LayoutContainer>
   )

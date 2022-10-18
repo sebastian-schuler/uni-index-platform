@@ -82,7 +82,7 @@ const SubjectFromInstitutionPage: NextPage<Props> = ({ country, institution, sub
 
           <Stack spacing={0}>
             <Text size={"lg"} weight={"bold"}>Website</Text>
-            <MantineLink label={subject?.website} url={subject?.website} external/>
+            <MantineLink label={subject?.website} url={subject?.website} type="external"/>
           </Stack>
 
         </Stack>

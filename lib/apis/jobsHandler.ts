@@ -18,7 +18,7 @@ type JobAPIParameters = {
 
 export async function getJobsFromApi(parameters: JobAPIParameters) {
     const endpoint = `${SERVER_URL}/api/jobs?${getJobParameters({ apiParameters: parameters })}`;
-    console.log(endpoint)
+    // console.log(endpoint)
     // const response = await fetch(endpoint);
     // if (!response.ok) {
     //     throw Error(response.statusText);

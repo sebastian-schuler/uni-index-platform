@@ -28,7 +28,7 @@ const PopularSection: React.FC<Props> = ({ title, subtext, buttonText, buttonUrl
                         </Title>
                         {subtext && <Text color={brandColor ? 'light.0' : 'dark.0'}>{subtext}</Text>}
                     </Stack>
-                    <MantineLink label={buttonText} url={buttonUrl} color={brandColor ? 'light.0' : undefined} />
+                    <MantineLink label={buttonText} url={buttonUrl} color={brandColor ? 'light.0' : undefined} type="internal"/>
                 </Group>
 
                 {

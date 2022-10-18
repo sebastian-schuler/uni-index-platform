@@ -29,16 +29,16 @@ const InstitutionNav = ({ title }: Props) => {
             url: urlBasePath
         },
         {
-            name: langContent.courses,
-            url: urlBasePath + "/subjects"
-        },
-        {
             name: langContent.socialMedia,
             url: urlBasePath + "/social-media"
         },
         {
             name: langContent.onlineMarketing,
             url: urlBasePath + "/online-marketing"
+        },
+        {
+            name: langContent.courses,
+            url: urlBasePath + "/subjects"
         },
         {
             name: langContent.screenshots,

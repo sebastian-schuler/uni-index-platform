@@ -12,7 +12,6 @@ import ResponsiveContainer from '../layout/ResponsiveContainer'
 
 export const LARGE_AD_HEIGHT = 400;
 
-
 interface Props {
     premiumAds: DetailedUserAd[]
     wrapInContainer?: boolean
@@ -96,10 +95,10 @@ const PremiumList: React.FC<Props> = ({ premiumAds, wrapInContainer }: Props) =>
     return (
 
         <Box>
-            <ResponsiveContainer skipContainer={!wrapInContainer}>
+            <ResponsiveContainer skipContainer={!wrapInContainer} paddingY>
 
                 <Title order={3} size={theme.fontSizes.lg}>{langContent.adLabel}</Title>
-                <Text>Click <MantineLink url='#' label='here' /> to learn more about our ads.</Text>
+                <Text>Click <MantineLink url='#' label='here' type='internal' /> to learn more about our ads.</Text>
                 <Divider mt={4} mb={24} />
 
                 <SimpleGrid cols={2} spacing={AD_SPACING} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
