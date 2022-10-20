@@ -1,11 +1,11 @@
-import { createStyles, ScrollArea, Table, Text, Title } from '@mantine/core';
+import { createStyles, Table, Text, Title } from '@mantine/core';
+import { Country } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
 import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes';
 import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants';
 import { toLink } from '../../../lib/util/util';
 import WhiteCard from '../../layout/WhiteCard';
-import WhitePaper from '../../WhitePaper';
 import MantineLink from '../MantineLink';
 
 const useStyles = createStyles((theme) => ({
@@ -14,23 +14,25 @@ const useStyles = createStyles((theme) => ({
 
 interface Props {
     socialMediaList: SmRankingEntryMinified[]
+    countries: Country[]
 }
 
-const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList }: Props) => {
+const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Props) => {
 
     const { classes, theme } = useStyles();
     const { lang } = useTranslation();
 
     const rows = socialMediaList.map((row, i) => {
 
-        const url = toLink(URL_INSTITUTION, row.Institution.Country.url, row.Institution.url, "social-media");
+        const country = countries.find(c => c.id === row.Institution.countryId);
+        const url = toLink(URL_INSTITUTION, country?.url || "", row.Institution.url, "social-media");
 
         return (
             <tr key={row.Institution.name + i}>
                 <td>
                     <MantineLink label={row.Institution.name} url={url} type="internal" />
                 </td>
-                <td>{row.Institution.Country.name}</td>
+                <td>{country?.name}</td>
                 <td>{Math.round(row.total_score).toLocaleString(lang)}</td>
             </tr>
         );

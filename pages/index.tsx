@@ -68,6 +68,7 @@ const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, c
         socialMediaList={socialMediaList}
         highestTwitterStringified={highestTwitterStringified}
         highestYoutubeStringified={highestYoutubeStringified}
+        countries={countryList}
       />
 
       <Stack spacing={0} mb={"xl"}>

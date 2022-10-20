@@ -1,17 +1,18 @@
 import { ScoreDisplayModes } from "./audit-result"
 
 export interface MinifiedLhrReport {
-    performance: LhrCategory | null
-    accessibility: LhrCategory | null
-    bestPractices: LhrCategory | null
-    seo: LhrCategory | null
-    pwa: LhrCategory | null
+    audits: LhrAudit[]
+    categories: LhrCategory[]
 }
 
 export interface LhrCategory {
+    id: string
     title: string
-    audits: LhrAudit[]
-    score: number
+    metricRefs: string[]
+    opportunityRefs: string[]
+    diagnosticRefs: string[]
+    passedRefs: string[]
+    score: number | null
 }
 
 export interface LhrAudit {
@@ -20,4 +21,6 @@ export interface LhrAudit {
     scoreDisplayMode: string
     title: string
     displayValue: string | null
+    type: string | null
+    passed: boolean
 }

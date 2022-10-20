@@ -1,6 +1,6 @@
 import { RingProgress, Stack, Text } from '@mantine/core'
 import React from 'react'
-import { getScoreColor } from '../../../lib/util/lighthouseUtil'
+import { getLhrScoreColor } from '../../../lib/util/lighthouseUtil'
 
 interface Props {
     score: number,
@@ -13,9 +13,9 @@ const LhrRingProgress: React.FC<Props> = ({ score, title, description }: Props) 
         <Stack spacing={0} align={"center"}> 
             <RingProgress
                 thickness={12}
-                sections={[{ value: score, color: getScoreColor(score) }, { value: 100 - score, color: "gray" }]}
+                sections={[{ value: score, color: getLhrScoreColor(score) }, { value: 100 - score, color: "gray" }]}
                 label={
-                    <Text color={getScoreColor(score)} weight={700} align="center" size="xl">
+                    <Text color={getLhrScoreColor(score)} weight={700} align="center" size="xl">
                         {score}%
                     </Text>
                 }

@@ -1,4 +1,5 @@
 import { Box, Card, CardSection, Grid, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { Country } from '@prisma/client'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import { SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry } from '../../../lib/types/SocialMediaTypes'
@@ -13,9 +14,10 @@ interface Props {
   socialMediaList: SmRankingEntryMinified[]
   highestTwitterStringified: string
   highestYoutubeStringified: string
+  countries: Country[]
 }
 
-const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitterStringified, highestYoutubeStringified }: Props) => {
+const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitterStringified, highestYoutubeStringified, countries }: Props) => {
 
   const highestTwitter = JSON.parse(highestTwitterStringified) as SocialMediaDBEntry;
   const highestYoutube = JSON.parse(highestYoutubeStringified) as SocialMediaDBEntry;
@@ -33,7 +35,10 @@ const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitterSt
       <Grid mt={'md'}>
 
         <Grid.Col span={6}>
-          <SmIndexTopRanking socialMediaList={socialMediaList} />
+          <SmIndexTopRanking
+            socialMediaList={socialMediaList}
+            countries={countries}
+          />
         </Grid.Col>
 
         <Grid.Col span={6}>
