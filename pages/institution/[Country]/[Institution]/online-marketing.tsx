@@ -58,11 +58,24 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhR
   }
 
   const getDiagnosticsList = (refs: string[]) => {
-    // Every audit but opportunities
+
     const audits = lhReport.audits.filter(audit => refs.includes(audit.id));
 
-    // const auditsNotPassed = audits.filter(audit => (audit.score === null || audit.score < 0.9) && categories.performance.audits.every(el => el.id !== audit.id))
-    //   .sort((a, b) => (a.score || 0) - (b.score || 0));
+    audits.sort((a, b) => {
+      // Score = null is informative
+      // Order is: Error, Warning, Informative, Passed
+      if (a.score === null && b.score && b.score >= 0.9) {
+        return -1;
+      }
+      if (a.score === null) {
+        return 1;
+      }
+      if (b.score === null) {
+        return -1;
+      }
+      return b.score - a.score;
+    });
+
     return (
       <>
         <Divider />

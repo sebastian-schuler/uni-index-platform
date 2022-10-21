@@ -44,18 +44,19 @@ export const getMinifiedLhr = (lhrData: any) => {
     Object.keys(lhr.audits).forEach((id) => {
         const audit = lhr.audits[id]
 
-        if (audit !== undefined && audit.scoreDisplayMode !== "notApplicable" && audit.scoreDisplayMode !== "manual") {
+        if (audit !== undefined && audit.scoreDisplayMode !== "manual" && (audit.scoreDisplayMode !== "notApplicable" || audit.details !== undefined)) {
 
             const passed =
                 (audit.score === null || audit.score >= 0.9) &&
                 (audit.scoreDisplayMode !== "informative" ||
                     (audit.scoreDisplayMode === "informative" && audit.details?.type === "table" && audit.details.headings.length === 0)
                 );
-
+            
             audits.push({
                 id: audit.id,
                 title: audit.title,
                 scoreDisplayMode: audit.scoreDisplayMode,
+                description: audit.description,
                 score: audit.score,
                 displayValue: audit.displayValue || null,
                 type: audit.details?.type || null,
@@ -89,26 +90,31 @@ const getPerformanceCategory = (lhr: Result, audits: LhrAudit[]): LhrCategory =>
     // Add opportunity refs and passed refs
     for (const auditRef of performance.auditRefs) {
 
+        // Skip metrics, they are already added
         if (auditRef.group === "metrics" || auditRef.group === "hidden") continue;
 
+        // Find audit in list
         const auditIndex = audits.findIndex(audit => audit.id === auditRef.id);
         const audit = audits[auditIndex];
 
         if (audit === undefined) continue;
 
+        // If audit is passed, it shouldn't be shown in the opportunity list
         if (audit.passed) {
             passedRefs.push(audit.id);
         } else {
+            // If audit is not passed, add to opportunity audits
             if (opportunityRefs.includes(auditRef.id) === false && audit?.type === "opportunity") {
                 opportunityRefs.push(auditRef.id);
             }
         }
     };
 
+    // Add diagnostic refs
     for (const auditRef of performance.auditRefs) {
 
+        // Diagnostic audits are the ones left, that have not been included elsewhere
         if (opportunityRefs.includes(auditRef.id) || metricRefs.includes(auditRef.id) || passedRefs.includes(auditRef.id)) continue;
-
 
         if (auditRef.group !== "hidden")
             diagnosticRefs.push(auditRef.id);

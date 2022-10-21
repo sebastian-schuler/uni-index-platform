@@ -20,6 +20,7 @@ export interface LhrAudit {
     score: number | null
     scoreDisplayMode: string
     title: string
+    description: string
     displayValue: string | null
     type: string | null
     passed: boolean
