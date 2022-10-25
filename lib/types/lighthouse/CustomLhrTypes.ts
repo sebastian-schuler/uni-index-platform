@@ -1,4 +1,6 @@
 import { ScoreDisplayModes } from "./audit-result"
+import { FormattedIcu } from "./i18n";
+import AuditDetails from "./audit-details";
 
 export interface MinifiedLhrReport {
     audits: LhrAudit[]
@@ -22,6 +24,26 @@ export interface LhrAudit {
     title: string
     description: string
     displayValue: string | null
-    type: string | null
+    // type: string | null
     passed: boolean
+    details: LhrAuditDetails
 }
+
+export type LhrAuditDetails = {
+    type: 'criticalrequestchain'
+} | {
+    type: 'filmstrip'
+} | {
+    type: 'list'
+} |
+
+    AuditDetails.Opportunity
+    // {
+    //     type: 'opportunity'
+    //     overallSavingsMs: number | null;
+    // } 
+    | {
+        type: 'table'
+    } | {
+        type: "debugdata" | "treemap-data" | "screenshot" | "full-page-screenshot" | null
+    }

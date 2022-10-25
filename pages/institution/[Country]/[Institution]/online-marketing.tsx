@@ -73,18 +73,15 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhR
       if (b.score === null) {
         return -1;
       }
-      return b.score - a.score;
+      return a.score - b.score;
     });
 
     return (
       <>
         <Divider />
-        <Text>Length: {audits.length}</Text>
         {
           audits.map((audit, i) => (
-            <>
-              <LhrAuditListItem key={i} audit={audit} />
-            </>
+            <LhrAuditListItem key={i} audit={audit} />
           ))
         }
 

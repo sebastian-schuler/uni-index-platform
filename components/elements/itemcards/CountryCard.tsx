@@ -52,7 +52,7 @@ const CountryCard: React.FC<Props> = ({ data }: Props) => {
     return (
         <Link href={data.url} passHref>
 
-            <Card component='a' withBorder p="lg" radius="md" shadow={"sm"} className={classes.card}>
+            <Card component='a' p="lg" radius="md" shadow={"sm"} className={classes.card}>
                 <Card.Section>
                     <Image src={data.imgSrc} alt={data.name} height={180} />
                 </Card.Section>

@@ -8,9 +8,11 @@ interface Props {
     institutionSM: InstitutionSocialMedia
     institution: Institution
     classes: Record<"card" | "title", string>
+    showTwitterNavItem: boolean
+    showYoutubeNavItem: boolean
 }
 
-const SmHeaderSection: React.FC<Props> = ({ institutionSM, institution, classes }: Props) => {
+const SmHeaderSection: React.FC<Props> = ({ institutionSM, institution, classes, showTwitterNavItem, showYoutubeNavItem }: Props) => {
 
     return (
         <div>
@@ -25,7 +27,12 @@ const SmHeaderSection: React.FC<Props> = ({ institutionSM, institution, classes 
                     </Text>
                     <List type='ordered'>
                         <List.Item><MantineLink label='Overview' url='#sectionOverview' type='scroll' /></List.Item>
-                        <List.Item><MantineLink label='Twitter Details' url='#sectionTwitterDetails' type='scroll' /></List.Item>
+                        {
+                            showTwitterNavItem && <List.Item><MantineLink label='Twitter Details' url='#sectionTwitterDetails' type='scroll' /></List.Item>
+                        }
+                        {
+                            showYoutubeNavItem && <List.Item><MantineLink label='Youtube Details' url='#sectionYoutubeDetails' type='scroll' /></List.Item>
+                        }
                     </List>
                 </Card>
 

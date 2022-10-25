@@ -1,5 +1,5 @@
 
-import { Card, createStyles, List, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { createStyles, Stack, Text } from '@mantine/core'
 import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client'
 
 
@@ -11,19 +11,16 @@ import SmOverviewSection from '../../../../components/layout/socialmedia/SmOverv
 import Breadcrumb from '../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
+import SmHeaderSection from '../../../../components/layout/socialmedia/SmHeaderSection'
+import SmTwitterSection from '../../../../components/layout/socialmedia/SmTwitterSection'
+import SmYoutubeSection from '../../../../components/layout/socialmedia/SmYoutubeSection'
 import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav'
 import Meta from '../../../../components/partials/Meta'
 import WhitePaper from '../../../../components/WhitePaper'
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../lib/prisma/prismaSocialMedia'
-import { TotalScore, TotalScoreSet, TwitterResults, YoutubeChannelData, YoutubeResults } from '../../../../lib/types/SocialMediaTypes'
+import { TotalScore, TotalScoreSet, TwitterProfile, YoutubeChannelData, YoutubeProfile } from '../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
-import { getLocalizedName } from '../../../../lib/util/util'
-import SmTwitterSection from '../../../../components/layout/socialmedia/SmTwitterSection'
-import SocialMediaIconLink from '../../../../components/elements/socialmedia/SmIconLink'
-import MantineLink from '../../../../components/elements/MantineLink'
-import SmHeaderSection from '../../../../components/layout/socialmedia/SmHeaderSection'
-import SmYoutubeSection from '../../../../components/layout/socialmedia/SmYoutubeSection'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -82,15 +79,15 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
   const countryTwitterScore = JSON.parse(countrySM.avg_twitter_score) as TotalScoreSet;
   const countryYoutubeScore = JSON.parse(countrySM.avg_youtube_score) as TotalScoreSet;
   const countryPercentScore = JSON.parse(countrySM.avg_total_score_percent) as TotalScoreSet;
-  const countryTwitterResults = JSON.parse(countrySM.avg_twitter_results) as TwitterResults;
-  const countryYoutubeResults = JSON.parse(countrySM.avg_youtube_results) as YoutubeResults;
+  const countryTwitterResults = JSON.parse(countrySM.avg_twitter_profile) as TwitterProfile;
+  const countryYoutubeResults = JSON.parse(countrySM.avg_youtube_profile) as YoutubeProfile;
 
   // Institution data
-  const twitterResult = institutionSM.twitter_scores !== null ? JSON.parse(institutionSM.twitter_scores) as TwitterResults : null;
-  const youtubeResult = institutionSM.youtube_scores !== null ? JSON.parse(institutionSM.youtube_scores) as YoutubeResults : null;
+  const twitterProfile = institutionSM.twitter_profile !== null ? JSON.parse(institutionSM.twitter_profile) as TwitterProfile : null;
+  const youtubeProfile = institutionSM.youtube_profile !== null ? JSON.parse(institutionSM.youtube_profile) as YoutubeProfile : null;
   // const facebookResults = (socialMedia?.facebook_results as unknown) as FacebookResult;
   // const twitterResults = (socialMedia?.twitter_results as unknown) as TwitterResult;
-  const youtubeData = institutionSM.youtube_results !== null ? JSON.parse(institutionSM.youtube_results) as YoutubeChannelData : null;
+  const youtubeData = institutionSM.youtube_data !== null ? JSON.parse(institutionSM.youtube_data) as YoutubeChannelData : null;
   // const instagramResults = (socialMedia?.instagram_results as unknown) as InstagramResult;
   // const youtubeLink = youtubeData ? "https://www.youtube.com/channel/" + youtubeData.id : null;
 
@@ -113,6 +110,8 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
             institutionSM={institutionSM}
             institution={institution}
             classes={classes}
+            showTwitterNavItem={twitterProfile !== null}
+            showYoutubeNavItem={youtubeProfile !== null}
           />
 
           <SmOverviewSection
@@ -123,24 +122,22 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
             countryPercentScore={countryPercentScore}
             countryTwitterScore={countryTwitterScore}
             countryYoutubeScore={countryYoutubeScore}
-            twitterScore={twitterResult}
-            youtubeScore={youtubeResult}
             classes={classes}
           />
 
           {
-            twitterResult !== null &&
+            twitterProfile !== null &&
             <SmTwitterSection
-              twitterResult={twitterResult}
+              twitterResult={twitterProfile}
               countryTwitterResults={countryTwitterResults}
               classes={classes}
             />
           }
 
           {
-            youtubeResult !== null &&
+            youtubeProfile !== null &&
             <SmYoutubeSection
-              youtubeResult={youtubeResult}
+              youtubeResult={youtubeProfile}
               countryYoutubeResults={countryYoutubeResults}
               classes={classes}
             />

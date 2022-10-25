@@ -157,19 +157,25 @@ export const getStaticProps: GetStaticProps = async (context) => {
     return b.total_score - a.total_score;
   }).slice(0, 5);
 
-  // Highest Twitter score
+  // Highest Youtube score
   socialMediaList.sort((a, b) => {
-    const aScore = a.youtube_scores ? (JSON.parse(a.youtube_scores) as TotalScoreSet).total : 0;
-    const bScore = b.youtube_scores ? (JSON.parse(b.youtube_scores) as TotalScoreSet).total : 0;
-    return bScore - aScore;
+    const totalScoreA = JSON.parse(a.total_score) as TotalScore;
+    const totalScoreB = JSON.parse(b.total_score) as TotalScore;
+    return totalScoreB.youtubeOnly.total - totalScoreA.youtubeOnly.total;
+    // const aScore = a.youtube_scores ? (JSON.parse(a.youtube) as TotalScoreSet).total : 0;
+    // const bScore = b.youtube_scores ? (JSON.parse(b.youtube_scores) as TotalScoreSet).total : 0;
+    // return bScore - aScore;
   });
   const highestYoutubeStringified = JSON.stringify(socialMediaList[0]);
 
   // Highest Twitter score
   socialMediaList.sort((a, b) => {
-    const aScore = a.twitter_scores ? (JSON.parse(a.twitter_scores) as TotalScoreSet).total : 0;
-    const bScore = b.twitter_scores ? (JSON.parse(b.twitter_scores) as TotalScoreSet).total : 0;
-    return bScore - aScore;
+    const totalScoreA = JSON.parse(a.total_score) as TotalScore;
+    const totalScoreB = JSON.parse(b.total_score) as TotalScore;
+    return totalScoreB.twitterOnly.total - totalScoreA.twitterOnly.total;
+    // const aScore = a.twitter_scores ? (JSON.parse(a.twitter_scores) as TotalScoreSet).total : 0;
+    // const bScore = b.twitter_scores ? (JSON.parse(b.twitter_scores) as TotalScoreSet).total : 0;
+    // return bScore - aScore;
   });
   const highestTwitterStringified = JSON.stringify(socialMediaList[0]);
 

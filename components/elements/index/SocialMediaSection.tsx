@@ -1,11 +1,8 @@
-import { Box, Card, CardSection, Grid, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { Grid, Stack, Text, Title } from '@mantine/core'
 import { Country } from '@prisma/client'
-import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
-import { SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry } from '../../../lib/types/SocialMediaTypes'
-import { getLocalizedName } from '../../../lib/util/util'
+import { SmRankingEntryMinified, SocialMediaDBEntry } from '../../../lib/types/SocialMediaTypes'
 import ResponsiveContainer from '../../layout/ResponsiveContainer'
-import WhiteCard from '../../layout/WhiteCard'
 import SmIndexTopRanking from '../socialmedia/SmIndexTopRanking'
 import BestTwitterCard from './BestTwitterCard'
 import BestYoutubeCard from './BestYoutubeCard'
@@ -32,7 +29,7 @@ const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitterSt
         <Text>We looked at every institutions social media pages.</Text>
       </Stack>
 
-      <Grid mt={'md'}>
+      <Grid mt={'md'} gutter={"lg"}>
 
         <Grid.Col span={6}>
           <SmIndexTopRanking
@@ -42,7 +39,7 @@ const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitterSt
         </Grid.Col>
 
         <Grid.Col span={6}>
-          <Stack>
+          <Stack spacing={"lg"}>
             <BestTwitterCard highestTwitter={highestTwitter} />
             <BestYoutubeCard highestYoutube={highestYoutube} />
           </Stack>

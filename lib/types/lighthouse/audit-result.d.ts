@@ -19,7 +19,7 @@ export interface ScoreDisplayModes {
 type ScoreDisplayMode = ScoreDisplayModes[keyof ScoreDisplayModes];
 
 /** Audit result returned in Lighthouse report. All audits offer a description and score of 0-1. */
-export interface Result {
+export interface AuditResult {
   displayValue?: string;
   /** An explanation of why the audit failed on the test page. */
   explanation?: string;

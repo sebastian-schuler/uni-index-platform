@@ -1,16 +1,15 @@
-import { Box, Card, createStyles, Grid, SimpleGrid, Stack, Text, Title } from '@mantine/core';
-import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client';
-import useTranslation from 'next-translate/useTranslation';
-import React from 'react';
-import { getLocalizedName } from '../../../lib/util/util';
-import SocialMediaIconLink from '../../elements/socialmedia/SmIconLink';
-import SocialMediaRadar from '../../elements/socialmedia/charts/SmRadar';
-import SocialMediaStatCard from '../../elements/socialmedia/SmStatCard';
+import { Box, Card, Grid, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { Country, CountrySocialMedia, Institution } from '@prisma/client';
 import {
     IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandYoutube
 } from '@tabler/icons';
-import { TotalScore, TotalScoreSet, TwitterResults, YoutubeResults } from '../../../lib/types/SocialMediaTypes';
+import useTranslation from 'next-translate/useTranslation';
+import React from 'react';
+import { TotalScore, TotalScoreSet } from '../../../lib/types/SocialMediaTypes';
+import { getLocalizedName } from '../../../lib/util/util';
 import SmProfilesBar from '../../elements/socialmedia/charts/SmProfilesBar';
+import SocialMediaRadar from '../../elements/socialmedia/charts/SmRadar';
+import SocialMediaStatCard from '../../elements/socialmedia/SmStatCard';
 
 interface Props {
     institution: Institution,
@@ -20,13 +19,11 @@ interface Props {
     countryPercentScore: TotalScoreSet,
     countryTwitterScore: TotalScoreSet,
     countryYoutubeScore: TotalScoreSet,
-    twitterScore: TwitterResults | null,
-    youtubeScore: YoutubeResults | null,
     classes: Record<"card" | "title" | "cardSection", string>
 }
 
 const SmOverviewSection: React.FC<Props> = (
-    { institution, country, countrySocialMedia, institutionScore, countryPercentScore, countryTwitterScore, countryYoutubeScore, twitterScore, youtubeScore, classes }: Props
+    { institution, country, countrySocialMedia, institutionScore, countryPercentScore, countryTwitterScore, countryYoutubeScore, classes }: Props
 ) => {
 
     const { t, lang } = useTranslation('common');
@@ -82,14 +79,14 @@ const SmOverviewSection: React.FC<Props> = (
                         <SimpleGrid cols={1}>
                             <SocialMediaStatCard
                                 title='Twitter'
-                                value={twitterScore?.total || 0}
-                                diff={calculateSocialMediaDifference(twitterScore?.total || 0, countryTwitterScore.total)}
+                                value={institutionScore?.twitterOnly.total || 0}
+                                diff={calculateSocialMediaDifference(institutionScore?.twitterOnly.total || 0, countryTwitterScore.total)}
                                 icon={IconBrandTwitter}
                             />
                             <SocialMediaStatCard
                                 title='Youtube'
-                                value={youtubeScore?.total || 0}
-                                diff={calculateSocialMediaDifference(youtubeScore?.total || 0, countryYoutubeScore.total)}
+                                value={institutionScore?.youtubeOnly.total || 0}
+                                diff={calculateSocialMediaDifference(institutionScore?.youtubeOnly.total || 0, countryYoutubeScore.total)}
                                 icon={IconBrandYoutube}
                             />
                             <SocialMediaStatCard

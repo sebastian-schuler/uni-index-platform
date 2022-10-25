@@ -62,14 +62,14 @@ model InstitutionSocialMedia {
   youtube_url       String?     @db.VarChar
   instagram_url     String?     @db.VarChar
   last_update       BigInt
-  twitter_results   String?     @db.VarChar
-  facebook_results  String?     @db.VarChar
-  youtube_results   String?     @db.VarChar
-  instagram_results String?     @db.VarChar
-  twitter_scores    String?     @db.VarChar
-  facebook_scores   String?     @db.VarChar
-  youtube_scores    String?     @db.VarChar
-  instagram_scores  String?     @db.VarChar
+  twitter_data      String?     @db.VarChar
+  facebook_data     String?     @db.VarChar
+  youtube_data      String?     @db.VarChar
+  instagram_data    String?     @db.VarChar
+  twitter_profile   String?     @db.VarChar
+  facebook_profile  String?     @db.VarChar
+  youtube_profile   String?     @db.VarChar
+  instagram_profile String?     @db.VarChar
   total_score       String      @db.VarChar
   Institution       Institution @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "institution has social media stats")
 }
@@ -177,10 +177,10 @@ model CountrySocialMedia {
   avg_youtube_score       String  @db.VarChar
   avg_facebook_score      String? @db.VarChar
   avg_instagram_score     String? @db.VarChar
-  avg_twitter_results     String  @db.VarChar
-  avg_youtube_results     String  @db.VarChar
-  avg_facebook_results    String? @db.VarChar
-  avg_instagram_results   String? @db.VarChar
+  avg_twitter_profile     String  @db.VarChar
+  avg_youtube_profile     String  @db.VarChar
+  avg_facebook_profile    String? @db.VarChar
+  avg_instagram_profile   String? @db.VarChar
   avg_total_score_percent String  @db.VarChar
   Country                 Country @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SocialMediaCountry id of country")
 }

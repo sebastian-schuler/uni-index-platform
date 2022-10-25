@@ -1,5 +1,5 @@
 
-import {Result as AuditResult} from './audit-result';
+import {AuditResult as AuditResult} from './audit-result';
 import {Locale} from './settings';
 
 declare module Treemap {

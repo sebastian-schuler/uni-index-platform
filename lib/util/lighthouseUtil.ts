@@ -1,6 +1,7 @@
 // CLIENT SIDE
 
-import { LhrAudit, LhrCategory, MinifiedLhrReport } from "../types/lighthouse/CustomLhrTypes";
+import { AuditResult } from "../types/lighthouse/audit-result";
+import { LhrAudit, LhrAuditDetails, LhrCategory, MinifiedLhrReport } from "../types/lighthouse/CustomLhrTypes";
 import Result from "../types/lighthouse/lhr";
 
 export const LHR_SCORE_BREAKPOINTS = {
@@ -42,7 +43,7 @@ export const getMinifiedLhr = (lhrData: any) => {
     // AUDITS
     const audits: LhrAudit[] = [];
     Object.keys(lhr.audits).forEach((id) => {
-        const audit = lhr.audits[id]
+        const audit: AuditResult = lhr.audits[id]
 
         if (audit !== undefined && audit.scoreDisplayMode !== "manual" && (audit.scoreDisplayMode !== "notApplicable" || audit.details !== undefined)) {
 
@@ -51,7 +52,7 @@ export const getMinifiedLhr = (lhrData: any) => {
                 (audit.scoreDisplayMode !== "informative" ||
                     (audit.scoreDisplayMode === "informative" && audit.details?.type === "table" && audit.details.headings.length === 0)
                 );
-            
+
             audits.push({
                 id: audit.id,
                 title: audit.title,
@@ -59,8 +60,8 @@ export const getMinifiedLhr = (lhrData: any) => {
                 description: audit.description,
                 score: audit.score,
                 displayValue: audit.displayValue || null,
-                type: audit.details?.type || null,
                 passed: passed,
+                details: getDetailsObject(audit),
             });
         }
     });
@@ -72,6 +73,20 @@ export const getMinifiedLhr = (lhrData: any) => {
     lhrReport.audits = audits;
 
     return lhrReport;
+}
+
+const getDetailsObject = (audit: AuditResult): LhrAuditDetails => {
+    if (audit.details?.type === "opportunity") {
+        return audit.details
+        // {
+        //     type: "opportunity",
+        //     overallSavingsMs: audit.details?.overallSavingsMs || null,
+        // }
+    } else {
+        return {
+            type: audit.details?.type || null,
+        }
+    }
 }
 
 const getPerformanceCategory = (lhr: Result, audits: LhrAudit[]): LhrCategory => {
@@ -104,7 +119,7 @@ const getPerformanceCategory = (lhr: Result, audits: LhrAudit[]): LhrCategory =>
             passedRefs.push(audit.id);
         } else {
             // If audit is not passed, add to opportunity audits
-            if (opportunityRefs.includes(auditRef.id) === false && audit?.type === "opportunity") {
+            if (opportunityRefs.includes(auditRef.id) === false && audit?.details.type === "opportunity") {
                 opportunityRefs.push(auditRef.id);
             }
         }
@@ -130,3 +145,4 @@ const getPerformanceCategory = (lhr: Result, audits: LhrAudit[]): LhrCategory =>
         passedRefs: passedRefs,
     }
 }
+

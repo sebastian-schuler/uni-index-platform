@@ -162,9 +162,9 @@ const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) 
                 <MantineLink label={row.name} url={row.url} type="internal" />
             </td>
             <td>{row.country}</td>
-            <td>{row.totalscore.toFixed(0)}</td>
-            <td>{row.twitterScore.toFixed(0)}</td>
-            <td>{row.youtubeScore.toFixed(0)}</td>
+            <td>{formatNumberInteger(row.totalscore, lang)}</td>
+            <td>{formatNumberInteger(row.twitterScore, lang)}</td>
+            <td>{formatNumberInteger(row.youtubeScore, lang)}</td>
         </tr>
     ));
 
@@ -181,8 +181,9 @@ const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) 
             <Table
                 horizontalSpacing="md"
                 verticalSpacing="xs"
-                sx={{ tableLayout: 'fixed', minWidth: 700 }}
+                sx={{ tableLayout: 'auto', minWidth: 700 }}
                 highlightOnHover
+                striped
             >
                 <thead>
                     <tr>
@@ -246,6 +247,13 @@ const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) 
             </Table>
         </ScrollArea>
     );
+}
+
+const formatNumberInteger = (value: number, locale: string): string => {
+    return value.toLocaleString(locale, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    });
 }
 
 export default SmRankingTable;

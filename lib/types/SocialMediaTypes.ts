@@ -87,29 +87,28 @@ export interface InstagramResult {
 
 // -------------- RATINGS --------------
 
-export interface YoutubeResults {
-    total: number
+export interface YoutubeProfile {
     subs: number
     views: number
     videos: number
     averageLikes: number
     averageViews: number
     averageComments: number
-    descriptionGood: number
-    videosHaveTags: number
+    descriptionGood: boolean
+    videosHaveTags: boolean
 }
 
-export interface TwitterResults {
-    total: number
+export interface TwitterProfile {
     followers: number
     following: number
     tweets: number
     listed: number
     averageLikes: number
     averageRetweets: number
+    averageReplies: number
     averageInteraction: number
-    verifiedMultiplier: number
-    websitelinkMultiplier: number
+    verifiedMultiplier: boolean
+    websitelinkMultiplier: boolean
 }
 
 export interface TotalScore {

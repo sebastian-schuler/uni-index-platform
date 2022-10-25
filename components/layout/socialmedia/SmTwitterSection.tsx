@@ -1,11 +1,11 @@
-import { Box, Card, createStyles, Divider, Group, Paper, SimpleGrid, Stack, Text, ThemeIcon, Title } from '@mantine/core'
-import React from 'react'
-import { TotalScore, TotalScoreSet, TwitterResults } from '../../../lib/types/SocialMediaTypes';
+import { Box, Card, Divider, SimpleGrid, Text, Title } from '@mantine/core';
+import React from 'react';
+import { TwitterProfile } from '../../../lib/types/SocialMediaTypes';
 import SmStatRow from '../../elements/socialmedia/SmStatRow';
 
 interface Props {
-    twitterResult: TwitterResults
-    countryTwitterResults: TwitterResults
+    twitterResult: TwitterProfile
+    countryTwitterResults: TwitterProfile
     classes: Record<"card" | "title" | "cardSection", string>
 }
 
@@ -57,15 +57,15 @@ const SmTwitterSection: React.FC<Props> = ({ twitterResult, countryTwitterResult
                             >
                                 Profile status
                             </Text>
-                            <Text weight={700} size="md" color={twitterResult.verifiedMultiplier > 0 ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                            <Text weight={700} size="md" color={twitterResult.verifiedMultiplier ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
                                 {
-                                    twitterResult.verifiedMultiplier > 0 ? "VERIFIED" : "NOT VERIFIED"
+                                    twitterResult.verifiedMultiplier ? "VERIFIED" : "NOT VERIFIED"
                                 }
                             </Text>
                         </div>
 
                         <Divider mt="md" mb="md" />
-                    
+
                         <div>
                             <Text
                                 color="dimmed"
@@ -75,9 +75,9 @@ const SmTwitterSection: React.FC<Props> = ({ twitterResult, countryTwitterResult
                             >
                                 Website link
                             </Text>
-                            <Text weight={700} size="md" color={twitterResult.websitelinkMultiplier > 0 ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                            <Text weight={700} size="md" color={twitterResult.websitelinkMultiplier ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
                                 {
-                                    twitterResult.websitelinkMultiplier > 0 ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
+                                    twitterResult.websitelinkMultiplier ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
                                 }
                             </Text>
                         </div>

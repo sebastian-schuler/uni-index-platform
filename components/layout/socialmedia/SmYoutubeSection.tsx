@@ -1,18 +1,18 @@
-import { Box, Card, createStyles, Divider, Group, Paper, SimpleGrid, Stack, Text, ThemeIcon, Title } from '@mantine/core'
-import React from 'react'
-import { TotalScore, TotalScoreSet, TwitterResults, YoutubeResults } from '../../../lib/types/SocialMediaTypes';
+import { Box, Card, Divider, SimpleGrid, Text, Title } from '@mantine/core';
+import React from 'react';
+import { YoutubeProfile } from '../../../lib/types/SocialMediaTypes';
 import SmStatRow from '../../elements/socialmedia/SmStatRow';
 
 interface Props {
-    youtubeResult: YoutubeResults
-    countryYoutubeResults: YoutubeResults
+    youtubeResult: YoutubeProfile
+    countryYoutubeResults: YoutubeProfile
     classes: Record<"card" | "title" | "cardSection", string>
 }
 
 const SmYoutubeSection: React.FC<Props> = ({ youtubeResult, countryYoutubeResults, classes }: Props) => {
 
     return (
-        <Box id='sectionTwitterDetails'>
+        <Box id='sectionYoutubeDetails'>
             { /* OVERVIEW SECTION */}
             <Title order={3}>Youtube Details</Title>
             <Text>All social media profiles at a glance.</Text>
@@ -47,9 +47,9 @@ const SmYoutubeSection: React.FC<Props> = ({ youtubeResult, countryYoutubeResult
                             >
                                 Description
                             </Text>
-                            <Text weight={700} size="md" color={youtubeResult.descriptionGood > 0 ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                            <Text weight={700} size="md" color={youtubeResult.descriptionGood ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
                                 {
-                                    youtubeResult.descriptionGood > 0 ? "GOOD LENGTH" : "BAD LENGTH"
+                                    youtubeResult.descriptionGood ? "GOOD LENGTH" : "BAD LENGTH"
                                 }
                             </Text>
                         </div>
@@ -95,9 +95,9 @@ const SmYoutubeSection: React.FC<Props> = ({ youtubeResult, countryYoutubeResult
                             >
                                 Average video tags
                             </Text>
-                            <Text weight={700} size="md" color={youtubeResult.videosHaveTags > 0 ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                            <Text weight={700} size="md" color={youtubeResult.videosHaveTags ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
                                 {
-                                    youtubeResult.videosHaveTags > 0 ? "GOOD AMOUNT" : "BAD AMOUNT"
+                                    youtubeResult.videosHaveTags ? "GOOD AMOUNT" : "BAD AMOUNT"
                                 }
                             </Text>
                         </div>

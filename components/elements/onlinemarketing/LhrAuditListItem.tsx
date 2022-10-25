@@ -1,4 +1,4 @@
-import { Box, Collapse, createStyles, Divider, Group, Text, UnstyledButton } from '@mantine/core'
+import { Box, Collapse, createStyles, Divider, Group, Progress, Text, UnstyledButton } from '@mantine/core'
 import { IconCheck, IconChevronDown, IconCircle, IconSquare, IconTriangle } from '@tabler/icons'
 import React, { useState } from 'react'
 import { LhrAudit } from '../../../lib/types/lighthouse/CustomLhrTypes';
@@ -81,8 +81,7 @@ interface Props {
 const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
 
     const { classes } = useStyles();
-    const [opened, setOpened] = useState(false);
-
+    const [opened, setOpened] = useState(true);
     const description = parseText(audit.description);
 
     return (
@@ -98,7 +97,24 @@ const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
                             }
                         </Group>
                     </Group>
-                    <IconChevronDown color={"gray"} size={20} />
+                    <Group>
+                        {
+                            audit.details.type === "opportunity" && !audit.passed && (
+                                <>
+                                    <Box sx={{ width: 200, transform: "scaleX(-1)" }}>
+                                        <Progress
+                                            size="lg"
+                                            sections={[
+                                                { value: ((audit.details.overallSavingsMs || 0) / 2000) * 100, color: 'orange' },
+                                            ]}
+                                        />
+                                    </Box>
+                                    <Text weight={600} color={getColor(audit.score)}>{((audit.details.overallSavingsMs || 0) / 1000).toFixed(2)}s</Text>
+                                </>
+                            )
+                        }
+                        <IconChevronDown color={"gray"} size={20} />
+                    </Group>
                 </Group>
             </UnstyledButton>
 
@@ -112,6 +128,17 @@ const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
                             ))
                         }
                     </Text>
+                    {
+                        audit.details.type === "opportunity" && !audit.passed && (
+                            <>
+                                {
+                                    audit.details.headings.map((heading, index) => (
+                                        heading.label
+                                    ))
+                                }
+                            </>
+                        )
+                    }
                 </Box>
             </Collapse>
 
