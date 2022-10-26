@@ -1,5 +1,5 @@
 import { Grid, Stack } from '@mantine/core';
-import { Country } from '@prisma/client';
+import { Country, State } from '@prisma/client';
 import type { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import PremiumList from '../components/container/AdList';
@@ -18,7 +18,7 @@ import { getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/pri
 import { getAds, getCountries } from '../lib/prisma/prismaQueries';
 import { getAllSocialMedia, getSocialMediaRanking } from '../lib/prisma/prismaSocialMedia';
 import { CountryCardData, DetailedCountry, DetailedInstitution, DetailedSubject, DetailedUserAd, InstitutionCardData, SubjectCardData } from '../lib/types/DetailedDatabaseTypes';
-import { SmRankingEntry, SmRankingEntryMinified, TotalScore, TotalScoreSet } from '../lib/types/SocialMediaTypes';
+import { SmRankingEntryMinified, TotalScore } from '../lib/types/SocialMediaTypes';
 import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
 import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmRankingItem } from '../lib/util/conversionUtil';
 import { toLink } from '../lib/util/util';
@@ -29,13 +29,15 @@ interface Props {
   subjectData: SubjectCardData[],
   countryData: CountryCardData[],
   countryList: Country[],
+  popularInstituteStates: State[],
   socialMediaList: SmRankingEntryMinified[],
   highestTwitterStringified: string,
   highestYoutubeStringified: string,
   footerContent: FooterContent[],
 }
 
-const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, countryData, countryList, socialMediaList, highestTwitterStringified, highestYoutubeStringified, footerContent }: Props) => {
+const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, countryData, countryList,
+  popularInstituteStates, socialMediaList, highestTwitterStringified, highestYoutubeStringified, footerContent }: Props) => {
 
   const ads: DetailedUserAd[] = JSON.parse(adsStringified);
 
@@ -99,7 +101,11 @@ const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, c
             institutionData.map((institute, i) => (
               // institute.InstitutionLocation.length !== 0 && (
               <Grid.Col key={i} sm={12} md={6} lg={4} sx={{ width: "100%" }}>
-                <InstitutionCard data={institute} country={countryList.find(c => c.id === institute.mainCountryId)} />
+                <InstitutionCard
+                  data={institute}
+                  country={countryList.find(c => c.id === institute.mainCountryId)}
+                  state={popularInstituteStates.find(s => s.id === institute.mainStateId)}
+                />
               </Grid.Col>
               // )
             ))
@@ -147,6 +153,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const subjectData: SubjectCardData[] = popularSubjectsDetailed.map(subj => convertSubjectToCardData(subj, lang));
   const countryData: CountryCardData[] = popularCountriesDetailed.map(country => convertCountryToCardData(country, lang, "location"));
 
+  // List of states for popular institutes
+  const popularInstituteStates: State[] = popularInstitutesDetailed.map(inst => {
+    return { ...inst.City.State }
+  });
+
   // === SOCIAL MEDIA ===
   const socialMediaRankingList = await getSocialMediaRanking();
   const socialMediaList = await getAllSocialMedia();
@@ -162,9 +173,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const totalScoreA = JSON.parse(a.total_score) as TotalScore;
     const totalScoreB = JSON.parse(b.total_score) as TotalScore;
     return totalScoreB.youtubeOnly.total - totalScoreA.youtubeOnly.total;
-    // const aScore = a.youtube_scores ? (JSON.parse(a.youtube) as TotalScoreSet).total : 0;
-    // const bScore = b.youtube_scores ? (JSON.parse(b.youtube_scores) as TotalScoreSet).total : 0;
-    // return bScore - aScore;
   });
   const highestYoutubeStringified = JSON.stringify(socialMediaList[0]);
 
@@ -173,9 +181,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const totalScoreA = JSON.parse(a.total_score) as TotalScore;
     const totalScoreB = JSON.parse(b.total_score) as TotalScore;
     return totalScoreB.twitterOnly.total - totalScoreA.twitterOnly.total;
-    // const aScore = a.twitter_scores ? (JSON.parse(a.twitter_scores) as TotalScoreSet).total : 0;
-    // const bScore = b.twitter_scores ? (JSON.parse(b.twitter_scores) as TotalScoreSet).total : 0;
-    // return bScore - aScore;
   });
   const highestTwitterStringified = JSON.stringify(socialMediaList[0]);
 
@@ -196,6 +201,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       institutionData,
       subjectData,
       countryList,
+      popularInstituteStates,
       socialMediaList: socialMediaTopList,
       highestTwitterStringified,
       highestYoutubeStringified,

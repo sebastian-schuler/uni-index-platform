@@ -1,13 +1,13 @@
 import { Anchor, Card, createStyles, Group, Stack, Text, ThemeIcon } from '@mantine/core'
-import { Country } from '@prisma/client'
+import { Country, State } from '@prisma/client'
 import { IconBuilding, IconCategory, IconSchool } from '@tabler/icons'
 import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React, { memo } from 'react'
 import { InstitutionCardData } from '../../../lib/types/DetailedDatabaseTypes'
-import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants'
-import { toLink } from '../../../lib/util/util'
+import { URL_INSTITUTION, URL_LOCATION } from '../../../lib/url-helper/urlConstants'
+import { getLocalizedName, toLink } from '../../../lib/util/util'
 import SocialMediaIconLink from '../socialmedia/SmIconLink'
 
 const useStyles = createStyles((theme) => ({
@@ -46,9 +46,10 @@ const useStyles = createStyles((theme) => ({
 type Props = {
   data: InstitutionCardData
   country: Country | undefined
+  state: State | undefined
 }
 
-const InstitutionCard: React.FC<Props> = ({ data, country }: Props) => {
+const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
 
   const { classes, theme } = useStyles();
   const { lang } = useTranslation('common');
@@ -58,7 +59,10 @@ const InstitutionCard: React.FC<Props> = ({ data, country }: Props) => {
   const twitterLink = data.InstitutionSocialMedia?.twitter_url;
   const instagramLink = data.InstitutionSocialMedia?.instagram_url;
 
-  const url = toLink(URL_INSTITUTION, country?.url || "", data.Institution.url);
+  const urlInstitution = toLink(URL_INSTITUTION, country?.url || "notfound", data.Institution.url);
+  const urlCity = toLink(URL_LOCATION, country?.url || "notfound", state?.url || "notfound", data.Institution.City.url);
+  const urlState = toLink(URL_LOCATION, country?.url || "notfound", state?.url || "notfound");
+
   const Flag = Flags[country?.country_code || ""] || Flags["EU"];
 
   return (
@@ -71,7 +75,8 @@ const InstitutionCard: React.FC<Props> = ({ data, country }: Props) => {
 
           <Stack spacing={theme.spacing.xs}>
 
-            <Link href={url} passHref>
+            {/* Name & Name in brackets */}
+            <Link href={urlInstitution} passHref>
               <Anchor color={"brandOrange.5"}>
                 <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
                   {data.Institution.name} <Text size={"xs"}>{data.Institution.nameBrackets}</Text>
@@ -79,8 +84,22 @@ const InstitutionCard: React.FC<Props> = ({ data, country }: Props) => {
               </Anchor>
             </Link>
 
-            <Text sx={{ lineHeight: 1.2 }}>{data.Institution.City.name}</Text>
+            {/* City & State */}
+            <Text color={theme.colors.brandGray[2]} sx={{ lineHeight: 1.2 }}>
+              <Link href={urlCity} passHref>
+                <Anchor color={"brandOrange.5"}>
+                  {data.Institution.City.name}
+                </Anchor>
+              </Link>
+              {', '}
+              <Link href={urlState} passHref>
+                <Anchor color={"brandOrange.5"}>
+                  {getLocalizedName({ lang: lang, state: state })}
+                </Anchor>
+              </Link>
+            </Text>
 
+            {/* Social Media Link icons */}
             <Group spacing={"xs"}>
               {
                 youtubeLink &&
@@ -101,6 +120,7 @@ const InstitutionCard: React.FC<Props> = ({ data, country }: Props) => {
             </Group>
           </Stack>
 
+          {/* Flag */}
           <Stack align={"center"} spacing={"sm"}>
             <Flag className={classes.flag} />
           </Stack>

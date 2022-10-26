@@ -3,6 +3,7 @@ import { City, Country, State } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { ParsedUrlQuery } from 'querystring';
+import CountryList from '../../../../../components/container/CountryList';
 import GenericPageHeader from '../../../../../components/elements/GenericPageHeader';
 import InstitutionCard from '../../../../../components/elements/itemcards/InstitutionCard';
 import Breadcrumb from '../../../../../components/layout/Breadcrumb';
@@ -12,10 +13,13 @@ import Meta from '../../../../../components/partials/Meta';
 import { getInstitutionsDetailedByCity } from '../../../../../lib/prisma/prismaDetailedQueries';
 import { getCityStateCountryByCity, getCountries } from '../../../../../lib/prisma/prismaQueries';
 import { getCityStateCountryPaths } from '../../../../../lib/prisma/prismaUrlPaths';
-import { DetailedInstitution } from '../../../../../lib/types/DetailedDatabaseTypes';
+import { DetailedInstitution, InstitutionCardData } from '../../../../../lib/types/DetailedDatabaseTypes';
+import { convertInstitutionToCardData } from '../../../../../lib/util/conversionUtil';
 
 interface Props {
-  institutionList: DetailedInstitution[],
+  countryList: Country[],
+  institutionData: InstitutionCardData[],
+  institutionStates: State[],
   footerContent: FooterContent[],
   cityInfo: (City & {
     State: State & {
@@ -24,7 +28,7 @@ interface Props {
   }),
 }
 
-const CityPage: NextPage<Props> = ({ institutionList, footerContent, cityInfo }: Props) => {
+const CityPage: NextPage<Props> = ({ countryList, institutionData, institutionStates, footerContent, cityInfo }: Props) => {
 
   const { t } = useTranslation('common');
   const langContent = {
@@ -68,9 +72,14 @@ const CityPage: NextPage<Props> = ({ institutionList, footerContent, cityInfo }:
           ]}
         >
           {
-            institutionList.map((institution, i) => (
+            institutionData.map((institution, i) => (
               // searchable.visible && (
-              <InstitutionCard key={i} institution={institution} /> //TODO make searchable
+              <InstitutionCard
+                key={i}
+                data={institution}
+                country={countryList.find(country => country.id === institution.mainCountryId)}
+                state={institutionStates.find(state => state.id === institution.mainStateId)}
+              />
               // )
             ))
           }
@@ -113,19 +122,32 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
 export async function getStaticProps(context: GetStaticPropsContext) {
 
+  const lang = context.locale || "en";
   let cityUrl = "" + context?.params?.City;
   const cityInfo = await getCityStateCountryByCity(cityUrl);
-  const institutions = cityInfo !== null ? (await getInstitutionsDetailedByCity(cityInfo.id)) : [];
+  const institutionList = cityInfo !== null ? (await getInstitutionsDetailedByCity(cityInfo.id)) : [];
+  const institutionData: InstitutionCardData[] = institutionList.map(inst => convertInstitutionToCardData(inst, lang));
+
+  // List of states for institutes
+  const institutionStates: State[] = institutionList.map(inst => {
+    return { ...inst.City.State }
+  });
 
   // Footer Data
   // Get all countries
-  const countryList = await getCountries("asc");
+  const countryList = await getCountries();
   const footerContent: FooterContent[] = [
     { title: "Countries", data: countryList, type: "Country" },
   ]
 
   return {
-    props: { institutionList: institutions, footerContent: footerContent, cityInfo: cityInfo }
+    props: {
+      countryList,
+      institutionData,
+      institutionStates,
+      footerContent,
+      cityInfo
+    }
   }
 
 }

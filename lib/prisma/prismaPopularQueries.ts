@@ -40,7 +40,7 @@ export const getInstitutionsByPopularity = async (takeCount: number): Promise<De
                 }
             },
             City: {
-                include: { State: { select: { Country: true } } },
+                include: { State: { include: { Country: true } } },
             },
             Subject: {
                 include: {

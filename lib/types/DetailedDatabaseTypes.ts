@@ -60,7 +60,7 @@ export type DetailedSubjectType = SubjectType & {
 // INSTITUTION CARD
 export type DetailedInstitution = (Institution & {
     City: City & {
-        State: {
+        State: State &{
             Country: Country;
         }
     }
@@ -89,12 +89,14 @@ export type DetailedInstitution = (Institution & {
 
 export type InstitutionCardData = {
     mainCountryId: string
+    mainStateId: string
     Institution: {
         url: string
         name: string
         nameBrackets: string
         City: {
             name: string
+            url: string
         }
     }
     campusCount: number

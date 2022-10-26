@@ -19,7 +19,7 @@ const WhiteCard: React.FC<Props> = ({ children, sx }: Props) => {
     const { classes } = useStyles();
 
     return (
-        <Card withBorder radius="md" p="md" shadow={"sm"} className={classes.card} sx={sx}>
+        <Card withBorder radius="md" p="lg" shadow={"sm"} className={classes.card} sx={sx}>
             {children}
         </Card>
     )

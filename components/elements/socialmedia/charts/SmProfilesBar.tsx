@@ -31,7 +31,7 @@ interface Props {
 const SmProfilesBar: React.FC<Props> = ({ total, scoreSetTwitter, scoreSetYoutube, scoreSetFacebook, scoreSetInstagram }: Props) => {
 
     const options = {
-        // indexAxis: 'y' as const,
+        indexAxis: 'y' as const,
         elements: {
             bar: {
                 borderWidth: 2,
@@ -51,66 +51,59 @@ const SmProfilesBar: React.FC<Props> = ({ total, scoreSetTwitter, scoreSetYoutub
         }
     };
 
-    const labels = ['Twitter', 'Youtube', 'Facebook', 'Instagram'];
+    const labels = ['Average impressions', 'Average interaction', 'Total content output', 'Total reach', 'Profiles completed'];
 
     const data = {
         labels,
         datasets: [
             {
-                label: 'Average impressions',
+                label: 'Twitter',
                 data: [
                     calcValue(scoreSetTwitter.averageImpressions, total.averageImpressions),
-                    calcValue(scoreSetYoutube.averageImpressions, total.averageImpressions),
-                    scoreSetFacebook?.averageImpressions || 0,
-                    scoreSetInstagram?.averageImpressions || 0
-                ],
-                backgroundColor: 'rgba(239, 71, 111, 0.2)',
-                borderColor: 'rgba(239, 71, 111, 1)',
-            },
-            {
-                label: 'Average interaction',
-                data: [
                     calcValue(scoreSetTwitter.averageInteraction, total.averageInteraction),
-                    calcValue(scoreSetYoutube.averageInteraction, total.averageInteraction),
-                    scoreSetFacebook?.averageInteraction || 0,
-                    scoreSetInstagram?.averageInteraction || 0
-                ],
-                backgroundColor: 'rgba(255, 209, 102, 0.2)',
-                borderColor: 'rgba(255, 209, 102, 1)',
-            },
-            {
-                label: 'Total content output',
-                data: [
                     calcValue(scoreSetTwitter.totalContentOutput, total.totalContentOutput),
-                    calcValue(scoreSetYoutube.totalContentOutput, total.totalContentOutput),
-                    scoreSetFacebook?.totalContentOutput || 0,
-                    scoreSetInstagram?.totalContentOutput || 0
-                ],
-                backgroundColor: 'rgba(6, 214, 160, 0.2)',
-                borderColor: 'rgba(6, 214, 160, 1)',
-            },
-            {
-                label: 'Total reach',
-                data: [
                     calcValue(scoreSetTwitter.totalReach, total.totalReach),
-                    calcValue(scoreSetYoutube.totalReach, total.totalReach),
-                    scoreSetFacebook?.totalReach || 0,
-                    scoreSetInstagram?.totalReach || 0
+                    calcValue(scoreSetTwitter.profilesCompleted, total.profilesCompleted),
                 ],
-                backgroundColor: 'rgba(17, 138, 178, 0.2)',
-                borderColor: 'rgba(17, 138, 178, 1)',
+                backgroundColor: 'rgba(29, 161, 242, 0.2)',
+                borderColor: 'rgba(29, 161, 242, 1)',
             },
             {
-                label: 'Profiles completed',
+                label: 'Youtube',
                 data: [
-                    calcValue(scoreSetTwitter.profilesCompleted, total.profilesCompleted),
+                    calcValue(scoreSetYoutube.averageImpressions, total.averageImpressions),
+                    calcValue(scoreSetYoutube.averageInteraction, total.averageInteraction),
+                    calcValue(scoreSetYoutube.totalContentOutput, total.totalContentOutput),
+                    calcValue(scoreSetYoutube.totalReach, total.totalReach),
                     calcValue(scoreSetYoutube.profilesCompleted, total.profilesCompleted),
-                    scoreSetFacebook?.profilesCompleted || 0,
-                    scoreSetInstagram?.profilesCompleted || 0
                 ],
-                backgroundColor: 'rgba(7, 59, 76, 0.2)',
-                borderColor: 'rgba(7, 59, 76, 1)',
-            }
+                backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                borderColor: 'rgba(255, 0, 0, 1)',
+            },
+            // {
+            //     label: 'Facebook',
+            //     data: [
+            //         scoreSetFacebook?.averageImpressions || 0,
+            //         scoreSetFacebook?.averageInteraction || 0,
+            //         scoreSetFacebook?.totalContentOutput || 0,
+            //         scoreSetFacebook?.totalReach || 0,
+            //         scoreSetFacebook?.profilesCompleted || 0,
+            //     ],
+            //     backgroundColor: 'rgba(239, 71, 111, 0.2)',
+            //     borderColor: 'rgba(239, 71, 111, 1)',
+            // },
+            // {
+            //     label: 'Instagram',
+            //     data: [
+            //         scoreSetInstagram?.averageImpressions || 0,
+            //         scoreSetInstagram?.averageInteraction || 0,
+            //         scoreSetInstagram?.totalContentOutput || 0,
+            //         scoreSetInstagram?.totalReach || 0,
+            //         scoreSetInstagram?.profilesCompleted || 0,
+            //     ],
+            //     backgroundColor: 'rgba(239, 71, 111, 0.2)',
+            //     borderColor: 'rgba(239, 71, 111, 1)',
+            // },
         ],
     };
 

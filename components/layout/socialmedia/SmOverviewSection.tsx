@@ -32,7 +32,7 @@ const SmOverviewSection: React.FC<Props> = (
     const graphLabels = [
         'Total reach %',
         'Total content output %',
-        'Average impressions %',
+        'Average visibility %',
         'Average interaction %',
         'Profiles completed %',
     ]

@@ -17,7 +17,7 @@ const loadDetailedCountries = async (countries: Country[]) => {
 }
 
 export const getDetailedCountries = async () => {
-    const countries = await getCountries('desc');
+    const countries = await getCountries();
     const detailed: DetailedCountry[] = await loadDetailedCountries(countries);
     return detailed;
 }
@@ -277,7 +277,7 @@ export const getInstitutionsDetailedByCountry = async (countryId: string): Promi
                 }
             },
             City: {
-                include: { State: { select: { Country: true } } },
+                include: { State: { include: { Country: true } } },
             },
             Subject: {
                 include: {
@@ -334,7 +334,7 @@ export const getInstitutionsDetailedByCity = async (cityId: string): Promise<Det
                 }
             },
             City: {
-                include: { State: { select: { Country: true } } },
+                include: { State: { include: { Country: true } } },
             },
             Subject: {
                 include: {

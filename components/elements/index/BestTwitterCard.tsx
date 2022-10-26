@@ -1,4 +1,4 @@
-import { Card, CardSection, createStyles, SimpleGrid, Text, Title } from '@mantine/core'
+import { Card, CardSection, createStyles, SimpleGrid, Space, Text, Title } from '@mantine/core'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
@@ -40,9 +40,10 @@ const BestTwitterCard: React.FC<Props> = ({ highestTwitter }: Props) => {
 
     return (
         <Link href={url} passHref>
-            <Card component='a' withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
-                <CardSection className={classes.section}>
+            <Card component='a' withBorder radius="md" p="lg" shadow={"sm"} className={classes.card}>
+                <CardSection className={classes.section} px={"lg"} pt={"lg"}>
                     <Title order={5}>Best Twitter profile</Title>
+                    <Space h={"xs"} />
                     <Text sx={{ lineHeight: 1.1 }}>
                         {highestTwitter.Institution.name}, {getLocalizedName({ lang: lang, dbTranslated: highestTwitter.Institution.City.State.Country })}
                     </Text>

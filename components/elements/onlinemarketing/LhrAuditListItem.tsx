@@ -81,7 +81,7 @@ interface Props {
 const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
 
     const { classes } = useStyles();
-    const [opened, setOpened] = useState(true);
+    const [opened, setOpened] = useState(false);
     const description = parseText(audit.description);
 
     return (

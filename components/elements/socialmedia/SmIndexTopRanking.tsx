@@ -40,7 +40,7 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
 
     return (
         <WhiteCard sx={{ height: "100%" }}>
-            <Title order={4} size={theme.fontSizes.lg} mb={"md"}>Top Institutions</Title>
+            <Title order={4} size={theme.fontSizes.lg} mb={"sm"}>Top Institutions</Title>
             <Table sx={{ minWidth: 100 }} verticalSpacing="xs">
                 <thead>
                     <tr>

@@ -15,7 +15,6 @@ const useStyles = createStyles((theme) => ({
     th: {
         padding: '0 !important',
     },
-
     control: {
         width: '100%',
         padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
@@ -24,11 +23,21 @@ const useStyles = createStyles((theme) => ({
             backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
         },
     },
-
     icon: {
         width: 21,
         height: 21,
         borderRadius: 21,
+    },
+
+    rankRow: {
+        minWidth: 100,
+    },
+    countryRow: {
+        minWidth: 150,
+    },
+    numberRow: {
+        textAlign: 'right',
+        minWidth: 150,
     },
 }));
 
@@ -40,10 +49,6 @@ interface RowData {
     youtubeScore: number;
     twitterScore: number;
     url: string;
-}
-
-interface TableSortProps {
-    data: RowData[];
 }
 
 interface ThProps {
@@ -123,6 +128,7 @@ interface Props {
 const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) => {
 
     const { t, lang } = useTranslation('common');
+    const { classes } = useStyles();
 
     const data: RowData[] = socialMediaList.map((item, i) => {
         const country = countries.find(c => c.id === item.Institution.countryId);
@@ -157,14 +163,14 @@ const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) 
 
     const rows = sortedData.map((row) => (
         <tr key={row.name}>
-            <td>{row.rank}</td>
+            <td className={classes.rankRow}>{row.rank}</td>
             <td>
                 <MantineLink label={row.name} url={row.url} type="internal" />
             </td>
-            <td>{row.country}</td>
-            <td>{formatNumberInteger(row.totalscore, lang)}</td>
-            <td>{formatNumberInteger(row.twitterScore, lang)}</td>
-            <td>{formatNumberInteger(row.youtubeScore, lang)}</td>
+            <td className={classes.countryRow}>{row.country}</td>
+            <td className={classes.numberRow}>{formatNumberInteger(row.totalscore, lang)}</td>
+            <td className={classes.numberRow}>{formatNumberInteger(row.twitterScore, lang)}</td>
+            <td className={classes.numberRow}>{formatNumberInteger(row.youtubeScore, lang)}</td>
         </tr>
     ));
 

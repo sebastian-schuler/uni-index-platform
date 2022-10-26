@@ -34,6 +34,7 @@ export const convertInstitutionToCardData = (inst: DetailedInstitution, lang: st
 
     return {
         mainCountryId: inst.City.State.Country.id,
+        mainStateId: inst.City.State.id,
         InstitutionSocialMedia: inst.InstitutionSocialMedia,
         subjectCount: inst._count.Subject,
         Institution: {
@@ -42,6 +43,7 @@ export const convertInstitutionToCardData = (inst: DetailedInstitution, lang: st
             nameBrackets: nameBrackets,
             City: {
                 name: inst.City.name,
+                url: inst.City.url,
             }
         },
         campusCount: inst.InstitutionLocation.length,
