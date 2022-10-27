@@ -1,6 +1,11 @@
-import { Card, List, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { ActionIcon, Card, Group, List, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { Institution, InstitutionSocialMedia } from '@prisma/client'
+import { IconBrandTwitter, IconBrandYoutube } from '@tabler/icons'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
+import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants'
+import { toLink } from '../../../lib/util/util'
 import MantineLink from '../../elements/MantineLink'
 import SmIconLink from '../../elements/socialmedia/SmIconLink'
 
@@ -14,53 +19,35 @@ interface Props {
 
 const SmHeaderSection: React.FC<Props> = ({ institutionSM, institution, classes, showTwitterNavItem, showYoutubeNavItem }: Props) => {
 
+    const router = useRouter();
+    console.log();
+    const currentUrl = router.asPath;
     return (
-        <div>
-            <Title order={2}>Social Media Statistics</Title>
-            <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
+        <Stack>
+            <div>
+                <Title order={2}>Social Media Statistics</Title>
+                <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
+            </div>
+            <Group sx={{ justifyContent: "center" }} spacing={"xl"}>
 
-            <SimpleGrid cols={2}>
+                <Stack align={"center"} spacing={"sm"}>
+                    <Link href={toLink(router.asPath,"twitter")} passHref>
+                        <ActionIcon component='a' variant="filled" size={50} radius={"xl"} color="twitter" >
+                            <IconBrandTwitter size={30} />
+                        </ActionIcon>
+                    </Link>
+                    <Text>Twitter Details</Text>
+                </Stack>
 
-                <Card shadow={"xs"} className={classes.card}>
-                    <Text size="xs" color="dimmed" className={classes.title}>
-                        Navigation
-                    </Text>
-                    <List type='ordered'>
-                        <List.Item><MantineLink label='Overview' url='#sectionOverview' type='scroll' /></List.Item>
-                        {
-                            showTwitterNavItem && <List.Item><MantineLink label='Twitter Details' url='#sectionTwitterDetails' type='scroll' /></List.Item>
-                        }
-                        {
-                            showYoutubeNavItem && <List.Item><MantineLink label='Youtube Details' url='#sectionYoutubeDetails' type='scroll' /></List.Item>
-                        }
-                    </List>
-                </Card>
+                <Stack align={"center"} spacing={"sm"}>
+                    <ActionIcon variant="filled" size={50} radius={"xl"} color="youtube" >
+                        <IconBrandYoutube size={30} />
+                    </ActionIcon>
+                    <Text>Youtube Details</Text>
+                </Stack>
 
-                <Card shadow={"xs"} className={classes.card}>
-                    <Stack spacing={"sm"}>
-                        <Text size="xs" color="dimmed" className={classes.title}>
-                            Social Media Links
-                        </Text>
-                        {
-                            institutionSM.youtube_url &&
-                            <SmIconLink type='youtube' url={institutionSM.youtube_url} label title={`Youtube channel of ${institution.name}`} />
-                        }
-                        {
-                            institutionSM.twitter_url &&
-                            <SmIconLink type='twitter' url={institutionSM.twitter_url} label title={`Twitter profile of ${institution.name}`} />
-                        }
-                        {
-                            institutionSM.facebook_url &&
-                            <SmIconLink type='facebook' url={institutionSM.facebook_url} label title={`Facebook profile of ${institution.name}`} />
-                        }
-                        {
-                            institutionSM.instagram_url &&
-                            <SmIconLink type='instagram' url={institutionSM.instagram_url} label title={`Instagram profile of ${institution.name}`} />
-                        }
-                    </Stack>
-                </Card>
-            </SimpleGrid>
-        </div>
+            </Group>
+        </Stack>
     )
 }
 

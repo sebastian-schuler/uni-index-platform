@@ -23,10 +23,10 @@ const PopularSection: React.FC<Props> = ({ title, subtext, buttonText, buttonUrl
 
                 <Group mb={"sm"} sx={{ justifyContent: "space-between", alignItems: "flex-end" }}>
                     <Stack spacing={0}>
-                        <Title order={2} color={brandColor ? 'light.0' : 'dark.0'}>
+                        <Title order={2} color={brandColor ? 'light.0' : 'light.9'}>
                             {title}
                         </Title>
-                        {subtext && <Text color={brandColor ? 'light.0' : 'dark.0'}>{subtext}</Text>}
+                        {subtext && <Text color={brandColor ? 'light.0' : 'light.9'}>{subtext}</Text>}
                     </Stack>
                     <MantineLink label={buttonText} url={buttonUrl} color={brandColor ? 'light.0' : undefined} type="internal"/>
                 </Group>

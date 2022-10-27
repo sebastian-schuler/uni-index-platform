@@ -1,5 +1,5 @@
 import { Box, Card, Grid, SimpleGrid, Stack, Text, Title } from '@mantine/core';
-import { Country, CountrySocialMedia, Institution } from '@prisma/client';
+import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client';
 import {
     IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandYoutube
 } from '@tabler/icons';
@@ -9,9 +9,11 @@ import { TotalScore, TotalScoreSet } from '../../../lib/types/SocialMediaTypes';
 import { getLocalizedName } from '../../../lib/util/util';
 import SmProfilesBar from '../../elements/socialmedia/charts/SmProfilesBar';
 import SocialMediaRadar from '../../elements/socialmedia/charts/SmRadar';
+import SmIconLink from '../../elements/socialmedia/SmIconLink';
 import SocialMediaStatCard from '../../elements/socialmedia/SmStatCard';
 
 interface Props {
+    institutionSM: InstitutionSocialMedia
     institution: Institution,
     country: Country,
     countrySocialMedia: CountrySocialMedia,
@@ -23,7 +25,7 @@ interface Props {
 }
 
 const SmOverviewSection: React.FC<Props> = (
-    { institution, country, countrySocialMedia, institutionScore, countryPercentScore, countryTwitterScore, countryYoutubeScore, classes }: Props
+    { institutionSM, institution, country, countrySocialMedia, institutionScore, countryPercentScore, countryTwitterScore, countryYoutubeScore, classes }: Props
 ) => {
 
     const { t, lang } = useTranslation('common');
@@ -102,7 +104,29 @@ const SmOverviewSection: React.FC<Props> = (
                                 icon={IconBrandFacebook}
                             />
                         </SimpleGrid>
-
+                        <Card shadow={"xs"} className={classes.card}>
+                            <Stack spacing={"sm"}>
+                                <Text size="xs" color="dimmed" className={classes.title}>
+                                    Social Media Links
+                                </Text>
+                                {
+                                    institutionSM.youtube_url &&
+                                    <SmIconLink type='youtube' url={institutionSM.youtube_url} label title={`Youtube channel of ${institution.name}`} />
+                                }
+                                {
+                                    institutionSM.twitter_url &&
+                                    <SmIconLink type='twitter' url={institutionSM.twitter_url} label title={`Twitter profile of ${institution.name}`} />
+                                }
+                                {
+                                    institutionSM.facebook_url &&
+                                    <SmIconLink type='facebook' url={institutionSM.facebook_url} label title={`Facebook profile of ${institution.name}`} />
+                                }
+                                {
+                                    institutionSM.instagram_url &&
+                                    <SmIconLink type='instagram' url={institutionSM.instagram_url} label title={`Instagram profile of ${institution.name}`} />
+                                }
+                            </Stack>
+                        </Card>
                     </Stack>
                 </Grid.Col>
 

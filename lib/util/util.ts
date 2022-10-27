@@ -84,8 +84,10 @@ export const getDBLocale = (locale: string | undefined) => {
 export const toLink = (...args: string[]) => {
     let res = "";
     args.forEach((val) => {
-        if (val !== undefined)
-            res = res + "/" + val;
+        if (val !== undefined) {
+            if (val.startsWith("/")) res += val;
+            else res = res + "/" + val;
+        }
     });
     return res;
 }

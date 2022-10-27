@@ -4,6 +4,15 @@ import React from 'react'
 
 const useStyles = createStyles((theme) => ({
 
+    groupContainer: {
+
+        // Media query with value from theme
+        [`@media (max-width: ${theme.breakpoints.md}px)`]: {
+            gap: theme.spacing.sm,
+        },
+
+    },
+
     iconFacebook: {
         color: theme.colors.gray[6],
         transition: "all .2s ease-in-out",
@@ -140,11 +149,11 @@ const SmIconLink: React.FC<Props> = ({ type, url, label, size, iconSize, title, 
 
         return (
             <Anchor component="a" href={url} color={"brandOrange.5"} target={"_blank"} title={title}>
-                <Group>
+                <Group noWrap className={classes.groupContainer}>
                     {
                         getIcon()
                     }
-                    <Text>{label === true ? shortenLink(url) : label.toString()}</Text>
+                    <Text sx={{ overflow: "clip" }}>{label === true ? shortenLink(url) : label.toString()}</Text>
                 </Group>
             </Anchor>
         )

@@ -41,6 +41,7 @@ model Institution {
   popularity_score       Int                     @default(0)
   City                   City                    @relation(fields: [main_location], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Institution main location in city")
   InstitutionLocation    InstitutionLocation[]
+  InstitutionScreenshot  InstitutionScreenshot[]
   InstitutionSocialMedia InstitutionSocialMedia?
   Subject                Subject[]
   User                   User[]
@@ -183,4 +184,19 @@ model CountrySocialMedia {
   avg_instagram_profile   String? @db.VarChar
   avg_total_score_percent String  @db.VarChar
   Country                 Country @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SocialMediaCountry id of country")
+}
+
+model InstitutionScreenshot {
+  id             Int         @id(map: "InstitutionScreenshots_pkey") @default(autoincrement())
+  institution_id String      @db.Uuid
+  filename       String      @db.VarChar
+  timestamp      Decimal     @db.Decimal
+  url            String      @db.VarChar
+  screen_index   Int
+  type           String      @db.VarChar
+  pair_index     Int
+  Institution    Institution @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Institution has screenshots")
+
+  @@unique([institution_id, filename], map: "filename per institution is unique")
+  @@unique([institution_id, screen_index], map: "screenshot index per institution unique")
 }

@@ -23,7 +23,7 @@ const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitterSt
     <ResponsiveContainer paddingY>
 
       <Stack spacing={0}>
-        <Title order={2} color={'dark.0'}>
+        <Title order={2} color={'light.9'}>
           Social Media Ranking
         </Title>
         <Text>We looked at every institutions social media pages.</Text>
