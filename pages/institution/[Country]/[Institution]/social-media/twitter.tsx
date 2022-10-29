@@ -77,7 +77,7 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
     const countryScore = JSON.parse(countrySM.avg_total_score) as TotalScoreSet;
     const countryTwitterScore = JSON.parse(countrySM.avg_twitter_score) as TotalScoreSet;
     const countryYoutubeScore = JSON.parse(countrySM.avg_youtube_score) as TotalScoreSet;
-    const countryPercentScore = JSON.parse(countrySM.avg_total_score_percent) as TotalScoreSet;
+    // const countryPercentScore = JSON.parse(countrySM.avg_total_score_percent) as TotalScoreSet;
     const countryTwitterResults = JSON.parse(countrySM.avg_twitter_profile) as TwitterProfile;
     const countryYoutubeResults = JSON.parse(countrySM.avg_youtube_profile) as YoutubeProfile;
 
@@ -156,9 +156,9 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
                                         >
                                             Profile status
                                         </Text>
-                                        <Text weight={700} size="md" color={twitterProfile.verifiedMultiplier ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                        <Text weight={700} size="md" color={twitterProfile.isVerified ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
                                             {
-                                                twitterProfile.verifiedMultiplier ? "VERIFIED" : "NOT VERIFIED"
+                                                twitterProfile.isVerified ? "VERIFIED" : "NOT VERIFIED"
                                             }
                                         </Text>
                                     </div>
@@ -174,9 +174,9 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
                                         >
                                             Website link
                                         </Text>
-                                        <Text weight={700} size="md" color={twitterProfile.websitelinkMultiplier ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                        <Text weight={700} size="md" color={twitterProfile.isWebsiteLinked ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
                                             {
-                                                twitterProfile.websitelinkMultiplier ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
+                                                twitterProfile.isWebsiteLinked ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
                                             }
                                         </Text>
                                     </div>
@@ -198,20 +198,20 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
                                     <Divider mt="md" mb="md" />
                                     <SmStatRow
                                         title='Average likes per tweet'
-                                        countryValue={countryTwitterResults.averageLikes}
-                                        institutionValue={twitterProfile.averageLikes}
+                                        countryValue={countryTwitterResults.avgLikes}
+                                        institutionValue={twitterProfile.avgLikes}
                                     />
                                     <Divider mt="md" mb="md" />
                                     <SmStatRow
-                                        title='Average interaction per tweet'
-                                        countryValue={countryTwitterResults.averageInteraction}
-                                        institutionValue={twitterProfile.averageInteraction}
+                                        title='Average replies per tweet'
+                                        countryValue={countryTwitterResults.avgReplies}
+                                        institutionValue={twitterProfile.avgReplies}
                                     />
                                     <Divider mt="md" mb="md" />
                                     <SmStatRow
                                         title='Average retweets per tweet'
-                                        countryValue={countryTwitterResults.averageRetweets}
-                                        institutionValue={twitterProfile.averageRetweets}
+                                        countryValue={countryTwitterResults.avgRetweets}
+                                        institutionValue={twitterProfile.avgRetweets}
                                     />
                                 </Card.Section>
                             </Card>

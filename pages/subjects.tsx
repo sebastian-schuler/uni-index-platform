@@ -2,7 +2,7 @@ import { Group, SimpleGrid, Stack } from '@mantine/core';
 import { Reorder } from 'framer-motion';
 import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import GenericPageHeader from '../components/elements/GenericPageHeader';
 import SubjectTypeCard from '../components/elements/itemcards/SubjectTypeCard';
 import OrderBySelect, { OrderByState, sortSearchableArray } from '../components/elements/OrderBySelect';
@@ -15,15 +15,25 @@ import { getDetailedSubjectTypes } from '../lib/prisma/prismaDetailedQueries';
 import { getCountries } from '../lib/prisma/prismaQueries';
 import { DetailedSubjectType } from '../lib/types/DetailedDatabaseTypes';
 import { Searchable } from '../lib/types/UiHelperTypes';
-import { generateSearchable } from '../lib/util/util';
+import { generateSearchable, getLocalizedName } from '../lib/util/util';
+
+type SearchState = {
+    query: string,
+}
+type SearchAction = {
+    query: string,
+}
 
 interface Props {
     searchableSubjectTypes: Searchable[]
     footerContent: FooterContent[]
 }
 
+// TODO: Move search functionality to a separate component
+
 const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Props) => {
 
+    // TRANSLATION
     const { t, lang } = useTranslation('subject');
     const langContent = {
         pageTitle: t('common:page-title'),
@@ -32,7 +42,32 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
         searchLabel: t('subjecttype-search-label'),
         searchPlaceholder: t('subjecttype-search-placeholder'),
     }
+
+    // DATA LISTS
     const [dataList, setDataList] = useState<Searchable[]>(searchableSubjectTypes);
+    const [searchState, searchDispatch] = useReducer(searchReducer, { query: "" });
+
+    // SEARCH FUNCTION REDUCER
+    function searchReducer(state: SearchState, newSearch: SearchAction) {
+
+        if (state.query === newSearch.query) return state;
+
+        const newSearchableList = Array.from([...dataList]);
+        if (newSearch.query === "") {
+            newSearchableList.forEach((searchable) => searchable.visible = true);
+        } else {
+            newSearchableList.forEach((searchable) => {
+
+                if (getLocalizedName({ lang: lang, searchable: searchable })?.toLowerCase().startsWith(newSearch.query.toLowerCase())) {
+                    searchable.visible = true;
+                } else {
+                    searchable.visible = false;
+                }
+            });
+        }
+        setDataList(newSearchableList);
+        return { query: newSearch.query };
+    }
 
     // Order by
     const [orderBy, setOrderBy] = useState<OrderByState>("relevance");
@@ -43,7 +78,7 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
     };
 
     useEffect(() => {
-        setDataList(d => sortSearchableArray(d, orderBy, lang) );
+        setDataList(d => sortSearchableArray(d, orderBy, lang));
     }, [orderBy, lang]);
 
     return (
@@ -63,8 +98,8 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
                     <SearchBox
                         label={langContent.searchLabel}
                         placeholder={langContent.searchPlaceholder}
-                        searchableList={dataList}
-                        setSearchableList={setDataList}
+                        searchTerm={searchState.query}
+                        setSearchTerm={(newSearch) => searchDispatch({ query: newSearch })}
                     />
                     <OrderBySelect orderBy={orderBy} handleChange={handleOrderChange} />
                 </Group>
@@ -83,7 +118,7 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
                         {
                             dataList.map((searchable, i) => (
                                 searchable.visible && (
-                                    <Reorder.Item key={searchable.data.id} as={"div"} value={searchable}>
+                                    <Reorder.Item key={"orderitem" + i} as={"div"} value={searchable}>
                                         <SubjectTypeCard key={i} subjectType={searchable.data as DetailedSubjectType} />
                                     </Reorder.Item>
                                 )
@@ -103,7 +138,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     // List of subject categories
     const detailedSubjectTypes = await getDetailedSubjectTypes();
-    const searchableSubjectTypes: Searchable[] = generateSearchable({ lang: context.locale, array: { type: "SubjectType", data: detailedSubjectTypes } });
+    const searchableSubjectTypes: Searchable[] = generateSearchable({ type: "SubjectType", data: detailedSubjectTypes });
 
     // Footer Data
     const countryList = await getCountries();

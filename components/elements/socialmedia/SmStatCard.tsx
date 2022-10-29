@@ -4,6 +4,7 @@ import {
 } from '@tabler/icons';
 import useTranslation from 'next-translate/useTranslation';
 import { memo } from 'react';
+import { formatNumber } from '../../../lib/util/formattingUtil';
 
 
 const useStyles = createStyles((theme) => ({
@@ -60,14 +61,14 @@ const SmStatCard = ({ title, value, diff, icon }: Props) => {
             </Group>
 
             <Group align="flex-end" spacing="xs" mt={25}>
-                <Text className={classes.value}>{value.toLocaleString(lang, { maximumFractionDigits: 0, minimumFractionDigits: 0 })}</Text>
+                <Text className={classes.value}>{formatNumber(value, lang, value > 0 ? 2 : 0)}%</Text>
                 <Text
                     color={diff > 0 ? 'teal' : (diff < 0 ? 'red' : 'gray')}
                     size="sm"
                     weight={500}
                     className={classes.diff}
                 >
-                    <span>{diff.toLocaleString(lang, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}%</span>
+                    <span>{formatNumber(diff, lang, 2)}%</span>
                     <DiffIcon size={16} stroke={1.5} />
                 </Text>
             </Group>

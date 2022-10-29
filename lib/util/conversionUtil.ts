@@ -9,16 +9,15 @@ import { getBracketedName, getLocalizedName, getUniqueSubjectTypeCounts, toLink 
  */
 export const minifySmRankingItem = (item: SmRankingEntry): SmRankingEntryMinified => {
     const parsedScore = JSON.parse(item.total_score) as TotalScore;
-    const total = parsedScore.all.total;
     return {
         Institution: {
             name: item.Institution.name,
             url: item.Institution.url,
             countryId: item.Institution.City.State.Country.id,
         },
-        total_score: total,
-        yt_total_score: parsedScore.youtubeOnly.total,
-        tw_total_score: parsedScore.twitterOnly.total,
+        combinedScore: parsedScore.percent.all.total,
+        youtubeScore: parsedScore.percent.youtube.total,
+        twitterScore: parsedScore.percent.twitter.total,
     }
 }
 

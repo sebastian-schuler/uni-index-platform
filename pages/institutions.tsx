@@ -8,8 +8,9 @@ import Meta from '../components/partials/Meta';
 import { AD_PAGE_INSTITUTIONS } from '../lib/appConstants';
 import { getDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
 import { getAds } from '../lib/prisma/prismaQueries';
-import { DetailedUserAd } from '../lib/types/DetailedDatabaseTypes';
+import { CountryCardData, DetailedUserAd } from '../lib/types/DetailedDatabaseTypes';
 import { Searchable } from '../lib/types/UiHelperTypes';
+import { convertCountryToCardData } from '../lib/util/conversionUtil';
 import { generateSearchable } from '../lib/util/util';
 
 interface Props {
@@ -41,12 +42,9 @@ const Institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, fo
                 <CountryList
                     title={langContent.title}
                     subtitle={langContent.subtitle}
-                    root={"institution"}
                     searchableCountries={searchableCountries}
                 >
-
                     <PremiumList premiumAds={ads} />
-
                 </CountryList>
 
             </LayoutContainer>
@@ -56,8 +54,10 @@ const Institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, fo
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
+    const lang = context.locale || "en";
     const countryList = await getDetailedCountries();
-    const searchableCountries = generateSearchable({ lang: context.locale, array: { type: "Country", data: countryList } });
+    const countryData: CountryCardData[] = countryList.map(country => convertCountryToCardData(country, lang, "institution"));
+    const searchableCountries = generateSearchable({ type: "Country", data: countryData });
 
     // Ads
     const ads: DetailedUserAd[] = await getAds(AD_PAGE_INSTITUTIONS);

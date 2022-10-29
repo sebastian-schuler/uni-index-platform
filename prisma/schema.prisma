@@ -182,7 +182,6 @@ model CountrySocialMedia {
   avg_youtube_profile     String  @db.VarChar
   avg_facebook_profile    String? @db.VarChar
   avg_instagram_profile   String? @db.VarChar
-  avg_total_score_percent String  @db.VarChar
   Country                 Country @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SocialMediaCountry id of country")
 }
 

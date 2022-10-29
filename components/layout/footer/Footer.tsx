@@ -53,13 +53,13 @@ const Footer: NextPage<Props> = props => {
                 const country = val.data as Country[];
                 country.forEach(val => {
                     let name = getLocalizedName({ lang: lang, dbTranslated: val });
-                    dataRow.content.push({ name: name, url: '/location/' + val.url })
+                    dataRow.content.push({ name: name, url: toLink(val.url) })
                 });
 
             } else if (val.type === "Searchable") {
                 const searchable = val.data as Searchable[];
                 searchable.forEach(val => {
-                    dataRow.content.push({ name: getLocalizedName({ lang: lang, searchable: val }), url: '/location/' + val.data.url })
+                    dataRow.content.push({ name: getLocalizedName({ lang: lang, searchable: val }), url: toLink(val.data.url) })
                 });
             }
 

@@ -3,6 +3,7 @@ import {
   Burger, Center, createStyles, Divider, Drawer, Group, Header, Menu, Stack, Text
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { NextLink } from '@mantine/next';
 import { IconChevronDown } from '@tabler/icons';
 import Link from 'next/link';
 import ResponsiveContainer from '../ResponsiveContainer';
@@ -53,14 +54,13 @@ const useStyles = createStyles((theme) => ({
     },
 
     '&:hover': {
-
+      textDecoration: 'none',
       [theme.fn.largerThan('sm')]: {
         backgroundColor: theme.fn.lighten(
           theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background || "",
           0.1
         ),
       },
-
     },
   },
 
@@ -84,32 +84,36 @@ const WebsiteHeader = () => {
 
   const links: NestedLinkProps[] = [
     { parent: { label: "Home", link: "/" }, children: [] },
-    { parent: { label: "Universities", link: "/locations" }, children: [] },
+    { parent: { label: "Locations", link: "/locations" }, children: [] },
     { parent: { label: "Subjects", link: "/subjects" }, children: [] },
     { parent: { label: "Institutions", link: "/institutions" }, children: [] },
-    { parent: { label: "Social-Media Ranking", link: "/social-media-ranking" }, children: [] },
+    {
+      parent: { label: "Social-Media", link: "/social-media" }, children: [
+        { label: "Social-Media Ranking", link: "/social-media/social-media-ranking" },
+        { label: "Statistics", link: "/social-media/statistics" }
+      ]
+    },
   ]
 
   const [opened, { toggle }] = useDisclosure(false);
   const { classes } = useStyles();
 
   const items = links.map((link) => {
+
     const menuItems = link.children?.map((item) => (
-      <Menu.Item key={item.link}>{item.label}</Menu.Item>
+      <Menu.Item key={item.link} component={NextLink} href={item.link}>{item.label}</Menu.Item>
     ));
 
     if (menuItems && menuItems.length > 0) {
       return (
-        <Menu key={link.parent.label} trigger="hover" exitTransitionDuration={0}>
+        <Menu key={link.parent.label} trigger="hover" exitTransitionDuration={100}>
           <Menu.Target>
-            <Link key={link.parent.label} href={link.parent.link} passHref>
-              <Anchor component='a' className={classes.link}>
-                <Center>
-                  <span className={classes.linkLabel}>{link.parent.label}</span>
-                  <IconChevronDown size={12} stroke={1.5} />
-                </Center>
-              </Anchor>
-            </Link>
+            <Anchor className={classes.link} sx={{ userSelect: 'none' }}>
+              <Center>
+                <span className={classes.linkLabel}>{link.parent.label}</span>
+                <IconChevronDown size={12} stroke={1.5} />
+              </Center>
+            </Anchor>
           </Menu.Target>
           <Menu.Dropdown>{menuItems}</Menu.Dropdown>
         </Menu>

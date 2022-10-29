@@ -77,7 +77,7 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
     const countryScore = JSON.parse(countrySM.avg_total_score) as TotalScoreSet;
     const countryTwitterScore = JSON.parse(countrySM.avg_twitter_score) as TotalScoreSet;
     const countryYoutubeScore = JSON.parse(countrySM.avg_youtube_score) as TotalScoreSet;
-    const countryPercentScore = JSON.parse(countrySM.avg_total_score_percent) as TotalScoreSet;
+    // const countryPercentScore = JSON.parse(countrySM.avg_total_score_percent) as TotalScoreSet;
     const countryTwitterResults = JSON.parse(countrySM.avg_twitter_profile) as TwitterProfile;
     const countryYoutubeResults = JSON.parse(countrySM.avg_youtube_profile) as YoutubeProfile;
 
@@ -126,8 +126,8 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
 
                                 <SmStatRow
                                     title='Subscribers'
-                                    countryValue={countryYoutubeResults.subs}
-                                    institutionValue={youtubeProfile.subs}
+                                    countryValue={countryYoutubeResults.subscribers}
+                                    institutionValue={youtubeProfile.subscribers}
                                 />
                                 <Divider mt="md" mb="md" />
 

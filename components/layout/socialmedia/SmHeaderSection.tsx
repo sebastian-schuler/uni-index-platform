@@ -31,7 +31,7 @@ const SmHeaderSection: React.FC<Props> = ({ institutionSM, institution, classes,
             <Group sx={{ justifyContent: "center" }} spacing={"xl"}>
 
                 <Stack align={"center"} spacing={"sm"}>
-                    <Link href={toLink(router.asPath,"twitter")} passHref>
+                    <Link href={toLink(router.asPath, "twitter")} passHref>
                         <ActionIcon component='a' variant="filled" size={50} radius={"xl"} color="twitter" >
                             <IconBrandTwitter size={30} />
                         </ActionIcon>
@@ -40,9 +40,11 @@ const SmHeaderSection: React.FC<Props> = ({ institutionSM, institution, classes,
                 </Stack>
 
                 <Stack align={"center"} spacing={"sm"}>
-                    <ActionIcon variant="filled" size={50} radius={"xl"} color="youtube" >
-                        <IconBrandYoutube size={30} />
-                    </ActionIcon>
+                    <Link href={toLink(router.asPath, "youtube")} passHref>
+                        <ActionIcon component='a' variant="filled" size={50} radius={"xl"} color="youtube" >
+                            <IconBrandYoutube size={30} />
+                        </ActionIcon>
+                    </Link>
                     <Text>Youtube Details</Text>
                 </Stack>
 

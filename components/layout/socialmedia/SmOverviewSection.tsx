@@ -39,11 +39,11 @@ const SmOverviewSection: React.FC<Props> = (
         'Profiles completed %',
     ]
     const graphDataInstitution = [
-        institutionScore.percentData.totalReach,
-        institutionScore.percentData.totalContentOutput,
-        institutionScore.percentData.averageImpressions,
-        institutionScore.percentData.averageInteraction,
-        institutionScore.percentData.profilesCompleted,
+        institutionScore.percent.all.totalReach,
+        institutionScore.percent.all.totalContentOutput,
+        institutionScore.percent.all.averageImpressions,
+        institutionScore.percent.all.averageInteraction,
+        institutionScore.percent.all.profilesCompleted,
     ]
     const graphDataCountry = [
         countryPercentScore.totalReach,
@@ -69,9 +69,9 @@ const SmOverviewSection: React.FC<Props> = (
                             dataCountry={graphDataCountry}
                         />
                         <SmProfilesBar
-                            total={institutionScore.all}
-                            scoreSetTwitter={institutionScore.twitterOnly}
-                            scoreSetYoutube={institutionScore.youtubeOnly}
+                            total={institutionScore.percent.all}
+                            scoreSetTwitter={institutionScore.percent.twitter}
+                            scoreSetYoutube={institutionScore.percent.youtube}
                         />
                     </Card>
                 </Grid.Col>
@@ -81,14 +81,14 @@ const SmOverviewSection: React.FC<Props> = (
                         <SimpleGrid cols={1}>
                             <SocialMediaStatCard
                                 title='Twitter'
-                                value={institutionScore?.twitterOnly.total || 0}
-                                diff={calculateSocialMediaDifference(institutionScore?.twitterOnly.total || 0, countryTwitterScore.total)}
+                                value={institutionScore?.percent.twitter.total || 0}
+                                diff={calculateSocialMediaDifference(institutionScore?.percent.twitter.total || 0, countryTwitterScore.total)}
                                 icon={IconBrandTwitter}
                             />
                             <SocialMediaStatCard
                                 title='Youtube'
-                                value={institutionScore?.youtubeOnly.total || 0}
-                                diff={calculateSocialMediaDifference(institutionScore?.youtubeOnly.total || 0, countryYoutubeScore.total)}
+                                value={institutionScore?.percent.youtube.total || 0}
+                                diff={calculateSocialMediaDifference(institutionScore?.percent.youtube.total || 0, countryYoutubeScore.total)}
                                 icon={IconBrandYoutube}
                             />
                             <SocialMediaStatCard

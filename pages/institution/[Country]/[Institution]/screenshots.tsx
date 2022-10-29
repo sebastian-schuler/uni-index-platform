@@ -2,6 +2,7 @@ import { Card, createStyles, Divider, Grid, Image, SimpleGrid, Stack, Text } fro
 import { Country, Institution, InstitutionScreenshot } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
+import { useState } from 'react'
 import Breadcrumb from '../../../../components/layout/Breadcrumb'
 import { FooterContent } from '../../../../components/layout/footer/Footer'
 import LayoutContainer from '../../../../components/layout/LayoutContainer'
@@ -15,9 +16,18 @@ import { PATH_INSTITUTION_SCREENSHOTS } from '../../../../lib/url-helper/urlCons
 import { toLink } from '../../../../lib/util/util'
 
 const useStyles = createStyles((theme) => ({
+  screenshotThumbnail: {
+    cursor: 'pointer',
+    transition: "all .2s ease-in-out",
+
+    '&:hover': {
+      transform: "scale(1.05)",
+    },
+  }
 
 }));
 
+type ScreenshotPair = { full: InstitutionScreenshot, thumbnail: InstitutionScreenshot }
 
 interface Props {
   institution: Institution,
@@ -28,20 +38,18 @@ interface Props {
 
 const InstitutionScreenshots: NextPage<Props> = ({ institution, country, screenshotsStringified, footerContent }: Props) => {
 
+  const [selectedScreenshot, setSelectedScreenshot] = useState<ScreenshotPair | null>(null);
   const { lang } = useTranslation();
   const { classes } = useStyles();
 
   const allScreenshots: InstitutionScreenshot[] = JSON.parse(screenshotsStringified);
 
-  type ScreenshotPair = { full: InstitutionScreenshot, thumbnail: InstitutionScreenshot }
   const screenshotPairs: ScreenshotPair[] = [];
 
   allScreenshots.forEach((screenshot: InstitutionScreenshot) => {
     if (screenshot.type === "full") {
       const thumbnail = allScreenshots.find(scrn => scrn.pair_index === screenshot.pair_index && scrn.type === "thumbnail");
       if (thumbnail) {
-        screenshotPairs.push({ full: screenshot, thumbnail: thumbnail });
-        screenshotPairs.push({ full: screenshot, thumbnail: thumbnail });
         screenshotPairs.push({ full: screenshot, thumbnail: thumbnail });
       }
     }
@@ -67,7 +75,7 @@ const InstitutionScreenshots: NextPage<Props> = ({ institution, country, screens
             {
               screenshotPairs.map((pair, index) => (
                 <div key={index}>
-                  <Stack my={"sm"} spacing={0}>
+                  <Stack my={"sm"} spacing={0} className={classes.screenshotThumbnail} onClick={() => setSelectedScreenshot(pair)}>
                     <Text weight={"bold"}>{getDateString(Number(pair.thumbnail.timestamp), lang)}</Text>
                     <Image src={toLink(PATH_INSTITUTION_SCREENSHOTS, pair.thumbnail.institution_id, pair.thumbnail.filename + ".jpg")} alt={""} fit={"scale-down"} />
                   </Stack>
@@ -78,7 +86,11 @@ const InstitutionScreenshots: NextPage<Props> = ({ institution, country, screens
           </Grid.Col>
 
           <Grid.Col span={9}>
-
+            {
+              selectedScreenshot && (
+                <Image src={toLink(PATH_INSTITUTION_SCREENSHOTS, selectedScreenshot.full.institution_id, selectedScreenshot.full.filename + ".jpg")} alt={""} fit={"scale-down"} />
+              )
+            }
           </Grid.Col>
 
         </Grid>

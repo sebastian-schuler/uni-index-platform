@@ -21,7 +21,7 @@ import { CountryCardData, DetailedCountry, DetailedInstitution, DetailedSubject,
 import { SmRankingEntryMinified, TotalScore } from '../lib/types/SocialMediaTypes';
 import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
 import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmRankingItem } from '../lib/util/conversionUtil';
-import { toLink } from '../lib/util/util';
+import { getUniquesFromArray, toLink } from '../lib/util/util';
 
 interface Props {
   adsStringified: string,
@@ -29,7 +29,7 @@ interface Props {
   subjectData: SubjectCardData[],
   countryData: CountryCardData[],
   countryList: Country[],
-  popularInstituteStates: State[],
+  institutionStates: State[],
   socialMediaList: SmRankingEntryMinified[],
   highestTwitterStringified: string,
   highestYoutubeStringified: string,
@@ -37,7 +37,7 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, countryData, countryList,
-  popularInstituteStates, socialMediaList, highestTwitterStringified, highestYoutubeStringified, footerContent }: Props) => {
+  institutionStates, socialMediaList, highestTwitterStringified, highestYoutubeStringified, footerContent }: Props) => {
 
   const ads: DetailedUserAd[] = JSON.parse(adsStringified);
 
@@ -104,7 +104,7 @@ const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, c
                 <InstitutionCard
                   data={institute}
                   country={countryList.find(c => c.id === institute.mainCountryId)}
-                  state={popularInstituteStates.find(s => s.id === institute.mainStateId)}
+                  state={institutionStates.find(s => s.id === institute.mainStateId)}
                 />
               </Grid.Col>
               // )
@@ -144,19 +144,17 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const lang = context.locale || "en";
 
   // Popular ...
-  const popularSubjectsDetailed: DetailedSubject[] = await getSubjectsByPopularity(6);
-  const popularInstitutesDetailed: DetailedInstitution[] = await getInstitutionsByPopularity(6);
-  const popularCountriesDetailed: DetailedCountry[] = await getPopularDetailedCountries();
+  const subjectsDetailed: DetailedSubject[] = await getSubjectsByPopularity(6);
+  const institutionsDetailed: DetailedInstitution[] = await getInstitutionsByPopularity(6);
+  const countriesDetailed: DetailedCountry[] = await getPopularDetailedCountries();
 
   // Convert to CardData to lower size
-  const institutionData: InstitutionCardData[] = popularInstitutesDetailed.map(inst => convertInstitutionToCardData(inst, lang));
-  const subjectData: SubjectCardData[] = popularSubjectsDetailed.map(subj => convertSubjectToCardData(subj, lang));
-  const countryData: CountryCardData[] = popularCountriesDetailed.map(country => convertCountryToCardData(country, lang, "location"));
+  const institutionData: InstitutionCardData[] = institutionsDetailed.map(inst => convertInstitutionToCardData(inst, lang));
+  const subjectData: SubjectCardData[] = subjectsDetailed.map(subj => convertSubjectToCardData(subj, lang));
+  const countryData: CountryCardData[] = countriesDetailed.map(country => convertCountryToCardData(country, lang, "location"));
 
   // List of states for popular institutes
-  const popularInstituteStates: State[] = popularInstitutesDetailed.map(inst => {
-    return { ...inst.City.State }
-  });
+  const institutionStates = getUniquesFromArray({ type: "State", data: institutionsDetailed.map(inst => inst.City.State) }) as State[];
 
   // === SOCIAL MEDIA ===
   const socialMediaRankingList = await getSocialMediaRanking();
@@ -201,7 +199,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       institutionData,
       subjectData,
       countryList,
-      popularInstituteStates,
+      institutionStates,
       socialMediaList: socialMediaTopList,
       highestTwitterStringified,
       highestYoutubeStringified,

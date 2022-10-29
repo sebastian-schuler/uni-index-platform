@@ -31,9 +31,9 @@ export interface SmRankingEntryMinified {
         url: string
         countryId: string
     }
-    total_score: number,
-    yt_total_score: number,
-    tw_total_score: number,
+    combinedScore: number,
+    youtubeScore: number,
+    twitterScore: number,
 }
 
 // -------------- YOUTUBE --------------
@@ -88,12 +88,13 @@ export interface InstagramResult {
 // -------------- RATINGS --------------
 
 export interface YoutubeProfile {
-    subs: number
+    subscribers: number
     views: number
     videos: number
     averageLikes: number
     averageViews: number
     averageComments: number
+    averageFavorites: number
     descriptionGood: boolean
     videosHaveTags: boolean
 }
@@ -103,19 +104,24 @@ export interface TwitterProfile {
     following: number
     tweets: number
     listed: number
-    averageLikes: number
-    averageRetweets: number
-    averageReplies: number
-    averageInteraction: number
-    verifiedMultiplier: boolean
-    websitelinkMultiplier: boolean
+    avgLikes: number
+    avgRetweets: number
+    avgReplies: number
+    isVerified: boolean
+    isWebsiteLinked: boolean
 }
 
 export interface TotalScore {
-    all: TotalScoreSet
-    percentData: TotalScoreSet
-    youtubeOnly: TotalScoreSet
-    twitterOnly: TotalScoreSet
+    percent: {
+        all: TotalScoreSet
+        twitter: TotalScoreSet
+        youtube: TotalScoreSet
+    }
+    raw: {
+        all: TotalScoreSet
+        twitter: TotalScoreSet
+        youtube: TotalScoreSet
+    }
 }
 
 export interface TotalScoreSet {

@@ -1,10 +1,8 @@
-import { TextInput, createStyles } from '@mantine/core'
+import { createStyles, TextInput } from '@mantine/core'
 import { IconSearch } from '@tabler/icons'
 import { NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
-import { memo, useEffect, useState } from 'react'
-import { Searchable } from '../../lib/types/UiHelperTypes'
-import { getLocalizedName } from '../../lib/util/util'
+import { memo } from 'react'
 
 const useStyles = createStyles((theme) => ({
     input: {
@@ -15,32 +13,14 @@ const useStyles = createStyles((theme) => ({
 interface Props {
     label: string,
     placeholder: string,
-    searchableList: Searchable[],
-    setSearchableList: (list: Searchable[]) => void,
+    searchTerm: string,
+    setSearchTerm: (newTerm: string) => void,
 }
 
-const SearchBox: NextPage<Props> = ({ label, placeholder, searchableList, setSearchableList }: Props) => {
+const SearchBox: NextPage<Props> = ({ label, placeholder, searchTerm, setSearchTerm }: Props) => {
 
     const { classes } = useStyles();
-    const [searchTerm, setSearchTerm] = useState("");
     const { lang } = useTranslation();
-
-    useEffect(() => {
-        const newSearchableList = Array.from([...searchableList]);
-        if (searchTerm === "") {
-            newSearchableList.forEach((searchable) => searchable.visible = true);
-        } else {
-
-            newSearchableList.forEach((searchable) => {
-                if (searchTerm !== "" && getLocalizedName({ lang: lang, searchable: searchable }).toLowerCase().startsWith(searchTerm.toLowerCase())) {
-                    searchable.visible = true;
-                } else {
-                    searchable.visible = false;
-                }
-            });
-        }
-        setSearchableList(newSearchableList);
-    }, [searchTerm, lang, setSearchableList, searchableList]);
 
     return (
         <TextInput
@@ -56,4 +36,4 @@ const SearchBox: NextPage<Props> = ({ label, placeholder, searchableList, setSea
     )
 }
 
-export default memo(SearchBox);
+export default SearchBox;

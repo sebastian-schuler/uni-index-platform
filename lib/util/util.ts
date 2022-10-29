@@ -1,5 +1,5 @@
 import { Country, Institution, State, Subject, SubjectHasSubjectTypes, SubjectType } from "@prisma/client";
-import { DetailedCountry, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
+import { CountryCardData, DetailedCountry, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
 import { SmRankingEntry, SmRankingEntryMinified, TotalScore } from "../types/SocialMediaTypes";
 import { Searchable } from "../types/UiHelperTypes";
 
@@ -52,22 +52,22 @@ export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, inst
 }
 
 // Take in an array of database objects and return an array of searchable objects
-interface GenerateSearchableProps {
-    lang: string | undefined
-    array: { type: "Country", data: DetailedCountry[] } | { type: "SubjectType", data: DetailedSubjectType[] }
+type GenerateSearchableProps = {
+    type: "Country", data: CountryCardData[]
+} | {
+    type: "SubjectType", data: DetailedSubjectType[]
 }
-export const generateSearchable = ({ lang, array }: GenerateSearchableProps) => { // TODO add other objects, eg. states
-    const locale = lang ?? "en";
+export const generateSearchable = (props: GenerateSearchableProps) => { // TODO add other objects, eg. states
     const arr: Searchable[] = [];
 
-    if (array.type === "Country") {
-        array.data.forEach((val) => {
-            const newSearchable: Searchable = { type: "Country", visible: false, data: val }
+    if (props.type === "Country") {
+        props.data.forEach((val) => {
+            const newSearchable: Searchable = { type: "Country", visible: true, data: val }
             arr.push(newSearchable);
         });
-    } else if (array.type === "SubjectType") {
-        array.data.forEach((val) => {
-            const newSearchable: Searchable = { type: "SubjectType", visible: false, data: val }
+    } else if (props.type === "SubjectType") {
+        props.data.forEach((val) => {
+            const newSearchable: Searchable = { type: "SubjectType", visible: true, data: val }
             arr.push(newSearchable);
         });
     }
@@ -175,4 +175,46 @@ export const getUniqueSubjectTypeCounts = ({ list, lang, itemCount }: LargestSub
     }
 
     return [...result];
+}
+
+type ArrayProps = { type: "Country", data: Country[] } | { type: "State", data: State[] } | { type: "SubjectType", data: SubjectType[] };
+/**
+ * Removes duplicates from an array of objects, returns a new array
+ * @param props - {type: "Country" | "State" | "SubjectType", data: Country[] | State[] | SubjectType[]}
+ */
+export const getUniquesFromArray = (props: ArrayProps) => {
+
+    if (props.type === "Country") {
+
+        const uniqueIds: string[] = [];
+        return props.data.filter((item) => {
+            if (uniqueIds.includes(item.id)) return false;
+            else {
+                uniqueIds.push(item.id);
+                return true;
+            }
+        });
+
+    } else if (props.type === "State") {
+
+        const uniqueIds: string[] = [];
+        return props.data.filter((item) => {
+            if (uniqueIds.includes(item.id)) return false;
+            else {
+                uniqueIds.push(item.id);
+                return true;
+            }
+        });
+    } else if (props.type === "SubjectType") {
+
+        const uniqueIds: number[] = [];
+        return props.data.filter((item) => {
+            if (uniqueIds.includes(item.id)) return false;
+            else {
+                uniqueIds.push(item.id);
+                return true;
+            }
+        });
+    }
+
 }

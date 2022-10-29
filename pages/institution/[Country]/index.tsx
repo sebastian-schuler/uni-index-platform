@@ -1,5 +1,5 @@
 import { Group, SimpleGrid, Stack } from '@mantine/core';
-import { Country } from '@prisma/client';
+import { Country, State } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { ParsedUrlQuery } from 'querystring';
@@ -14,16 +14,17 @@ import { getInstitutionsDetailedByCountry } from '../../../lib/prisma/prismaDeta
 import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
 import { DetailedInstitution, InstitutionCardData } from '../../../lib/types/DetailedDatabaseTypes';
 import { convertInstitutionToCardData } from '../../../lib/util/conversionUtil';
-import { getLocalizedName } from '../../../lib/util/util';
+import { getLocalizedName, getUniquesFromArray } from '../../../lib/util/util';
 
 interface Props {
   institutionData: InstitutionCardData[],
+  institutionStates: State[],
   countryInfo: Country,
   countryList: Country[],
   footerContent: FooterContent[],
 }
 
-const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, countryInfo, countryList, footerContent }: Props) => {
+const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institutionStates, countryInfo, countryList, footerContent }: Props) => {
 
   const { lang } = useTranslation('common');
 
@@ -65,7 +66,12 @@ const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, countryInfo
           {
             institutionData.map((institute, i) => (
               // searchableCountry.visible && (
-              <InstitutionCard key={i} data={institute} country={countryList.find(c => c.id === institute.mainCountryId)} />
+              <InstitutionCard
+                key={i}
+                data={institute}
+                country={countryList.find(c => c.id === institute.mainCountryId)}
+                state={institutionStates.find(c => c.id === institute.mainStateId)}
+              />
               // )
             ))
           }
@@ -115,6 +121,9 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   // Convert to CardData to lower size
   const institutionData: InstitutionCardData[] = institutions.map(inst => convertInstitutionToCardData(inst, lang));
 
+  // List of states for institutes
+  const institutionStates = getUniquesFromArray({ type: "State", data: institutions.map(inst => inst.City.State) }) as State[];
+
   // Footer Data
   // Get all countries
   const countryList = await getCountries();
@@ -125,6 +134,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   return {
     props: {
       institutionData,
+      institutionStates,
       countryInfo,
       countryList,
       footerContent,

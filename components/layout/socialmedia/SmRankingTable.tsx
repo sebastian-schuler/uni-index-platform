@@ -8,6 +8,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useState } from 'react';
 import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes';
 import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants';
+import { formatNumber } from '../../../lib/util/formattingUtil';
 import { getLocalizedName, toLink } from '../../../lib/util/util';
 import MantineLink from '../../elements/MantineLink';
 
@@ -136,9 +137,9 @@ const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) 
             rank: (i + 1),
             name: item.Institution.name,
             country: getLocalizedName({ lang: lang, dbTranslated: country }),
-            totalscore: item.total_score,
-            youtubeScore: item.yt_total_score,
-            twitterScore: item.tw_total_score,
+            totalscore: item.combinedScore,
+            youtubeScore: item.youtubeScore,
+            twitterScore: item.twitterScore,
             url: toLink(URL_INSTITUTION, country?.url || "", item.Institution.url, "social-media"),
         }
     })
@@ -168,9 +169,9 @@ const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) 
                 <MantineLink label={row.name} url={row.url} type="internal" />
             </td>
             <td className={classes.countryRow}>{row.country}</td>
-            <td className={classes.numberRow}>{formatNumberInteger(row.totalscore, lang)}</td>
-            <td className={classes.numberRow}>{formatNumberInteger(row.twitterScore, lang)}</td>
-            <td className={classes.numberRow}>{formatNumberInteger(row.youtubeScore, lang)}</td>
+            <td className={classes.numberRow}>{formatNumber(row.totalscore, lang, 2)}%</td>
+            <td className={classes.numberRow}>{formatNumber(row.twitterScore, lang, 2)}%</td>
+            <td className={classes.numberRow}>{formatNumber(row.youtubeScore, lang, 2)}%</td>
         </tr>
     ));
 
@@ -253,13 +254,6 @@ const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) 
             </Table>
         </ScrollArea>
     );
-}
-
-const formatNumberInteger = (value: number, locale: string): string => {
-    return value.toLocaleString(locale, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-    });
 }
 
 export default SmRankingTable;

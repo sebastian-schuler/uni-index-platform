@@ -1,9 +1,9 @@
-import { DetailedCountry, DetailedSubjectType } from "./DetailedDatabaseTypes"
+import { CountryCardData, DetailedCountry, DetailedSubjectType } from "./DetailedDatabaseTypes"
 
 export type Searchable = {
     type: "Country"
     visible: boolean,
-    data: DetailedCountry
+    data: CountryCardData
 } | {
     type: "SubjectType"
     visible: boolean,

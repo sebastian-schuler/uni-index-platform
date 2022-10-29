@@ -1,23 +1,22 @@
 import { GetStaticProps, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
-import CountryList from '../components/container/CountryList'
 import PremiumList from '../components/container/AdList'
-import { FooterContent } from '../components/layout/footer/Footer'
+import CountryList from '../components/container/CountryList'
 import LayoutContainer from '../components/layout/LayoutContainer'
 import Meta from '../components/partials/Meta'
 import { getDetailedCountries } from '../lib/prisma/prismaDetailedQueries'
 import { getAds } from '../lib/prisma/prismaQueries'
-import { DetailedUserAd } from '../lib/types/DetailedDatabaseTypes'
+import { CountryCardData, DetailedUserAd } from '../lib/types/DetailedDatabaseTypes'
 import { Searchable } from '../lib/types/UiHelperTypes'
+import { convertCountryToCardData } from '../lib/util/conversionUtil'
 import { generateSearchable } from '../lib/util/util'
 
 interface Props {
     searchableCountries: Searchable[]
     adsStringified: string
-    footerContent: FooterContent[]
 }
 
-const Locations: NextPage<Props> = ({ adsStringified, searchableCountries, footerContent }: Props) => {
+const Locations: NextPage<Props> = ({ adsStringified, searchableCountries }: Props) => {
 
     const { t } = useTranslation('location');
     const langContent = {
@@ -28,7 +27,7 @@ const Locations: NextPage<Props> = ({ adsStringified, searchableCountries, foote
     const ads: DetailedUserAd[] = JSON.parse(adsStringified);
 
     return (
-        <LayoutContainer footerContent={footerContent}>
+        <LayoutContainer>
 
             <Meta
                 title={langContent.pageTitle + ' - ' + langContent.title}
@@ -38,7 +37,6 @@ const Locations: NextPage<Props> = ({ adsStringified, searchableCountries, foote
             <CountryList
                 title={langContent.title}
                 subtitle={langContent.subtitle}
-                root={"location"}
                 searchableCountries={searchableCountries}
             >
 
@@ -52,11 +50,10 @@ const Locations: NextPage<Props> = ({ adsStringified, searchableCountries, foote
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
+    const lang = context.locale || "en";
     const detailedCountries = await getDetailedCountries();
-    const searchableCountries: Searchable[] = generateSearchable({ lang: context.locale, array: { type: "Country", data: detailedCountries } });
-    const footerContent: FooterContent[] = [
-        { title: "Countries", data: searchableCountries, type: "Searchable" },
-    ]
+    const countryData: CountryCardData[] = detailedCountries.map(country => convertCountryToCardData(country, lang, "location"));
+    const searchableCountries: Searchable[] = generateSearchable({ type: "Country", data: countryData });
 
     const ads: DetailedUserAd[] = await getAds("locations");
     const allAds = JSON.stringify(ads);
@@ -65,7 +62,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
         props: {
             searchableCountries: searchableCountries,
             adsStringified: allAds,
-            footerContent: footerContent
         }
     }
 

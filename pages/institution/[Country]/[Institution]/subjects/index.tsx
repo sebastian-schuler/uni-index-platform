@@ -10,17 +10,19 @@ import InstitutionNav from '../../../../../components/layout/subnav/InstitutionN
 import Meta from '../../../../../components/partials/Meta';
 import { getDetailedSubjectsByInstitution } from '../../../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
-import { DetailedSubject } from '../../../../../lib/types/DetailedDatabaseTypes';
+import { DetailedSubject, SubjectCardData } from '../../../../../lib/types/DetailedDatabaseTypes';
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions';
+import { convertSubjectToCardData } from '../../../../../lib/util/conversionUtil';
 
 interface Props {
   institution: Institution,
   country: Country,
   footerContent: FooterContent[],
-  detailedSubjects: DetailedSubject[]
+  subjectData: SubjectCardData[]
+  countryList: Country[]
 }
 
-const subjects: NextPage<Props> = ({ institution, country, footerContent, detailedSubjects }: Props) => {
+const subjects: NextPage<Props> = ({ institution, country, footerContent, subjectData, countryList }: Props) => {
 
   return (
     <LayoutContainer footerContent={footerContent}>
@@ -56,9 +58,13 @@ const subjects: NextPage<Props> = ({ institution, country, footerContent, detail
         >
 
           {
-            detailedSubjects.map((subject, i) => (
+            subjectData.map((subject, i) => (
               // searchable.visible && (
-              <SubjectCard key={i} subject={subject} />
+              <SubjectCard
+                key={i}
+                data={subject}
+                country={countryList.find(c => c.id === subject.countryId)}
+              />
               // )
             ))
           }
@@ -73,22 +79,31 @@ const subjects: NextPage<Props> = ({ institution, country, footerContent, detail
 
 export async function getStaticProps(context: GetStaticPropsContext) {
 
+  const lang = context.locale || "en";
   let countryUrl = "" + context?.params?.Country;
   let institutionUrl = "" + context?.params?.Institution;
 
   const country = await getCountry(countryUrl);
   const institution = await getInstitution(institutionUrl);
+
   const detailedSubjects: DetailedSubject[] = institution ? (await getDetailedSubjectsByInstitution(institution.id)) : [];
+  const subjectData: SubjectCardData[] = detailedSubjects.map(subj => convertSubjectToCardData(subj, lang));
+  const countryList = await getCountries();
 
   // Footer Data
   // Get all countries
-  const countryList = await getCountries();
   const footerContent: FooterContent[] = [
     { title: "Countries", data: countryList, type: "Country" },
   ]
 
   return {
-    props: { institution, detailedSubjects, country, footerContent }
+    props: {
+      institution,
+      subjectData,
+      country,
+      countryList,
+      footerContent
+    }
   }
 }
 

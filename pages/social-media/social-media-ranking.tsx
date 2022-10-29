@@ -1,4 +1,4 @@
-import { Space, Title } from '@mantine/core'
+import { Space, Text, Title } from '@mantine/core'
 import { Country } from '@prisma/client'
 import { GetStaticProps, NextPage } from 'next'
 import Breadcrumb from '../../components/layout/Breadcrumb'
@@ -14,10 +14,11 @@ import { minifySmRankingItem } from '../../lib/util/conversionUtil'
 interface Props {
     countries: Country[],
     socialMediaList: SmRankingEntryMinified[]
+    filtedOutCount: number
     footerContent: FooterContent[]
 }
 
-const SocialMediaRanking: NextPage<Props> = ({ countries, socialMediaList, footerContent }: Props) => {
+const SocialMediaRanking: NextPage<Props> = ({ countries, socialMediaList, filtedOutCount, footerContent }: Props) => {
 
     return (
         <LayoutContainer footerContent={footerContent}>
@@ -34,6 +35,8 @@ const SocialMediaRanking: NextPage<Props> = ({ countries, socialMediaList, foote
                     socialMediaList={socialMediaList}
                 />
 
+                <Text mt={"lg"}>{filtedOutCount} institutions are not being displayed, due to having a score of 0.</Text>
+
             </WhitePaper>
 
         </LayoutContainer>
@@ -47,9 +50,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
     // SOCIAL MEDIA
     const rawSocialMediaList = await getSocialMediaRanking();
     let socialMediaList: SmRankingEntryMinified[] = rawSocialMediaList.map((item) => minifySmRankingItem(item));
-    socialMediaList = socialMediaList.filter((item) => item.total_score > 0);
+    socialMediaList = socialMediaList.filter((item) => item.combinedScore > 0);
+
+    const filtedOutCount = rawSocialMediaList.length - socialMediaList.length;
+
     socialMediaList.sort((a, b) => {
-        return b.total_score - a.total_score;
+        return b.combinedScore - a.combinedScore;
     });
 
     const footerContent: FooterContent[] = [
@@ -60,6 +66,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         props: {
             countries,
             socialMediaList,
+            filtedOutCount,
             footerContent
         }
     }

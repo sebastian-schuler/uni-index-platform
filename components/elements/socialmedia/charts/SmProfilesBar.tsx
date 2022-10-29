@@ -80,30 +80,6 @@ const SmProfilesBar: React.FC<Props> = ({ total, scoreSetTwitter, scoreSetYoutub
                 backgroundColor: 'rgba(255, 0, 0, 0.2)',
                 borderColor: 'rgba(255, 0, 0, 1)',
             },
-            // {
-            //     label: 'Facebook',
-            //     data: [
-            //         scoreSetFacebook?.averageImpressions || 0,
-            //         scoreSetFacebook?.averageInteraction || 0,
-            //         scoreSetFacebook?.totalContentOutput || 0,
-            //         scoreSetFacebook?.totalReach || 0,
-            //         scoreSetFacebook?.profilesCompleted || 0,
-            //     ],
-            //     backgroundColor: 'rgba(239, 71, 111, 0.2)',
-            //     borderColor: 'rgba(239, 71, 111, 1)',
-            // },
-            // {
-            //     label: 'Instagram',
-            //     data: [
-            //         scoreSetInstagram?.averageImpressions || 0,
-            //         scoreSetInstagram?.averageInteraction || 0,
-            //         scoreSetInstagram?.totalContentOutput || 0,
-            //         scoreSetInstagram?.totalReach || 0,
-            //         scoreSetInstagram?.profilesCompleted || 0,
-            //     ],
-            //     backgroundColor: 'rgba(239, 71, 111, 0.2)',
-            //     borderColor: 'rgba(239, 71, 111, 1)',
-            // },
         ],
     };
 
