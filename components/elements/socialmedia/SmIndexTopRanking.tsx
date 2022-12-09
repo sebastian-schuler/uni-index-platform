@@ -5,11 +5,13 @@ import React from 'react';
 import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes';
 import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants';
 import { toLink } from '../../../lib/util/util';
-import WhiteCard from '../../layout/WhiteCard';
+import WhiteCard from '../../../layout/WhiteCard';
 import MantineLink from '../MantineLink';
 
 const useStyles = createStyles((theme) => ({
-
+    scoreColumn: {
+        textAlign: 'right',
+    }
 }));
 
 interface Props {
@@ -33,13 +35,13 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
                     <MantineLink label={row.Institution.name} url={url} type="internal" />
                 </td>
                 <td>{country?.name}</td>
-                <td>{Math.round(row.total_score).toLocaleString(lang)}</td>
+                <td className={classes.scoreColumn}>{Math.round(row.combinedScore).toLocaleString(lang) + '%'}</td>
             </tr>
         );
     });
 
     return (
-        <WhiteCard sx={{ height: "100%" }}>
+        <div>
             <Title order={4} size={theme.fontSizes.lg} mb={"sm"}>Top Institutions</Title>
             <Table sx={{ minWidth: 100 }} verticalSpacing="xs">
                 <thead>
@@ -52,7 +54,7 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
                 <tbody>{rows}</tbody>
             </Table>
             <Text mt={"md"}>You can find our entire social media ranking <MantineLink label='here' type='internal' url='social-media-ranking' />.</Text>
-        </WhiteCard>
+        </div>
     );
 }
 

@@ -2,8 +2,8 @@ import { Title } from '@mantine/core';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react'
 import SmTotalBar from '../../components/elements/socialmedia/charts/SmTotalBar';
-import Breadcrumb from '../../components/layout/Breadcrumb';
-import LayoutContainer from '../../components/layout/LayoutContainer';
+import Breadcrumb from '../../layout/Breadcrumb';
+import LayoutContainer from '../../layout/LayoutContainer';
 import WhitePaper from '../../components/WhitePaper';
 import { getCountries } from '../../lib/prisma/prismaQueries';
 import { getAllSocialMedia } from '../../lib/prisma/prismaSocialMedia';

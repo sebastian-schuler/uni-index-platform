@@ -66,8 +66,6 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
   const Flag = Flags[country?.country_code || ""] || Flags["EU"];
 
   return (
-
-
     <Card withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
 
       <Card.Section className={classes.section}>

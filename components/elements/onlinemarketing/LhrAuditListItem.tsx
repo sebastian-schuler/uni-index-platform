@@ -1,9 +1,11 @@
-import { Box, Collapse, createStyles, Divider, Group, Progress, Text, UnstyledButton } from '@mantine/core'
-import { IconCheck, IconChevronDown, IconCircle, IconSquare, IconTriangle } from '@tabler/icons'
-import React, { useState } from 'react'
+import { Box, Collapse, createStyles, Divider, Group, Progress, Table, Text, TypographyStylesProvider, UnstyledButton } from '@mantine/core';
+import { IconChevronDown, IconCircle, IconSquare, IconTriangle } from '@tabler/icons';
+import React, { ReactNode, useState } from 'react';
+import Details from '../../../lib/types/lighthouse/audit-details';
 import { LhrAudit } from '../../../lib/types/lighthouse/CustomLhrTypes';
-import { LHR_SCORE_BREAKPOINTS, LHR_SCORE_COLORS } from '../../../lib/util/lighthouseUtil'
-import MantineLink from '../MantineLink';
+import { getByteAsKb } from '../../../lib/util/calcUtil';
+import { LHR_SCORE_BREAKPOINTS, LHR_SCORE_COLORS } from '../../../lib/util/lighthouseUtil';
+import { getGenericExternalLink } from '../../../lib/util/mantineFactory';
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -18,60 +20,26 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const getColor = (score: number | null) => {
-    if (score === null) {
+    if (score === null)
         return LHR_SCORE_COLORS.informative;
-    }
 
-    if (score >= LHR_SCORE_BREAKPOINTS.good) {
+    if (score >= LHR_SCORE_BREAKPOINTS.good)
         return LHR_SCORE_COLORS.good;
-    }
 
-    if (score >= LHR_SCORE_BREAKPOINTS.average) {
+    if (score >= LHR_SCORE_BREAKPOINTS.average)
         return LHR_SCORE_COLORS.average;
-    }
 
     return LHR_SCORE_COLORS.poor;
 }
 
 const getIcon = (score: number | null) => {
-    if (score === null || score >= LHR_SCORE_BREAKPOINTS.good) {
+    if (score === null || score >= LHR_SCORE_BREAKPOINTS.good)
         return <IconCircle color={getColor(score)} size={20} />;
-    }
 
-    if (score >= LHR_SCORE_BREAKPOINTS.average) {
+    if (score >= LHR_SCORE_BREAKPOINTS.average)
         return <IconSquare color={LHR_SCORE_COLORS.average} size={20} />
-    }
 
     return <IconTriangle color={LHR_SCORE_COLORS.poor} size={20} />;
-}
-
-type TextPart = { type: 'text', text: string } | { type: 'link', text: string, url: string };
-
-/**
- * Parses a Lighthouse text containing links to an array 
- * e.g.: [Link text](Link url) 
- * @param text 
- */
-const parseText = (text: string): TextPart[] => {
-    const links = text.match(/\[[^()]*\](\(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\))/g);
-
-    if (links === null) return [{ type: 'text', text: text }];
-    const result: TextPart[] = [];
-    let lastIndex = 0;
-
-    for (const link of links) {
-        const index = text.indexOf(link);
-
-        if (index > lastIndex) {
-            result.push({ type: 'text', text: text.substring(lastIndex, index) });
-            lastIndex = index;
-        }
-        const linkText = link.substring(link.indexOf('[') + 1, link.indexOf(']'));
-        const linkUrl = link.substring(link.indexOf('(') + 1, link.indexOf(')'));
-        result.push({ type: 'link', text: linkText, url: linkUrl });
-        lastIndex += link.length;
-    }
-    return result;
 }
 
 interface Props {
@@ -82,7 +50,13 @@ const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
 
     const { classes } = useStyles();
     const [opened, setOpened] = useState(false);
-    const description = parseText(audit.description);
+
+    if (audit.details.type === 'opportunity' && audit.details.items.length > 0) {
+
+        // console.log(audit.id)
+        // console.log(audit.details.items[0]["node"]);
+
+    }
 
     return (
         <>
@@ -119,26 +93,71 @@ const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
             </UnstyledButton>
 
             <Collapse in={opened}>
-                {/* 20px (icon) + 16px (group gap) + 8px (padding button) */}
                 <Box px={44} pb={"sm"}>
-                    <Text size={"sm"}>
-                        {
-                            description.map((part, index) => (
-                                part.type === 'text' ? part.text : <MantineLink key={index} label={part.text} url={part.url} type={"external"} />
-                            ))
-                        }
-                    </Text>
+
+                    <TypographyStylesProvider >
+                        <div dangerouslySetInnerHTML={{ __html: audit.description }} />
+                    </TypographyStylesProvider>
                     {
-                        audit.details.type === "opportunity" && !audit.passed && (
-                            <>
-                                {
-                                    audit.details.headings.map((heading, index) => (
-                                        heading.label
-                                    ))
-                                }
-                            </>
+                        audit.details.type === "opportunity" && audit.details.items.length > 0 && (
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        {
+                                            audit.details.headings.map((heading, index) => (
+                                                <th key={index}>{heading.label.toString()}</th>
+                                            ))
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        audit.details.items.map((item, index) => {
+
+                                            const tds: ReactNode[] = [];
+
+                                            // TODO - look at headings, valueType to determine how to display
+                                            console.log(audit.title);
+                                            console.log(audit.details);
+
+                                            // Generate the table underneath the audit description     
+                                            if (item["node"] !== undefined) {
+                                                // If items are of type "node", then we need to generate a table with the node's properties
+
+                                                const node = item["node"] as Details.NodeValue;
+                                                tds.push(
+                                                    <>
+                                                        <Text>{node?.selector}</Text>
+                                                        <Text color={'cyan'}>{node?.snippet}</Text>
+                                                    </>
+                                                );
+                                                tds.push(getGenericExternalLink(item.url));
+                                                tds.push(<>{item.wastedMs}</>);
+
+                                            } else {
+                                                // If items have no type
+
+                                                tds.push(getGenericExternalLink(item.url));
+                                                tds.push(<>{getByteAsKb(item.totalBytes || 0) + ' KiB'}</>);
+                                                tds.push(<>{getByteAsKb(item.wastedBytes || 0) + ' KiB'}</>);
+                                            }
+
+                                            return (
+                                                <tr key={index}>
+                                                    {
+                                                        tds.map((td, index) => (
+                                                            <td key={index}>{td}</td>
+                                                        ))
+                                                    }
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </Table>
                         )
                     }
+
                 </Box>
             </Collapse>
 

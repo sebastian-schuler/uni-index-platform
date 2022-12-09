@@ -4,10 +4,10 @@ import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import LhrAuditListItem from '../../../../components/elements/onlinemarketing/LhrAuditListItem'
 import LhrAuditScore from '../../../../components/elements/onlinemarketing/LhrAuditScore'
 import LhrRingProgress from '../../../../components/elements/onlinemarketing/LhrRingProgress'
-import Breadcrumb from '../../../../components/layout/Breadcrumb'
-import { FooterContent } from '../../../../components/layout/footer/Footer'
-import LayoutContainer from '../../../../components/layout/LayoutContainer'
-import InstitutionNav from '../../../../components/layout/subnav/InstitutionNav'
+import Breadcrumb from '../../../../layout/Breadcrumb'
+import { FooterContent } from '../../../../layout/footer/Footer'
+import LayoutContainer from '../../../../layout/LayoutContainer'
+import InstitutionNav from '../../../../layout/subnav/InstitutionNav'
 import Meta from '../../../../components/partials/Meta'
 import WhitePaper from '../../../../components/WhitePaper'
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries'
@@ -24,12 +24,18 @@ interface Props {
 
 const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhReport, footerContent }: Props) => {
 
+  /**
+   * Bundle categories and their respective audits into a single object
+   * @param id - category id
+   * @returns - object with category and audits
+   */
   const getCategory = (id: string) => {
     const category = lhReport.categories.find(category => category.id === id);
     const audits = lhReport.audits.filter(audit => category?.metricRefs.includes(audit.id));
     return { data: category, audits: audits };
   }
 
+  // Categories
   const categories = {
     performance: getCategory('performance'),
     accessibility: getCategory('accessibility'),
@@ -38,6 +44,13 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhR
     pwa: getCategory('pwa'),
   }
 
+  /**
+   * Return a column of Metrics
+   * @param audits - array of audits
+   * @param fromIndex - index of first audit to be displayed
+   * @param toIndex - index of last audit to be displayed
+   * @returns ReactNode - column of audits
+   */
   const getMetricsCol = (audits: LhrAudit[], fromIndex: number, toIndex: number) => {
     const auditsToDisplay = audits.slice(fromIndex, toIndex);
     return (
@@ -57,6 +70,11 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhR
     )
   }
 
+  /**
+   * Get a list of diagnostics
+   * @param refs - audit ids
+   * @returns - ReactNode - list of audits of diagnostics
+   */
   const getDiagnosticsList = (refs: string[]) => {
 
     const audits = lhReport.audits.filter(audit => refs.includes(audit.id));
@@ -177,7 +195,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   const lhrData = await import(`../../../../data/lighthouse/lhr-${id}.json`).catch((err) => {
     console.log("Not found");
   });
-  const lhReport = getMinifiedLhr(lhrData);
+  const lhReport = await getMinifiedLhr(lhrData);
 
   return {
     props: {

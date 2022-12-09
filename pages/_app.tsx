@@ -2,13 +2,13 @@ import { MantineProvider } from '@mantine/core'
 import useTranslation from 'next-translate/useTranslation'
 import type { AppProps, NextWebVitalsMetric } from 'next/app'
 import { useRouter } from 'next/router'
-import AccountNavigation from '../components/layout/account/AccountNavigation'
-import WebsiteHeader from '../components/layout/nav/WebsiteHeader'
-import { AuthProvider } from '../context/SessionContext'
+import AccountNavigation from '../layout/account/AccountNavigation'
+import WebsiteHeader from '../layout/nav/WebsiteHeader'
+import { AuthProvider } from '../lib/context/SessionContext'
 import { URL_ACCOUNT } from '../lib/url-helper/urlConstants'
 import { toLink } from '../lib/util/util'
 import '../styles/globals.css'
-import appTheme from '../theme/theme'
+import appTheme from '../styles/theme'
 
 function MyApp({ Component, pageProps }: AppProps) {
 

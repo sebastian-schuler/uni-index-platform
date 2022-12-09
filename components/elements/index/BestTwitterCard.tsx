@@ -60,13 +60,13 @@ const BestTwitterCard: React.FC<Props> = ({ highestTwitter }: Props) => {
                     </div>
 
                     <div>
-                        <Text size={"sm"} weight={"bold"} color="dimmed">Average<br />interaction</Text>
-                        <Text>{results?.averageInteraction.toFixed(3)}</Text>
+                        <Text size={"sm"} weight={"bold"} color="dimmed">Average<br />Retweets</Text>
+                        <Text>{results?.avgRetweets.toFixed(3)}</Text>
                     </div>
 
                     <div>
                         <Text size={"sm"} weight={"bold"} color="dimmed">Avgerage<br />likes</Text>
-                        <Text>{results?.averageLikes.toFixed(3)}</Text>
+                        <Text>{results?.avgLikes.toFixed(3)}</Text>
                     </div>
                 </SimpleGrid>
 

@@ -1,5 +1,6 @@
 // CLIENT SIDE
 
+import markdownToHtml from "../markdownParser";
 import { AuditResult } from "../types/lighthouse/audit-result";
 import { LhrAudit, LhrAuditDetails, LhrCategory, MinifiedLhrReport } from "../types/lighthouse/CustomLhrTypes";
 import Result from "../types/lighthouse/lhr";
@@ -29,7 +30,7 @@ export const getLhrScoreColor = (score: number) => {
 
 // SERVER SIDE
 
-export const getMinifiedLhr = (lhrData: any) => {
+export const getMinifiedLhr = async (lhrData: any) => {
 
     let lhrReport: MinifiedLhrReport = {
         audits: [],
@@ -42,7 +43,12 @@ export const getMinifiedLhr = (lhrData: any) => {
 
     // AUDITS
     const audits: LhrAudit[] = [];
-    Object.keys(lhr.audits).forEach((id) => {
+
+    for (const id of Object.keys(lhr.audits)) {
+
+        // }
+
+        // Object.keys(lhr.audits).forEach((id) => {
         const audit: AuditResult = lhr.audits[id]
 
         if (audit !== undefined && audit.scoreDisplayMode !== "manual" && (audit.scoreDisplayMode !== "notApplicable" || audit.details !== undefined)) {
@@ -53,18 +59,21 @@ export const getMinifiedLhr = (lhrData: any) => {
                     (audit.scoreDisplayMode === "informative" && audit.details?.type === "table" && audit.details.headings.length === 0)
                 );
 
+            const parsedDescription = await markdownToHtml(audit.description || "");
+
             audits.push({
                 id: audit.id,
                 title: audit.title,
                 scoreDisplayMode: audit.scoreDisplayMode,
-                description: audit.description,
+                description: parsedDescription,
                 score: audit.score,
                 displayValue: audit.displayValue || null,
                 passed: passed,
                 details: getDetailsObject(audit),
             });
         }
-    });
+        // });
+    }
 
     // CATEGORY: PERFORMANCE
     const performance = getPerformanceCategory(lhr, audits);

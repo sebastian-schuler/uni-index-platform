@@ -8,7 +8,7 @@ import MantineLink from '../elements/MantineLink'
 import LargeAd from '../elements/userads/LargeAd'
 import MediumAd from '../elements/userads/MediumAd'
 import SmallAd from '../elements/userads/SmallAd'
-import ResponsiveContainer from '../layout/ResponsiveContainer'
+import ResponsiveContainer from '../../layout/ResponsiveContainer'
 
 export const LARGE_AD_HEIGHT = 400;
 

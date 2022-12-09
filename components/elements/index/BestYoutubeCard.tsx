@@ -51,7 +51,7 @@ const BestYoutubeCard: React.FC<Props> = ({ highestYoutube }: Props) => {
                 <SimpleGrid cols={4}>
                     <div>
                         <Text size={"sm"} weight={"bold"} color="dimmed">Total<br />Subscribers</Text>
-                        <Text>{results?.subs}</Text>
+                        <Text>{results?.subscribers}</Text>
                     </div>
 
                     <div>

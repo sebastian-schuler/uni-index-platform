@@ -3,14 +3,15 @@ import { Country, State } from '@prisma/client';
 import type { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import PremiumList from '../components/container/AdList';
-import HeroSection from '../components/elements/index/HeroSection';
-import SocialMediaSection from '../components/elements/index/SocialMediaSection';
+import HeroSection from '../layout/index/HeroSection';
+import SearchSection from '../layout/index/SearchSection';
+import SocialMediaSection from '../layout/index/SocialMediaSection';
 import CountryCard from '../components/elements/itemcards/CountryCard';
 import InstitutionCard from '../components/elements/itemcards/InstitutionCard';
 import SubjectCard from '../components/elements/itemcards/SubjectCard';
-import { FooterContent } from '../components/layout/footer/Footer';
-import PopularSection from '../components/layout/index/PopularSection';
-import LayoutContainer from '../components/layout/LayoutContainer';
+import { FooterContent } from '../layout/footer/Footer';
+import PopularSection from '../layout/index/PopularSection';
+import LayoutContainer from '../layout/LayoutContainer';
 import Meta from '../components/partials/Meta';
 import { AD_PAGE_INDEX } from '../lib/appConstants';
 import { getPopularDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
@@ -22,6 +23,7 @@ import { SmRankingEntryMinified, TotalScore } from '../lib/types/SocialMediaType
 import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
 import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmRankingItem } from '../lib/util/conversionUtil';
 import { getUniquesFromArray, toLink } from '../lib/util/util';
+import OnlineMarketingSection from '../layout/index/OnlineMarketingSection';
 
 interface Props {
   adsStringified: string,
@@ -72,6 +74,10 @@ const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, c
         highestYoutubeStringified={highestYoutubeStringified}
         countries={countryList}
       />
+
+      <OnlineMarketingSection />
+
+      <SearchSection />
 
       <Stack spacing={0} mb={"xl"}>
 
@@ -163,14 +169,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
   // Sort by total score, get top 5
   let socialMediaTopList: SmRankingEntryMinified[] = socialMediaRankingList.map((item) => minifySmRankingItem(item));
   socialMediaTopList = socialMediaTopList.sort((a, b) => {
-    return b.total_score - a.total_score;
-  }).slice(0, 5);
+    return b.combinedScore - a.combinedScore;
+  }).slice(0, 10);
 
   // Highest Youtube score
   socialMediaList.sort((a, b) => {
     const totalScoreA = JSON.parse(a.total_score) as TotalScore;
     const totalScoreB = JSON.parse(b.total_score) as TotalScore;
-    return totalScoreB.youtubeOnly.total - totalScoreA.youtubeOnly.total;
+    return totalScoreB.percent.youtube.total - totalScoreA.percent.youtube.total;
   });
   const highestYoutubeStringified = JSON.stringify(socialMediaList[0]);
 
@@ -178,7 +184,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   socialMediaList.sort((a, b) => {
     const totalScoreA = JSON.parse(a.total_score) as TotalScore;
     const totalScoreB = JSON.parse(b.total_score) as TotalScore;
-    return totalScoreB.twitterOnly.total - totalScoreA.twitterOnly.total;
+    return totalScoreB.percent.twitter.total - totalScoreA.percent.twitter.total;
   });
   const highestTwitterStringified = JSON.stringify(socialMediaList[0]);
 

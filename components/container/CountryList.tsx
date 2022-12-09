@@ -8,7 +8,7 @@ import { getLocalizedName } from '../../lib/util/util'
 import GenericPageHeader from '../elements/GenericPageHeader'
 import CountryCard from '../elements/itemcards/CountryCard'
 import OrderBySelect, { OrderByState, sortSearchableArray } from '../elements/OrderBySelect'
-import Breadcrumb from '../layout/Breadcrumb'
+import Breadcrumb from '../../layout/Breadcrumb'
 import SearchBox from '../partials/SearchBox'
 
 type SearchState = {

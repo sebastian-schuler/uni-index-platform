@@ -7,7 +7,7 @@ import HelpPopover from '../../components/elements/HelpPopover';
 import LargeAd from '../../components/elements/userads/LargeAd';
 import MediumAd from '../../components/elements/userads/MediumAd';
 import SmallAd from '../../components/elements/userads/SmallAd';
-import { useAuth } from '../../context/SessionContext';
+import { useAuth } from '../../lib/context/SessionContext';
 import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
 import { UserDataProfile } from '../../lib/types/AccountHandlingTypes';
 

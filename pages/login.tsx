@@ -7,9 +7,9 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import MantineLink from '../components/elements/MantineLink';
-import ForgotPassword from '../components/layout/account/ForgotPassword';
-import LayoutContainer from '../components/layout/LayoutContainer';
-import { useAuth } from '../context/SessionContext';
+import ForgotPassword from '../layout/account/ForgotPassword';
+import LayoutContainer from '../layout/LayoutContainer';
+import { useAuth } from '../lib/context/SessionContext';
 import { LoginStatus } from '../lib/types/AccountHandlingTypes';
 import { URL_REGISTER } from '../lib/url-helper/urlConstants';
 
