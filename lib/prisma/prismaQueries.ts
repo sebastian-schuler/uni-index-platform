@@ -235,10 +235,17 @@ export const getCountry = async (countryUrl: string) => {
 
 }
 
-export const getInstitution = async (institutionUrl: string) => {
+type GetInstitutionProps = { institutionUrl: string } | { institutionId: string }
+export const getInstitution = async (props: GetInstitutionProps) => {
+
+    // Make sure only one parameter is passed
+    const url = "institutionUrl" in props ? props.institutionUrl : undefined;
+    const id = "institutionId" in props ? props.institutionId : undefined;
+
     return await prisma.institution.findUnique({
         where: {
-            url: institutionUrl
+            url: url,
+            id: id
         }
     });
 }

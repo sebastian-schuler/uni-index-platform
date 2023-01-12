@@ -1,10 +1,10 @@
 import { Box, Collapse, createStyles, Divider, Group, Progress, Table, Text, TypographyStylesProvider, UnstyledButton } from '@mantine/core';
 import { IconChevronDown, IconCircle, IconSquare, IconTriangle } from '@tabler/icons';
 import React, { ReactNode, useState } from 'react';
+import { LHR_SCORE_BREAKPOINTS, LHR_SCORE_COLORS } from '../../../lib/lighthouse/lhrUtil';
 import Details from '../../../lib/types/lighthouse/audit-details';
 import { LhrAudit } from '../../../lib/types/lighthouse/CustomLhrTypes';
 import { getByteAsKb } from '../../../lib/util/calcUtil';
-import { LHR_SCORE_BREAKPOINTS, LHR_SCORE_COLORS } from '../../../lib/util/lighthouseUtil';
 import { getGenericExternalLink } from '../../../lib/util/mantineFactory';
 
 const useStyles = createStyles((theme) => ({
@@ -52,10 +52,8 @@ const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
     const [opened, setOpened] = useState(false);
 
     if (audit.details.type === 'opportunity' && audit.details.items.length > 0) {
-
         // console.log(audit.id)
         // console.log(audit.details.items[0]["node"]);
-
     }
 
     return (
@@ -117,8 +115,8 @@ const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
                                             const tds: ReactNode[] = [];
 
                                             // TODO - look at headings, valueType to determine how to display
-                                            console.log(audit.title);
-                                            console.log(audit.details);
+                                            // console.log(audit.title);
+                                            // console.log(audit.details);
 
                                             // Generate the table underneath the audit description     
                                             if (item["node"] !== undefined) {

@@ -1,7 +1,7 @@
 import { Divider, Group, Stack, Text } from '@mantine/core';
 import { IconCircle, IconSquare, IconTriangle } from '@tabler/icons';
 import React from 'react';
-import { getLhrScoreColor, LHR_SCORE_BREAKPOINTS, LHR_SCORE_COLORS } from '../../../lib/util/lighthouseUtil';
+import { getLhrScoreColor, LHR_SCORE_BREAKPOINTS, LHR_SCORE_COLORS } from '../../../lib/lighthouse/lhrUtil';
 
 interface Props {
     title: string,

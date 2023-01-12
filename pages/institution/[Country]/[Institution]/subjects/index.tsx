@@ -84,7 +84,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   let institutionUrl = "" + context?.params?.Institution;
 
   const country = await getCountry(countryUrl);
-  const institution = await getInstitution(institutionUrl);
+  const institution = await getInstitution({ institutionUrl });
 
   const detailedSubjects: DetailedSubject[] = institution ? (await getDetailedSubjectsByInstitution(institution.id)) : [];
   const subjectData: SubjectCardData[] = detailedSubjects.map(subj => convertSubjectToCardData(subj, lang));

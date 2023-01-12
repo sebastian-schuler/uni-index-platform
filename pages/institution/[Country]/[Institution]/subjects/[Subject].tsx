@@ -82,7 +82,7 @@ const SubjectFromInstitutionPage: NextPage<Props> = ({ country, institution, sub
 
           <Stack spacing={0}>
             <Text size={"lg"} weight={"bold"}>Website</Text>
-            <MantineLink label={subject?.website} url={subject?.website} type="external"/>
+            <MantineLink label={subject?.website} url={subject?.website} type="external" />
           </Stack>
 
         </Stack>
@@ -100,7 +100,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   // Get information single objects
   const country: Country | null = await getCountry(countryUrl);
-  const institution: Institution | null = await getInstitution(institutionUrl);
+  const institution: Institution | null = await getInstitution({ institutionUrl });
   const subjectInfo: DetailedSubject | null = institution && (await getSubjectDetailedByUrl(subjectUrl, institution.id));
 
   // Footer Data

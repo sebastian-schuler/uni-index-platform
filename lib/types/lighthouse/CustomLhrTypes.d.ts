@@ -1,8 +1,9 @@
 import { ScoreDisplayModes } from "./audit-result"
 import { FormattedIcu } from "./i18n";
 import AuditDetails from "./audit-details";
+import { Institution } from "@prisma/client";
 
-export interface MinifiedLhrReport {
+export interface LhrMinified {
     audits: LhrAudit[]
     categories: LhrCategory[]
 }
@@ -30,15 +31,34 @@ export interface LhrAudit {
 }
 
 export type LhrAuditDetails = {
-        type: 'criticalrequestchain'
-    } | {
-        type: 'filmstrip'
-    } | {
-        type: 'list'
-    } |
+    type: 'criticalrequestchain'
+} | {
+    type: 'filmstrip'
+} | {
+    type: 'list'
+} |
     AuditDetails.Opportunity
     | {
         type: 'table'
     } | {
         type: "debugdata" | "treemap-data" | "screenshot" | "full-page-screenshot" | null
     }
+
+export type LhrSimple = {
+    institution: LhrInstitution
+    total: number
+    performanceScore: number
+    accessibilityScore: number
+    bestPracticesScore: number
+    seoScore: number
+    pwaScore: number
+}
+
+export type LhrInstitution = {
+    id: string
+    name: string
+    slug: string
+    website: string
+}
+
+export type LhrCategoryName = "performance" | "accessibility" | "best-practices" | "seo" | "pwa";

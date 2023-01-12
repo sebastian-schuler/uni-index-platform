@@ -55,7 +55,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   let institutionUrl = "" + context?.params?.Institution;
 
   const country = await getCountry(countryUrl);
-  const institution = await getInstitution(institutionUrl);
+  const institution = await getInstitution({ institutionUrl });
 
   // Get Wikipedia Data
   const wikiDataRes = institution ? (await searchWikipedia(institution.name, "" + context.locale)) : "";

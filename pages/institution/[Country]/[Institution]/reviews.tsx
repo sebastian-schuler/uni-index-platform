@@ -38,7 +38,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   let institutionUrl = "" + context?.params?.Institution;
 
   const country = await getCountry(countryUrl);
-  const institution = await getInstitution(institutionUrl);
+  const institution = await getInstitution({ institutionUrl });
 
   // Footer Data
   // Get all countries

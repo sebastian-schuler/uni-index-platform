@@ -24,8 +24,11 @@ import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/url-helper
 import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmRankingItem } from '../lib/util/conversionUtil';
 import { getUniquesFromArray, toLink } from '../lib/util/util';
 import OnlineMarketingSection from '../layout/index/OnlineMarketingSection';
+import { getAllLhrSimplified } from '../lib/lighthouse/lhrSimplifier';
+import { LhrSimple } from '../lib/types/lighthouse/CustomLhrTypes';
 
 interface Props {
+  simpleLhReports: LhrSimple[],
   adsStringified: string,
   institutionData: InstitutionCardData[],
   subjectData: SubjectCardData[],
@@ -38,7 +41,7 @@ interface Props {
   footerContent: FooterContent[],
 }
 
-const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, countryData, countryList,
+const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionData, subjectData, countryData, countryList,
   institutionStates, socialMediaList, highestTwitterStringified, highestYoutubeStringified, footerContent }: Props) => {
 
   const ads: DetailedUserAd[] = JSON.parse(adsStringified);
@@ -75,7 +78,7 @@ const Home: NextPage<Props> = ({ adsStringified, institutionData, subjectData, c
         countries={countryList}
       />
 
-      <OnlineMarketingSection />
+      <OnlineMarketingSection simpleLhReports={simpleLhReports} />
 
       <SearchSection />
 
@@ -188,6 +191,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
   });
   const highestTwitterStringified = JSON.stringify(socialMediaList[0]);
 
+  // === ONLINE MARKETING ===
+  const simpleLhReports = await getAllLhrSimplified(4);
+
   // === ADS ===
   const ads: DetailedUserAd[] = await getAds(AD_PAGE_INDEX);
   const adsStringified = JSON.stringify(ads);
@@ -201,6 +207,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
+      simpleLhReports,
       adsStringified,
       institutionData,
       subjectData,

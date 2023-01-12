@@ -65,14 +65,14 @@ const SubjectJobs: NextPage<Props> = props => {
 export async function getStaticProps(context: GetStaticPropsContext) {
 
     let countryQuery = "" + context?.params?.Country;
-    let institutionQuery = "" + context?.params?.Institution;
+    let institutionUrl = "" + context?.params?.Institution;
     let subjectQuery = "" + context?.params?.Subject;
     let localeDb = getDBLocale(context.locale);
 
     // Get information single objects
     const country: Country | null = await getCountry(countryQuery);
-    const institution: Institution | null = await getInstitution(institutionQuery);
-    const subject: Subject | null = await getSubject(subjectQuery, institutionQuery);
+    const institution: Institution | null = await getInstitution({ institutionUrl });
+    const subject: Subject | null = await getSubject(subjectQuery, institutionUrl);
 
     const jobs = await getJobsFromApi({ wo: "Berlin", was: "Informatik" });
 

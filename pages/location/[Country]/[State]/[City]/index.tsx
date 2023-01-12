@@ -3,17 +3,16 @@ import { City, Country, State } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { ParsedUrlQuery } from 'querystring';
-import CountryList from '../../../../../components/container/CountryList';
 import GenericPageHeader from '../../../../../components/elements/GenericPageHeader';
 import InstitutionCard from '../../../../../components/elements/itemcards/InstitutionCard';
+import Meta from '../../../../../components/partials/Meta';
 import Breadcrumb from '../../../../../layout/Breadcrumb';
 import { FooterContent } from '../../../../../layout/footer/Footer';
 import LayoutContainer from '../../../../../layout/LayoutContainer';
-import Meta from '../../../../../components/partials/Meta';
 import { getInstitutionsDetailedByCity } from '../../../../../lib/prisma/prismaDetailedQueries';
 import { getCityStateCountryByCity, getCountries } from '../../../../../lib/prisma/prismaQueries';
 import { getCityStateCountryPaths } from '../../../../../lib/prisma/prismaUrlPaths';
-import { DetailedInstitution, InstitutionCardData } from '../../../../../lib/types/DetailedDatabaseTypes';
+import { InstitutionCardData } from '../../../../../lib/types/DetailedDatabaseTypes';
 import { convertInstitutionToCardData } from '../../../../../lib/util/conversionUtil';
 
 interface Props {

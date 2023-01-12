@@ -1,14 +1,14 @@
-import { Card, createStyles, Divider, Grid, Image, SimpleGrid, Stack, Text } from '@mantine/core'
+import { createStyles, Divider, Grid, Image, Stack, Text } from '@mantine/core'
 import { Country, Institution, InstitutionScreenshot } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import { useState } from 'react'
+import Meta from '../../../../components/partials/Meta'
+import WhitePaper from '../../../../components/WhitePaper'
 import Breadcrumb from '../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../layout/footer/Footer'
 import LayoutContainer from '../../../../layout/LayoutContainer'
 import InstitutionNav from '../../../../layout/subnav/InstitutionNav'
-import Meta from '../../../../components/partials/Meta'
-import WhitePaper from '../../../../components/WhitePaper'
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries'
 import { getInstitutionScreenshots } from '../../../../lib/prisma/prismaScreenshots'
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
@@ -115,7 +115,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   let institutionUrl = "" + context?.params?.Institution;
 
   const country = await getCountry(countryUrl);
-  const institution = await getInstitution(institutionUrl);
+  const institution = await getInstitution({ institutionUrl });
   const screenshots = institution ? await getInstitutionScreenshots(institution.id) : [];
   const screenshotsStringified = JSON.stringify(screenshots);
 

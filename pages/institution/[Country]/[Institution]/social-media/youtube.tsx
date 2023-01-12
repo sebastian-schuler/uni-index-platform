@@ -218,7 +218,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     let institutionUrl = "" + context?.params?.Institution;
 
     const country = await getCountry(countryUrl);
-    const institution = await getInstitution(institutionUrl);
+    const institution = await getInstitution({ institutionUrl });
     const socialMedia = institution ? (await getSocialMedia(institution.id)) : null;
     const countrySocialMedia = country ? (await getCountrySocialmedia(country.id)) : null;
 

@@ -3,14 +3,14 @@ import { createStyles, Stack, Text } from '@mantine/core'
 import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
+import Meta from '../../../../../components/partials/Meta'
+import WhitePaper from '../../../../../components/WhitePaper'
 import Breadcrumb from '../../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../../layout/footer/Footer'
 import LayoutContainer from '../../../../../layout/LayoutContainer'
 import SmHeaderSection from '../../../../../layout/socialmedia/SmHeaderSection'
 import SmOverviewSection from '../../../../../layout/socialmedia/SmOverviewSection'
 import InstitutionNav from '../../../../../layout/subnav/InstitutionNav'
-import Meta from '../../../../../components/partials/Meta'
-import WhitePaper from '../../../../../components/WhitePaper'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
 import { TotalScore, TotalScoreSet, TwitterProfile, YoutubeChannelData, YoutubeProfile } from '../../../../../lib/types/SocialMediaTypes'
@@ -132,7 +132,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     let institutionUrl = "" + context?.params?.Institution;
 
     const country = await getCountry(countryUrl);
-    const institution = await getInstitution(institutionUrl);
+    const institution = await getInstitution({ institutionUrl });
     const socialMedia = institution ? (await getSocialMedia(institution.id)) : null;
     const countrySocialMedia = country ? (await getCountrySocialmedia(country.id)) : null;
 
