@@ -37,12 +37,11 @@ export type LhrAuditDetails = {
 } | {
     type: 'list'
 } |
-    AuditDetails.Opportunity
-    | {
-        type: 'table'
-    } | {
-        type: "debugdata" | "treemap-data" | "screenshot" | "full-page-screenshot" | null
-    }
+    AuditDetails.Opportunity |
+    AuditDetails.Table |
+{
+    type: "debugdata" | "treemap-data" | "screenshot" | "full-page-screenshot" | null
+}
 
 export type LhrSimple = {
     institution: LhrInstitution

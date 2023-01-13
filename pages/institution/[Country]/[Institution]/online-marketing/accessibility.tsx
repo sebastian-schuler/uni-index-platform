@@ -1,11 +1,12 @@
-import { Country, Institution } from '@prisma/client';
-import { GetStaticPaths, GetStaticPropsContext } from 'next';
-import LhrCategoryPage from '../../../../../components/elements/onlinemarketing/LhrCategoryPage';
-import { FooterContent } from '../../../../../layout/footer/Footer';
-import { getMinifiedLhrCategory } from '../../../../../lib/lighthouse/lhrParser';
-import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
-import { LhrAudit, LhrCategory } from '../../../../../lib/types/lighthouse/CustomLhrTypes';
-import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions';
+import { Country, Institution } from '@prisma/client'
+import { GetStaticPaths, GetStaticPropsContext } from 'next'
+import React from 'react'
+import LhrCategoryPage from '../../../../../components/elements/onlinemarketing/LhrCategoryPage'
+import { FooterContent } from '../../../../../layout/footer/Footer'
+import { getMinifiedLhrCategory } from '../../../../../lib/lighthouse/lhrParser'
+import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
+import { LhrAudit, LhrCategory } from '../../../../../lib/types/lighthouse/CustomLhrTypes'
+import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 
 interface Props {
     institution: Institution,
@@ -15,8 +16,7 @@ interface Props {
     footerContent: FooterContent[],
 }
 
-const SeoPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }: Props) => {
-
+const AccessibilityPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }: Props) => {
     return (
         <LhrCategoryPage
             country={country}
@@ -27,6 +27,7 @@ const SeoPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }
         />
     )
 }
+
 
 export async function getStaticProps(context: GetStaticPropsContext) {
 
@@ -49,7 +50,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         console.log("Not found");
     });
 
-    const lhr = await getMinifiedLhrCategory(lhrData, "seo");
+    const lhr = await getMinifiedLhrCategory(lhrData, "accessibility");
 
     return {
         props: {
@@ -71,5 +72,4 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
     }
 }
 
-
-export default SeoPage;
+export default AccessibilityPage

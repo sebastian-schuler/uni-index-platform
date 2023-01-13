@@ -15,7 +15,7 @@ interface Props {
     footerContent: FooterContent[],
 }
 
-const SeoPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }: Props) => {
+const BestPracticesPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }: Props) => {
 
     return (
         <LhrCategoryPage
@@ -49,7 +49,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         console.log("Not found");
     });
 
-    const lhr = await getMinifiedLhrCategory(lhrData, "seo");
+    const lhr = await getMinifiedLhrCategory(lhrData, "best-practices");
 
     return {
         props: {
@@ -71,5 +71,4 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
     }
 }
 
-
-export default SeoPage;
+export default BestPracticesPage;

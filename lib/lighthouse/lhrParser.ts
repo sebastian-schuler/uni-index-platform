@@ -76,6 +76,18 @@ export const getMinifiedLhrCategory = async (lhrData: any, category?: LhrCategor
                 lhrResult.audits = filterUnnecessaryAudits(lhrResult.audits, seo);
                 break;
 
+            case "best-practices":
+                const bestPractices = getBestPracticesCategory(lhr, audits);
+                lhrResult.categories.push(bestPractices);
+                lhrResult.audits = filterUnnecessaryAudits(lhrResult.audits, bestPractices);
+                break;
+
+            case "accessibility":
+                const accessibility = getAccessibilityCategory(lhr, audits);
+                lhrResult.categories.push(accessibility);
+                lhrResult.audits = filterUnnecessaryAudits(lhrResult.audits, accessibility);
+                break;
+
         }
     }
 
@@ -83,8 +95,13 @@ export const getMinifiedLhrCategory = async (lhrData: any, category?: LhrCategor
 }
 
 const getDetailsObject = (audit: AuditResult): LhrAuditDetails => {
+
     if (audit.details?.type === "opportunity") {
-        return audit.details
+        return audit.details;
+
+    } else if (audit.details?.type === "table") {
+        return audit.details;
+
     } else {
         return {
             type: audit.details?.type || null,

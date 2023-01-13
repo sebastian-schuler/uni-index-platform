@@ -34,7 +34,7 @@ const LhrAuditList = ({ title, refs, auditList }: Props) => {
             <Divider />
             {
                 audits.map((audit, i) => (
-                    <LhrAuditListItem key={i} audit={audit} />
+                    <LhrAuditListItem key={audit.id+i} audit={audit} />
                 ))
             }
         </>

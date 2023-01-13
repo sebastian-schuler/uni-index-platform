@@ -70,7 +70,7 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
 
   const categoryCards = data.map((category, index) => {
     return (
-      <Link href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_ONLINEMARKETING, category.url)} passHref>
+      <Link key={category.url+index} href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_ONLINEMARKETING, category.url)} passHref>
         <Card component='a'>
           <LhrRingProgress
             title={category.title}
@@ -100,8 +100,8 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
         <Stack>
 
           <div>
-          <Title order={2}>Online Marketing Analysis</Title>
-          <Text>This analysis is based on Googles Lighthouse tool...</Text>
+            <Title order={2}>Online Marketing Analysis</Title>
+            <Text>This analysis is based on Googles Lighthouse tool...</Text>
           </div>
 
           <SimpleGrid cols={3}>

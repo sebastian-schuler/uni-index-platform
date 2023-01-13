@@ -2,6 +2,7 @@ import { Button, Divider, Grid, SimpleGrid, Text } from '@mantine/core';
 import { NextLink } from '@mantine/next';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext } from 'next';
+import Link from 'next/link';
 import LhrAuditList from '../../../../../components/elements/onlinemarketing/LhrAuditList';
 import LhrAuditScore from '../../../../../components/elements/onlinemarketing/LhrAuditScore';
 import LhrRingProgress from '../../../../../components/elements/onlinemarketing/LhrRingProgress';
@@ -67,8 +68,10 @@ const Performance = ({ institution, country, lhrAudits, lhrCategory, footerConte
 
             <WhitePaper>
 
-                <Button variant='outline' component={NextLink} href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_ONLINEMARKETING)}>Back to Online Marketing</Button>
-
+                <Link href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_ONLINEMARKETING)}>
+                    <Button variant='outline' component={"a"}>Back to Online Marketing</Button>
+                </Link>
+                
                 <Grid mt={"md"}>
                     <Grid.Col span={12}>
                         <LhrRingProgress
@@ -93,7 +96,7 @@ const Performance = ({ institution, country, lhrAudits, lhrCategory, footerConte
 
                     <Grid.Col span={12}>
 
-                    <LhrAuditList
+                        <LhrAuditList
                             title='Opportunities'
                             auditList={lhrAudits}
                             refs={lhrCategory.opportunityRefs || []}
