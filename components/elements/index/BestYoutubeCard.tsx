@@ -2,7 +2,7 @@ import { Card, CardSection, createStyles, SimpleGrid, Space, Text, Title } from 
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
-import { SocialMediaDBEntry, TotalScore, YoutubeProfile } from '../../../lib/types/SocialMediaTypes'
+import { SmBestCardMinified, SocialMediaDBEntry, TotalScore, YoutubeProfile } from '../../../lib/types/SocialMediaTypes'
 import { URL_INSTITUTION, URL_INSTITUTION_SOCIALMEDIA } from '../../../lib/url-helper/urlConstants'
 import { getLocalizedName, toLink } from '../../../lib/util/util'
 
@@ -26,7 +26,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface Props {
-    highestYoutube: SocialMediaDBEntry
+    highestYoutube: SmBestCardMinified
 }
 
 const BestYoutubeCard: React.FC<Props> = ({ highestYoutube }: Props) => {
@@ -34,39 +34,36 @@ const BestYoutubeCard: React.FC<Props> = ({ highestYoutube }: Props) => {
     const { t, lang } = useTranslation('common');
     const { classes, theme } = useStyles();
 
-    const totalScore = JSON.parse(highestYoutube.total_score) as TotalScore;
-    const results = highestYoutube.youtube_profile ? JSON.parse(highestYoutube.youtube_profile) as YoutubeProfile : null;
-    const url = toLink(URL_INSTITUTION, highestYoutube.Institution.City.State.Country.url, highestYoutube.Institution.url, URL_INSTITUTION_SOCIALMEDIA);
+    if (highestYoutube.type !== 'youtube') return <></>;
 
     return (
-        <Link href={url} passHref>
-            <Card component='a' withBorder radius="md" p="lg" shadow={"sm"} className={classes.card}>
-                <CardSection className={classes.section} px={"lg"} pt={"lg"}>
-                    <Title order={5}>Best Youtube profile</Title>
-                    <Space h={"xs"} />
+        <Link href={highestYoutube.Institution.url} passHref>
+            <Card component='a' withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
+                <CardSection className={classes.section} px={"md"} pt={"lg"}>
+                    <Title order={5} mb={"xs"}>Best Youtube profile</Title>
                     <Text sx={{ lineHeight: 1.1 }}>
-                        {highestYoutube.Institution.name}, {getLocalizedName({ lang: lang, dbTranslated: highestYoutube.Institution.City.State.Country })}
+                        {highestYoutube.Institution.name}, {highestYoutube.Institution.countryName}
                     </Text>
                 </CardSection>
                 <SimpleGrid cols={4}>
                     <div>
                         <Text size={"sm"} weight={"bold"} color="dimmed">Total<br />Subscribers</Text>
-                        <Text>{results?.subscribers}</Text>
+                        <Text>{highestYoutube.totalSubscribers}</Text>
                     </div>
 
                     <div>
                         <Text size={"sm"} weight={"bold"} color="dimmed">Total<br />Videos</Text>
-                        <Text>{results?.videos}</Text>
+                        <Text>{highestYoutube.totalVideos}</Text>
                     </div>
 
                     <div>
                         <Text size={"sm"} weight={"bold"} color="dimmed">Average<br />views</Text>
-                        <Text>{results?.averageViews.toFixed(0)}</Text>
+                        <Text>{highestYoutube.avgViews.toFixed(0)}</Text>
                     </div>
 
                     <div>
                         <Text size={"sm"} weight={"bold"} color="dimmed">Avgerage<br />comments</Text>
-                        <Text>{results?.averageComments.toFixed(2)}</Text>
+                        <Text>{highestYoutube.avgComments.toFixed(2)}</Text>
                     </div>
                 </SimpleGrid>
 

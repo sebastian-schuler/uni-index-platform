@@ -2,14 +2,14 @@ import fs from 'fs/promises';
 import { getInstitutionDetailed } from '../prisma/prismaDetailedQueries';
 import { DetailedInstitution } from '../types/DetailedDatabaseTypes';
 import { LhrInstitution, LhrSimple } from '../types/lighthouse/CustomLhrTypes';
-import { URL_INSTITUTION, URL_INSTITUTION_ONLINEMARKETING } from '../url-helper/urlConstants';
+import { URL_INSTITUTION, URL_INSTITUTION_OM } from '../url-helper/urlConstants';
 import { toLink } from '../util/util';
 import { getMinifiedLhrCategory } from './lhrParser';
 
 export const getLhrSimplified = async (id: string) => {
 
-    // const rawFile = await fs.readFile(`data/lighthouse/lhr-${id}.json`, "utf-8");
-    const rawFile = await fs.readFile(`data/lighthouse/lhr-HSKL.json`, "utf-8");
+    const rawFile = await fs.readFile(`data/lighthouse/lhr-${id}.json`, "utf-8");
+    // const rawFile = await fs.readFile(`data/lighthouse/lhr-HSKL.json`, "utf-8");
     const parsedFile = JSON.parse(rawFile);
     const lhReport = await getMinifiedLhrCategory(parsedFile);
 
@@ -24,7 +24,7 @@ export const getLhrSimplified = async (id: string) => {
         seoScore: lhReport.categories[1].score || 0,
         bestPracticesScore: lhReport.categories[2].score || 0,
         accessibilityScore: lhReport.categories[3].score || 0,
-        pwaScore: 0,
+        pwaScore: lhReport.categories[4].score || 0,
     }
     report.total = (report.performanceScore + report.accessibilityScore + report.bestPracticesScore + report.seoScore + report.pwaScore) / 5;
     return report;
@@ -56,7 +56,7 @@ const convertToLhrInstitution = (institution: DetailedInstitution) => {
     const lhInstitution: LhrInstitution = {
         id: institution.id,
         name: institution.name,
-        slug: toLink(URL_INSTITUTION, institution.City.State.Country.url, institution.url, URL_INSTITUTION_ONLINEMARKETING),
+        slug: toLink(URL_INSTITUTION, institution.City.State.Country.url, institution.url, URL_INSTITUTION_OM),
         website: institution.website,
     }
 

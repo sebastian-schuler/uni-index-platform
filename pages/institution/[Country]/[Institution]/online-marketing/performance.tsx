@@ -1,4 +1,4 @@
-import { Button, Divider, Grid, SimpleGrid, Text } from '@mantine/core';
+import { Button, Divider, Grid, Group, SimpleGrid, Space, Text } from '@mantine/core';
 import { NextLink } from '@mantine/next';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext } from 'next';
@@ -15,7 +15,7 @@ import { getMinifiedLhrCategory } from '../../../../../lib/lighthouse/lhrParser'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
 import { LhrAudit, LhrCategory } from '../../../../../lib/types/lighthouse/CustomLhrTypes';
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions';
-import { URL_INSTITUTION, URL_INSTITUTION_ONLINEMARKETING } from '../../../../../lib/url-helper/urlConstants';
+import { URL_INSTITUTION, URL_INSTITUTION_OM } from '../../../../../lib/url-helper/urlConstants';
 import { toLink } from '../../../../../lib/util/util';
 
 /**
@@ -64,14 +64,18 @@ const Performance = ({ institution, country, lhrAudits, lhrCategory, footerConte
                 description='Very nice page'
             />
 
-            <Breadcrumb countryInfo={country} institutionInfo={institution} />
+
+            <Group position="apart">
+                <Breadcrumb countryInfo={country} institutionInfo={institution} />
+                <Link href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM)}>
+                    <Button variant='outline' component={"a"}>Back to Online Marketing</Button>
+                </Link>
+            </Group>
+
+            <Space h="md" />
 
             <WhitePaper>
 
-                <Link href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_ONLINEMARKETING)}>
-                    <Button variant='outline' component={"a"}>Back to Online Marketing</Button>
-                </Link>
-                
                 <Grid mt={"md"}>
                     <Grid.Col span={12}>
                         <LhrRingProgress
@@ -137,12 +141,9 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         { title: "Countries", data: countryList, type: "Country" },
     ]
 
-    // TODO dynamic import, finish this
-    const id = "HSKL";
-    const lhrData = await import(`../../../../../data/lighthouse/lhr-${id}.json`).catch((err) => {
+    const lhrData = await import(`../../../../../data/lighthouse/lhr-${institution?.id}.json`).catch((err) => {
         console.log("Not found");
     });
-
     const lhr = await getMinifiedLhrCategory(lhrData, "performance");
 
     return {

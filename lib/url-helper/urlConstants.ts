@@ -5,9 +5,14 @@ export const URL_INSTITUTION = "institution";
 export const URL_INSTITUTIONS = "institutions";
 export const URL_INSTITUTION_SUBJECTS = "subjects";
 export const URL_INSTITUTION_SOCIALMEDIA = "social-media";
-export const URL_INSTITUTION_ONLINEMARKETING = "online-marketing";
 export const URL_INSTITUTION_SOCIALMEDIA_YT = "youtube";
 export const URL_INSTITUTION_SOCIALMEDIA_TW = "twitter";
+export const URL_INSTITUTION_OM = "online-marketing";
+export const URL_INSTITUTION_OM_PERFORMANCE = "performance";
+export const URL_INSTITUTION_OM_SEO = "seo";
+export const URL_INSTITUTION_OM_BESTPRACTICES = "best-practices";
+export const URL_INSTITUTION_OM_ACCESSIBILITY = "accessibility";
+export const URL_INSTITUTION_OM_PWA = "pwa";
 
 export const URL_SUBJECT = "subject";
 export const URL_SUBJECTS = "subjects";

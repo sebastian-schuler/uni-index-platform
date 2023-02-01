@@ -60,6 +60,9 @@ export const getMinifiedLhrCategory = async (lhrData: any, category?: LhrCategor
         const accessibility = getAccessibilityCategory(lhr, audits);
         lhrResult.categories.push(accessibility);
 
+        const pwa = getPwaCategory(lhr, audits);
+        lhrResult.categories.push(pwa);
+
     } else {
         // Add specific category
         switch (category) {
@@ -86,6 +89,12 @@ export const getMinifiedLhrCategory = async (lhrData: any, category?: LhrCategor
                 const accessibility = getAccessibilityCategory(lhr, audits);
                 lhrResult.categories.push(accessibility);
                 lhrResult.audits = filterUnnecessaryAudits(lhrResult.audits, accessibility);
+                break;
+
+            case "pwa":
+                const pwa = getPwaCategory(lhr, audits);
+                lhrResult.categories.push(pwa);
+                lhrResult.audits = filterUnnecessaryAudits(lhrResult.audits, pwa);
                 break;
 
         }
@@ -265,3 +274,20 @@ const getAccessibilityCategory = (lhr: Result, audits: LhrAudit[]): LhrCategory 
     }
 }
 
+const getPwaCategory = (lhr: Result, audits: LhrAudit[]): LhrCategory => {
+    const seo = lhr.categories["pwa"];
+
+    const metricRefs: string[] = getMetricRefs(seo);
+    const { opportunityRefs, passedRefs } = getOpportunityAndPassedRefs(seo, audits, "pwa");
+    const diagnosticRefs: string[] = getDiagnosticRefs(seo, opportunityRefs, metricRefs, passedRefs);
+
+    return {
+        id: seo.id,
+        title: seo.title,
+        score: seo.score || 0,
+        metricRefs,
+        opportunityRefs,
+        diagnosticRefs,
+        passedRefs,
+    }
+}

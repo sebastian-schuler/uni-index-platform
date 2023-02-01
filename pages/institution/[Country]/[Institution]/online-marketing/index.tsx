@@ -14,7 +14,7 @@ import { getLhrSimplified } from '../../../../../lib/lighthouse/lhrSimplifier'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { LhrSimple } from '../../../../../lib/types/lighthouse/CustomLhrTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
-import { URL_INSTITUTION, URL_INSTITUTION_ONLINEMARKETING } from '../../../../../lib/url-helper/urlConstants'
+import { URL_INSTITUTION, URL_INSTITUTION_OM } from '../../../../../lib/url-helper/urlConstants'
 import { toLink } from '../../../../../lib/util/util'
 
 interface CategoryData {
@@ -70,7 +70,7 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
 
   const categoryCards = data.map((category, index) => {
     return (
-      <Link key={category.url+index} href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_ONLINEMARKETING, category.url)} passHref>
+      <Link key={category.url+index} href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM, category.url)} passHref>
         <Card component='a'>
           <LhrRingProgress
             title={category.title}

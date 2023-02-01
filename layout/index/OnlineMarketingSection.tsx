@@ -1,28 +1,8 @@
-import { Card, CardSection, createStyles, SimpleGrid, Stack, Text, Title } from '@mantine/core'
-import Link from 'next/link';
-import React from 'react'
-import LhrRingProgress from '../../components/elements/onlinemarketing/LhrRingProgress';
-import { LhrSimple } from '../../lib/types/lighthouse/CustomLhrTypes'
+import { Box, Divider, Group, SimpleGrid, Stack, Text, Title, useMantineTheme } from '@mantine/core';
+import MantineLink from '../../components/elements/MantineLink';
+import OnlineMarketingCard from '../../components/elements/onlinemarketing/OnlineMarketingCard';
+import { LhrSimple } from '../../lib/types/lighthouse/CustomLhrTypes';
 import ResponsiveContainer from '../ResponsiveContainer';
-
-const useStyles = createStyles((theme) => ({
-  card: {
-    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
-    transition: "all .2s ease-in-out",
-    height: "100%",
-
-    '&:hover': {
-      transform: "scale(1.05)",
-    }
-  },
-
-  section: {
-    borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
-    padding: theme.spacing.md,
-    marginBottom: theme.spacing.md,
-  },
-
-}));
 
 interface Props {
   simpleLhReports: LhrSimple[],
@@ -30,42 +10,33 @@ interface Props {
 
 const OnlineMarketingSection = ({ simpleLhReports }: Props) => {
 
-  const { classes, theme } = useStyles();
+  const theme = useMantineTheme();
 
   return (
-    <ResponsiveContainer paddingY>
+    <Box sx={{ backgroundColor: theme.colors.brandOrange[5] }}>
+      <ResponsiveContainer paddingY>
 
-      <Stack spacing={0}>
-        <Title order={2}>
-          Online Marketing
-        </Title>
-        <Text>We analysed every institutions website.</Text>
-      </Stack>
+        <Group mb={"sm"} sx={{ justifyContent: "space-between", alignItems: "flex-end" }}>
+          <Stack spacing={0}>
+            <Title order={2} color={'white'}>Online Marketing</Title>
+            <Text color={'white'}>We analysed every institutions website.</Text>
+          </Stack>
+          <MantineLink label={"See all online marketing analyses"} url={"#"} color={'light.0'} type="internal" />
+        </Group>
 
-      <SimpleGrid cols={2} spacing={"lg"}>
-        {
-          simpleLhReports.map((report, i) => (
-            <Link key={report.institution.id} href={report.institution.slug} passHref>
-              <Card component='a' withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
+        <Divider color={'white'} sx={{ opacity: 0.7 }} />
 
-                <CardSection className={classes.section}>
-                  <Text size={"xl"}>{report.institution.name}</Text>
-                  <Text>{report.institution.website}</Text>
-                </CardSection>
+        <SimpleGrid mt={'md'} cols={2} spacing={"lg"}>
+          {
+            simpleLhReports.map((report, i) => (
+              <OnlineMarketingCard key={report.institution.id} report={report} />
+            ))
+          }
+        </SimpleGrid>
 
-                <LhrRingProgress
-                  size='sm'
-                  title={"Performance"}
-                  score={report.performanceScore * 100}
-                />
+      </ResponsiveContainer>
+    </Box>
 
-              </Card>
-            </Link>
-          ))
-        }
-      </SimpleGrid>
-
-    </ResponsiveContainer>
   )
 }
 

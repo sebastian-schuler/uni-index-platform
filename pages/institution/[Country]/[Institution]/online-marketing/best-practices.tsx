@@ -43,9 +43,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         { title: "Countries", data: countryList, type: "Country" },
     ]
 
-    // TODO dynamic import, finish this
-    const id = "HSKL";
-    const lhrData = await import(`../../../../../data/lighthouse/lhr-${id}.json`).catch((err) => {
+    const lhrData = await import(`../../../../../data/lighthouse/lhr-${institution?.id}.json`).catch((err) => {
         console.log("Not found");
     });
 

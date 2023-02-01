@@ -1,6 +1,7 @@
 import { Group, RingProgress, Stack, Text, Title } from '@mantine/core'
 import React from 'react'
 import { getLhrScoreColor } from '../../../lib/lighthouse/lhrUtil'
+import { interpolateBetweenColors } from '../../../lib/util/uiUtil'
 
 interface Props {
     score: number,
@@ -20,7 +21,7 @@ const LhrRingProgress: React.FC<Props> = ({ score, title, description, size }: P
                     sections={[{ value: score, color: getLhrScoreColor(score) }, { value: 100 - score, color: "#525252" }]}
                     label={
                         <Text color={getLhrScoreColor(score)} weight={700} align="center" size={"xl"}>
-                            {score}%
+                            {Math.round(score)}%
                         </Text>
                     }
                 />
@@ -42,7 +43,7 @@ const LhrRingProgress: React.FC<Props> = ({ score, title, description, size }: P
                     sections={[{ value: score, color: getLhrScoreColor(score) }, { value: 100 - score, color: "#525252" }]}
                     label={
                         <Text color={getLhrScoreColor(score)} weight={700} align="center" size={"xl"}>
-                            {score}%
+                            {Math.round(score)}%
                         </Text>
                     }
                 />
@@ -62,7 +63,7 @@ const LhrRingProgress: React.FC<Props> = ({ score, title, description, size }: P
                     sections={[{ value: score, color: getLhrScoreColor(score) }, { value: 100 - score, color: "#525252" }]}
                     label={
                         <Text color={getLhrScoreColor(score)} weight={700} align="center" size={"sm"}>
-                            {score}%
+                            {Math.round(score)}%
                         </Text>
                     }
                 />

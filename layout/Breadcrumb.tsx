@@ -1,12 +1,12 @@
-import { Breadcrumbs, Text, useMantineTheme } from '@mantine/core';
+import { Breadcrumbs, Text } from '@mantine/core';
 import { City, Country, Institution, State, Subject, SubjectType } from '@prisma/client';
 import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
-import { URL_INSTITUTION, URL_INSTITUTIONS, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SOCIALMEDIA_TW, URL_INSTITUTION_SOCIALMEDIA_YT, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING, URL_SOCIAL_MEDIA_STATISTICS, URL_SUBJECT, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
-import { getLocalizedName, toLink } from '../lib/util/util';
 import MantineLink from '../components/elements/MantineLink';
+import { URL_INSTITUTION, URL_INSTITUTIONS, URL_INSTITUTION_OM, URL_INSTITUTION_OM_ACCESSIBILITY, URL_INSTITUTION_OM_BESTPRACTICES, URL_INSTITUTION_OM_PERFORMANCE, URL_INSTITUTION_OM_PWA, URL_INSTITUTION_OM_SEO, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SOCIALMEDIA_TW, URL_INSTITUTION_SOCIALMEDIA_YT, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING, URL_SOCIAL_MEDIA_STATISTICS, URL_SUBJECT, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
+import { getLocalizedName, toLink } from '../lib/util/util';
 
 type Props = {
 
@@ -164,6 +164,46 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
                             url: toLink(URL_INSTITUTION, country, institution, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SOCIALMEDIA_YT)
                         });
                     }
+                } else if (route.startsWith(toLink(URL_INSTITUTION, "[Country]", "[Institution]", URL_INSTITUTION_OM))) {
+                    // INSTITUTIONS > COUNTRY > INSTITUTION > ONLINE MARKETING
+                    links.push({
+                        name: "Online Marketing",
+                        url: toLink(URL_INSTITUTION, country, institution, URL_INSTITUTION_OM)
+                    });
+
+                    if (route.startsWith(toLink(URL_INSTITUTION, "[Country]", "[Institution]", URL_INSTITUTION_OM, URL_INSTITUTION_OM_PERFORMANCE))) {
+                        // INSTITUTIONS > COUNTRY > INSTITUTION > ONLINE MARKETING > PERFORMANCE
+                        links.push({
+                            name: "Performance",
+                            url: toLink(URL_INSTITUTION, country, institution, URL_INSTITUTION_OM, URL_INSTITUTION_OM_PERFORMANCE)
+                        });
+
+                    } else if (route.startsWith(toLink(URL_INSTITUTION, "[Country]", "[Institution]", URL_INSTITUTION_OM, URL_INSTITUTION_OM_SEO))) {
+                        // INSTITUTIONS > COUNTRY > INSTITUTION > ONLINE MARKETING > SEO
+                        links.push({
+                            name: "SEO",
+                            url: toLink(URL_INSTITUTION, country, institution, URL_INSTITUTION_OM, URL_INSTITUTION_OM_SEO)
+                        });
+                    } else if (route.startsWith(toLink(URL_INSTITUTION, "[Country]", "[Institution]", URL_INSTITUTION_OM, URL_INSTITUTION_OM_BESTPRACTICES))) {
+                        // INSTITUTIONS > COUNTRY > INSTITUTION > ONLINE MARKETING > BEST PRACTICES
+                        links.push({
+                            name: "Best Practices",
+                            url: toLink(URL_INSTITUTION, country, institution, URL_INSTITUTION_OM, URL_INSTITUTION_OM_BESTPRACTICES)
+                        });
+                    } else if (route.startsWith(toLink(URL_INSTITUTION, "[Country]", "[Institution]", URL_INSTITUTION_OM, URL_INSTITUTION_OM_ACCESSIBILITY))) {
+                        // INSTITUTIONS > COUNTRY > INSTITUTION > ONLINE MARKETING > ACCESSIBILITY
+                        links.push({
+                            name: "Accessibility",
+                            url: toLink(URL_INSTITUTION, country, institution, URL_INSTITUTION_OM, URL_INSTITUTION_OM_ACCESSIBILITY)
+                        });
+                    } else if (route.startsWith(toLink(URL_INSTITUTION, "[Country]", "[Institution]", URL_INSTITUTION_OM, URL_INSTITUTION_OM_PWA))) {
+                        // INSTITUTIONS > COUNTRY > INSTITUTION > ONLINE MARKETING > PWA
+                        links.push({
+                            name: "PWA",
+                            url: toLink(URL_INSTITUTION, country, institution, URL_INSTITUTION_OM, URL_INSTITUTION_OM_PWA)
+                        });
+                    }
+
                 } else if (route.startsWith(toLink(URL_INSTITUTION, "[Country]", "[Institution]", "[Subject]"))) {
                     // INSTITUTIONS > COUNTRY > INSTITUTION > SUBJECT
                     let subject = query.Subject as string;
@@ -190,7 +230,7 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
                 name: "Social Media Ranking",
                 url: toLink(URL_SOCIAL_MEDIA_RANKING)
             });
-        }else if(route.startsWith(toLink(URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_STATISTICS))){
+        } else if (route.startsWith(toLink(URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_STATISTICS))) {
             // SOCIAL MEDIA TWITTER PATH
             links.push({
                 name: "Social Media Statistics",

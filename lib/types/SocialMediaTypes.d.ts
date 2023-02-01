@@ -1,5 +1,7 @@
 import { City, Country, Institution, InstitutionSocialMedia, State } from "@prisma/client";
 
+export type SocialMediaPages = "youtube" | "twitter"
+
 export interface SocialMediaDBEntry extends InstitutionSocialMedia {
     Institution: Institution & {
         City: City & {
@@ -34,6 +36,32 @@ export interface SmRankingEntryMinified {
     combinedScore: number,
     youtubeScore: number,
     twitterScore: number,
+}
+
+export type SmBestCardMinified = {
+    type: "youtube"
+    Institution: {
+        name: string
+        url: string
+        countryName: string
+    }
+    youtubeScore: number,
+    totalSubscribers: number,
+    totalVideos: number,
+    avgViews: number,
+    avgComments: number,
+} | {
+    type: "twitter"
+    Institution: {
+        name: string
+        url: string
+        countryName: string
+    }
+    twitterScore: number
+    totalFollowers: number
+    totalTweets: number
+    avgLikes: number
+    avgRetweets: number
 }
 
 // -------------- YOUTUBE --------------

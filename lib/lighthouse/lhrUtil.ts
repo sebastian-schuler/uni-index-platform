@@ -1,6 +1,6 @@
 export const LHR_SCORE_BREAKPOINTS = {
-    good: 0.9,
-    average: 0.5,
+    good: 75,
+    average: 50,
     poor: 0,
 }
 
@@ -12,10 +12,10 @@ export const LHR_SCORE_COLORS = {
 }
 
 export const getLhrScoreColor = (score: number) => {
-    if (score >= LHR_SCORE_BREAKPOINTS.good) {
+    if (score > LHR_SCORE_BREAKPOINTS.good) {
         return 'green';
     }
-    if (score >= LHR_SCORE_BREAKPOINTS.average) {
+    if (score > LHR_SCORE_BREAKPOINTS.average) {
         return 'orange';
     }
     return 'red';

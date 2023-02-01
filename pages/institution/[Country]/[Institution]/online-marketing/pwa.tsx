@@ -16,7 +16,7 @@ interface Props {
     footerContent: FooterContent[],
 }
 
-const AccessibilityPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }: Props) => {
+const PwaPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }: Props) => {
     return (
         <LhrCategoryPage
             country={country}
@@ -48,8 +48,9 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         console.log("Not found");
     });
 
-    const lhr = await getMinifiedLhrCategory(lhrData, "accessibility");
+    const lhr = await getMinifiedLhrCategory(lhrData, "pwa");
 
+    console.log("categories",lhr.categories)
     return {
         props: {
             institution,
@@ -70,4 +71,4 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
     }
 }
 
-export default AccessibilityPage
+export default PwaPage

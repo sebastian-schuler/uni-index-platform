@@ -1,11 +1,11 @@
-import { Button, Grid } from "@mantine/core"
+import { Button, Grid, Group, Space } from "@mantine/core"
 import { Country, Institution } from "@prisma/client"
 import Link from "next/link"
 import Breadcrumb from "../../../layout/Breadcrumb"
 import { FooterContent } from "../../../layout/footer/Footer"
 import LayoutContainer from "../../../layout/LayoutContainer"
 import { LhrAudit, LhrCategory } from "../../../lib/types/lighthouse/CustomLhrTypes"
-import { URL_INSTITUTION, URL_INSTITUTION_ONLINEMARKETING } from "../../../lib/url-helper/urlConstants"
+import { URL_INSTITUTION, URL_INSTITUTION_OM } from "../../../lib/url-helper/urlConstants"
 import { toLink } from "../../../lib/util/util"
 import Meta from "../../partials/Meta"
 import WhitePaper from "../../WhitePaper"
@@ -29,14 +29,16 @@ const LhrCategoryPage = ({ institution, country, lhrAudits, lhrCategory, footerC
                 description='Very nice page'
             />
 
-            <Breadcrumb countryInfo={country} institutionInfo={institution} />
-
-            <WhitePaper>
-
-                <Link href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_ONLINEMARKETING)}>
+            <Group position="apart">
+                <Breadcrumb countryInfo={country} institutionInfo={institution} />
+                <Link href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM)}>
                     <Button variant='outline' component={"a"}>Back to Online Marketing</Button>
                 </Link>
+            </Group>
 
+            <Space h="md" />
+
+            <WhitePaper>
                 <Grid>
 
                     <Grid.Col span={4}>

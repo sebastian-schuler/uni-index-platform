@@ -1,6 +1,6 @@
 import { CountryCardData, DetailedCountry, DetailedInstitution, DetailedSubject, InstitutionCardData, SubjectCardData } from "../types/DetailedDatabaseTypes";
-import { SmRankingEntry, SmRankingEntryMinified, TotalScore } from "../types/SocialMediaTypes";
-import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_INSTITUTION_SUBJECTS, URL_LOCATION } from "../url-helper/urlConstants";
+import { SmBestCardMinified, SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry, SocialMediaPages, TotalScore, TwitterProfile, YoutubeChannelData, YoutubeProfile } from "../types/SocialMediaTypes";
+import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SUBJECTS, URL_LOCATION } from "../url-helper/urlConstants";
 import { getBracketedName, getLocalizedName, getUniqueSubjectTypeCounts, toLink } from "./util";
 
 /**
@@ -19,6 +19,52 @@ export const minifySmRankingItem = (item: SmRankingEntry): SmRankingEntryMinifie
         youtubeScore: parsedScore.percent.youtube.total,
         twitterScore: parsedScore.percent.twitter.total,
     }
+}
+
+/**
+ * Minify a "Best (Youtube/Twitter) Card" to only contain the data needed
+ * @param item 
+ */
+export const minifySmBestCard = (item: SocialMediaDBEntry, socialMediaSource: SocialMediaPages, locale: string): SmBestCardMinified | null => {
+    const parsedScore = JSON.parse(item.total_score) as TotalScore;
+
+    if (socialMediaSource === "youtube") {
+
+        if (!item.youtube_profile) return null;
+        const youtubeProfile = JSON.parse(item.youtube_profile) as YoutubeProfile;
+
+        return {
+            type: "youtube",
+            Institution: {
+                name: item.Institution.name,
+                url: toLink(URL_INSTITUTION, item.Institution.City.State.Country.url, item.Institution.url, URL_INSTITUTION_SOCIALMEDIA),
+                countryName: getLocalizedName({ lang: locale, dbTranslated: item.Institution.City.State.Country }),
+            },
+            youtubeScore: parsedScore.percent.youtube.total,
+            totalSubscribers: youtubeProfile.subscribers,
+            totalVideos: youtubeProfile.videos,
+            avgViews: youtubeProfile.averageViews,
+            avgComments: youtubeProfile.averageComments,
+        }
+    } else {
+        if (!item.twitter_profile) return null;
+        const parsedTwitter = JSON.parse(item.twitter_profile) as TwitterProfile;
+
+        return {
+            type: "twitter",
+            Institution: {
+                name: item.Institution.name,
+                url: toLink(URL_INSTITUTION, item.Institution.City.State.Country.url, item.Institution.url, URL_INSTITUTION_SOCIALMEDIA),
+                countryName: getLocalizedName({ lang: locale, dbTranslated: item.Institution.City.State.Country }),
+            },
+            twitterScore: parsedScore.percent.youtube.total,
+            totalFollowers: parsedTwitter.followers,
+            avgLikes: parsedTwitter.avgLikes,
+            avgRetweets: parsedTwitter.avgRetweets,
+            totalTweets: parsedTwitter.tweets,
+        }
+    }
+
 }
 
 /**

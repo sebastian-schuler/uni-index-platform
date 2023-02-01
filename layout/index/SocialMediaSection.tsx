@@ -1,23 +1,21 @@
-import { Grid, Stack, Text, Title } from '@mantine/core'
+import { Box, SimpleGrid, Stack, Text, Title, useMantineTheme } from '@mantine/core'
 import { Country } from '@prisma/client'
 import React from 'react'
-import { SmRankingEntryMinified, SocialMediaDBEntry } from '../../lib/types/SocialMediaTypes'
-import ResponsiveContainer from '../ResponsiveContainer'
-import SmIndexTopRanking from '../../components/elements/socialmedia/SmIndexTopRanking'
 import BestTwitterCard from '../../components/elements/index/BestTwitterCard'
 import BestYoutubeCard from '../../components/elements/index/BestYoutubeCard'
+import SmIndexTopRanking from '../../components/elements/socialmedia/SmIndexTopRanking'
+import { SmBestCardMinified, SmRankingEntryMinified } from '../../lib/types/SocialMediaTypes'
+import ResponsiveContainer from '../ResponsiveContainer'
 
 interface Props {
   socialMediaList: SmRankingEntryMinified[]
-  highestTwitterStringified: string
-  highestYoutubeStringified: string
+  highestTwitter: SmBestCardMinified
+  highestYoutube: SmBestCardMinified
   countries: Country[]
 }
 
-const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitterStringified, highestYoutubeStringified, countries }: Props) => {
+const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitter, highestYoutube, countries }: Props) => {
 
-  const highestTwitter = JSON.parse(highestTwitterStringified) as SocialMediaDBEntry;
-  const highestYoutube = JSON.parse(highestYoutubeStringified) as SocialMediaDBEntry;
 
   return (
     <ResponsiveContainer id='socialMediaSection' paddingY>
@@ -29,23 +27,25 @@ const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitterSt
         <Text>We looked at every institutions social media pages.</Text>
       </Stack>
 
-      <Grid mt={'md'} gutter={"lg"}>
+      <SimpleGrid
+        mt={'md'}
+        breakpoints={[
+          { minWidth: 'md', cols: 2, spacing: 'md' },
+          { minWidth: 'sm', cols: 1, spacing: 'sm' },
+        ]}
+      >
 
-        <Grid.Col span={6}>
-          <SmIndexTopRanking
-            socialMediaList={socialMediaList}
-            countries={countries}
-          />
-        </Grid.Col>
+        <SmIndexTopRanking
+          socialMediaList={socialMediaList}
+          countries={countries}
+        />
 
-        <Grid.Col span={6}>
-          <Stack spacing={"lg"}>
-            <BestTwitterCard highestTwitter={highestTwitter} />
-            <BestYoutubeCard highestYoutube={highestYoutube} />
-          </Stack>
-        </Grid.Col>
+        <Stack spacing={"md"}>
+          <BestTwitterCard highestTwitter={highestTwitter} />
+          <BestYoutubeCard highestYoutube={highestYoutube} />
+        </Stack>
 
-      </Grid>
+      </SimpleGrid>
     </ResponsiveContainer>
   )
 

@@ -19,9 +19,9 @@ import { getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/pri
 import { getAds, getCountries } from '../lib/prisma/prismaQueries';
 import { getAllSocialMedia, getSocialMediaRanking } from '../lib/prisma/prismaSocialMedia';
 import { CountryCardData, DetailedCountry, DetailedInstitution, DetailedSubject, DetailedUserAd, InstitutionCardData, SubjectCardData } from '../lib/types/DetailedDatabaseTypes';
-import { SmRankingEntryMinified, TotalScore } from '../lib/types/SocialMediaTypes';
+import { SmBestCardMinified, SmRankingEntryMinified, TotalScore } from '../lib/types/SocialMediaTypes';
 import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
-import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmRankingItem } from '../lib/util/conversionUtil';
+import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmBestCard, minifySmRankingItem } from '../lib/util/conversionUtil';
 import { getUniquesFromArray, toLink } from '../lib/util/util';
 import OnlineMarketingSection from '../layout/index/OnlineMarketingSection';
 import { getAllLhrSimplified } from '../lib/lighthouse/lhrSimplifier';
@@ -36,13 +36,13 @@ interface Props {
   countryList: Country[],
   institutionStates: State[],
   socialMediaList: SmRankingEntryMinified[],
-  highestTwitterStringified: string,
-  highestYoutubeStringified: string,
+  highestTwitter: SmBestCardMinified,
+  highestYoutube: SmBestCardMinified,
   footerContent: FooterContent[],
 }
 
 const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionData, subjectData, countryData, countryList,
-  institutionStates, socialMediaList, highestTwitterStringified, highestYoutubeStringified, footerContent }: Props) => {
+  institutionStates, socialMediaList, highestTwitter, highestYoutube, footerContent }: Props) => {
 
   const ads: DetailedUserAd[] = JSON.parse(adsStringified);
 
@@ -73,8 +73,8 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
 
       <SocialMediaSection
         socialMediaList={socialMediaList}
-        highestTwitterStringified={highestTwitterStringified}
-        highestYoutubeStringified={highestYoutubeStringified}
+        highestTwitter={highestTwitter}
+        highestYoutube={highestYoutube}
         countries={countryList}
       />
 
@@ -181,7 +181,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const totalScoreB = JSON.parse(b.total_score) as TotalScore;
     return totalScoreB.percent.youtube.total - totalScoreA.percent.youtube.total;
   });
-  const highestYoutubeStringified = JSON.stringify(socialMediaList[0]);
+  const highestYoutube = minifySmBestCard(socialMediaList[0], "youtube", lang);
 
   // Highest Twitter score
   socialMediaList.sort((a, b) => {
@@ -189,7 +189,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const totalScoreB = JSON.parse(b.total_score) as TotalScore;
     return totalScoreB.percent.twitter.total - totalScoreA.percent.twitter.total;
   });
-  const highestTwitterStringified = JSON.stringify(socialMediaList[0]);
+  const highestTwitter = minifySmBestCard(socialMediaList[0], "twitter", lang);
 
   // === ONLINE MARKETING ===
   const simpleLhReports = await getAllLhrSimplified(4);
@@ -214,8 +214,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
       countryList,
       institutionStates,
       socialMediaList: socialMediaTopList,
-      highestTwitterStringified,
-      highestYoutubeStringified,
+      highestTwitter,
+      highestYoutube,
       countryData,
       footerContent,
     }
