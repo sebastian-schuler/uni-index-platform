@@ -4,7 +4,7 @@ import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
-import { CountryCardData } from '../../../lib/types/DetailedDatabaseTypes'
+import { CountryCardData } from '../../../lib/types/UiHelperTypes'
 
 const useStyles = createStyles((theme) => ({
     card: {

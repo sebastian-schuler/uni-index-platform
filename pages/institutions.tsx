@@ -8,8 +8,8 @@ import Meta from '../components/partials/Meta';
 import { AD_PAGE_INSTITUTIONS } from '../lib/appConstants';
 import { getDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
 import { getAds } from '../lib/prisma/prismaQueries';
-import { CountryCardData, DetailedUserAd } from '../lib/types/DetailedDatabaseTypes';
-import { Searchable } from '../lib/types/UiHelperTypes';
+import { DetailedUserAd } from '../lib/types/DetailedDatabaseTypes';
+import { CountryCardData, Searchable } from '../lib/types/UiHelperTypes';
 import { convertCountryToCardData } from '../lib/util/conversionUtil';
 import { generateSearchable } from '../lib/util/util';
 

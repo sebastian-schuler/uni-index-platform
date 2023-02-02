@@ -31,7 +31,7 @@ export const sortSearchableArray = (searchable: Searchable[], orderBy: OrderBySt
             const bName = getLocalizedName({ lang: lang, searchable: b });
             return aName.localeCompare(bName); // TODO add relevance sorting
         } else if (orderBy === "popularity") {
-            return b.data.popularity_score - a.data.popularity_score;
+            return b.data.popularity - a.data.popularity;
         } else {
             return 0;
         }

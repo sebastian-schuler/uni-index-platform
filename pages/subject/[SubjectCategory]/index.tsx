@@ -5,16 +5,17 @@ import useTranslation from 'next-translate/useTranslation';
 import { ParsedUrlQuery } from 'querystring';
 import GenericPageHeader from '../../../components/elements/GenericPageHeader';
 import SubjectCard from '../../../components/elements/itemcards/SubjectCard';
+import Meta from '../../../components/partials/Meta';
 import Breadcrumb from '../../../layout/Breadcrumb';
 import { FooterContent } from '../../../layout/footer/Footer';
 import LayoutContainer from '../../../layout/LayoutContainer';
-import Meta from '../../../components/partials/Meta';
 import prisma from '../../../lib/prisma/prisma';
 import { getSubjectsDetailedByCategory } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getSubjectType } from '../../../lib/prisma/prismaQueries';
-import { DetailedSubject, SubjectCardData } from '../../../lib/types/DetailedDatabaseTypes';
+import { DetailedSubject } from '../../../lib/types/DetailedDatabaseTypes';
+import { SubjectCardData } from '../../../lib/types/UiHelperTypes';
 import { convertSubjectToCardData } from '../../../lib/util/conversionUtil';
-import { getDBLocale, getLocalizedName } from '../../../lib/util/util';
+import { getLocalizedName } from '../../../lib/util/util';
 
 interface Props {
   subjectTypeInfo: SubjectType,

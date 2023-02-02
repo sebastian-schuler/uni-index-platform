@@ -30,7 +30,7 @@ export function AuthProvider({ children }: Props) {
     };
 
     const deleteAuthToken = () => {
-        Cookies.remove(INSTITUTION_SESSION_COOKIE, {sameSite: 'Lax'});
+        Cookies.remove(INSTITUTION_SESSION_COOKIE, { sameSite: 'Lax' });
         setToken("");
     };
 
@@ -44,7 +44,7 @@ export function AuthProvider({ children }: Props) {
         const cookie = Cookies.get(INSTITUTION_SESSION_COOKIE);
         if (cookie !== undefined) setToken(cookie);
         return () => { setToken(""); }
-    });
+    }, [setToken]);
 
     return (
         <>

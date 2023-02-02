@@ -36,22 +36,6 @@ export type DetailedSubject = (Subject & {
     })[];
 });
 
-export type SubjectCardData = {
-    countryId: string
-    fullUrl: string
-    subjectTypes: string
-    name: string
-    degree: string
-    duration: number
-    durationType: string
-    Institution: {
-        name: string
-    },
-    City: {
-        name: string
-    }
-};
-
 // SUBJECT TYPE CARD
 export type DetailedSubjectType = SubjectType & {
     subjectCount: number;
@@ -60,7 +44,7 @@ export type DetailedSubjectType = SubjectType & {
 // INSTITUTION CARD
 export type DetailedInstitution = (Institution & {
     City: City & {
-        State: State &{
+        State: State & {
             Country: Country;
         }
     }
@@ -115,15 +99,6 @@ export type DetailedCountry = Country & {
     institutionCount: number;
     subjectCount: number;
 };
-
-export type CountryCardData = {
-    name: string
-    url: string
-    imgSrc: string
-    countryCode: string
-    institutionCount: number
-    subjectCount: number
-}
 
 // STATE CARD
 export type DetailedState = State & {

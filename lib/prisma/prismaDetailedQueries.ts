@@ -66,16 +66,14 @@ const getCountryInstitutionCount = async (id: string): Promise<number> => {
 // ================= SUBJECT TYPE =============
 // ===========================================================
 
-const loadDetailedSubjectTypes = async (subjectTypes: SubjectType[]) => {
-    return await Promise.all(subjectTypes.map(async (type) => {
+export const getDetailedSubjectTypes = async () => {
+    const types = await getSubjectTypes();
+
+    const detailed: DetailedSubjectType[] = await Promise.all(types.map(async (type) => {
         const subjectCount: number = await getSubjectTypeSubjectCount(type.url);
         return { ...type, subjectCount };
     }));
-}
 
-export const getDetailedSubjectTypes = async () => {
-    const types = await getSubjectTypes();
-    const detailed: DetailedSubjectType[] = await loadDetailedSubjectTypes(types);
     return detailed;
 }
 

@@ -1,7 +1,6 @@
 import { Country, Institution, State, Subject, SubjectHasSubjectTypes, SubjectType } from "@prisma/client";
-import { CountryCardData, DetailedCountry, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
-import { SmRankingEntry, SmRankingEntryMinified, TotalScore } from "../types/SocialMediaTypes";
-import { Searchable } from "../types/UiHelperTypes";
+import { DetailedSubjectType } from "../types/DetailedDatabaseTypes";
+import { CountryCardData, Searchable, SubjectTypeCardData } from "../types/UiHelperTypes";
 
 interface LocalizedNameProps {
     lang: string,
@@ -37,13 +36,7 @@ export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, inst
         return toStr(institution.name);
 
     } else if (searchable !== undefined) {
-
-        if (searchable.type === "Country")
-            return toStr(searchable.data.name);
-        else if (searchable.type === "SubjectType")
-            return toStr(getLocalizedName({ lang, any: searchable.data }));
-        else
-            return ""
+        return toStr(searchable.data.name);
 
     } else {
         return "";
@@ -55,7 +48,7 @@ export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, inst
 type GenerateSearchableProps = {
     type: "Country", data: CountryCardData[]
 } | {
-    type: "SubjectType", data: DetailedSubjectType[]
+    type: "SubjectType", data: SubjectTypeCardData[]
 }
 export const generateSearchable = (props: GenerateSearchableProps) => { // TODO add other objects, eg. states
     const arr: Searchable[] = [];

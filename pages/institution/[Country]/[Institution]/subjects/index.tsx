@@ -10,9 +10,10 @@ import InstitutionNav from '../../../../../layout/subnav/InstitutionNav';
 import Meta from '../../../../../components/partials/Meta';
 import { getDetailedSubjectsByInstitution } from '../../../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
-import { DetailedSubject, SubjectCardData } from '../../../../../lib/types/DetailedDatabaseTypes';
+import { DetailedSubject } from '../../../../../lib/types/DetailedDatabaseTypes';
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions';
 import { convertSubjectToCardData } from '../../../../../lib/util/conversionUtil';
+import { SubjectCardData } from '../../../../../lib/types/UiHelperTypes';
 
 interface Props {
   institution: Institution,

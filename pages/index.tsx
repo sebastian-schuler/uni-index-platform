@@ -18,7 +18,7 @@ import { getPopularDetailedCountries } from '../lib/prisma/prismaDetailedQueries
 import { getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/prisma/prismaPopularQueries';
 import { getAds, getCountries } from '../lib/prisma/prismaQueries';
 import { getAllSocialMedia, getSocialMediaRanking } from '../lib/prisma/prismaSocialMedia';
-import { CountryCardData, DetailedCountry, DetailedInstitution, DetailedSubject, DetailedUserAd, InstitutionCardData, SubjectCardData } from '../lib/types/DetailedDatabaseTypes';
+import { DetailedCountry, DetailedInstitution, DetailedSubject, DetailedUserAd, InstitutionCardData } from '../lib/types/DetailedDatabaseTypes';
 import { SmBestCardMinified, SmRankingEntryMinified, TotalScore } from '../lib/types/SocialMediaTypes';
 import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
 import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmBestCard, minifySmRankingItem } from '../lib/util/conversionUtil';
@@ -26,6 +26,7 @@ import { getUniquesFromArray, toLink } from '../lib/util/util';
 import OnlineMarketingSection from '../layout/index/OnlineMarketingSection';
 import { getAllLhrSimplified } from '../lib/lighthouse/lhrSimplifier';
 import { LhrSimple } from '../lib/types/lighthouse/CustomLhrTypes';
+import { CountryCardData, SubjectCardData } from '../lib/types/UiHelperTypes';
 
 interface Props {
   simpleLhReports: LhrSimple[],

@@ -14,8 +14,9 @@ import SearchBox from '../components/partials/SearchBox';
 import { getDetailedSubjectTypes } from '../lib/prisma/prismaDetailedQueries';
 import { getCountries } from '../lib/prisma/prismaQueries';
 import { DetailedSubjectType } from '../lib/types/DetailedDatabaseTypes';
-import { Searchable } from '../lib/types/UiHelperTypes';
+import { Searchable, SubjectTypeCardData } from '../lib/types/UiHelperTypes';
 import { generateSearchable, getLocalizedName } from '../lib/util/util';
+import { convertSubjectTypeToCardData } from '../lib/util/conversionUtil';
 
 type SearchState = {
     query: string,
@@ -119,7 +120,7 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
                             dataList.map((searchable, i) => (
                                 searchable.visible && (
                                     <Reorder.Item key={"orderitem" + i} as={"div"} value={searchable}>
-                                        <SubjectTypeCard key={i} subjectType={searchable.data as DetailedSubjectType} />
+                                        <SubjectTypeCard key={i} subjectType={searchable.data as SubjectTypeCardData} />
                                     </Reorder.Item>
                                 )
                             ))
@@ -136,9 +137,14 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
-    // List of subject categories
+    const lang = context.locale || "en";
+
+    // Detailed Subject Types
     const detailedSubjectTypes = await getDetailedSubjectTypes();
-    const searchableSubjectTypes: Searchable[] = generateSearchable({ type: "SubjectType", data: detailedSubjectTypes });
+    // Convert to card data
+    const cardData = detailedSubjectTypes.map((subjectType) => convertSubjectTypeToCardData(subjectType, lang));
+    // Generate searchable array
+    const searchableSubjectTypes: Searchable[] = generateSearchable({ type: "SubjectType", data: cardData });
 
     // Footer Data
     const countryList = await getCountries();

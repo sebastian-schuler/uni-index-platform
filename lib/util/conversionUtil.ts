@@ -1,6 +1,7 @@
-import { CountryCardData, DetailedCountry, DetailedInstitution, DetailedSubject, InstitutionCardData, SubjectCardData } from "../types/DetailedDatabaseTypes";
-import { SmBestCardMinified, SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry, SocialMediaPages, TotalScore, TwitterProfile, YoutubeChannelData, YoutubeProfile } from "../types/SocialMediaTypes";
-import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SUBJECTS, URL_LOCATION } from "../url-helper/urlConstants";
+import { DetailedCountry, DetailedInstitution, DetailedSubject, DetailedSubjectType, InstitutionCardData } from "../types/DetailedDatabaseTypes";
+import { SmBestCardMinified, SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry, SocialMediaPages, TotalScore, TwitterProfile, YoutubeProfile } from "../types/SocialMediaTypes";
+import { CountryCardData, SubjectCardData, SubjectTypeCardData } from "../types/UiHelperTypes";
+import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SUBJECTS, URL_LOCATION, URL_SUBJECT } from "../url-helper/urlConstants";
 import { getBracketedName, getLocalizedName, getUniqueSubjectTypeCounts, toLink } from "./util";
 
 /**
@@ -138,5 +139,16 @@ export const convertCountryToCardData = (country: DetailedCountry, lang: string,
         countryCode: country.country_code,
         subjectCount: country.subjectCount,
         institutionCount: country.institutionCount,
+        popularity: country.popularity_score,
+    }
+}
+
+export const convertSubjectTypeToCardData = (subjectType: DetailedSubjectType, lang: string): SubjectTypeCardData => {
+
+    return {
+        name: getLocalizedName({ lang: lang, any: subjectType }),
+        url: toLink(URL_SUBJECT, subjectType.url),
+        subjectCount: subjectType.subjectCount,
+        popularity: subjectType.popularity_score,
     }
 }
