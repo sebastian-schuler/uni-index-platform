@@ -30,10 +30,7 @@ const GlobalSearch: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const router = useRouter();
 
-    const { t } = useTranslation('common');
-    const langContent = {
-        globalSearch: t('global-search'),
-    }
+    const { t } = useTranslation('index');
 
     const handleSearchClick = () => {
         if (searchTerm.length <= 0) return;
@@ -61,7 +58,7 @@ const GlobalSearch: React.FC = () => {
                         )}
                     </ActionIcon>
                 }
-                placeholder="Search..."
+                placeholder={t('search.placeholder')}
                 rightSectionWidth={42}
                 onClick={handleSearchClick}
                 onKeyDown={handleKeyPress}

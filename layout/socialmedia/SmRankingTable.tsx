@@ -166,7 +166,7 @@ const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) 
         <tr key={row.name}>
             <td className={classes.rankRow}>{row.rank}</td>
             <td>
-                <MantineLink label={row.name} url={row.url} type="internal" />
+                <MantineLink url={row.url} type="internal">{row.name}</MantineLink>
             </td>
             <td className={classes.countryRow}>{row.country}</td>
             <td className={classes.numberRow}>{formatNumber(row.totalscore, lang, 2)}%</td>

@@ -26,7 +26,7 @@ const Register: NextPage<Props> = props => {
 
 
       <Title color={theme.colors.brandGray[3]} align={"center"} >Create new account</Title>
-      <Text color={"dimmed"} align={"center"} pb={theme.spacing.lg}>Already have an account? <MantineLink label='Login' url={URL_LOGIN} type="internal" /> instead</Text>
+      <Text color={"dimmed"} align={"center"} pb={theme.spacing.lg}>Already have an account? <MantineLink url={URL_LOGIN} type="internal">Login</MantineLink>instead</Text>
 
       <RegisterSteps registrationInstitutes={props.registrationInstitutes} />
 

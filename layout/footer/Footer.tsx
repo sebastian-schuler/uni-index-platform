@@ -1,12 +1,11 @@
-import { Box, Grid, Stack, Title, useMantineTheme, Divider, Text, Anchor } from '@mantine/core';
+import { Box, Divider, Grid, Stack, Text, Title, useMantineTheme } from '@mantine/core';
 import { City, Country, State } from '@prisma/client';
 import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import { memo } from 'react';
+import MantineLink from '../../components/elements/MantineLink';
 import { Searchable } from '../../lib/types/UiHelperTypes';
 import { URL_LOGIN, URL_REGISTER } from '../../lib/url-helper/urlConstants';
 import { getLocalizedName, toLink } from '../../lib/util/util';
-import MantineLink from '../../components/elements/MantineLink';
 import ResponsiveContainer from '../ResponsiveContainer';
 import FooterLanguageChoice from './FooterLanguageChoice';
 
@@ -36,13 +35,13 @@ const Footer: NextPage<Props> = props => {
     const theme = useMantineTheme();
 
     const footerData: FooterContentList[] = [];
-    const { lang } = useTranslation();
+    const { t, lang } = useTranslation();
 
     const accountLinks: FooterContentItem[] = [
-        { url: toLink(URL_LOGIN), name: "Login" },
-        { url: toLink(URL_REGISTER), name: "Register" }
+        { url: toLink(URL_LOGIN), name: t('footer.account-login') },
+        { url: toLink(URL_REGISTER), name: t('footer.account-register') }
     ]
-    footerData.push({ title: "Account", content: accountLinks });
+    footerData.push({ title: t('footer.account-title'), content: accountLinks });
 
     if (props.footerContent !== undefined) {
         // For each List of footer data
@@ -69,7 +68,6 @@ const Footer: NextPage<Props> = props => {
     }
 
     return (
-
         <Box component={'footer'} sx={{ backgroundColor: theme.colors.brandGray[5], color: theme.white }}>
             <ResponsiveContainer sx={{ paddingTop: 64, paddingBottom: 32 }}>
 
@@ -85,7 +83,7 @@ const Footer: NextPage<Props> = props => {
                                         {
 
                                             footerList.content.map((item, j) => (
-                                                <MantineLink key={item.name + j} label={item.name} url={item.url} type="internal" />
+                                                <MantineLink key={item.name + j} url={item.url} type="internal">{item.name}</MantineLink>
                                             ))
 
                                         }
@@ -106,4 +104,4 @@ const Footer: NextPage<Props> = props => {
     )
 }
 
-export default memo(Footer)
+export default Footer;

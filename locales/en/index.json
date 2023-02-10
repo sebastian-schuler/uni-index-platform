@@ -1,0 +1,62 @@
+{
+  "page-title": "Uni-Index - Home",
+  "page-description": "Discover top universities & courses with our comprehensive platform. Get insights on web presence & social media profiles. Find your dream education!",
+
+  "hero": {
+    "title": "Find the most detailed <0>university analysis</0> in Europe",
+    "desc": "Search by subject, university, or course name to find university courses from over 1000 universities in Europe. Check out their social media ranking or read reviews from other students to help you decide which course is right for you.",
+    "label-button": "Find out more"
+  },
+
+  "social-media": {
+    "title": "Social media ranking",
+    "desc": "We have analysed the social media presence of over 1000 universities in Europe. Find out which universities are the most active on social media and which ones are not.",
+
+    "top-institutions-title": "Top universities on social media",
+    "top-institutions-desc": "Discover the most active universities on social media. This is the combined ranking of all social media platforms.",
+    "top-table-col-institution": "University",
+    "top-table-col-country": "Country",
+    "top-table-col-score": "Score",
+    "reference-full-ranking": "You can find our entire social media ranking <0>here</0>.",
+
+    "best-yt": {
+      "title": "Best university on YouTube",
+      "subs": "Total subscribers",
+      "videos": "Total videos",
+      "views": "Average views",
+      "comments": "Average comments"
+    },
+
+    "best-tw": {
+      "title": "Best university on Twitter",
+      "followers": "Total followers",
+      "tweets": "Total tweets",
+      "retweets": "Average retweets",
+      "likes": "Average likes"
+    }
+  },
+
+  "online-marketing": {
+    "title": "Universities with the best website",
+    "desc": "We have analysed every university website in Europe. Find out which universities have the best website in terms of performance, best practices, accessibility, and SEO.",
+    "label-all": "See all online marketing analyses"
+  },
+
+  "search": {
+    "title": "Search everything",
+    "desc": "Search for a university, course, or subject to find the most detailed university analysis in Europe.",
+    "placeholder": "Search for a university, course, or subject"
+  },
+
+  "popular": {
+    "title-courses": "University courses you have to look at",
+    "desc-courses": "Discover the most popular courses in Europe. Learn more about them and what they are about.",
+    "title-institutions": "Trending universities",
+    "desc-institutions": "Discover the most popular universities in Europe. Find out what the most popular universities are and what they are offering.",
+    "title-locations": "Most popular countries to study in",
+    "desc-locations": "Discover the most popular countries to study in and which universities you should be looking at.",
+    "label-all-courses": "See all courses",
+    "label-all-institutions": "See all universities",
+    "label-all-locations": "See all locations"
+  }
+}

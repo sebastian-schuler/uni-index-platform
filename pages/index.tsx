@@ -47,27 +47,15 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
 
   const ads: DetailedUserAd[] = JSON.parse(adsStringified);
 
-  const { t } = useTranslation('common');
-  const langContent = {
-    pageTitle: t('page-title'),
-    title: t('nav-home'),
-
-    titlePopularCourses: t('title-popular-courses'),
-    titlePopularInstitutions: t('title-popular-institutions'),
-    titlePopularLocations: t('title-popular-locations'),
-
-    linkCourses: t('link-all-courses'),
-    linkInstitutions: t('link-all-institutions'),
-    linkLocations: t('link-all-locations'),
-  }
+  const { t } = useTranslation('index');
 
   return (
 
     <LayoutContainer removeVerticalPadding removeContainerWrapper footerContent={footerContent}>
 
       <Meta
-        title={langContent.pageTitle + " - " + langContent.title}
-        description='Very nice page'
+        title={t('page-title')}
+        description={t('page-description')}
       />
 
       <HeroSection />
@@ -86,9 +74,9 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
       <Stack spacing={0} mb={"xl"}>
 
         <PopularSection
-          title={langContent.titlePopularCourses}
-          subtext="The most popular courses on our platform"
-          buttonText={langContent.linkCourses}
+          title={t('popular.title-courses')}
+          desc={t('popular.desc-courses')}
+          buttonText={t('popular.label-all-courses')}
           buttonUrl={toLink(URL_SUBJECTS)}
           brandColor
         >
@@ -102,14 +90,13 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
         </PopularSection>
 
         <PopularSection
-          title={langContent.titlePopularInstitutions}
-          subtext="Universities with the most popular courses"
-          buttonText={langContent.linkInstitutions}
+          title={t('popular.title-institutions')}
+          desc={t('popular.desc-institutions')}
+          buttonText={t('popular.label-all-institutions')}
           buttonUrl={toLink(URL_INSTITUTIONS)}
         >
           {
             institutionData.map((institute, i) => (
-              // institute.InstitutionLocation.length !== 0 && (
               <Grid.Col key={i} sm={12} md={6} lg={4} sx={{ width: "100%" }}>
                 <InstitutionCard
                   data={institute}
@@ -117,15 +104,14 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
                   state={institutionStates.find(s => s.id === institute.mainStateId)}
                 />
               </Grid.Col>
-              // )
             ))
           }
         </PopularSection>
 
         <PopularSection
-          title={langContent.titlePopularLocations}
-          subtext="Popular countries for studying"
-          buttonText={langContent.linkLocations}
+          title={t('popular.title-locations')}
+          desc={t('popular.desc-locations')}
+          buttonText={t('popular.label-all-locations')}
           buttonUrl={toLink(URL_LOCATIONS)}
           brandColor
         >

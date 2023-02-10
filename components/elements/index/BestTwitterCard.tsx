@@ -29,7 +29,7 @@ interface Props {
 
 const BestTwitterCard: React.FC<Props> = ({ highestTwitter }: Props) => {
 
-    const { t, lang } = useTranslation('common');
+    const { t } = useTranslation('index');
     const { classes, theme } = useStyles();
 
     if (highestTwitter.type !== 'twitter') return <></>;
@@ -38,29 +38,29 @@ const BestTwitterCard: React.FC<Props> = ({ highestTwitter }: Props) => {
         <Link href={highestTwitter.Institution.url} passHref>
             <Card component='a' withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
                 <CardSection className={classes.section} px={"md"} pt={"lg"}>
-                    <Title order={5} mb={"xs"}>Best Twitter profile</Title>
+                    <Title order={5} mb={"xs"}>{t('social-media.best-tw.title')}</Title>
                     <Text sx={{ lineHeight: 1.1 }}>
                         {highestTwitter.Institution.name}, {highestTwitter.Institution.countryName}
                     </Text>
                 </CardSection>
                 <SimpleGrid cols={4}>
                     <div>
-                        <Text size={"sm"} weight={"bold"} color="dimmed">Total<br />followers</Text>
+                        <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-tw.followers')}</Text>
                         <Text>{highestTwitter.totalFollowers}</Text>
                     </div>
 
                     <div>
-                        <Text size={"sm"} weight={"bold"} color="dimmed">Total<br />tweets</Text>
+                        <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-tw.tweets')}</Text>
                         <Text>{highestTwitter.totalTweets}</Text>
                     </div>
 
                     <div>
-                        <Text size={"sm"} weight={"bold"} color="dimmed">Average<br />Retweets</Text>
+                        <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-tw.retweets')}</Text>
                         <Text>{highestTwitter.avgRetweets.toFixed(3)}</Text>
                     </div>
 
                     <div>
-                        <Text size={"sm"} weight={"bold"} color="dimmed">Avgerage<br />likes</Text>
+                        <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-tw.likes')}</Text>
                         <Text>{highestTwitter.avgLikes.toFixed(3)}</Text>
                     </div>
                 </SimpleGrid>

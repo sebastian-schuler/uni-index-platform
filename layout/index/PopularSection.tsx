@@ -5,14 +5,14 @@ import ResponsiveContainer from '../ResponsiveContainer'
 
 interface Props {
     title: string
-    subtext?: string
+    desc?: string
     buttonText: string
     buttonUrl: string
     brandColor?: boolean
     children: React.ReactNode
 }
 
-const PopularSection: React.FC<Props> = ({ title, subtext, buttonText, buttonUrl, brandColor, children }: Props) => {
+const PopularSection: React.FC<Props> = ({ title, desc, buttonText, buttonUrl, brandColor, children }: Props) => {
 
     const theme = useMantineTheme();
 
@@ -26,9 +26,9 @@ const PopularSection: React.FC<Props> = ({ title, subtext, buttonText, buttonUrl
                         <Title order={2} color={brandColor ? 'light.0' : 'light.9'}>
                             {title}
                         </Title>
-                        {subtext && <Text color={brandColor ? 'light.0' : 'light.9'}>{subtext}</Text>}
+                        {desc && <Text color={brandColor ? 'light.0' : 'light.9'}>{desc}</Text>}
                     </Stack>
-                    <MantineLink label={buttonText} url={buttonUrl} color={brandColor ? 'light.0' : undefined} type="internal"/>
+                    <MantineLink url={buttonUrl} color={brandColor ? 'light.0' : undefined} type="internal">{buttonText}</MantineLink>
                 </Group>
 
                 {

@@ -1,5 +1,7 @@
 import { Button, createStyles, Text, Title } from '@mantine/core';
 import ResponsiveContainer from '../ResponsiveContainer';
+import Trans from 'next-translate/Trans';
+import useTranslation from 'next-translate/useTranslation';
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -55,6 +57,7 @@ const useStyles = createStyles((theme) => ({
 const HeroSection = () => {
 
     const { classes } = useStyles();
+    const { t } = useTranslation("index");
 
     return (
         <div className={classes.root}>
@@ -63,24 +66,22 @@ const HeroSection = () => {
                     <div className={classes.content}>
 
                         <Title order={1} className={classes.title}>
-                            Find the most detailed {' '}
-                            <Text
-                                component="span"
-                                inherit
-                                variant="gradient"
-                                gradient={{ from: 'pink', to: 'yellow' }}
-                            >
-                                university analysis
-                            </Text>{' '}
-                            in Europe.
+                            <Trans
+                                i18nKey="index:hero.title"
+                                components={[
+                                    <Text
+                                        component="span"
+                                        inherit
+                                        variant="gradient"
+                                        gradient={{ from: 'pink', to: 'yellow' }}
+                                    />
+                                ]}
+                            />
                         </Title>
 
-                        <Text className={classes.description} mt={30} mb={30}>
-                            Search by subject, university, or course name to find university courses from over 1000 universities in Europe.
-                            Check out their social media ranking or read reviews from other students to help you decide which course is right for you.
-                        </Text>
+                        <Text className={classes.description} mt={30} mb={30}>{t('hero.desc')}</Text>
 
-                        <Button component='a' href='#socialMediaSection' size='md' px={'lg'}>Learn more</Button>
+                        <Button component='a' href='#socialMediaSection' size='md' px={'lg'}>{t('hero.label-button')}</Button>
 
                     </div>
                 </div>

@@ -1,15 +1,15 @@
-import { Anchor, Stack, Text } from '@mantine/core'
+import { Stack, Text } from '@mantine/core'
 import { Country, Institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import MantineLink from '../../../../../components/elements/MantineLink'
+import Meta from '../../../../../components/partials/Meta'
 import WhitePaper from '../../../../../components/WhitePaper'
 import Breadcrumb from '../../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../../layout/footer/Footer'
 import LayoutContainer from '../../../../../layout/LayoutContainer'
 import SubjectNav from '../../../../../layout/subnav/SubjectNav'
-import Meta from '../../../../../components/partials/Meta'
 import { getSubjectDetailedByUrl } from '../../../../../lib/prisma/prismaDetailedQueries'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getSubjectPaths } from '../../../../../lib/prisma/prismaUrlPaths'
@@ -82,7 +82,7 @@ const SubjectFromInstitutionPage: NextPage<Props> = ({ country, institution, sub
 
           <Stack spacing={0}>
             <Text size={"lg"} weight={"bold"}>Website</Text>
-            <MantineLink label={subject?.website} url={subject?.website} type="external" />
+            <MantineLink url={subject?.website} type="external">{subject?.website}</MantineLink>
           </Stack>
 
         </Stack>

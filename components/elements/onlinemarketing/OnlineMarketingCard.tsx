@@ -1,4 +1,5 @@
 import { Card, CardSection, createStyles, SimpleGrid, Text } from '@mantine/core'
+import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link'
 import React from 'react'
 import { LhrSimple } from '../../../lib/types/lighthouse/CustomLhrTypes';
@@ -30,6 +31,7 @@ interface Props {
 const OnlineMarketingCard = ({ report }: Props) => {
 
     const { classes, theme } = useStyles();
+    const { t } = useTranslation('common');
 
     return (
         <Link href={report.institution.slug} passHref>
@@ -44,25 +46,25 @@ const OnlineMarketingCard = ({ report }: Props) => {
 
                     <LhrRingProgress
                         size='sm'
-                        title={"Performance"}
+                        title={t('online-marketing-category.performance')}
                         score={report.performanceScore * 100}
                     />
 
                     <LhrRingProgress
                         size='sm'
-                        title={"Best Practices"}
+                        title={t('online-marketing-category.best-practices')}
                         score={report.bestPracticesScore * 100}
                     />
 
                     <LhrRingProgress
                         size='sm'
-                        title={"Accessibility"}
+                        title={t('online-marketing-category.accessibility')}
                         score={report.accessibilityScore * 100}
                     />
 
                     <LhrRingProgress
                         size='sm'
-                        title={"SEO"}
+                        title={t('online-marketing-category.seo')}
                         score={report.seoScore * 100}
                     />
 

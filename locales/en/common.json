@@ -1,6 +1,5 @@
 {
   "page-title": "Uni-Index",
-  "variable-example": "Using a variable {{count}}",
 
   "page-settings": "Settings",
   "page-settings-language": "Language",
@@ -12,18 +11,8 @@
 
   "breadcrumb-back-to": "Back to {{origin}}",
 
-  "global-search": "Search anything",
-  "ad-label": "Ads",
-  
   "countries-search-label": "Search for a country",
   "countries-search-placeholder": "e.g. Germany",
-
-  "title-popular-courses": "University courses you have to look at",
-  "title-popular-institutions": "Trending universities",
-  "title-popular-locations": "Most popular countries to study in",
-  "link-all-courses": "See all courses",
-  "link-all-institutions": "See all universities",
-  "link-all-locations": "See all locations",
 
   "card-label-universities": {
     "0": "No universities",
@@ -35,5 +24,23 @@
     "0": "No courses",
     "one": "{{count}} Course",
     "other": "{{count}} Courses"
+  },
+
+  "online-marketing-category": {
+    "performance": "Performance",
+    "best-practices": "Best Practices",
+    "accessibility": "Accessibility",
+    "seo": "SEO"
+  },
+
+  "ads": {
+    "title": "Ads",
+    "desc": "We use advertisements booked by universities to support our mission. <0>Learn more</0>"
+  },
+
+  "footer": {
+    "account-title": "Account",
+    "account-login": "Login",
+    "account-register": "Register"
   }
 }

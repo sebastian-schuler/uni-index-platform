@@ -110,7 +110,7 @@ const CustomerLogin: NextPage = () => {
               (
                 <>
                   <Title color={theme.colors.brandGray[3]} align={"center"} >Welcome back!</Title>
-                  <Text color={"dimmed"} align={"center"}>Do not have an account yet? <MantineLink label='Create account' url={URL_REGISTER} type="internal"/></Text>
+                  <Text color={"dimmed"} align={"center"}>Do not have an account yet? <MantineLink url={URL_REGISTER} type="internal">Create account</MantineLink></Text>
 
                   <Paper component='form' withBorder shadow="md" p={theme.spacing.lg} mt={theme.spacing.lg} radius="md" sx={{ maxWidth: 400, backgroundColor: theme.colors.light[0] }}>
                     <TextInput

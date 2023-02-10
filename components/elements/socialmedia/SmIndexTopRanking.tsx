@@ -1,11 +1,11 @@
-import { Card, CardSection, createStyles, Space, Table, Text, Title } from '@mantine/core';
+import { Card, CardSection, createStyles, Table, Text, Title } from '@mantine/core';
 import { Country } from '@prisma/client';
+import Trans from 'next-translate/Trans';
 import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
 import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes';
 import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants';
 import { toLink } from '../../../lib/util/util';
-import WhiteCard from '../../../layout/WhiteCard';
 import MantineLink from '../MantineLink';
 
 const useStyles = createStyles((theme) => ({
@@ -30,7 +30,7 @@ interface Props {
 const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Props) => {
 
     const { classes, theme } = useStyles();
-    const { lang } = useTranslation();
+    const { t, lang } = useTranslation("index");
 
     const rows = socialMediaList.map((row, i) => {
 
@@ -40,7 +40,7 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
         return (
             <tr key={row.Institution.name + i}>
                 <td>
-                    <MantineLink label={row.Institution.name} url={url} type="internal" />
+                    <MantineLink url={url} type="internal">{row.Institution.name}</MantineLink>
                 </td>
                 <td>{country?.name}</td>
                 <td className={classes.scoreColumn}>{Math.round(row.combinedScore).toLocaleString(lang) + '%'}</td>
@@ -51,20 +51,27 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
     return (
         <Card withBorder radius="md" p="md" shadow="sm" sx={{ backgroundColor: theme.colors.light[0] }}>
             <CardSection className={classes.section} px={"md"} pt={"lg"}>
-                <Title order={3} size={'h5'} mb={"xs"}>Top Institutions</Title>
-                <Text sx={{ lineHeight: 1.1 }}>The top ten institutions that have the best social media presence.</Text>
+                <Title order={3} size={'h5'} mb={"xs"}>{t('social-media.top-institutions-title')}</Title>
+                <Text sx={{ lineHeight: 1.1 }}>{t('social-media.top-institutions-desc')}</Text>
             </CardSection>
             <Table sx={{ minWidth: 100 }} verticalSpacing="xs">
                 <thead>
                     <tr>
-                        <th>University</th>
-                        <th>Country</th>
-                        <th>Score</th>
+                        <th>{t('social-media.top-table-col-institution')}</th>
+                        <th>{t('social-media.top-table-col-country')}</th>
+                        <th>{t('social-media.top-table-col-score')}</th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>
             </Table>
-            <Text mt={"md"}>You can find our entire social media ranking <MantineLink label='here' type='internal' url='social-media-ranking' />.</Text>
+            <Text mt={"md"}>
+                <Trans
+                    i18nKey="index:social-media.reference-full-ranking"
+                    components={[
+                        <MantineLink type='internal' title='University social media ranking' url='social-media/ranking' />
+                    ]}
+                />
+            </Text>
         </Card>
     );
 }

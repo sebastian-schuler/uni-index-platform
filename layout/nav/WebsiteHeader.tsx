@@ -1,6 +1,6 @@
 import {
   Anchor,
-  Burger, Center, createStyles, Divider, Drawer, Group, Header, Menu, Stack, Text
+  Burger, Button, Center, createStyles, Divider, Drawer, Group, Header, Menu, Stack, Text, UnstyledButton
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NextLink } from '@mantine/next';
@@ -106,14 +106,14 @@ const WebsiteHeader = () => {
 
     if (menuItems && menuItems.length > 0) {
       return (
-        <Menu key={link.parent.label} trigger="hover" exitTransitionDuration={100}>
+        <Menu key={link.parent.label}  trigger="hover" exitTransitionDuration={100}>
           <Menu.Target>
-            <Anchor className={classes.link} sx={{ userSelect: 'none' }}>
+            <UnstyledButton className={classes.link} sx={{ userSelect: 'none' }}>
               <Center>
                 <span className={classes.linkLabel}>{link.parent.label}</span>
                 <IconChevronDown size={12} stroke={1.5} />
               </Center>
-            </Anchor>
+            </UnstyledButton>
           </Menu.Target>
           <Menu.Dropdown>{menuItems}</Menu.Dropdown>
         </Menu>

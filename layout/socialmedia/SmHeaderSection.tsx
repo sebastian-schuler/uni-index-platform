@@ -1,13 +1,10 @@
-import { ActionIcon, Card, Group, List, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { ActionIcon, Group, Stack, Text, Title } from '@mantine/core'
 import { Institution, InstitutionSocialMedia } from '@prisma/client'
 import { IconBrandTwitter, IconBrandYoutube } from '@tabler/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { URL_INSTITUTION } from '../../lib/url-helper/urlConstants'
 import { toLink } from '../../lib/util/util'
-import MantineLink from '../../components/elements/MantineLink'
-import SmIconLink from '../../components/elements/socialmedia/SmIconLink'
 
 interface Props {
     institutionSM: InstitutionSocialMedia
