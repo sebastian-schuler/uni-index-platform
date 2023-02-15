@@ -1,10 +1,10 @@
 import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 import PremiumList from '../components/container/AdList';
 import CountryList from '../components/container/CountryList';
 import { FooterContent } from '../layout/footer/Footer';
 import LayoutContainer from '../layout/LayoutContainer';
-import Meta from '../components/partials/Meta';
 import { AD_PAGE_INSTITUTIONS } from '../lib/appConstants';
 import { getDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
 import { getAds } from '../lib/prisma/prismaQueries';
@@ -22,26 +22,20 @@ interface Props {
 const Institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, footerContent }: Props) => {
 
     const { t } = useTranslation('institution');
-    const langContent = {
-        title: t('countries-title'),
-        subtitle: t('countries-title-sub'),
-        pageTitle: t('common:page-title')
-    }
-
     const ads: DetailedUserAd[] = JSON.parse(stringifiedAds);
 
     return (
         <>
-            <Meta
-                title={langContent.pageTitle + ' - ' + langContent.title}
-                description='Very nice page'
-            />
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('institutions-title')}</title>
+                <meta key={"description"} name="description" content={t('institutions-description')} />
+            </Head>
 
             <LayoutContainer footerContent={footerContent}>
 
                 <CountryList
-                    title={langContent.title}
-                    subtitle={langContent.subtitle}
+                    title={t('institutions-title')}
+                    subtitle={t('institutions-subtitle')}
                     searchableCountries={searchableCountries}
                 >
                     <PremiumList premiumAds={ads} />

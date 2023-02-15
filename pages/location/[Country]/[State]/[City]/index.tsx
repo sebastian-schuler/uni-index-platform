@@ -5,7 +5,6 @@ import useTranslation from 'next-translate/useTranslation';
 import { ParsedUrlQuery } from 'querystring';
 import GenericPageHeader from '../../../../../components/elements/GenericPageHeader';
 import InstitutionCard from '../../../../../components/elements/itemcards/InstitutionCard';
-import Meta from '../../../../../components/partials/Meta';
 import Breadcrumb from '../../../../../layout/Breadcrumb';
 import { FooterContent } from '../../../../../layout/footer/Footer';
 import LayoutContainer from '../../../../../layout/LayoutContainer';
@@ -36,11 +35,6 @@ const CityPage: NextPage<Props> = ({ countryList, institutionData, institutionSt
 
   return (
     <LayoutContainer footerContent={footerContent}>
-
-      <Meta
-        title={langContent.pageTitle + ' - ' + cityInfo.name}
-        description='Very nice page'
-      />
 
       <Breadcrumb
         countryInfo={cityInfo.State.Country}

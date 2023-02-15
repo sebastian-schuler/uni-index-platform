@@ -2,8 +2,8 @@ import { createStyles, Divider, Grid, Image, Stack, Text } from '@mantine/core'
 import { Country, Institution, InstitutionScreenshot } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
+import Head from 'next/head'
 import { useState } from 'react'
-import Meta from '../../../../components/partials/Meta'
 import WhitePaper from '../../../../components/WhitePaper'
 import Breadcrumb from '../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../layout/footer/Footer'
@@ -39,7 +39,7 @@ interface Props {
 const InstitutionScreenshots: NextPage<Props> = ({ institution, country, screenshotsStringified, footerContent }: Props) => {
 
   const [selectedScreenshot, setSelectedScreenshot] = useState<ScreenshotPair | null>(null);
-  const { lang } = useTranslation();
+  const { t, lang } = useTranslation("institution");
   const { classes } = useStyles();
 
   const allScreenshots: InstitutionScreenshot[] = JSON.parse(screenshotsStringified);
@@ -58,10 +58,10 @@ const InstitutionScreenshots: NextPage<Props> = ({ institution, country, screens
   return (
     <LayoutContainer footerContent={footerContent}>
 
-      <Meta
-        title={'Uni Index - '}
-        description='Very nice page'
-      />
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('institution-screenshots-title', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('institution-screenshots-description')} />
+      </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
 

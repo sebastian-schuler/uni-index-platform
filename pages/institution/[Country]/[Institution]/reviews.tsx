@@ -1,10 +1,11 @@
 import { Country, Institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
+import useTranslation from 'next-translate/useTranslation'
+import Head from 'next/head'
 import Breadcrumb from '../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../layout/footer/Footer'
 import LayoutContainer from '../../../../layout/LayoutContainer'
 import InstitutionNav from '../../../../layout/subnav/InstitutionNav'
-import Meta from '../../../../components/partials/Meta'
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries'
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
 
@@ -16,13 +17,15 @@ interface Props {
 
 const InstitutionReviews: NextPage<Props> = ({ institution, country, footerContent }: Props) => {
 
+  const { t, lang } = useTranslation('institution');
+
   return (
     <LayoutContainer footerContent={footerContent}>
 
-      <Meta
-        title={'Uni Index - '}
-        description='Very nice page'
-      />
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('institution-reviews-title', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('institution-reviews-description')} />
+      </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
 

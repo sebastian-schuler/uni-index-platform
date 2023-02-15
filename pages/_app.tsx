@@ -1,5 +1,4 @@
 import { MantineProvider } from '@mantine/core'
-import useTranslation from 'next-translate/useTranslation'
 import type { AppProps, NextWebVitalsMetric } from 'next/app'
 import { useRouter } from 'next/router'
 import AccountNavigation from '../layout/account/AccountNavigation'
@@ -9,51 +8,72 @@ import { URL_ACCOUNT } from '../lib/url-helper/urlConstants'
 import { toLink } from '../lib/util/util'
 import '../styles/globals.css'
 import appTheme from '../styles/theme'
+import * as gtag from '../lib/analytics/gtag'
+import Head from 'next/head'
+import Script from 'next/script'
+import { useEffect } from 'react'
 
 function MyApp({ Component, pageProps }: AppProps) {
 
-  const { asPath } = useRouter();
-  const { lang } = useTranslation();
-  // const themeConfig = React.useMemo(
-  //   () => createTheme(theme, locales[getLanguageThemeById(lang)]),
-  //   [lang, theme],
-  // );
+  const { asPath, events } = useRouter();
+
+  useEffect(() => {
+    const handleRouteChange = (url: string) => gtag.pageview(url);
+    events.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [events]);
 
   return (
-    <AuthProvider>
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={appTheme}
-      >
 
-        {
-          asPath.startsWith(toLink(URL_ACCOUNT)) ? (
-            <AccountNavigation>
-              <Component {...pageProps} />
-            </AccountNavigation>
-          ) : (
-            <>
-              <WebsiteHeader />
-              <Component {...pageProps} />
-            </>
-          )
-        }
+    <>
+      <Head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${gtag.GA_TRACKING_ID}', {
+                page_path: window.location.pathname,
+              });
+            `,
+          }}
+        />
+      </Head>
 
-      </MantineProvider>
-    </AuthProvider>
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+      />
+
+      <AuthProvider>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={appTheme}
+        >
+          {
+            asPath.startsWith(toLink(URL_ACCOUNT)) ? (
+              <AccountNavigation>
+                <Component {...pageProps} />
+              </AccountNavigation>
+            ) : (
+              <>
+                <WebsiteHeader />
+                <Component {...pageProps} />
+              </>
+            )
+          }
+
+        </MantineProvider>
+      </AuthProvider>
+    </>
   )
 }
 
 export default MyApp
-
-// Get authentication -> available anywhere afterwards
-
-// MyApp.getInitialProps = async (appContext) => {
-//   const appProps = await App.getInitialProps(appContext)
-//   const auth = await getUser(appContext.ctx)
-//   return { ...appProps, auth: auth }
-// }
 
 export function reportWebVitals(metric: NextWebVitalsMetric) {
   // console.log(metric)

@@ -68,7 +68,7 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
                 <Trans
                     i18nKey="index:social-media.reference-full-ranking"
                     components={[
-                        <MantineLink type='internal' title='University social media ranking' url='social-media/ranking' />
+                        <MantineLink key={"linkSmRanking"} type='internal' title='University social media ranking' url='social-media/ranking' />
                     ]}
                 />
             </Text>

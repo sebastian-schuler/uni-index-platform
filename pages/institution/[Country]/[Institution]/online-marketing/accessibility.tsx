@@ -44,7 +44,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         { title: "Countries", data: countryList, type: "Country" },
     ]
 
-    const lhrData = await import(`../../../../../data/lighthouse/lhr-${institution?.id}.json`).catch((err) => {
+    const lhrData = await import(`../../../../../data/lighthouse/lhr-${institution?.url}.json`).catch((err) => {
         console.log("Not found");
     });
 
@@ -55,7 +55,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
             institution,
             country,
             lhrAudits: lhr.audits,
-            lhrCategory: lhr.categories[0],
+            lhrCategory: lhr.categories[0] ?? [],
             footerContent
         }
     }

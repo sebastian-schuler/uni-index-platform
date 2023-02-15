@@ -3,7 +3,6 @@ import { createStyles, Stack, Text } from '@mantine/core'
 import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
-import Meta from '../../../../../components/partials/Meta'
 import WhitePaper from '../../../../../components/WhitePaper'
 import Breadcrumb from '../../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../../layout/footer/Footer'
@@ -53,10 +52,7 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
     if (institutionSM === null || institutionSM === undefined || countrySM === null || countrySM === undefined) {
         return (
             <LayoutContainer footerContent={footerContent}>
-                <Meta
-                    title={'Uni Index - '}
-                    description=''
-                />
+
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />
                 <InstitutionNav title={institution.name} />
                 <WhitePaper>
@@ -86,11 +82,6 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
 
     return (
         <LayoutContainer footerContent={footerContent}>
-
-            <Meta
-                title={'Uni Index - '}
-                description='Very nice page'
-            />
 
             <Breadcrumb countryInfo={country} institutionInfo={institution} />
 

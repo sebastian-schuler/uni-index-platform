@@ -4,6 +4,7 @@ import {
 } from '@mantine/core';
 import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import MantineLink from '../components/elements/MantineLink';
@@ -101,6 +102,12 @@ const CustomerLogin: NextPage = () => {
 
   return (
     <LayoutContainer>
+
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('login-tab-title')}</title>
+        <meta key={"description"} name="description" content={t('login-description')} />
+      </Head>
+
       <Center>
         <Stack spacing={0}>
 

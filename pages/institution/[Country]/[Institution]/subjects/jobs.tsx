@@ -6,7 +6,6 @@ import Breadcrumb from '../../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../../layout/footer/Footer'
 import LayoutContainer from '../../../../../layout/LayoutContainer'
 import SubjectNav from '../../../../../layout/subnav/SubjectNav'
-import Meta from '../../../../../components/partials/Meta'
 import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../lib/url-helper/urlConstants'
 import { getCountries, getCountry, getInstitution, getSubject } from '../../../../../lib/prisma/prismaQueries'
 import { getDBLocale, toLink } from '../../../../../lib/util/util'
@@ -16,9 +15,9 @@ import WhitePaper from '../../../../../components/WhitePaper'
 import { getSubjectPaths } from '../../../../../lib/prisma/prismaUrlPaths'
 
 type Props = {
-    country: Country,
-    institution: Institution,
-    subject: Subject,
+    country: Country | null,
+    institution: Institution | null,
+    subject: Subject | null,
 
     footerContent: FooterContent[],
 }
@@ -27,18 +26,13 @@ const SubjectJobs: NextPage<Props> = props => {
 
     const query = useRouter().query;
 
-    const title = props.subject.name + " - " + props.subject.degree
+    const title = props.subject?.name + " - " + props.subject?.degree;
 
     const countryUrl = (query.Country || "") as string;
     const institutionUrl = (query.Institution || "") as string;
 
     return (
         <LayoutContainer footerContent={props.footerContent}>
-
-            <Meta
-                title={'Uni Index - '}
-                description='Very nice page'
-            />
 
             <Breadcrumb
                 countryInfo={props.country}

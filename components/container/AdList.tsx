@@ -100,7 +100,7 @@ const PremiumList: React.FC<Props> = ({ premiumAds, wrapInContainer }: Props) =>
                     <Trans
                         i18nKey="common:ads.desc"
                         components={[
-                            <MantineLink url='#' type='internal' />
+                            <MantineLink key={"linkAdInfos"} url='#' type='internal' />
                         ]}
                     />
                 </Text>

@@ -1,6 +1,26 @@
 {
-  "countries-title": "Institutions",
-  "countries-title-sub": "Find any university in a country of your choice.",
+  "institutions-title": "Institutions",
+  "institutions-subtitle": "Find any university in a country of your choice.",
+  "institutions-description": "Discover top universities all over Europe and find the perfect match for your studies.",
+
+  "institution-country-title": "Institutions in {{country}}",
+  "institution-country-description": "Search through a comprehensive list of all academic institutions in {{country}}.",
+
+  "institution-title": "{{country}} | {{institution}}",
+  "institution-description": "Find all information, analyses, and contact details on {{institution}} in {{country}}.",
+
+  "institution-reviews-title": "Reviews | {{institution}}",
+  "institution-reviews-description": "Read reviews of {{institution}} to learn more about the institution.",
+
+  "institution-screenshots-title": "Screenshots | {{institution}}",
+  "institution-screenshots-description": "See screenshots of {{institution}} to learn more about the institution.",
+
+  "institution-social-media-title": "Social Media | {{institution}}",
+  "institution-social-media-description": "See social media profiles of {{institution}} to learn more about the institution.",
+
+  "institution-online-marketing-title-nodata": "No data for {{institution}}",
+  "institution-online-marketing-title": "Online Marketing | {{institution}}",
+  "institution-online-marketing-description": "See online marketing of {{institution}} to learn more about the institution.",
 
   "institution-profile": "Profile",
   "institution-courses": "Subjects",

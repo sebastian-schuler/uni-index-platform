@@ -6,7 +6,6 @@ import Link from 'next/link';
 import LhrAuditList from '../../../../../components/elements/onlinemarketing/LhrAuditList';
 import LhrAuditScore from '../../../../../components/elements/onlinemarketing/LhrAuditScore';
 import LhrRingProgress from '../../../../../components/elements/onlinemarketing/LhrRingProgress';
-import Meta from '../../../../../components/partials/Meta';
 import WhitePaper from '../../../../../components/WhitePaper';
 import Breadcrumb from '../../../../../layout/Breadcrumb';
 import { FooterContent } from '../../../../../layout/footer/Footer';
@@ -58,12 +57,6 @@ const Performance = ({ institution, country, lhrAudits, lhrCategory, footerConte
 
     return (
         <LayoutContainer footerContent={footerContent}>
-
-            <Meta
-                title={'Uni Index - '}
-                description='Very nice page'
-            />
-
 
             <Group position="apart">
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />
@@ -141,7 +134,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         { title: "Countries", data: countryList, type: "Country" },
     ]
 
-    const lhrData = await import(`../../../../../data/lighthouse/lhr-${institution?.id}.json`).catch((err) => {
+    const lhrData = await import(`../../../../../data/lighthouse/lhr-${institution?.url}.json`).catch((err) => {
         console.log("Not found");
     });
     const lhr = await getMinifiedLhrCategory(lhrData, "performance");
@@ -151,7 +144,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
             institution,
             country,
             lhrAudits: lhr.audits,
-            lhrCategory: lhr.categories[0],
+            lhrCategory: lhr.categories[0] ?? [],
             footerContent
         }
     }

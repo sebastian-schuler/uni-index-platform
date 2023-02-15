@@ -1,4 +1,14 @@
 {
   "countries-title": "Countries",
-  "countries-title-sub": "Find any university course in a country of your choice."
+  "countries-subtitle": "Find any university course in a country of your choice.",
+  "countries-description": "Discover top universities by country all over Europe and find the perfect match for your studies.",
+
+  "country-title": "States in {{country}}",
+  "country-subtitle": "Look through the list of states in {{country}} and find the best university for you.",
+  "country-description": "Discover top universities in {{country}} by state and find the perfect match for your studies.",
+
+  "state-title": "Cities in {{state}}",
+  "state-subtitle": "Look through the list of cities in {{state}} and find the best university for you.",
+  "state-description": "Discover top universities in {{state}} by state and find the perfect match for your studies."
+
 }

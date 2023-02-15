@@ -2,21 +2,20 @@ import { Group, SimpleGrid, Stack } from '@mantine/core';
 import { Reorder } from 'framer-motion';
 import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 import { useEffect, useReducer, useState } from 'react';
 import GenericPageHeader from '../components/elements/GenericPageHeader';
 import SubjectTypeCard from '../components/elements/itemcards/SubjectTypeCard';
 import OrderBySelect, { OrderByState, sortSearchableArray } from '../components/elements/OrderBySelect';
+import SearchBox from '../components/partials/SearchBox';
 import Breadcrumb from '../layout/Breadcrumb';
 import { FooterContent } from '../layout/footer/Footer';
 import LayoutContainer from '../layout/LayoutContainer';
-import Meta from '../components/partials/Meta';
-import SearchBox from '../components/partials/SearchBox';
 import { getDetailedSubjectTypes } from '../lib/prisma/prismaDetailedQueries';
 import { getCountries } from '../lib/prisma/prismaQueries';
-import { DetailedSubjectType } from '../lib/types/DetailedDatabaseTypes';
 import { Searchable, SubjectTypeCardData } from '../lib/types/UiHelperTypes';
-import { generateSearchable, getLocalizedName } from '../lib/util/util';
 import { convertSubjectTypeToCardData } from '../lib/util/conversionUtil';
+import { generateSearchable, getLocalizedName } from '../lib/util/util';
 
 type SearchState = {
     query: string,
@@ -36,13 +35,6 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
 
     // TRANSLATION
     const { t, lang } = useTranslation('subject');
-    const langContent = {
-        pageTitle: t('common:page-title'),
-        title: t('subjects-title'),
-        subtitle: t('subjects-title-sub'),
-        searchLabel: t('subjecttype-search-label'),
-        searchPlaceholder: t('subjecttype-search-placeholder'),
-    }
 
     // DATA LISTS
     const [dataList, setDataList] = useState<Searchable[]>(searchableSubjectTypes);
@@ -85,20 +77,20 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
     return (
         <LayoutContainer footerContent={footerContent}>
 
-            <Meta
-                title={langContent.pageTitle + ' - ' + langContent.title}
-                description='Very nice page'
-            />
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('subject-types-title')}</title>
+                <meta key={"description"} name="description" content={t('subject-types-description')} />
+            </Head>
 
             <Breadcrumb />
 
             <Stack>
-                <GenericPageHeader title={langContent.title} description={langContent.subtitle} />
+                <GenericPageHeader title={t('subject-types-title')} description={t('subject-types-subtitle')} />
 
                 <Group position='apart' >
                     <SearchBox
-                        label={langContent.searchLabel}
-                        placeholder={langContent.searchPlaceholder}
+                        label={t('subjecttype-search-label')}
+                        placeholder={t('subjecttype-search-placeholder')}
                         searchTerm={searchState.query}
                         setSearchTerm={(newSearch) => searchDispatch({ query: newSearch })}
                     />

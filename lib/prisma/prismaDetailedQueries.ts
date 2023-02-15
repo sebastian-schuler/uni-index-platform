@@ -423,3 +423,50 @@ export const getInstitutionDetailed = async (institutionId: string): Promise<Det
         }
     })
 }
+
+/**
+ * Get DetailedInstitution by internal url
+ * @param institutionId 
+ * @returns 
+ */
+export const getInstitutionDetailedByUrl = async (internalUrl: string): Promise<DetailedInstitution | null> => {
+    return await prisma.institution.findUnique({
+        include: {
+            InstitutionSocialMedia: {
+                select: {
+                    facebook_url: true,
+                    instagram_url: true,
+                    twitter_url: true,
+                    youtube_url: true,
+                }
+            },
+            City: {
+                include: { State: { include: { Country: true } } },
+            },
+            Subject: {
+                include: {
+                    SubjectHasSubjectTypes: {
+                        include: {
+                            SubjectType: true
+                        }
+                    },
+                }
+            },
+            InstitutionLocation: {
+                select: {
+                    City: {
+                        include: { State: { include: { Country: true } } }
+                    }
+                }
+            },
+            _count: {
+                select: {
+                    Subject: true
+                }
+            }
+        },
+        where: {
+            url: internalUrl
+        }
+    })
+}

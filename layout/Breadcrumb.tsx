@@ -10,14 +10,14 @@ import { getLocalizedName, toLink } from '../lib/util/util';
 
 type Props = {
 
-    countryInfo?: Country,
-    stateInfo?: State,
-    cityInfo?: City,
+    countryInfo?: Country | null,
+    stateInfo?: State | null,
+    cityInfo?: City | null,
 
-    subjectTypeInfo?: SubjectType
-    subjectInfo?: Subject
+    subjectTypeInfo?: SubjectType | null
+    subjectInfo?: Subject | null
 
-    institutionInfo?: Institution
+    institutionInfo?: Institution | null
 
 }
 

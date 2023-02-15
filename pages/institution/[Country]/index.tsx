@@ -2,13 +2,13 @@ import { Group, SimpleGrid, Stack } from '@mantine/core';
 import { Country, State } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
 import GenericPageHeader from '../../../components/elements/GenericPageHeader';
 import InstitutionCard from '../../../components/elements/itemcards/InstitutionCard';
 import Breadcrumb from '../../../layout/Breadcrumb';
 import { FooterContent } from '../../../layout/footer/Footer';
 import LayoutContainer from '../../../layout/LayoutContainer';
-import Meta from '../../../components/partials/Meta';
 import prisma from '../../../lib/prisma/prisma';
 import { getInstitutionsDetailedByCountry } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
@@ -26,17 +26,16 @@ interface Props {
 
 const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institutionStates, countryInfo, countryList, footerContent }: Props) => {
 
-  const { lang } = useTranslation('common');
-
-  const localizedCountryName = getLocalizedName({ lang: lang, dbTranslated: countryInfo });
+  const { t, lang } = useTranslation('institution');
+  const countryName = getLocalizedName({ lang: lang, dbTranslated: countryInfo });
 
   return (
     <LayoutContainer footerContent={footerContent}>
 
-      <Meta
-        title={'Uni Index - ' + localizedCountryName}
-        description='Very nice page'
-      />
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('institution-country-title', { country: countryName })}</title>
+        <meta key={"description"} name="description" content={t('institution-country-description')} />
+      </Head>
 
       <Breadcrumb countryInfo={countryInfo} />
 

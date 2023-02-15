@@ -1,21 +1,20 @@
-function searchWikipedia(searchQuery: string, locale: string) {
+export const searchWikipedia = async (searchQuery: string, locale: string): Promise<string> => {
 
     return getTitles(searchQuery, locale).then((searchRes) => {
 
-        if(searchRes.query.search.length === 0) return "";
+        if (searchRes.query.search.length === 0) return "";
 
         return getContent(searchRes.query.search[0].title, locale).then((contentRes) => {
 
-            const extract: string = contentRes.query.pages[0].extract;
-            
+            const extract: string | undefined = contentRes.query.pages[0].extract;
+            if(!extract) return "";
+
             // In wikipedias wiki language == title == is a header, we want to find the first one and take the excerpt until that header
             let firstHeader = extract.search(/==(.)+==/g)
-            
+
             firstHeader = firstHeader == -1 ? extract.length : firstHeader;
-            return extract.substring(0,firstHeader).trim();
-
+            return extract.substring(0, firstHeader).trim();
         })
-
     })
 }
 
@@ -38,5 +37,3 @@ async function getContent(title: string, locale: string) {
     const json = await response.json();
     return json;
 }
-
-export default searchWikipedia;

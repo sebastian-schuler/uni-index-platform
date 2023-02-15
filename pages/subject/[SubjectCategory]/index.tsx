@@ -2,10 +2,10 @@ import { Group, SimpleGrid, Stack } from '@mantine/core';
 import { Country, SubjectType } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
 import GenericPageHeader from '../../../components/elements/GenericPageHeader';
 import SubjectCard from '../../../components/elements/itemcards/SubjectCard';
-import Meta from '../../../components/partials/Meta';
 import Breadcrumb from '../../../layout/Breadcrumb';
 import { FooterContent } from '../../../layout/footer/Footer';
 import LayoutContainer from '../../../layout/LayoutContainer';
@@ -27,20 +27,15 @@ interface Props {
 const SubjectCategoryPage: NextPage<Props> = ({ subjectTypeInfo, subjectData, countryList, footerContent }: Props) => {
 
   const { t, lang } = useTranslation('subject');
-  const langContent = {
-    pageTitle: t('common:page-title')
-  }
-
   const courseTypeName = getLocalizedName({ lang: lang, any: subjectTypeInfo });
 
   return (
     <LayoutContainer footerContent={footerContent}>
 
-      <Meta
-        title={langContent.pageTitle + " - " + courseTypeName}
-        description='Very nice page'
-      />
-
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('subject-title', { subject: courseTypeName })}</title>
+        <meta key={"description"} name="description" content={t('subject-description')} />
+      </Head>
 
       <Breadcrumb subjectTypeInfo={subjectTypeInfo} />
 

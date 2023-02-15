@@ -12,7 +12,6 @@ import SubjectCard from '../components/elements/itemcards/SubjectCard';
 import { FooterContent } from '../layout/footer/Footer';
 import PopularSection from '../layout/index/PopularSection';
 import LayoutContainer from '../layout/LayoutContainer';
-import Meta from '../components/partials/Meta';
 import { AD_PAGE_INDEX } from '../lib/appConstants';
 import { getPopularDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
 import { getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/prisma/prismaPopularQueries';
@@ -27,6 +26,7 @@ import OnlineMarketingSection from '../layout/index/OnlineMarketingSection';
 import { getAllLhrSimplified } from '../lib/lighthouse/lhrSimplifier';
 import { LhrSimple } from '../lib/types/lighthouse/CustomLhrTypes';
 import { CountryCardData, SubjectCardData } from '../lib/types/UiHelperTypes';
+import Head from 'next/head';
 
 interface Props {
   simpleLhReports: LhrSimple[],
@@ -53,10 +53,10 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
 
     <LayoutContainer removeVerticalPadding removeContainerWrapper footerContent={footerContent}>
 
-      <Meta
-        title={t('page-title')}
-        description={t('page-description')}
-      />
+      <Head>
+        <title key={"title"}>{t('page-title')}</title>
+        <meta key={"description"} name="description" content={t('page-description')} />
+      </Head>
 
       <HeroSection />
 
@@ -205,7 +205,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
       highestYoutube,
       countryData,
       footerContent,
-    }
+    },
+    revalidate: 60 * 60 * 24, // 24 hours
   }
 
 }

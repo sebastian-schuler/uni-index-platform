@@ -1,5 +1,7 @@
+import { existsSync } from 'fs';
 import fs from 'fs/promises';
-import { getInstitutionDetailed } from '../prisma/prismaDetailedQueries';
+import path from 'path';
+import { getInstitutionDetailedByUrl } from '../prisma/prismaDetailedQueries';
 import { DetailedInstitution } from '../types/DetailedDatabaseTypes';
 import { LhrInstitution, LhrSimple } from '../types/lighthouse/CustomLhrTypes';
 import { URL_INSTITUTION, URL_INSTITUTION_OM } from '../url-helper/urlConstants';
@@ -8,12 +10,20 @@ import { getMinifiedLhrCategory } from './lhrParser';
 
 export const getLhrSimplified = async (id: string) => {
 
-    const rawFile = await fs.readFile(`data/lighthouse/lhr-${id}.json`, "utf-8");
+    const filepath = path.join("data", "lighthouse", `lhr-${id}.json`)
+
+    if (!existsSync(filepath)) {
+        return null;
+    }
+
+    const rawFile = await fs.readFile(filepath, "utf-8");
+    // console.log(path.join("data", "lighthouse", `lhr-${id}.json`));
     // const rawFile = await fs.readFile(`data/lighthouse/lhr-HSKL.json`, "utf-8");
+
     const parsedFile = JSON.parse(rawFile);
     const lhReport = await getMinifiedLhrCategory(parsedFile);
 
-    const institution = id ? await getInstitutionDetailed(id) : null;
+    const institution = id ? await getInstitutionDetailedByUrl(id) : null;
 
     if (!institution) return null;
 
@@ -37,7 +47,7 @@ export const getAllLhrSimplified = async (count: number) => {
     let reports: LhrSimple[] = [];
 
     for (const fileName of fileNames) {
-        const idMatch = fileName.match(/lhr-([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}).json/i);
+        const idMatch = fileName.match(/lhr-([a-zA-Z-]+)\.json/i);
         const id = idMatch ? idMatch[1] : null;
         const report = id ? (await getLhrSimplified(id)) : null;
         if (report) reports.push(report);

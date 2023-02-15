@@ -2,6 +2,7 @@ import { Grid, SimpleGrid, Stack, Title, Box } from '@mantine/core';
 import { Country } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import CountryMapContainer from '../../../components/dynamic/CountryMapContainer';
@@ -10,7 +11,6 @@ import StateCard from '../../../components/elements/itemcards/StateCard';
 import Breadcrumb from '../../../layout/Breadcrumb';
 import { FooterContent } from '../../../layout/footer/Footer';
 import LayoutContainer from '../../../layout/LayoutContainer';
-import Meta from '../../../components/partials/Meta';
 import prisma from '../../../lib/prisma/prisma';
 import { getStatesDetailedByCountry } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
@@ -23,15 +23,12 @@ interface Props {
   footerContent: FooterContent[],
 }
 
-const CountryPage: NextPage<Props> = ({ states, countryInfo, footerContent }:Props) => {
+const CountryPage: NextPage<Props> = ({ states, countryInfo, footerContent }: Props) => {
 
   const query = useRouter().query;
 
   // Translations
   const { t, lang } = useTranslation('location');
-  const langContent = {
-    pageTitle: t('common:page-title')
-  }
   const localizedCountryName = getLocalizedName({ lang: lang, dbTranslated: countryInfo });
 
   // Translated State Names
@@ -46,26 +43,26 @@ const CountryPage: NextPage<Props> = ({ states, countryInfo, footerContent }:Pro
   return (
     <LayoutContainer footerContent={footerContent}>
 
-      <Meta
-        title={langContent.pageTitle + ' - ' + localizedCountryName}
-        description='Very nice page'
-      />
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('country-title', { country: localizedCountryName })}</title>
+        <meta key={"description"} name="description" content={t('country-description', { country: localizedCountryName })} />
+      </Head>
 
       <Breadcrumb countryInfo={countryInfo} />
 
       <Stack>
 
-        <GenericPageHeader title={localizedCountryName} description={"Ein schönes Land"} />
+        <GenericPageHeader title={localizedCountryName} description={t('country-subtitle', { country: localizedCountryName })} />
 
         <Grid>
 
           <Grid.Col sm={12}>
             <Title order={6} mb={2}>Map of Germany</Title>
-            <Box sx={{zIndex: 0}}>
-            <CountryMapContainer
-              country={query.Country?.toString() ?? ""}
-              stateNames={translatedStates}
-            />
+            <Box sx={{ zIndex: 0 }}>
+              <CountryMapContainer
+                country={query.Country?.toString() ?? ""}
+                stateNames={translatedStates}
+              />
             </Box>
           </Grid.Col>
 

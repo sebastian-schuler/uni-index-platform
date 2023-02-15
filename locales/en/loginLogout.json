@@ -1,4 +1,9 @@
 {
+  "login-tab-title": "Login",
+  "login-description": "Login as an institution to manage your ads on our platform.",
+  "signup-tab-title": "Sign up",
+  "signup-description": "Sign up as an institution to book ads on our platform.",
+
   "login-email-label": "Email Address",
   "login-password-label": "Password",
   "login-forgot": "Forgot your password?",

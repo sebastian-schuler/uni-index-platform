@@ -2,6 +2,7 @@ import { Group, SimpleGrid, Stack } from '@mantine/core';
 import { Country, State } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import GenericPageHeader from '../../../../components/elements/GenericPageHeader';
@@ -9,10 +10,9 @@ import CityCard from '../../../../components/elements/itemcards/CityCard';
 import Breadcrumb from '../../../../layout/Breadcrumb';
 import { FooterContent } from '../../../../layout/footer/Footer';
 import LayoutContainer from '../../../../layout/LayoutContainer';
-import Meta from '../../../../components/partials/Meta';
 import prisma from '../../../../lib/prisma/prisma';
 import { getCitiesDetailedByState } from '../../../../lib/prisma/prismaDetailedQueries';
-import {getCountries, getCountryByState, getState } from '../../../../lib/prisma/prismaQueries';
+import { getCountries, getCountryByState, getState } from '../../../../lib/prisma/prismaQueries';
 import { DetailedCity } from '../../../../lib/types/DetailedDatabaseTypes';
 import { getLocalizedName } from '../../../../lib/util/util';
 
@@ -25,24 +25,21 @@ interface Props {
 
 const StatePage: NextPage<Props> = ({ cityList, stateInfo, countryInfo, footerContent }: Props) => {
 
-    const query = useRouter().query;
-    const { t, lang } = useTranslation('common');
-    const langContent = {
-        pageTitle: t('common:page-title')
-    }
+    const { t, lang } = useTranslation('location');
+    const stateName = getLocalizedName({ lang: lang, state: stateInfo });
 
     return (
         <LayoutContainer footerContent={footerContent}>
 
-            <Meta
-                title={langContent.pageTitle + ' - ' + getLocalizedName({ lang: lang, state: stateInfo })}
-                description='Very nice page'
-            />
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('state-title', { state: stateName })}</title>
+                <meta key={"description"} name="description" content={t('state-description', { state: stateName })} />
+            </Head>
 
             <Breadcrumb countryInfo={countryInfo} stateInfo={stateInfo} />
 
             <Stack>
-                <GenericPageHeader title={getLocalizedName({ lang: lang, state: stateInfo })} description={`Find courses located in this state in ${countryInfo.name}`} />
+                <GenericPageHeader title={getLocalizedName({ lang: lang, state: stateInfo })} description={t('state-subtitle', { state: stateName })} />
 
                 <Group position='apart' >
                     {/* <SearchBox
@@ -67,7 +64,7 @@ const StatePage: NextPage<Props> = ({ cityList, stateInfo, countryInfo, footerCo
                     {
                         cityList.map((city, i) => (
                             // searchable.visible && (
-                                <CityCard key={i} city={city} /> //TODO make searchable
+                            <CityCard key={i} city={city} /> //TODO make searchable
                             // )
                         ))
                     }

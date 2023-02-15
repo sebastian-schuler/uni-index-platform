@@ -10,7 +10,6 @@ import Breadcrumb from '../../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../../layout/footer/Footer'
 import LayoutContainer from '../../../../../layout/LayoutContainer'
 import InstitutionNav from '../../../../../layout/subnav/InstitutionNav'
-import Meta from '../../../../../components/partials/Meta'
 import WhitePaper from '../../../../../components/WhitePaper'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
@@ -55,10 +54,7 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
 
     const errorComponent = (
         <LayoutContainer footerContent={footerContent}>
-            <Meta
-                title={'Uni Index - '}
-                description=''
-            />
+
             <Breadcrumb countryInfo={country} institutionInfo={institution} />
             <InstitutionNav title={institution.name} />
             <WhitePaper>
@@ -95,11 +91,6 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
 
     return (
         <LayoutContainer footerContent={footerContent}>
-
-            <Meta
-                title={'Uni Index - '}
-                description='Very nice page'
-            />
 
             <WhitePaper>
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />

@@ -1,6 +1,11 @@
 {
-    "subjects-title": "Subjects",
-    "subjects-title-sub": "Find any subject of your choice.",
+    "subject-types-title": "Subject Types",
+    "subject-types-subtitle": "Find any subject of your choice.",
+    "subject-types-description": "Find courses all over Europe by fields of study.",
+
+    "subject-title": "{{subject}}",
+    "subject-subtitle": "Find any subject of your choice.",
+    "subject-description": "Find courses all over Europe by fields of study.",
 
     "subjecttype-search-label": "Search for a subject type",
     "subjecttype-search-placeholder": "e.g. Marketing"

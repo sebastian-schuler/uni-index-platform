@@ -1,43 +1,41 @@
-import { Text, Title, useMantineTheme } from '@mantine/core';
+import { Text, Title } from '@mantine/core';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 import WhitePaper from '../../../../components/WhitePaper';
 import Breadcrumb from '../../../../layout/Breadcrumb';
 import { FooterContent } from '../../../../layout/footer/Footer';
 import LayoutContainer from '../../../../layout/LayoutContainer';
 import InstitutionNav from '../../../../layout/subnav/InstitutionNav';
-import Meta from '../../../../components/partials/Meta';
-import searchWikipedia from '../../../../lib/apis/wikipediaHandler';
+import { searchWikipedia } from '../../../../lib/apis/wikipediaHandler';
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries';
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions';
+import { getLocalizedName } from '../../../../lib/util/util';
 
 interface Props {
-  institution: Institution,
-  country: Country,
+  institution: Institution | null,
+  country: Country | null,
   wikipediaContent: string,
   footerContent: FooterContent[]
 }
 
 const InstitutionPage: NextPage<Props> = ({ institution, country, wikipediaContent, footerContent }: Props) => {
 
-  const theme = useMantineTheme();
-  const { t } = useTranslation('common');
-  const langContent = {
-    pageTitle: t('common:page-title'),
-  }
+  const { t, lang } = useTranslation('institution');
+  const countryName = getLocalizedName({ lang: lang, dbTranslated: country });
 
   return (
     <LayoutContainer footerContent={footerContent}>
 
-      <Meta
-        title={langContent.pageTitle + " - "}
-        description='Very nice page'
-      />
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('institution-title', { country: countryName, institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('institution-description')} />
+      </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
 
-      <InstitutionNav title={institution.name} />
+      <InstitutionNav title={institution?.name || ""} />
 
       <WhitePaper>
         <Title order={2}>About</Title>
@@ -58,7 +56,10 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   const institution = await getInstitution({ institutionUrl });
 
   // Get Wikipedia Data
-  const wikiDataRes = institution ? (await searchWikipedia(institution.name, "" + context.locale)) : "";
+  let wikiDataRes: string | null = null;
+  if (institution) {
+    wikiDataRes = await searchWikipedia(institution.name, "" + context.locale);
+  }
 
   // Footer Data
   // Get all countries

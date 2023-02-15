@@ -7,7 +7,6 @@ import Breadcrumb from '../../../../../layout/Breadcrumb';
 import { FooterContent } from '../../../../../layout/footer/Footer';
 import LayoutContainer from '../../../../../layout/LayoutContainer';
 import InstitutionNav from '../../../../../layout/subnav/InstitutionNav';
-import Meta from '../../../../../components/partials/Meta';
 import { getDetailedSubjectsByInstitution } from '../../../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
 import { DetailedSubject } from '../../../../../lib/types/DetailedDatabaseTypes';
@@ -27,11 +26,6 @@ const subjects: NextPage<Props> = ({ institution, country, footerContent, subjec
 
   return (
     <LayoutContainer footerContent={footerContent}>
-
-      <Meta
-        title={'Uni Index - '}
-        description='Very nice page'
-      />
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
 

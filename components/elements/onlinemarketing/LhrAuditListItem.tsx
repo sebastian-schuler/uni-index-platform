@@ -51,14 +51,14 @@ const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
     const { classes } = useStyles();
     const [opened, setOpened] = useState(false);
 
-    if (audit.details.type === 'opportunity' && audit.details.items.length > 0) {
-        // console.log(audit.id)
-        // console.log(audit.details.items[0]["node"]);
-    }
+    // if (audit.details.type === 'opportunity' && audit.details.items.length > 0) {
+    //     // console.log(audit.id)
+    //     // console.log(audit.details.items[0]["node"]);
+    // }
 
-    if (audit.id === "crawlable-anchors") {
-        // console.log(audit.details);
-    }
+    // if (audit.id === "crawlable-anchors") {
+    //     // console.log(audit.details);
+    // }
 
     let detailsObject: JSX.Element | null = null;
 
@@ -147,8 +147,10 @@ const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
 
                                             if (heading.itemType === "source-location") {
                                                 const sourceLocation = item[heading.key] as unknown as Details.SourceLocationValue;
-                                                inner = sourceLocation.url ? <Anchor href={sourceLocation.url}>{sourceLocation.url}</Anchor> : null;
-                                                if (!inner) inner = <Text>{sourceLocation["value"]}</Text>; // Last table row, "Legible Text" in "SEO"
+                                                if (sourceLocation) {
+                                                    inner = sourceLocation.url ? <Anchor href={sourceLocation.url}>{sourceLocation.url}</Anchor> : null;
+                                                    if (!inner) inner = <Text>{sourceLocation["value"]}</Text>; // Last table row, "Legible Text" in "SEO"
+                                                }
 
                                             } else if (heading.itemType === "node") {
                                                 const node = item[heading.key] as unknown as Details.NodeValue;
@@ -166,14 +168,14 @@ const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
 
                                             } else if (heading.itemType === "timespanMs") {
                                                 const timespanMs = item[heading.key] as number;
-                                                inner = heading.key ? <Text>{timespanMs.toFixed(2)}</Text> : null;
+                                                inner = heading.key ? <Text>{timespanMs?.toFixed(2)}</Text> : null;
 
                                             } else if (heading.itemType === "link") {
                                                 inner = heading.key ? <Text>{item[heading.key]?.toString()}</Text> : null;
 
                                             } else if (heading.itemType === "ms") {
                                                 const timespanMs = item[heading.key] as number;
-                                                inner = heading.key ? <Text>{timespanMs.toFixed(2)} ms</Text> : null;
+                                                inner = heading.key ? <Text>{timespanMs?.toFixed(2)} ms</Text> : null;
 
                                             } else if (heading.itemType === "url") {
                                                 const url = item[heading.key] as string;

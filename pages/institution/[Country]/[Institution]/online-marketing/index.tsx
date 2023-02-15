@@ -2,9 +2,10 @@ import { Stack, Text } from '@mantine/core'
 import { Card, SimpleGrid, Title } from '@mantine/core'
 import { Country, Institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
+import useTranslation from 'next-translate/useTranslation'
+import Head from 'next/head'
 import Link from 'next/link'
 import LhrRingProgress from '../../../../../components/elements/onlinemarketing/LhrRingProgress'
-import Meta from '../../../../../components/partials/Meta'
 import WhitePaper from '../../../../../components/WhitePaper'
 import Breadcrumb from '../../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../../layout/footer/Footer'
@@ -33,7 +34,23 @@ interface Props {
 
 const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr, footerContent }: Props) => {
 
-  if (!lhr) return (<div>no LHR found</div>);
+  const { t, lang } = useTranslation('institution');
+
+  if (!lhr) return (
+    <LayoutContainer footerContent={footerContent}>
+
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('institution-online-marketing-title-nodata', { institution: institution?.name })}</title>
+      </Head>
+
+      <Breadcrumb countryInfo={country} institutionInfo={institution} />
+
+      <InstitutionNav title={institution.name} />
+
+      <WhitePaper>No LHR data</WhitePaper>
+
+    </LayoutContainer>
+  );
 
   const data: CategoryData[] = [
     {
@@ -70,7 +87,7 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
 
   const categoryCards = data.map((category, index) => {
     return (
-      <Link key={category.url+index} href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM, category.url)} passHref>
+      <Link key={category.url + index} href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM, category.url)} passHref>
         <Card component='a'>
           <LhrRingProgress
             title={category.title}
@@ -86,10 +103,10 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
   return (
     <LayoutContainer footerContent={footerContent}>
 
-      <Meta
-        title={'Uni Index - '}
-        description='Very nice page'
-      />
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('institution-online-marketing-title', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('institution-online-marketing-description')} />
+      </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
 
@@ -132,7 +149,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   ]
 
   // Get LHR
-  const lhr = institution?.id ? await getLhrSimplified(institution.id) : null;
+  const lhr = institution?.id ? await getLhrSimplified(institution.url) : null;
 
   return {
     props: {

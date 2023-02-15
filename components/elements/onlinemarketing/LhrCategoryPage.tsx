@@ -7,7 +7,6 @@ import LayoutContainer from "../../../layout/LayoutContainer"
 import { LhrAudit, LhrCategory } from "../../../lib/types/lighthouse/CustomLhrTypes"
 import { URL_INSTITUTION, URL_INSTITUTION_OM } from "../../../lib/url-helper/urlConstants"
 import { toLink } from "../../../lib/util/util"
-import Meta from "../../partials/Meta"
 import WhitePaper from "../../WhitePaper"
 import LhrAuditList from "./LhrAuditList"
 import LhrRingProgress from "./LhrRingProgress"
@@ -23,11 +22,6 @@ interface Props {
 const LhrCategoryPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }: Props) => {
     return (
         <LayoutContainer footerContent={footerContent}>
-
-            <Meta
-                title={'Uni Index - '}
-                description='Very nice page'
-            />
 
             <Group position="apart">
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />

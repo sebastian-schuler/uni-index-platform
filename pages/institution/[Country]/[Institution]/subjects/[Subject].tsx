@@ -4,7 +4,6 @@ import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import MantineLink from '../../../../../components/elements/MantineLink'
-import Meta from '../../../../../components/partials/Meta'
 import WhitePaper from '../../../../../components/WhitePaper'
 import Breadcrumb from '../../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../../layout/footer/Footer'
@@ -37,11 +36,6 @@ const SubjectFromInstitutionPage: NextPage<Props> = ({ country, institution, sub
 
   return (
     <LayoutContainer footerContent={footerContent}>
-
-      <Meta
-        title={'Uni Index - '}
-        description='Very nice page'
-      />
 
       <Breadcrumb
         countryInfo={country}

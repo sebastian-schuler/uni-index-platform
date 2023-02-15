@@ -4,12 +4,12 @@ import { CountryCardData, Searchable, SubjectTypeCardData } from "../types/UiHel
 
 interface LocalizedNameProps {
     lang: string,
-    any?: SubjectType | undefined,
-    dbTranslated?: Country
-    state?: State,
-    subject?: Subject,
-    institution?: Institution,
-    searchable?: Searchable
+    any?: SubjectType | undefined | null,
+    dbTranslated?: Country | null
+    state?: State | null,
+    subject?: Subject | null,
+    institution?: Institution | null,
+    searchable?: Searchable | null
 }
 
 // Take in a database object and return its name in the selected locale
@@ -17,25 +17,25 @@ export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, inst
 
     const toStr = (name: string | undefined | null): string => name || "";
 
-    if (any !== undefined) {
+    if (any) {
         if (lang === "de") return toStr(any.name_native);
         else return toStr(any.name_en);
 
-    } else if (dbTranslated !== undefined) {
+    } else if (dbTranslated) {
         const translations = dbTranslated.translations as { [key: string]: string };
         return translations['name_' + lang] ?? dbTranslated.name;
 
-    } else if (state !== undefined) {
+    } else if (state) {
         if (lang === "en") return toStr(state.name_en);
         else return state.name_native;
 
-    } else if (subject !== undefined) {
+    } else if (subject) {
         return toStr(subject.name);
 
-    } else if (institution !== undefined) {
+    } else if (institution) {
         return toStr(institution.name);
 
-    } else if (searchable !== undefined) {
+    } else if (searchable) {
         return toStr(searchable.data.name);
 
     } else {
