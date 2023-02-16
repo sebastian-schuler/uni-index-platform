@@ -33,8 +33,8 @@ const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institution
     <LayoutContainer footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('institution-country-title', { country: countryName })}</title>
-        <meta key={"description"} name="description" content={t('institution-country-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('country-title', { country: countryName })}</title>
+        <meta key={"description"} name="description" content={t('country-description')} />
       </Head>
 
       <Breadcrumb countryInfo={countryInfo} />

@@ -2,6 +2,8 @@ import { Button, Divider, Grid, Group, SimpleGrid, Space, Text } from '@mantine/
 import { NextLink } from '@mantine/next';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext } from 'next';
+import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 import Link from 'next/link';
 import LhrAuditList from '../../../../../components/elements/onlinemarketing/LhrAuditList';
 import LhrAuditScore from '../../../../../components/elements/onlinemarketing/LhrAuditScore';
@@ -54,9 +56,15 @@ interface Props {
 const Performance = ({ institution, country, lhrAudits, lhrCategory, footerContent }: Props) => {
 
     const audits = lhrAudits.filter(audit => lhrCategory.metricRefs.includes(audit.id));
+    const { t, lang } = useTranslation('institution');
 
     return (
         <LayoutContainer footerContent={footerContent}>
+
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-performance-title', { institution: institution?.name })}</title>
+                <meta key={"description"} name="description" content={t('online-marketing-performance-title')} />
+            </Head>
 
             <Group position="apart">
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />

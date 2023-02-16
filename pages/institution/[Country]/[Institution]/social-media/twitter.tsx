@@ -16,6 +16,7 @@ import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma
 import { TotalScore, TotalScoreSet, TwitterProfile, YoutubeChannelData, YoutubeProfile } from '../../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION_SOCIALMEDIA_TW } from '../../../../../lib/url-helper/urlConstants'
+import Head from 'next/head'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -46,7 +47,7 @@ interface Props {
 const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerContent, institutionSMString, countrySMString }: Props) => {
 
     const { classes, theme } = useStyles();
-    const { t, lang } = useTranslation('common');
+    const { t, lang } = useTranslation('institution');
     const router = useRouter();
 
     const institutionSM: InstitutionSocialMedia | null = JSON.parse(institutionSMString);
@@ -55,15 +56,20 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
     const errorComponent = (
         <LayoutContainer footerContent={footerContent}>
 
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('social-media-twitter-title-nodata', { institution: institution.name })}</title>
+                <meta key={"description"} name="description" content={t('social-media-twitter-description', { institution: institution.name })} />
+            </Head>
+
             <Breadcrumb countryInfo={country} institutionInfo={institution} />
-            <InstitutionNav title={institution.name} />
             <WhitePaper>
-                <Text>No data</Text>
+                <Text>No Twitter data</Text>
             </WhitePaper>
         </LayoutContainer>
-    )
+    );
+
     // IF NO SOCIAL MEDIA DATA PRESENT, RETURN ERROR COMPONENT
-    if (institutionSM === null || institutionSM === undefined || countrySM === null || countrySM === undefined) {
+    if (!institutionSM || !institutionSM || !countrySM || !countrySM) {
         return errorComponent;
     }
 
@@ -89,8 +95,18 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
     // Url Back
     const urlBack = router.asPath.replace(URL_INSTITUTION_SOCIALMEDIA_TW, '');
 
+    // IF NO SOCIAL MEDIA DATA PRESENT, RETURN ERROR COMPONENT
+    if (!twitterProfile) {
+        return errorComponent;
+    }
+
     return (
         <LayoutContainer footerContent={footerContent}>
+
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('social-media-twitter-title', { institution: institution.name })}</title>
+                <meta key={"description"} name="description" content={t('social-media-twitter-description', { institution: institution.name })} />
+            </Head>
 
             <WhitePaper>
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />
@@ -105,110 +121,107 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
                     </Link>
                 </Group>
 
-                {
-                    twitterProfile !== null ?
-                        <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
+                <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
 
-                            <Card shadow={"xs"} className={classes.card}>
+                    <Card shadow={"xs"} className={classes.card}>
 
-                                <Title order={4}>Profile statistic</Title>
-                                <Text>Basic information about the institutions twitter profile.</Text>
+                        <Title order={4}>Profile statistic</Title>
+                        <Text>Basic information about the institutions twitter profile.</Text>
 
-                                <Card.Section className={classes.cardSection}>
+                        <Card.Section className={classes.cardSection}>
 
-                                    <SmStatRow
-                                        title='Followers'
-                                        countryValue={countryTwitterResults.followers}
-                                        institutionValue={twitterProfile.followers}
-                                    />
-                                    <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Followers'
+                                countryValue={countryTwitterResults.followers}
+                                institutionValue={twitterProfile.followers}
+                            />
+                            <Divider mt="md" mb="md" />
 
-                                    <SmStatRow
-                                        title='Following'
-                                        countryValue={countryTwitterResults.following}
-                                        institutionValue={twitterProfile.following}
-                                    />
+                            <SmStatRow
+                                title='Following'
+                                countryValue={countryTwitterResults.following}
+                                institutionValue={twitterProfile.following}
+                            />
 
-                                    <Divider mt="md" mb="md" />
+                            <Divider mt="md" mb="md" />
 
-                                    <SmStatRow
-                                        title='List appearances'
-                                        countryValue={countryTwitterResults.listed}
-                                        institutionValue={twitterProfile.listed}
-                                    />
+                            <SmStatRow
+                                title='List appearances'
+                                countryValue={countryTwitterResults.listed}
+                                institutionValue={twitterProfile.listed}
+                            />
 
-                                    <Divider mt="md" mb="md" />
+                            <Divider mt="md" mb="md" />
 
-                                    <div>
-                                        <Text
-                                            color="dimmed"
-                                            transform="uppercase"
-                                            weight={700}
-                                            size="xs"
-                                        >
-                                            Profile status
-                                        </Text>
-                                        <Text weight={700} size="md" color={twitterProfile.isVerified ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                            {
-                                                twitterProfile.isVerified ? "VERIFIED" : "NOT VERIFIED"
-                                            }
-                                        </Text>
-                                    </div>
+                            <div>
+                                <Text
+                                    color="dimmed"
+                                    transform="uppercase"
+                                    weight={700}
+                                    size="xs"
+                                >
+                                    Profile status
+                                </Text>
+                                <Text weight={700} size="md" color={twitterProfile.isVerified ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                    {
+                                        twitterProfile.isVerified ? "VERIFIED" : "NOT VERIFIED"
+                                    }
+                                </Text>
+                            </div>
 
-                                    <Divider mt="md" mb="md" />
+                            <Divider mt="md" mb="md" />
 
-                                    <div>
-                                        <Text
-                                            color="dimmed"
-                                            transform="uppercase"
-                                            weight={700}
-                                            size="xs"
-                                        >
-                                            Website link
-                                        </Text>
-                                        <Text weight={700} size="md" color={twitterProfile.isWebsiteLinked ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                            {
-                                                twitterProfile.isWebsiteLinked ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
-                                            }
-                                        </Text>
-                                    </div>
+                            <div>
+                                <Text
+                                    color="dimmed"
+                                    transform="uppercase"
+                                    weight={700}
+                                    size="xs"
+                                >
+                                    Website link
+                                </Text>
+                                <Text weight={700} size="md" color={twitterProfile.isWebsiteLinked ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                    {
+                                        twitterProfile.isWebsiteLinked ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
+                                    }
+                                </Text>
+                            </div>
 
-                                </Card.Section>
-                            </Card>
+                        </Card.Section>
+                    </Card>
 
-                            <Card shadow={"xs"} className={classes.card}>
+                    <Card shadow={"xs"} className={classes.card}>
 
-                                <Title order={4}>Tweet statistic</Title>
-                                <Text>Basic information about the institutions twitter profile.</Text>
+                        <Title order={4}>Tweet statistic</Title>
+                        <Text>Basic information about the institutions twitter profile.</Text>
 
-                                <Card.Section className={classes.cardSection}>
-                                    <SmStatRow
-                                        title='Total tweets'
-                                        countryValue={countryTwitterResults.tweets}
-                                        institutionValue={twitterProfile.tweets}
-                                    />
-                                    <Divider mt="md" mb="md" />
-                                    <SmStatRow
-                                        title='Average likes per tweet'
-                                        countryValue={countryTwitterResults.avgLikes}
-                                        institutionValue={twitterProfile.avgLikes}
-                                    />
-                                    <Divider mt="md" mb="md" />
-                                    <SmStatRow
-                                        title='Average replies per tweet'
-                                        countryValue={countryTwitterResults.avgReplies}
-                                        institutionValue={twitterProfile.avgReplies}
-                                    />
-                                    <Divider mt="md" mb="md" />
-                                    <SmStatRow
-                                        title='Average retweets per tweet'
-                                        countryValue={countryTwitterResults.avgRetweets}
-                                        institutionValue={twitterProfile.avgRetweets}
-                                    />
-                                </Card.Section>
-                            </Card>
-                        </SimpleGrid> : errorComponent
-                }
+                        <Card.Section className={classes.cardSection}>
+                            <SmStatRow
+                                title='Total tweets'
+                                countryValue={countryTwitterResults.tweets}
+                                institutionValue={twitterProfile.tweets}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average likes per tweet'
+                                countryValue={countryTwitterResults.avgLikes}
+                                institutionValue={twitterProfile.avgLikes}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average replies per tweet'
+                                countryValue={countryTwitterResults.avgReplies}
+                                institutionValue={twitterProfile.avgReplies}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average retweets per tweet'
+                                countryValue={countryTwitterResults.avgRetweets}
+                                institutionValue={twitterProfile.avgRetweets}
+                            />
+                        </Card.Section>
+                    </Card>
+                </SimpleGrid>
             </WhitePaper>
         </LayoutContainer>
     )

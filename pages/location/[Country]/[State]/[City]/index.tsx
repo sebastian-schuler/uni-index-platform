@@ -2,6 +2,7 @@ import { Group, SimpleGrid, Stack } from '@mantine/core';
 import { City, Country, State } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
 import GenericPageHeader from '../../../../../components/elements/GenericPageHeader';
 import InstitutionCard from '../../../../../components/elements/itemcards/InstitutionCard';
@@ -28,13 +29,15 @@ interface Props {
 
 const CityPage: NextPage<Props> = ({ countryList, institutionData, institutionStates, footerContent, cityInfo }: Props) => {
 
-  const { t } = useTranslation('common');
-  const langContent = {
-    pageTitle: t('common:page-title')
-  }
+  const { t } = useTranslation('location');
 
   return (
     <LayoutContainer footerContent={footerContent}>
+
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('city-title', { city: cityInfo.name })}</title>
+        <meta key={"description"} name="description" content={t('city-description', { city: cityInfo.name })} />
+      </Head>
 
       <Breadcrumb
         countryInfo={cityInfo.State.Country}
@@ -43,7 +46,7 @@ const CityPage: NextPage<Props> = ({ countryList, institutionData, institutionSt
       />
 
       <Stack>
-        <GenericPageHeader title={cityInfo.name} description={`Find courses located in the city of ${cityInfo.name}`} />
+        <GenericPageHeader title={cityInfo.name} description={t('city-subtitle', { city: cityInfo.name })} />
 
         <Group position='apart' >
           {/* <SearchBox

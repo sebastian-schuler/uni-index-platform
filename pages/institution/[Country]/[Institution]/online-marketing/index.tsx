@@ -40,7 +40,8 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
     <LayoutContainer footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('institution-online-marketing-title-nodata', { institution: institution?.name })}</title>
+        <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-title-nodata', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('online-marketing-description')} />
       </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
@@ -104,8 +105,8 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
     <LayoutContainer footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('institution-online-marketing-title', { institution: institution?.name })}</title>
-        <meta key={"description"} name="description" content={t('institution-online-marketing-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-title', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('online-marketing-description')} />
       </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />

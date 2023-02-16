@@ -9,6 +9,10 @@
 
   "state-title": "Cities in {{state}}",
   "state-subtitle": "Look through the list of cities in {{state}} and find the best university for you.",
-  "state-description": "Discover top universities in {{state}} by state and find the perfect match for your studies."
+  "state-description": "Discover top universities in {{state}} by state and find the perfect match for your studies.",
+
+  "city-title": "Universities in {{city}}",
+  "city-subtitle": "Look through the list of universities in {{city}} and find the best match for you.",
+  "city-description": "Discover top universities in {{city}} and find the perfect match for your studies."
 
 }

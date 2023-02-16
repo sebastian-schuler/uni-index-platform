@@ -16,6 +16,7 @@ import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma
 import { TotalScore, TotalScoreSet, TwitterProfile, YoutubeChannelData, YoutubeProfile } from '../../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION_SOCIALMEDIA_YT } from '../../../../../lib/url-helper/urlConstants'
+import Head from 'next/head'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -46,7 +47,7 @@ interface Props {
 const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerContent, institutionSMString, countrySMString }: Props) => {
 
     const { classes, theme } = useStyles();
-    const { t, lang } = useTranslation('common');
+    const { t, lang } = useTranslation('institution');
     const router = useRouter();
 
     const institutionSM: InstitutionSocialMedia | null = JSON.parse(institutionSMString);
@@ -55,15 +56,19 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
     const errorComponent = (
         <LayoutContainer footerContent={footerContent}>
 
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('social-media-youtube-title-nodata', { institution: institution.name })}</title>
+                <meta key={"description"} name="description" content={t('social-media-youtube-description', { institution: institution.name })} />
+            </Head>
+
             <Breadcrumb countryInfo={country} institutionInfo={institution} />
-            <InstitutionNav title={institution.name} />
             <WhitePaper>
-                <Text>No data</Text>
+                <Text>No Youtube data</Text>
             </WhitePaper>
         </LayoutContainer>
     );
     // IF NO SOCIAL MEDIA DATA PRESENT, RETURN ERROR COMPONENT
-    if (institutionSM === null || institutionSM === undefined || countrySM === null || countrySM === undefined) {
+    if (!institutionSM || !institutionSM || !countrySM || !countrySM) {
         return errorComponent;
     }
 
@@ -89,8 +94,17 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
     // Url Back
     const urlBack = router.asPath.replace(URL_INSTITUTION_SOCIALMEDIA_YT, '');
 
+    if (!youtubeProfile) {
+        return errorComponent;
+    }
+
     return (
         <LayoutContainer footerContent={footerContent}>
+
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('social-media-youtube-title', { institution: institution.name })}</title>
+                <meta key={"description"} name="description" content={t('social-media-youtube-description', { institution: institution.name })} />
+            </Head>
 
             <WhitePaper>
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />
@@ -105,100 +119,95 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
                     </Link>
                 </Group>
 
-                {
-                    youtubeProfile !== null ? <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
+                <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
 
-                        <Card shadow={"xs"} className={classes.card}>
+                    <Card shadow={"xs"} className={classes.card}>
 
-                            <Title order={4}>Profile statistic</Title>
-                            <Text>Basic information about the institutions twitter profile.</Text>
+                        <Title order={4}>Profile statistic</Title>
+                        <Text>Basic information about the institutions twitter profile.</Text>
 
-                            <Card.Section className={classes.cardSection}>
+                        <Card.Section className={classes.cardSection}>
 
-                                <SmStatRow
-                                    title='Subscribers'
-                                    countryValue={countryYoutubeResults.subscribers}
-                                    institutionValue={youtubeProfile.subscribers}
-                                />
-                                <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Subscribers'
+                                countryValue={countryYoutubeResults.subscribers}
+                                institutionValue={youtubeProfile.subscribers}
+                            />
+                            <Divider mt="md" mb="md" />
 
-                                <SmStatRow
-                                    title='Total views'
-                                    countryValue={countryYoutubeResults.views}
-                                    institutionValue={youtubeProfile.views}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <div>
-                                    <Text
-                                        color="dimmed"
-                                        transform="uppercase"
-                                        weight={700}
-                                        size="xs"
-                                    >
-                                        Description
-                                    </Text>
-                                    <Text weight={700} size="md" color={youtubeProfile.descriptionGood ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                        {
-                                            youtubeProfile.descriptionGood ? "GOOD LENGTH" : "BAD LENGTH"
-                                        }
-                                    </Text>
-                                </div>
-                            </Card.Section>
-                        </Card>
+                            <SmStatRow
+                                title='Total views'
+                                countryValue={countryYoutubeResults.views}
+                                institutionValue={youtubeProfile.views}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <div>
+                                <Text
+                                    color="dimmed"
+                                    transform="uppercase"
+                                    weight={700}
+                                    size="xs"
+                                >
+                                    Description
+                                </Text>
+                                <Text weight={700} size="md" color={youtubeProfile.descriptionGood ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                    {
+                                        youtubeProfile.descriptionGood ? "GOOD LENGTH" : "BAD LENGTH"
+                                    }
+                                </Text>
+                            </div>
+                        </Card.Section>
+                    </Card>
 
-                        <Card shadow={"xs"} className={classes.card}>
+                    <Card shadow={"xs"} className={classes.card}>
 
-                            <Title order={4}>Video statistic</Title>
-                            <Text>Basic information about the institutions twitter profile.</Text>
+                        <Title order={4}>Video statistic</Title>
+                        <Text>Basic information about the institutions twitter profile.</Text>
 
-                            <Card.Section className={classes.cardSection}>
-                                <SmStatRow
-                                    title='Total videos'
-                                    countryValue={countryYoutubeResults.videos}
-                                    institutionValue={youtubeProfile.videos}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <SmStatRow
-                                    title='Average likes per video'
-                                    countryValue={countryYoutubeResults.averageLikes}
-                                    institutionValue={youtubeProfile.averageLikes}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <SmStatRow
-                                    title='Average comments per video'
-                                    countryValue={countryYoutubeResults.averageComments}
-                                    institutionValue={youtubeProfile.averageComments}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <SmStatRow
-                                    title='Average views per video'
-                                    countryValue={countryYoutubeResults.averageViews}
-                                    institutionValue={youtubeProfile.averageViews}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <div>
-                                    <Text
-                                        color="dimmed"
-                                        transform="uppercase"
-                                        weight={700}
-                                        size="xs"
-                                    >
-                                        Average video tags
-                                    </Text>
-                                    <Text weight={700} size="md" color={youtubeProfile.videosHaveTags ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                        {
-                                            youtubeProfile.videosHaveTags ? "GOOD AMOUNT" : "BAD AMOUNT"
-                                        }
-                                    </Text>
-                                </div>
-                            </Card.Section>
-                        </Card>
-
-                    </SimpleGrid> : errorComponent
-                }
-
+                        <Card.Section className={classes.cardSection}>
+                            <SmStatRow
+                                title='Total videos'
+                                countryValue={countryYoutubeResults.videos}
+                                institutionValue={youtubeProfile.videos}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average likes per video'
+                                countryValue={countryYoutubeResults.averageLikes}
+                                institutionValue={youtubeProfile.averageLikes}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average comments per video'
+                                countryValue={countryYoutubeResults.averageComments}
+                                institutionValue={youtubeProfile.averageComments}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average views per video'
+                                countryValue={countryYoutubeResults.averageViews}
+                                institutionValue={youtubeProfile.averageViews}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <div>
+                                <Text
+                                    color="dimmed"
+                                    transform="uppercase"
+                                    weight={700}
+                                    size="xs"
+                                >
+                                    Average video tags
+                                </Text>
+                                <Text weight={700} size="md" color={youtubeProfile.videosHaveTags ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                    {
+                                        youtubeProfile.videosHaveTags ? "GOOD AMOUNT" : "BAD AMOUNT"
+                                    }
+                                </Text>
+                            </div>
+                        </Card.Section>
+                    </Card>
+                </SimpleGrid>
             </WhitePaper>
-
         </LayoutContainer>
     )
 }

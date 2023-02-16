@@ -1,5 +1,7 @@
 import { Country, Institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext } from 'next'
+import useTranslation from 'next-translate/useTranslation'
+import Head from 'next/head'
 import React from 'react'
 import LhrCategoryPage from '../../../../../components/elements/onlinemarketing/LhrCategoryPage'
 import { FooterContent } from '../../../../../layout/footer/Footer'
@@ -17,14 +19,24 @@ interface Props {
 }
 
 const PwaPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }: Props) => {
+
+    const { t, lang } = useTranslation('institution');
+
     return (
-        <LhrCategoryPage
-            country={country}
-            institution={institution}
-            lhrAudits={lhrAudits}
-            lhrCategory={lhrCategory}
-            footerContent={footerContent}
-        />
+        <>
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-pwa-title', { institution: institution?.name })}</title>
+                <meta key={"description"} name="description" content={t('online-marketing-pwa-title')} />
+            </Head>
+
+            <LhrCategoryPage
+                country={country}
+                institution={institution}
+                lhrAudits={lhrAudits}
+                lhrCategory={lhrCategory}
+                footerContent={footerContent}
+            />
+        </>
     )
 }
 
@@ -50,7 +62,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
     const lhr = await getMinifiedLhrCategory(lhrData, "pwa");
 
-    console.log("categories",lhr.categories)
+    console.log("categories", lhr.categories)
     return {
         props: {
             institution,

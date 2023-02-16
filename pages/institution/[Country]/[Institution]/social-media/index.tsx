@@ -3,6 +3,7 @@ import { createStyles, Stack, Text } from '@mantine/core'
 import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
+import Head from 'next/head'
 import WhitePaper from '../../../../../components/WhitePaper'
 import Breadcrumb from '../../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../../layout/footer/Footer'
@@ -44,7 +45,7 @@ interface Props {
 const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerContent, institutionSMString, countrySMString }: Props) => {
 
     const { classes, theme } = useStyles();
-    const { t, lang } = useTranslation('common');
+    const { t, lang } = useTranslation('institution');
 
     const institutionSM: InstitutionSocialMedia | null = JSON.parse(institutionSMString);
     const countrySM: CountrySocialMedia | null = JSON.parse(countrySMString);
@@ -52,6 +53,11 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
     if (institutionSM === null || institutionSM === undefined || countrySM === null || countrySM === undefined) {
         return (
             <LayoutContainer footerContent={footerContent}>
+
+                <Head>
+                    <title key={"title"}>{t('common:page-title') + " | " + t('social-media-title-nodata', { institution: institution.name })}</title>
+                    <meta key={"description"} name="description" content={t('social-media-description', { institution: institution.name })} />
+                </Head>
 
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />
                 <InstitutionNav title={institution.name} />
@@ -82,6 +88,11 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
 
     return (
         <LayoutContainer footerContent={footerContent}>
+
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('social-media-title', { institution: institution.name })}</title>
+                <meta key={"description"} name="description" content={t('social-media-description', { institution: institution.name })} />
+            </Head>
 
             <Breadcrumb countryInfo={country} institutionInfo={institution} />
 

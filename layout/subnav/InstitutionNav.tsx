@@ -11,41 +11,32 @@ type Props = {
 const InstitutionNav = ({ title }: Props) => {
 
     const { t } = useTranslation('institution');
-    const langContent = {
-        profile: t('institution-profile'),
-        courses: t('institution-courses'),
-        screenshots: t('institution-screenshots'),
-        reviews: t('institution-reviews'),
-        socialMedia: t('institution-social-media'),
-        onlineMarketing: t('institution-online-marketing'),
-    }
-
     const query = useRouter().query;
     const urlBasePath = `/${URL_INSTITUTION}/${query.Country}/${query.Institution}`;
 
     const pageLinks = [
         {
-            name: langContent.profile,
+            name: t('tab-profile'),
             url: urlBasePath
         },
         {
-            name: langContent.socialMedia,
+            name: t('tab-social-media'),
             url: urlBasePath + "/social-media"
         },
         {
-            name: langContent.onlineMarketing,
+            name: t('tab-online-marketing'),
             url: urlBasePath + "/online-marketing"
         },
         {
-            name: langContent.courses,
+            name: t('tab-courses'),
             url: urlBasePath + "/subjects"
         },
         {
-            name: langContent.screenshots,
+            name: t('tab-screenshots'),
             url: urlBasePath + "/screenshots"
         },
         {
-            name: langContent.reviews,
+            name: t('tab-reviews'),
             url: urlBasePath + "/reviews"
         },
     ]

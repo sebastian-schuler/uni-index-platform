@@ -23,8 +23,8 @@ const InstitutionReviews: NextPage<Props> = ({ institution, country, footerConte
     <LayoutContainer footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('institution-reviews-title', { institution: institution?.name })}</title>
-        <meta key={"description"} name="description" content={t('institution-reviews-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('reviews-title', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('reviews-description')} />
       </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />

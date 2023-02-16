@@ -59,8 +59,8 @@ const InstitutionScreenshots: NextPage<Props> = ({ institution, country, screens
     <LayoutContainer footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('institution-screenshots-title', { institution: institution?.name })}</title>
-        <meta key={"description"} name="description" content={t('institution-screenshots-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('screenshots-title', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('screenshots-description')} />
       </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
