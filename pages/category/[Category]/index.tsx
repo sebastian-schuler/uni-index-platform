@@ -1,4 +1,4 @@
-import { Group, SimpleGrid, Stack } from '@mantine/core';
+import { Group, SimpleGrid, Stack, useMantineTheme } from '@mantine/core';
 import { Country, SubjectType } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
@@ -18,16 +18,17 @@ import { convertSubjectToCardData } from '../../../lib/util/conversionUtil';
 import { getLocalizedName } from '../../../lib/util/util';
 
 interface Props {
-  subjectTypeInfo: SubjectType,
+  categoryInfo: SubjectType,
   subjectData: SubjectCardData[],
   countryList: Country[],
   footerContent: FooterContent[],
 }
 
-const SubjectCategoryPage: NextPage<Props> = ({ subjectTypeInfo, subjectData, countryList, footerContent }: Props) => {
+const SubjectCategoryPage: NextPage<Props> = ({ categoryInfo, subjectData, countryList, footerContent }: Props) => {
 
-  const { t, lang } = useTranslation('subject');
-  const courseTypeName = getLocalizedName({ lang: lang, any: subjectTypeInfo });
+  const { t, lang } = useTranslation('category');
+  const courseTypeName = getLocalizedName({ lang: lang, any: categoryInfo });
+  const theme = useMantineTheme();
 
   return (
     <LayoutContainer footerContent={footerContent}>
@@ -37,7 +38,7 @@ const SubjectCategoryPage: NextPage<Props> = ({ subjectTypeInfo, subjectData, co
         <meta key={"description"} name="description" content={t('subject-description')} />
       </Head>
 
-      <Breadcrumb subjectTypeInfo={subjectTypeInfo} />
+      <Breadcrumb subjectTypeInfo={categoryInfo} />
 
       <Stack>
 
@@ -57,9 +58,9 @@ const SubjectCategoryPage: NextPage<Props> = ({ subjectTypeInfo, subjectData, co
           cols={4}
           spacing="lg"
           breakpoints={[
-            { maxWidth: 980, cols: 3, spacing: 'md' },
-            { maxWidth: 755, cols: 2, spacing: 'sm' },
-            { maxWidth: 600, cols: 1, spacing: 'sm' },
+            { maxWidth: theme.breakpoints.lg, cols: 3, spacing: 'md' },
+            { maxWidth: theme.breakpoints.md, cols: 2, spacing: 'sm' },
+            { maxWidth: theme.breakpoints.sm, cols: 1, spacing: 'sm' },
           ]}
         >
           {
@@ -79,7 +80,7 @@ const SubjectCategoryPage: NextPage<Props> = ({ subjectTypeInfo, subjectData, co
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
-  const courseTypes = await prisma.subjectType.findMany();
+  const categories = await prisma.subjectType.findMany();
 
   let paths: {
     params: ParsedUrlQuery;
@@ -88,10 +89,10 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
   // Add locale to every possible path
   locales?.forEach((locale) => {
-    courseTypes.forEach((subjectTypes) => {
+    categories.forEach((category) => {
       paths.push({
         params: {
-          SubjectCategory: subjectTypes.url,
+          Category: category.url,
         },
         locale,
       });
@@ -106,13 +107,13 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
 export async function getStaticProps(context: GetStaticPropsContext) {
 
-  const subjectCategory = "" + context?.params?.SubjectCategory;
+  const category = "" + context?.params?.Category;
   const lang = context.locale || "en";
 
-  const subjectTypeInfo: SubjectType | null = await getSubjectType(subjectCategory)
+  const categoryInfo: SubjectType | null = await getSubjectType(category)
 
   // Get all courses of this category
-  const subjects: DetailedSubject[] = await getSubjectsDetailedByCategory(subjectCategory);
+  const subjects: DetailedSubject[] = await getSubjectsDetailedByCategory(category);
   const subjectData: SubjectCardData[] = subjects.map(subj => convertSubjectToCardData(subj, lang));
 
   // Footer Data
@@ -124,7 +125,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   return {
     props: {
-      subjectTypeInfo,
+      categoryInfo,
       subjectData,
       countryList,
       footerContent,

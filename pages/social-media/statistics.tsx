@@ -8,6 +8,8 @@ import WhitePaper from '../../components/WhitePaper';
 import { getCountries } from '../../lib/prisma/prismaQueries';
 import { getAllSocialMedia } from '../../lib/prisma/prismaSocialMedia';
 import { SocialMediaDBEntry, TotalScore } from '../../lib/types/SocialMediaTypes';
+import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 
 export interface SmStatisticGraphRatings {
     total: number[]
@@ -22,9 +24,15 @@ interface Props {
 const Statistics: NextPage<Props> = ({ graphRatings }: Props) => {
 
     // const socialMedia = JSON.parse(socialMediaStringified);
+    const { t } = useTranslation('rankings');
 
     return (
         <LayoutContainer>
+
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('seo-sm-statistics-title')}</title>
+                <meta key={"description"} name="description" content={t('seo-sm-statistics-description')} />
+            </Head>
 
             <Breadcrumb />
 
@@ -51,7 +59,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const emptyArr = () => [...new Array(10)].map(() => 0);
 
-    const graphRatings:SmStatisticGraphRatings = {
+    const graphRatings: SmStatisticGraphRatings = {
         total: emptyArr(),
         twitter: emptyArr(),
         youtube: emptyArr(),

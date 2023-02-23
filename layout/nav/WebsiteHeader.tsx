@@ -5,7 +5,11 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { NextLink } from '@mantine/next';
 import { IconChevronDown } from '@tabler/icons';
+import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { URL_CATEGORIES, URL_CATEGORY, URL_INSTITUTION, URL_INSTITUTIONS, URL_LOCATION, URL_LOCATIONS } from '../../lib/url-helper/urlConstants';
+import { toLink } from '../../lib/util/util';
 import ResponsiveContainer from '../ResponsiveContainer';
 import HeaderAccountMenu from './HeaderAccountMenu';
 
@@ -45,8 +49,7 @@ const useStyles = createStyles((theme) => ({
     borderRadius: theme.radius.sm,
     textDecoration: 'none',
     color: theme.white,
-    fontSize: theme.fontSizes.md,
-    fontWeight: 500,
+    fontSize: theme.fontSizes.lg,
 
     [theme.fn.smallerThan('sm')]: {
       color: theme.black,
@@ -64,53 +67,116 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
+  linkActive: {
+    fontWeight: 800,
+    borderBottom: `2px solid ${theme.white}`,
+  },
+
   linkLabel: {
     marginRight: 5,
   },
 
+  menuItem: {
+    '&[data-hovered]': {
+      backgroundColor: theme.fn.rgba(theme.colors[theme.primaryColor][theme.fn.primaryShade()], 0.85),
+      color: theme.white,
+    },
+  },
+
+  menuItemLabel: {
+    fontSize: theme.fontSizes.md,
+  },
+
+  menuLabel: {
+    fontSize: theme.fontSizes.md,
+    color: theme.colors.brandOrange[5],
+  },
+
+  menuDivider: {
+    borderColor: theme.colors.dark[0],
+  }
+
 }));
 
-interface LinkProps {
+type MenuLink = {
   label: string;
   link: string;
 }
 
-interface NestedLinkProps {
-  parent: LinkProps
-  children: LinkProps[]
+type MenuChildren = MenuLink & { type: 'link' } | { type: 'divider' } | { type: 'label', text: string };
+
+type MenuLinkRoot = {
+  parent: MenuLink
+  rootUrl: string[];
+  children: MenuChildren[]
 }
 
 const WebsiteHeader = () => {
 
-  const links: NestedLinkProps[] = [
-    { parent: { label: "Home", link: "/" }, children: [] },
-    { parent: { label: "Locations", link: "/locations" }, children: [] },
-    { parent: { label: "Subjects", link: "/subjects" }, children: [] },
-    { parent: { label: "Institutions", link: "/institutions" }, children: [] },
+  const { t } = useTranslation("common");
+
+  const links: MenuLinkRoot[] = [
+    { parent: { label: t('nav.home'), link: "/" }, rootUrl: [""], children: [] },
+    { parent: { label: t('nav.locations'), link: toLink(URL_LOCATIONS) }, rootUrl: [URL_LOCATION], children: [] },
+    { parent: { label: t('nav.categories'), link: toLink(URL_CATEGORIES) }, rootUrl: [URL_CATEGORY, URL_CATEGORIES], children: [] },
+    { parent: { label: t('nav.institutions'), link: toLink(URL_INSTITUTIONS) }, rootUrl: [URL_INSTITUTION], children: [] },
     {
-      parent: { label: "Social-Media", link: "/social-media" }, children: [
-        { label: "Social-Media Ranking", link: "/social-media/ranking" },
-        { label: "Statistics", link: "/social-media/statistics" }
+      parent: { label: t('nav.analysis.title'), link: "/social-media" }, rootUrl: ["social-media"], children: [
+        { type: 'label', text: t('nav.analysis.social-media-label') },
+        { type: 'link', label: t('nav.analysis.social-media-ranking'), link: "/social-media/ranking" },
+        { type: 'link', label: t('nav.analysis.social-media-statistics'), link: "/social-media/statistics" },
+        { type: 'divider' },
+        { type: 'label', text: t('nav.analysis.online-marketing-label') },
+        { type: 'link', label: t('nav.analysis.online-marketing-ranking'), link: "#ranking" },
+        { type: 'link', label: t('nav.analysis.online-marketing-statistics'), link: "#statistics" },
       ]
     },
-  ]
+  ];
 
   const [opened, { toggle }] = useDisclosure(false);
-  const { classes } = useStyles();
+  const { classes, cx } = useStyles();
+  const router = useRouter();
 
   const items = links.map((link) => {
 
-    const menuItems = link.children?.map((item) => (
-      <Menu.Item key={item.link} component={NextLink} href={item.link}>{item.label}</Menu.Item>
-    ));
+    const menuItems = link.children?.map((item, i) => {
+
+      if (item.type === "link")
+        return (<Menu.Item key={item.link} component={NextLink} href={item.link}>{item.label}</Menu.Item>);
+
+      if (item.type === "divider")
+        return (<Menu.Divider key={i} />);
+
+      if (item.type === "label")
+        return (<Menu.Label key={i}>{item.text}</Menu.Label>);
+    });
+
+    // Check if the route is the current route
+    let isCurrent = link.rootUrl.some((url) => {
+      if (url === "" && router.route === "/") return true;
+      if (url != "" && router.route.startsWith("/" + url)) return true;
+      return false;
+    });
 
     if (menuItems && menuItems.length > 0) {
       return (
-        <Menu key={link.parent.label}  trigger="hover" exitTransitionDuration={100}>
+        <Menu
+          key={link.parent.label}
+          trigger="hover"
+          exitTransitionDuration={100}
+          classNames={{
+            itemLabel: classes.menuItemLabel,
+            label: classes.menuLabel,
+            divider: classes.menuDivider,
+            item: classes.menuItem,
+          }}
+        >
           <Menu.Target>
             <UnstyledButton className={classes.link} sx={{ userSelect: 'none' }}>
               <Center>
-                <span className={classes.linkLabel}>{link.parent.label}</span>
+                <div className={classes.linkLabel}>
+                  <Text component='div' className={isCurrent ? classes.linkActive : undefined}>{link.parent.label}</Text>
+                </div>
                 <IconChevronDown size={12} stroke={1.5} />
               </Center>
             </UnstyledButton>
@@ -123,7 +189,7 @@ const WebsiteHeader = () => {
     return (
       <Link key={link.parent.label} href={link.parent.link} passHref>
         <Anchor component='a' className={classes.link}>
-          {link.parent.label}
+          <Text component='div' className={isCurrent ? classes.linkActive : undefined}>{link.parent.label}</Text>
         </Anchor>
       </Link>
     );

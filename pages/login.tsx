@@ -43,14 +43,6 @@ const CustomerLogin: NextPage = () => {
 
   // Translation
   const { t } = useTranslation('loginLogout');
-  const langContent = {
-    loginTitle: t('login-title'),
-    emailLabel: t('login-email-label'),
-    loginForgot: t('login-forgot'),
-    loginButtonText: t('login-button-text'),
-    loginNeedAccount: t('login-needaccount'),
-    loginErrorUsername: t('login-error-username'),
-  }
 
   // Handle login
   const submitLogin = async () => {

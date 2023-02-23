@@ -19,7 +19,7 @@ import { getAds, getCountries } from '../lib/prisma/prismaQueries';
 import { getAllSocialMedia, getSocialMediaRanking } from '../lib/prisma/prismaSocialMedia';
 import { DetailedCountry, DetailedInstitution, DetailedSubject, DetailedUserAd, InstitutionCardData } from '../lib/types/DetailedDatabaseTypes';
 import { SmBestCardMinified, SmRankingEntryMinified, TotalScore } from '../lib/types/SocialMediaTypes';
-import { URL_INSTITUTIONS, URL_LOCATIONS, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
+import { URL_INSTITUTIONS, URL_LOCATIONS, URL_CATEGORIES } from '../lib/url-helper/urlConstants';
 import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmBestCard, minifySmRankingItem } from '../lib/util/conversionUtil';
 import { getUniquesFromArray, toLink } from '../lib/util/util';
 import OnlineMarketingSection from '../layout/index/OnlineMarketingSection';
@@ -77,7 +77,7 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
           title={t('popular.title-courses')}
           desc={t('popular.desc-courses')}
           buttonText={t('popular.label-all-courses')}
-          buttonUrl={toLink(URL_SUBJECTS)}
+          buttonUrl={toLink(URL_CATEGORIES)}
           brandColor
         >
           {

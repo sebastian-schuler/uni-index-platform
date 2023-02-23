@@ -15,10 +15,12 @@ import prisma from '../../../lib/prisma/prisma';
 import { getStatesDetailedByCountry } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
 import { DetailedState } from '../../../lib/types/DetailedDatabaseTypes';
+import { StateCardData } from '../../../lib/types/UiHelperTypes';
+import { convertStateToCardData } from '../../../lib/util/conversionUtil';
 import { getLocalizedName } from '../../../lib/util/util';
 
 interface Props {
-  states: DetailedState[],
+  states: StateCardData[],
   countryInfo: Country,
   footerContent: FooterContent[],
 }
@@ -34,11 +36,8 @@ const CountryPage: NextPage<Props> = ({ states, countryInfo, footerContent }: Pr
   // Translated State Names
   const translatedStates = new Map<string, { name: string, url: string }>();
   states.map((state) => {
-    translatedStates.set(
-      state.id,
-      { name: getLocalizedName({ lang: lang, state: state }), url: state.url }
-    );
-  })
+    translatedStates.set(state.id, { name: state.name, url: state.url });
+  });
 
   return (
     <LayoutContainer footerContent={footerContent}>
@@ -57,7 +56,7 @@ const CountryPage: NextPage<Props> = ({ states, countryInfo, footerContent }: Pr
         <Grid>
 
           <Grid.Col sm={12}>
-            <Title order={6} mb={2}>Map of Germany</Title>
+            <Title order={2} my={'md'}>{t('state-country-map-title', { country: localizedCountryName })}</Title>
             <Box sx={{ zIndex: 0 }}>
               <CountryMapContainer
                 country={query.Country?.toString() ?? ""}
@@ -67,7 +66,7 @@ const CountryPage: NextPage<Props> = ({ states, countryInfo, footerContent }: Pr
           </Grid.Col>
 
           <Grid.Col sm={12}>
-            <Title order={6} mb={2}>List of states</Title>
+            <Title order={2} my={'md'}>{t('state-list-title', { country: localizedCountryName })}</Title>
             <SimpleGrid
               cols={4}
               spacing="lg"
@@ -122,12 +121,14 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
 export async function getStaticProps(context: GetStaticPropsContext) {
 
-  let countryUrl = "" + context?.params?.Country;
+  const countryUrl = "" + context?.params?.Country;
+  const lang = context.locale || "en";
 
   // Get information on the country of this particular page
   const countryInfo = await getCountry(countryUrl);
 
   const detailedStates: DetailedState[] = await getStatesDetailedByCountry(countryUrl);
+  const stateData: StateCardData[] = detailedStates.map(state => convertStateToCardData(state, lang));
 
   // Footer Data
   const countryList = await getCountries();
@@ -136,7 +137,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   ]
 
   return {
-    props: { states: detailedStates, countryInfo: countryInfo, footerContent: footerContent }
+    props: { states: stateData, countryInfo: countryInfo, footerContent: footerContent }
   }
 
 }

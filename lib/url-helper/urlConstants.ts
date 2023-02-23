@@ -14,8 +14,8 @@ export const URL_INSTITUTION_OM_BESTPRACTICES = "best-practices";
 export const URL_INSTITUTION_OM_ACCESSIBILITY = "accessibility";
 export const URL_INSTITUTION_OM_PWA = "pwa";
 
-export const URL_SUBJECT = "subject";
-export const URL_SUBJECTS = "subjects";
+export const URL_CATEGORY = "category";
+export const URL_CATEGORIES = "categories";
 
 export const URL_LOCATION = "location";
 export const URL_LOCATIONS = "locations";

@@ -5,7 +5,7 @@ export type Searchable = {
 } | {
     type: "SubjectType"
     visible: boolean,
-    data: SubjectTypeCardData
+    data: CategoryCardData
 }
 
 export type CountryCardData = {
@@ -18,7 +18,8 @@ export type CountryCardData = {
     popularity: number
 }
 
-export type SubjectTypeCardData = {
+export type CategoryCardData = {
+    id: number
     name: string
     url: string
     subjectCount: number
@@ -40,3 +41,12 @@ export type SubjectCardData = {
         name: string
     }
 };
+
+export type StateCardData = {
+    id: string
+    name: string
+    url: string
+    cityCount: number
+    subjectCount: number
+    popularity: number
+}

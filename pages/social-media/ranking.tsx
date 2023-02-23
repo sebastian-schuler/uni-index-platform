@@ -10,6 +10,8 @@ import { getCountries } from '../../lib/prisma/prismaQueries'
 import { getSocialMediaRanking } from '../../lib/prisma/prismaSocialMedia'
 import { SmRankingEntryMinified } from '../../lib/types/SocialMediaTypes'
 import { minifySmRankingItem } from '../../lib/util/conversionUtil'
+import Head from 'next/head'
+import useTranslation from 'next-translate/useTranslation'
 
 interface Props {
     countries: Country[],
@@ -20,8 +22,15 @@ interface Props {
 
 const SocialMediaRanking: NextPage<Props> = ({ countries, socialMediaList, filtedOutCount, footerContent }: Props) => {
 
+    const { t } = useTranslation('rankings');
+
     return (
         <LayoutContainer footerContent={footerContent}>
+
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('seo-sm-ranking-title')}</title>
+                <meta key={"description"} name="description" content={t('seo-sm-ranking-description')} />
+            </Head>
 
             <Breadcrumb />
 

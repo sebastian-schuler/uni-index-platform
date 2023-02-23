@@ -1,6 +1,7 @@
 import { Country, Institution, State, Subject, SubjectHasSubjectTypes, SubjectType } from "@prisma/client";
 import { DetailedSubjectType } from "../types/DetailedDatabaseTypes";
-import { CountryCardData, Searchable, SubjectTypeCardData } from "../types/UiHelperTypes";
+import { CountryCardData, Searchable, CategoryCardData } from "../types/UiHelperTypes";
+import { URL_CATEGORY } from "../url-helper/urlConstants";
 
 interface LocalizedNameProps {
     lang: string,
@@ -48,7 +49,7 @@ export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, inst
 type GenerateSearchableProps = {
     type: "Country", data: CountryCardData[]
 } | {
-    type: "SubjectType", data: SubjectTypeCardData[]
+    type: "SubjectType", data: CategoryCardData[]
 }
 export const generateSearchable = (props: GenerateSearchableProps) => { // TODO add other objects, eg. states
     const arr: Searchable[] = [];
@@ -138,7 +139,7 @@ interface LargestSubjectTypeProps {
     lang: string;
     itemCount: number;
 }
-export const getUniqueSubjectTypeCounts = ({ list, lang, itemCount }: LargestSubjectTypeProps): string[] => {
+export const getUniqueSubjectTypeCounts = ({ list, lang, itemCount }: LargestSubjectTypeProps) => {
 
     // Find all types of subjects
     const typeList: SubjectType[] = [];
@@ -162,9 +163,19 @@ export const getUniqueSubjectTypeCounts = ({ list, lang, itemCount }: LargestSub
     const sorted = [...counts].map(([id, count]) => ({ id, count })).sort((a, b) => b.count - a.count);
 
     // Get the top 3
-    const result: string[] = [];
+    const result: {
+        name: string
+        url: string
+    }[] = [];
+
     for (let i = 0; i < itemCount && i < sorted.length; i++) {
-        result.push(getLocalizedName({ lang: lang, any: typeList.find(type => type.id === sorted[i].id) }));
+        const category = typeList.find(type => type.id === sorted[i].id);
+        if (!category) continue;
+        const name = getLocalizedName({ lang: lang, any: category })
+        result.push({
+            name,
+            url: toLink(URL_CATEGORY, category?.url)
+        });
     }
 
     return [...result];

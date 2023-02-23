@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 import MantineLink from '../components/elements/MantineLink';
-import { URL_INSTITUTION, URL_INSTITUTIONS, URL_INSTITUTION_OM, URL_INSTITUTION_OM_ACCESSIBILITY, URL_INSTITUTION_OM_BESTPRACTICES, URL_INSTITUTION_OM_PERFORMANCE, URL_INSTITUTION_OM_PWA, URL_INSTITUTION_OM_SEO, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SOCIALMEDIA_TW, URL_INSTITUTION_SOCIALMEDIA_YT, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING, URL_SOCIAL_MEDIA_STATISTICS, URL_SUBJECT, URL_SUBJECTS } from '../lib/url-helper/urlConstants';
+import { URL_INSTITUTION, URL_INSTITUTIONS, URL_INSTITUTION_OM, URL_INSTITUTION_OM_ACCESSIBILITY, URL_INSTITUTION_OM_BESTPRACTICES, URL_INSTITUTION_OM_PERFORMANCE, URL_INSTITUTION_OM_PWA, URL_INSTITUTION_OM_SEO, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SOCIALMEDIA_TW, URL_INSTITUTION_SOCIALMEDIA_YT, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING, URL_SOCIAL_MEDIA_STATISTICS, URL_CATEGORY, URL_CATEGORIES } from '../lib/url-helper/urlConstants';
 import { getLocalizedName, toLink } from '../lib/util/util';
 
 type Props = {
@@ -31,10 +31,10 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
 
     const { t, lang } = useTranslation('common');
     const langContent = {
-        home: t('nav-home'),
-        locations: t('nav-locations'),
-        subjects: t('nav-subjects'),
-        institutions: t('nav-institutions'),
+        home: t('nav.home'),
+        locations: t('nav.locations'),
+        categories: t('nav.categories'),
+        institutions: t('nav.institutions'),
         search: t('global-search'),
     }
 
@@ -91,29 +91,29 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
             }
         }
 
-    } else if (route.startsWith(toLink(URL_SUBJECT))) {
-        // SUBJECTS PATH
+    } else if (route.startsWith(toLink(URL_CATEGORY)) || route.startsWith(toLink(URL_CATEGORIES))) {
+        // CATEGORIES PATH
         links.push({
-            name: langContent.subjects,
-            url: toLink(URL_SUBJECTS)
+            name: langContent.categories,
+            url: toLink(URL_CATEGORIES)
         });
 
-        if (route.startsWith(toLink(URL_SUBJECT, "[SubjectCategory]"))) {
-            // SUBJECTS > CATEGORY
-            let subjectCategory = query.SubjectCategory as string;
-            let subjectCategoryTranslated = getLocalizedName({ lang: lang, any: subjectTypeInfo });
+        if (route.startsWith(toLink(URL_CATEGORY, "[Category]"))) {
+            // CATEGORIES > CATEGORY
+            let category = query.SubjectCategory as string;
+            let categoryTranslated = getLocalizedName({ lang: lang, any: subjectTypeInfo });
             links.push({
-                name: checkTranslationNull(subjectCategory, subjectCategoryTranslated),
-                url: toLink(URL_SUBJECT, subjectCategory)
+                name: checkTranslationNull(category, categoryTranslated),
+                url: toLink(URL_CATEGORY, category)
             });
 
-            if (route.startsWith(toLink(URL_SUBJECT, "[SubjectCategory]", "[Subject]"))) {
-                // SUBJECTS > CATEGORY > SUBJECT
+            if (route.startsWith(toLink(URL_CATEGORY, "[Category]", "[Subject]"))) {
+                // CATEGORIES > CATEGORY > SUBJECT
                 let subject = query.Subject as string;
                 let subjectTranslated = getLocalizedName({ lang: lang, subject: subjectInfo });
                 links.push({
                     name: checkTranslationNull(subject, subjectTranslated),
-                    url: toLink(URL_SUBJECT, subjectCategory, subject)
+                    url: toLink(URL_CATEGORY, category, subject)
                 });
             }
         }

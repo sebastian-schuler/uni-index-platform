@@ -1,4 +1,4 @@
-import { Card, createStyles, Group, Stack, Text, ThemeIcon } from '@mantine/core'
+import { Card, createStyles, Grid, Group, Stack, Text, ThemeIcon } from '@mantine/core'
 import { Country } from '@prisma/client'
 import { IconAward, IconCalendar, IconCategory } from '@tabler/icons'
 import Flags from 'country-flag-icons/react/3x2'
@@ -25,6 +25,11 @@ const useStyles = createStyles((theme) => ({
     padding: theme.spacing.md,
   },
 
+  titleContainer: {
+    display: 'flex',
+
+  },
+
   label: {
     textTransform: 'uppercase',
     fontSize: theme.fontSizes.xs,
@@ -32,7 +37,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   flag: {
-    width: "2rem",
+    width: "30px",
     opacity: 0.75,
   }
 
@@ -43,7 +48,7 @@ type Props = {
   country: Country | undefined
 }
 
-const SubjectCard: React.FC<Props> = ({ data, country}: Props) => {
+const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
 
   const { classes, theme } = useStyles();
   const { lang } = useTranslation('common');
@@ -55,15 +60,22 @@ const SubjectCard: React.FC<Props> = ({ data, country}: Props) => {
       <Card component='a' withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
 
         <Card.Section className={classes.section}>
-          <Group position="apart" noWrap sx={{ alignItems: "start" }}>
-            <Stack spacing={theme.spacing.xs}>
-              <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
+
+          <Grid>
+
+            <Grid.Col span={10}>
+              <Text size="lg" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1, wordBreak: "break-word" }}>
                 {data.name}
               </Text>
-              <Text sx={{ lineHeight: 1.2 }}>{data.Institution.name} | Campus {data.City.name}</Text>
-            </Stack>
-            <Flag className={classes.flag} />
-          </Group>
+              <Text sx={{ lineHeight: 1.2, wordBreak: "break-all", lineBreak: "anywhere" }}>{data.Institution.name} | Campus {data.City.name}</Text>
+            </Grid.Col>
+
+            <Grid.Col span={2}>
+              <div className={classes.flag}>
+                <Flag />
+              </div>
+            </Grid.Col>
+          </Grid>
 
         </Card.Section>
 

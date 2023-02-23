@@ -2,7 +2,7 @@ import { createStyles, TextInput } from '@mantine/core'
 import { IconSearch } from '@tabler/icons'
 import { NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 
 const useStyles = createStyles((theme) => ({
     input: {
@@ -21,6 +21,7 @@ const SearchBox: NextPage<Props> = ({ label, placeholder, searchTerm, setSearchT
 
     const { classes } = useStyles();
     const { lang } = useTranslation();
+    const [value, setValue] = useState('');
 
     return (
         <TextInput
@@ -28,9 +29,9 @@ const SearchBox: NextPage<Props> = ({ label, placeholder, searchTerm, setSearchT
             radius="md"
             placeholder={placeholder}
             rightSectionWidth={42}
-            value={searchTerm}
+            value={value}
             label={label}
-            onChange={(e) => setSearchTerm(e.currentTarget.value)}
+            onChange={(e) => { setSearchTerm(e.currentTarget.value); setValue(e.currentTarget.value); }}
             classNames={classes}
         />
     )

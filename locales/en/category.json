@@ -1,7 +1,7 @@
 {
-    "subject-types-title": "Subject Types",
-    "subject-types-subtitle": "Find any subject of your choice.",
-    "subject-types-description": "Find courses all over Europe by fields of study.",
+    "category-title": "Categories | Fields of study",
+    "category-subtitle": "Find any category and all of its available courses.",
+    "category-description": "Find courses all over Europe by fields of study.",
 
     "subject-title": "{{subject}}",
     "subject-subtitle": "Find any subject of your choice.",

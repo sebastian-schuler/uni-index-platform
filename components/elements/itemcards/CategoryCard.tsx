@@ -3,12 +3,12 @@ import { IconSchool } from '@tabler/icons'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
-import { SubjectTypeCardData } from '../../../lib/types/UiHelperTypes'
+import { CategoryCardData } from '../../../lib/types/UiHelperTypes'
 
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
-        transition: "all .2s ease-in-out",
+        transition: "transform .2s ease-in-out",
         height: "100%",
 
         '&:hover': {
@@ -28,14 +28,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface Props {
-    subjectType: SubjectTypeCardData
+    subjectType: CategoryCardData
 }
 
-const SubjectTypeCard: React.FC<Props> = ({ subjectType }: Props) => {
+const CategoryCard: React.FC<Props> = ({ subjectType }: Props) => {
 
     const { classes, theme } = useStyles();
-    const { lang } = useTranslation('common');
-
+    const { t } = useTranslation('common');
+    
     return (
         <Link href={subjectType.url} passHref>
             <Card component='a' withBorder radius="md" shadow={"sm"} className={classes.card}>
@@ -52,10 +52,10 @@ const SubjectTypeCard: React.FC<Props> = ({ subjectType }: Props) => {
                     <Stack spacing={"sm"}>
 
                         <Group noWrap>
-                            <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+                            <ThemeIcon size={24} radius="xl">
                                 <IconSchool size={18} />
                             </ThemeIcon>
-                            <Text>{subjectType.subjectCount} Subject</Text>
+                            <Text>{t('card-category.label-subjects',{count: subjectType.subjectCount})}</Text>
                         </Group>
 
                     </Stack>
@@ -66,4 +66,4 @@ const SubjectTypeCard: React.FC<Props> = ({ subjectType }: Props) => {
     )
 }
 
-export default SubjectTypeCard
+export default CategoryCard

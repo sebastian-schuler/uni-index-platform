@@ -1,5 +1,5 @@
 import React from 'react'
-import { URL_INSTITUTION, URL_LOCATION, URL_SUBJECT } from '../../../lib/url-helper/urlConstants'
+import { URL_INSTITUTION, URL_LOCATION, URL_CATEGORY } from '../../../lib/url-helper/urlConstants'
 import { LinkableCity, LinkableInstitution, LinkableSubject } from '../../../lib/types/Linkables'
 import { toLink } from '../../../lib/util/util'
 import MantineLink from '../MantineLink'

@@ -4,10 +4,42 @@
   "page-settings": "Settings",
   "page-settings-language": "Language",
 
-  "nav-home": "Home",
-  "nav-locations": "Locations",
-  "nav-subjects": "Subjects",
-  "nav-institutions": "Institutions",
+  "nav": {
+    "home": "Home",
+    "locations": "Where to study",
+    "categories": "Categories",
+    "institutions": "Institutions",
+    "analysis": {
+      "title": "Analysis",
+      "social-media-label": "Social Media",
+      "social-media-ranking": "Ranking",
+      "social-media-statistics": "Statistics",
+      "online-marketing-label": "Online Marketing",
+      "online-marketing-ranking": "Ranking",
+      "online-marketing-statistics": "Statistics"
+    }
+  },
+
+  "card-state": {
+    "label-cities": {
+      "0": "No cities",
+      "one": "One city with institutions",
+      "other": "{{count}} cities with institutions"
+    },
+    "label-subjects": {
+      "0": "No subjects available",
+      "one": "One subject available",
+      "other": "{{count}} subjects available"
+    }
+  },
+
+  "card-category": {
+    "label-subjects": {
+      "0": "No subjects available",
+      "one": "One subject available",
+      "other": "{{count}} subjects available"
+    }
+  },
 
   "breadcrumb-back-to": "Back to {{origin}}",
 
@@ -15,9 +47,9 @@
   "countries-search-placeholder": "e.g. Germany",
 
   "card-label-universities": {
-    "0": "No universities",
-    "one": "{{count}} University",
-    "other": "{{count}} Universities"
+    "0": "No institutions",
+    "one": "{{count}} institutions",
+    "other": "{{count}} institutions"
   },
 
   "card-label-courses": {

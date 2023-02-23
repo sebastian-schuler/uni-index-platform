@@ -130,24 +130,35 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
         <Stack spacing={"sm"}>
 
           <Group noWrap>
-            <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+            <ThemeIcon size={24} radius="xl">
               <IconBuilding size={18} />
             </ThemeIcon>
             <Text sx={{ lineHeight: 1.2 }}>{data.campusCount} campus location{data.campusCount > 1 ? "s" : ""}</Text>
           </Group>
 
           <Group noWrap>
-            <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+            <ThemeIcon size={24} radius="xl">
               <IconSchool size={18} />
             </ThemeIcon>
             <Text sx={{ lineHeight: 1.2 }}>{data.subjectCount} subjects</Text>
           </Group>
 
           <Group noWrap>
-            <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
+            <ThemeIcon size={24} radius="xl">
               <IconCategory size={18} />
             </ThemeIcon>
-            <Text sx={{ lineHeight: 1.2 }}>{data.biggestSubjectTypes.join(", ")}</Text>
+            <Text sx={{ lineHeight: 1.2 }}>
+              {
+                data.biggestSubjectTypes.map((category, i) => (
+                  <React.Fragment key={i}>
+                    <Link href={category.url} passHref>
+                      <Anchor>{category.name}</Anchor>
+                    </Link>
+                    {i < data.biggestSubjectTypes.length - 1 && ', '}
+                  </React.Fragment>
+                ))
+              }
+            </Text>
           </Group>
 
         </Stack>

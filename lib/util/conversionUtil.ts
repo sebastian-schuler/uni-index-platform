@@ -1,7 +1,7 @@
-import { DetailedCountry, DetailedInstitution, DetailedSubject, DetailedSubjectType, InstitutionCardData } from "../types/DetailedDatabaseTypes";
+import { DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType, InstitutionCardData } from "../types/DetailedDatabaseTypes";
 import { SmBestCardMinified, SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry, SocialMediaPages, TotalScore, TwitterProfile, YoutubeProfile } from "../types/SocialMediaTypes";
-import { CountryCardData, SubjectCardData, SubjectTypeCardData } from "../types/UiHelperTypes";
-import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SUBJECTS, URL_LOCATION, URL_SUBJECT } from "../url-helper/urlConstants";
+import { CountryCardData, StateCardData, SubjectCardData, CategoryCardData } from "../types/UiHelperTypes";
+import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SUBJECTS, URL_LOCATION, URL_CATEGORY } from "../url-helper/urlConstants";
 import { getBracketedName, getLocalizedName, getUniqueSubjectTypeCounts, toLink } from "./util";
 
 /**
@@ -143,12 +143,27 @@ export const convertCountryToCardData = (country: DetailedCountry, lang: string,
     }
 }
 
-export const convertSubjectTypeToCardData = (subjectType: DetailedSubjectType, lang: string): SubjectTypeCardData => {
+export const convertCategoryToCardData = (category: DetailedSubjectType, lang: string): CategoryCardData => {
 
     return {
-        name: getLocalizedName({ lang: lang, any: subjectType }),
-        url: toLink(URL_SUBJECT, subjectType.url),
-        subjectCount: subjectType.subjectCount,
-        popularity: subjectType.popularity_score,
+        id: category.id,
+        name: getLocalizedName({ lang: lang, any: category }),
+        url: toLink(URL_CATEGORY, category.url),
+        subjectCount: category.subjectCount,
+        popularity: category.popularity_score,
+    }
+}
+
+export const convertStateToCardData = (state: DetailedState, lang: string): StateCardData => {
+
+    const subjects = state.City.reduce((acc, city) => acc + city._count.Subject, 0);
+
+    return {
+        id: state.id,
+        name: getLocalizedName({ lang: lang, state: state }),
+        url: toLink(URL_LOCATION, state.Country.url, state.url),
+        cityCount: state._count.City,
+        subjectCount: subjects,
+        popularity: state.popularity_score,
     }
 }

@@ -85,7 +85,10 @@ export type InstitutionCardData = {
     }
     campusCount: number
     subjectCount: number
-    biggestSubjectTypes: string[]
+    biggestSubjectTypes: {
+        name: string
+        url: string
+    }[]
     InstitutionSocialMedia: {
         facebook_url: string | null
         twitter_url: string | null
@@ -102,10 +105,14 @@ export type DetailedCountry = Country & {
 
 // STATE CARD
 export type DetailedState = State & {
-    City: City[];
     Country: {
         url: string;
     };
+    City: {
+        _count: {
+            Subject: number;
+        }
+    }[];
     _count: {
         City: number;
     };

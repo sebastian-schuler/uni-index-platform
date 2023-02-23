@@ -226,19 +226,34 @@ export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string):
 // ================= STATE =============
 // ===========================================================
 
+// export const getDetailedSubjectTypes = async () => {
+//     const types = await getSubjectTypes();
+
+//     const detailed: DetailedSubjectType[] = await Promise.all(types.map(async (type) => {
+//         const subjectCount: number = await getSubjectTypeSubjectCount(type.url);
+//         return { ...type, subjectCount };
+//     }));
+
+//     return detailed;
+// }
+
 // Return DetailedSubjects, where SubjectType is URL parameter 
 export const getStatesDetailedByCountry = async (countryUrl: string): Promise<DetailedState[]> => {
     return await prisma.state.findMany({
         include: {
             _count: {
                 select: {
-                    City: true
+                    City: true,
+
                 }
             },
             City: {
-                take: 3,
-                orderBy: {
-                    popularity_score: "desc"
+                select: {
+                    _count: {
+                        select: {
+                            Subject: true,
+                        }
+                    }
                 }
             },
             Country: {
