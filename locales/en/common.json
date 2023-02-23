@@ -41,6 +41,10 @@
     }
   },
 
+  "card-subject": {
+    "subtitle": "{{institution}} | Campus {{city}}"
+  },
+
   "breadcrumb-back-to": "Back to {{origin}}",
 
   "countries-search-label": "Search for a country",

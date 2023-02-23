@@ -1,6 +1,6 @@
 import { Country, Institution, State, Subject, SubjectHasSubjectTypes, SubjectType } from "@prisma/client";
 import { DetailedSubjectType } from "../types/DetailedDatabaseTypes";
-import { CountryCardData, Searchable, CategoryCardData } from "../types/UiHelperTypes";
+import { CountryCardData, Searchable, CategoryCardData, StateCardData } from "../types/UiHelperTypes";
 import { URL_CATEGORY } from "../url-helper/urlConstants";
 
 interface LocalizedNameProps {
@@ -49,21 +49,28 @@ export const getLocalizedName = ({ lang, any, dbTranslated, state, subject, inst
 type GenerateSearchableProps = {
     type: "Country", data: CountryCardData[]
 } | {
-    type: "SubjectType", data: CategoryCardData[]
+    type: "Category", data: CategoryCardData[]
+} | {
+    type: "State", data: StateCardData[]
 }
 export const generateSearchable = (props: GenerateSearchableProps) => { // TODO add other objects, eg. states
     const arr: Searchable[] = [];
 
     if (props.type === "Country") {
         props.data.forEach((val) => {
-            const newSearchable: Searchable = { type: "Country", visible: true, data: val }
-            arr.push(newSearchable);
+            arr.push({ type: "Country", visible: true, data: val });
         });
-    } else if (props.type === "SubjectType") {
+
+    } else if (props.type === "Category") {
         props.data.forEach((val) => {
-            const newSearchable: Searchable = { type: "SubjectType", visible: true, data: val }
-            arr.push(newSearchable);
+            arr.push({ type: "Category", visible: true, data: val });
         });
+
+    } else if (props.type === "State") {
+        props.data.forEach((val) => {
+            arr.push({ type: "State", visible: true, data: val });
+        });
+
     }
     return arr;
 }

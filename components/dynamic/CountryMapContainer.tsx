@@ -6,6 +6,7 @@ import dataBelgium from '../../data/geoJson/belgium-states.json'
 import dataItaly from '../../data/geoJson/italy-states.json'
 import { GeoJsonObject } from 'geojson'
 import useTranslation from 'next-translate/useTranslation'
+import { Skeleton } from '@mantine/core'
 
 type Props = {
   country: string,
@@ -19,6 +20,7 @@ const CountryMapContainer = ({ country, stateNames }: Props) => {
   let data = undefined;
   let coordinates = { lat: 0, lng: 0 };
   let zoom = 6;
+  let height = 600;
 
   if (country === "germany") {
     data = dataGermany as GeoJsonObject;
@@ -45,7 +47,7 @@ const CountryMapContainer = ({ country, stateNames }: Props) => {
   const Map = React.useMemo(() => dynamic(
     () => import('../dynamic/CountryMap'),
     {
-      loading: () => <p>A map is loading</p>,
+      loading: () => <Skeleton height={height}>Loading</Skeleton>,
       ssr: false // prevent server-side render
     }
   ), [lang]);
@@ -60,6 +62,7 @@ const CountryMapContainer = ({ country, stateNames }: Props) => {
     data={data}
     coordinates={coordinates}
     zoomLevel={zoom}
+    mapHeight={height}
   />
 
 }

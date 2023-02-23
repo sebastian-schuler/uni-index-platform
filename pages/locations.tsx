@@ -28,15 +28,12 @@ const Locations: NextPage<Props> = ({ adsStringified, searchableCountries }: Pro
                 <title key={"title"}>{t('common:page-title') + " | " + t('countries-title')}</title>
                 <meta key={"description"} name="description" content={t('countries-description')} />
             </Head>
-
             <CountryList
                 title={t('countries-title')}
                 subtitle={t('countries-subtitle')}
                 searchableCountries={searchableCountries}
             >
-
                 <PremiumList premiumAds={ads} />
-
             </CountryList>
 
         </LayoutContainer>
@@ -46,8 +43,9 @@ const Locations: NextPage<Props> = ({ adsStringified, searchableCountries }: Pro
 export const getStaticProps: GetStaticProps = async (context) => {
 
     const lang = context.locale || "en";
-    const detailedCountries = await getDetailedCountries();
-    const countryData: CountryCardData[] = detailedCountries.map(country => convertCountryToCardData(country, lang, "location"));
+    const countries = await getDetailedCountries();
+    countries.sort((a, b) => b.popularity_score - a.popularity_score);
+    const countryData: CountryCardData[] = countries.map(country => convertCountryToCardData(country, lang, "location"));
     const searchableCountries: Searchable[] = generateSearchable({ type: "Country", data: countryData });
 
     const ads: DetailedUserAd[] = await getAds("locations");

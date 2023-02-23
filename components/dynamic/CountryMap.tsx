@@ -5,6 +5,7 @@ import hash from 'object-hash';
 import { GeoJsonObject } from 'geojson'
 import useTranslation from 'next-translate/useTranslation';
 import labelPositioning from '../../data/geoJson/labelPositioning';
+import { useMantineTheme } from '@mantine/core';
 
 type Props = {
     country: string,
@@ -12,11 +13,13 @@ type Props = {
     data: GeoJsonObject,
     coordinates: { lat: number, lng: number },
     zoomLevel: number
+    mapHeight: number
 }
 
-const CountryMap = ({ country, stateNames, data, coordinates, zoomLevel }: Props) => {
+const CountryMap = ({ country, stateNames, data, coordinates, zoomLevel, mapHeight }: Props) => {
 
     const { t, lang } = useTranslation('common');
+    const theme = useMantineTheme();
 
     function onEachFeature(feature: any, layer: L.Layer) {
         if (feature.properties) {
@@ -47,7 +50,12 @@ const CountryMap = ({ country, stateNames, data, coordinates, zoomLevel }: Props
     return (
         <div className='h-[600px] w-full'>
 
-            <MapContainer center={[coordinates.lat, coordinates.lng]} zoom={zoomLevel} scrollWheelZoom={false} style={{ height: 600, width: "100%", zIndex: 5 }} >
+            <MapContainer
+                center={[coordinates.lat, coordinates.lng]}
+                zoom={zoomLevel}
+                scrollWheelZoom={false}
+                style={{ height: mapHeight, width: "100%", zIndex: 5, borderRadius: theme.radius.md }}
+            >
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

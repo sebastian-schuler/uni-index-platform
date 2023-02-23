@@ -1,6 +1,6 @@
-import { DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType, InstitutionCardData } from "../types/DetailedDatabaseTypes";
+import { DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
 import { SmBestCardMinified, SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry, SocialMediaPages, TotalScore, TwitterProfile, YoutubeProfile } from "../types/SocialMediaTypes";
-import { CountryCardData, StateCardData, SubjectCardData, CategoryCardData } from "../types/UiHelperTypes";
+import { CountryCardData, StateCardData, SubjectCardData, CategoryCardData, InstitutionCardData } from "../types/UiHelperTypes";
 import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SUBJECTS, URL_LOCATION, URL_CATEGORY } from "../url-helper/urlConstants";
 import { getBracketedName, getLocalizedName, getUniqueSubjectTypeCounts, toLink } from "./util";
 
@@ -76,7 +76,7 @@ export const minifySmBestCard = (item: SocialMediaDBEntry, socialMediaSource: So
 export const convertInstitutionToCardData = (inst: DetailedInstitution, lang: string): InstitutionCardData => {
 
     const { name, nameBrackets } = getBracketedName(getLocalizedName({ lang: lang, institution: inst }));
-    const subjectTypes = getUniqueSubjectTypeCounts({ list: inst.Subject || [], lang: lang, itemCount: 3 })
+    const categories = getUniqueSubjectTypeCounts({ list: inst.Subject || [], lang: lang, itemCount: 3 })
 
     return {
         mainCountryId: inst.City.State.Country.id,
@@ -93,7 +93,7 @@ export const convertInstitutionToCardData = (inst: DetailedInstitution, lang: st
             }
         },
         campusCount: inst.InstitutionLocation.length,
-        biggestSubjectTypes: subjectTypes
+        biggestCategories: categories
     }
 }
 
@@ -104,12 +104,15 @@ export const convertInstitutionToCardData = (inst: DetailedInstitution, lang: st
  */
 export const convertSubjectToCardData = (subj: DetailedSubject, lang: string): SubjectCardData => {
 
-    const subjectTypeNames = subj.SubjectHasSubjectTypes.map((type) => getLocalizedName({ lang: lang, any: type.SubjectType }));
-    let subjectType = "";
-    for (let i = 0; i < 2 && i < subjectTypeNames.length; i++) {
-        subjectType += subjectTypeNames[i] + " / ";
-    }
-    subjectType = subjectType.slice(0, -3);
+    let categories = subj.SubjectHasSubjectTypes.map((type) => {
+        return ({
+            name: getLocalizedName({ lang: lang, any: type.SubjectType }),
+            url: type.SubjectType.url
+        })
+    });
+
+    // Only show the first three categories
+    categories = categories.slice(0, 3);
 
     return {
         name: subj.name,
@@ -118,7 +121,7 @@ export const convertSubjectToCardData = (subj: DetailedSubject, lang: string): S
         degree: subj.degree,
         duration: subj.duration,
         durationType: subj.duration_type,
-        subjectTypes: subjectType,
+        categories: categories,
         Institution: {
             name: subj.Institution.name,
         },

@@ -135,7 +135,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     // Convert to card data
     const cardData = detailedSubjectTypes.map((subjectType) => convertCategoryToCardData(subjectType, lang));
     // Generate searchable array
-    const searchableSubjectTypes: Searchable[] = generateSearchable({ type: "SubjectType", data: cardData });
+    const searchableSubjectTypes: Searchable[] = generateSearchable({ type: "Category", data: cardData });
 
     // Footer Data
     const countryList = await getCountries();

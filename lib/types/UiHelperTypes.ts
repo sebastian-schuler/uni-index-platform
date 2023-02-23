@@ -3,9 +3,13 @@ export type Searchable = {
     visible: boolean,
     data: CountryCardData
 } | {
-    type: "SubjectType"
+    type: "Category"
     visible: boolean,
     data: CategoryCardData
+} | {
+    type: "State"
+    visible: boolean,
+    data: StateCardData
 }
 
 export type CountryCardData = {
@@ -26,10 +30,40 @@ export type CategoryCardData = {
     popularity: number
 }
 
+export type InstitutionCardData = {
+    mainCountryId: string
+    mainStateId: string
+    Institution: {
+        url: string
+        name: string
+        nameBrackets: string
+        City: {
+            name: string
+            url: string
+        }
+    }
+    campusCount: number
+    subjectCount: number
+    biggestCategories: {
+        name: string
+        url: string
+    }[]
+    InstitutionSocialMedia: {
+        facebook_url: string | null
+        twitter_url: string | null
+        instagram_url: string | null
+        youtube_url: string | null
+    } | null
+};
+
+
 export type SubjectCardData = {
     countryId: string
     fullUrl: string
-    subjectTypes: string
+    categories: {
+        name: string
+        url: string
+    }[]
     name: string
     degree: string
     duration: number

@@ -49,8 +49,9 @@ const Institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, fo
 export const getStaticProps: GetStaticProps = async (context) => {
 
     const lang = context.locale || "en";
-    const countryList = await getDetailedCountries();
-    const countryData: CountryCardData[] = countryList.map(country => convertCountryToCardData(country, lang, "institution"));
+    const countries = await getDetailedCountries();
+    countries.sort((a, b) => b.popularity_score - a.popularity_score);
+    const countryData: CountryCardData[] = countries.map(country => convertCountryToCardData(country, lang, "institution"));
     const searchableCountries = generateSearchable({ type: "Country", data: countryData });
 
     // Ads

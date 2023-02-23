@@ -5,7 +5,7 @@ import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React, { memo } from 'react'
-import { InstitutionCardData } from '../../../lib/types/DetailedDatabaseTypes'
+import { InstitutionCardData } from '../../../lib/types/UiHelperTypes'
 import { URL_INSTITUTION, URL_LOCATION } from '../../../lib/url-helper/urlConstants'
 import { getLocalizedName, toLink } from '../../../lib/util/util'
 import SocialMediaIconLink from '../socialmedia/SmIconLink'
@@ -75,8 +75,8 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
 
             {/* Name & Name in brackets */}
             <Link href={urlInstitution} passHref>
-              <Anchor color={"brandOrange.5"}>
-                <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
+              <Anchor>
+                <Text size="lg" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
                   {data.Institution.name} <Text size={"xs"}>{data.Institution.nameBrackets}</Text>
                 </Text>
               </Anchor>
@@ -85,13 +85,13 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
             {/* City & State */}
             <Text color={theme.colors.brandGray[2]} sx={{ lineHeight: 1.2 }}>
               <Link href={urlCity} passHref>
-                <Anchor color={"brandOrange.5"}>
+                <Anchor>
                   {data.Institution.City.name}
                 </Anchor>
               </Link>
               {', '}
               <Link href={urlState} passHref>
-                <Anchor color={"brandOrange.5"}>
+                <Anchor>
                   {getLocalizedName({ lang: lang, state: state })}
                 </Anchor>
               </Link>
@@ -149,12 +149,12 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
             </ThemeIcon>
             <Text sx={{ lineHeight: 1.2 }}>
               {
-                data.biggestSubjectTypes.map((category, i) => (
+                data.biggestCategories.map((category, i) => (
                   <React.Fragment key={i}>
                     <Link href={category.url} passHref>
                       <Anchor>{category.name}</Anchor>
                     </Link>
-                    {i < data.biggestSubjectTypes.length - 1 && ', '}
+                    {i < data.biggestCategories.length - 1 && ', '}
                   </React.Fragment>
                 ))
               }

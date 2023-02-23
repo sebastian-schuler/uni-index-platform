@@ -71,32 +71,6 @@ export type DetailedInstitution = (Institution & {
     }
 });
 
-export type InstitutionCardData = {
-    mainCountryId: string
-    mainStateId: string
-    Institution: {
-        url: string
-        name: string
-        nameBrackets: string
-        City: {
-            name: string
-            url: string
-        }
-    }
-    campusCount: number
-    subjectCount: number
-    biggestSubjectTypes: {
-        name: string
-        url: string
-    }[]
-    InstitutionSocialMedia: {
-        facebook_url: string | null
-        twitter_url: string | null
-        instagram_url: string | null
-        youtube_url: string | null
-    } | null
-};
-
 // COUNTRY CARD
 export type DetailedCountry = Country & {
     institutionCount: number;

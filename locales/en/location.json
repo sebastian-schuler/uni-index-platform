@@ -3,15 +3,21 @@
   "countries-subtitle": "Find any university course in a country of your choice.",
   "countries-description": "Discover top universities by country all over Europe and find the perfect match for your studies.",
 
-  "country-title": "States in {{country}}",
-  "country-subtitle": "Look through the list of states in {{country}} and find the best university for you.",
-  "country-description": "Discover top universities in {{country}} by state and find the perfect match for your studies.",
+  "country": {
+    "title": "States in {{country}}",
+    "subtitle": "Look through the list of states in {{country}} and find the best university for you.",
+    "description": "Discover top universities in {{country}} by state and find the perfect match for your studies.",
+    "country-map-title": "Map of states in {{country}}",
+    "list-title": "List of states in {{country}}",
+    "search-label": "Search for a state in {{country}}",
+    "search-placeholder": "e.g. Berlin"
+  },
 
-  "state-title": "Cities in {{state}}",
-  "state-subtitle": "Look through the list of cities in {{state}} and find the best university for you.",
-  "state-description": "Discover top universities in {{state}} by state and find the perfect match for your studies.",
-  "state-country-map-title": "Map of states in {{country}}",
-  "state-list-title": "List of states in {{country}}",
+  "state": {
+    "title": "Cities in {{state}}",
+    "subtitle": "Look through the list of cities in {{state}} and find the best university for you.",
+    "description": "Discover top universities in {{state}} by state and find the perfect match for your studies."
+  },
 
   "city-title": "Universities in {{city}}",
   "city-subtitle": "Look through the list of universities in {{city}} and find the best match for you.",
