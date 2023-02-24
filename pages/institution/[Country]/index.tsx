@@ -12,7 +12,8 @@ import LayoutContainer from '../../../layout/LayoutContainer';
 import prisma from '../../../lib/prisma/prisma';
 import { getInstitutionsDetailedByCountry } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
-import { DetailedInstitution, InstitutionCardData } from '../../../lib/types/DetailedDatabaseTypes';
+import { DetailedInstitution } from '../../../lib/types/DetailedDatabaseTypes';
+import { InstitutionCardData } from '../../../lib/types/UiHelperTypes';
 import { convertInstitutionToCardData } from '../../../lib/util/conversionUtil';
 import { getLocalizedName, getUniquesFromArray } from '../../../lib/util/util';
 

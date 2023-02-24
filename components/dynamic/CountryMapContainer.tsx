@@ -20,7 +20,7 @@ const CountryMapContainer = ({ country, stateNames }: Props) => {
   let data = undefined;
   let coordinates = { lat: 0, lng: 0 };
   let zoom = 6;
-  let height = 600;
+  const height = 600;
 
   if (country === "germany") {
     data = dataGermany as GeoJsonObject;
@@ -50,7 +50,7 @@ const CountryMapContainer = ({ country, stateNames }: Props) => {
       loading: () => <Skeleton height={height}>Loading</Skeleton>,
       ssr: false // prevent server-side render
     }
-  ), [lang]);
+  ), [lang, height]);
 
   if (data === undefined) {
     return <></>;

@@ -12,7 +12,7 @@ import LayoutContainer from '../../../../../layout/LayoutContainer';
 import { getInstitutionsDetailedByCity } from '../../../../../lib/prisma/prismaDetailedQueries';
 import { getCityStateCountryByCity, getCountries } from '../../../../../lib/prisma/prismaQueries';
 import { getCityStateCountryPaths } from '../../../../../lib/prisma/prismaUrlPaths';
-import { InstitutionCardData } from '../../../../../lib/types/DetailedDatabaseTypes';
+import { InstitutionCardData } from '../../../../../lib/types/UiHelperTypes';
 import { convertInstitutionToCardData } from '../../../../../lib/util/conversionUtil';
 
 interface Props {

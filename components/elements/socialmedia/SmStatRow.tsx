@@ -1,7 +1,6 @@
-import React from 'react'
-
-import { IconArrowUpRight, IconArrowDownRight } from '@tabler/icons';
-import { createStyles, Group, Paper, Text, ThemeIcon } from '@mantine/core';
+import React from 'react';
+import { createStyles, Group, Text, ThemeIcon } from '@mantine/core';
+import { IconArrowDownRight, IconArrowUpRight } from '@tabler/icons';
 import useTranslation from 'next-translate/useTranslation';
 
 const useStyles = createStyles((theme) => ({

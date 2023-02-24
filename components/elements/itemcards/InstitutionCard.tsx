@@ -59,9 +59,11 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
   const twitterLink = data.InstitutionSocialMedia?.twitter_url;
   const instagramLink = data.InstitutionSocialMedia?.instagram_url;
 
-  const urlInstitution = toLink(URL_INSTITUTION, country?.url || "notfound", data.Institution.url);
-  const urlCity = toLink(URL_LOCATION, country?.url || "notfound", state?.url || "notfound", data.Institution.City.url);
-  const urlState = toLink(URL_LOCATION, country?.url || "notfound", state?.url || "notfound");
+  const countryUrl = country?.url;
+  const stateUrl = state?.url;
+  const urlInstitution = countryUrl ? toLink(URL_INSTITUTION, countryUrl, data.Institution.url) : "#";
+  const urlCity = countryUrl && stateUrl ? toLink(URL_LOCATION, countryUrl, stateUrl, data.Institution.City.url) : '#';
+  const urlState = countryUrl && stateUrl ? toLink(URL_LOCATION, countryUrl, stateUrl) : '#';
 
   const Flag = Flags[country?.country_code || ""] || Flags["EU"];
 

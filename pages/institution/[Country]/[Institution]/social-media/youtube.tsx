@@ -1,22 +1,21 @@
 
-import { Button, Card, createStyles, Divider, Group, SimpleGrid, Text, Title } from '@mantine/core'
-import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client'
+import { Button, Card, createStyles, Divider, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { Country, Institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
+import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import SmStatRow from '../../../../../components/elements/socialmedia/SmStatRow'
+import WhitePaper from '../../../../../components/WhitePaper'
 import Breadcrumb from '../../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../../layout/footer/Footer'
 import LayoutContainer from '../../../../../layout/LayoutContainer'
-import InstitutionNav from '../../../../../layout/subnav/InstitutionNav'
-import WhitePaper from '../../../../../components/WhitePaper'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
-import { TotalScore, TotalScoreSet, TwitterProfile, YoutubeChannelData, YoutubeProfile } from '../../../../../lib/types/SocialMediaTypes'
+import { TotalScore, TotalScoreSet, YoutubeProfile } from '../../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION_SOCIALMEDIA_YT } from '../../../../../lib/url-helper/urlConstants'
-import Head from 'next/head'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -39,19 +38,18 @@ const useStyles = createStyles((theme) => ({
 interface Props {
     institution: Institution,
     country: Country,
-    institutionSMString: string,
-    countrySMString: string,
+    countryYoutubeScore: TotalScoreSet | null
+    countryYoutubeProfile: YoutubeProfile | null
+    institutionScore: TotalScoreSet | null
+    institutionYoutubeProfile: YoutubeProfile | null
     footerContent: FooterContent[],
 }
 
-const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerContent, institutionSMString, countrySMString }: Props) => {
+const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, countryYoutubeScore, countryYoutubeProfile, institutionScore, institutionYoutubeProfile, footerContent }: Props) => {
 
     const { classes, theme } = useStyles();
     const { t, lang } = useTranslation('institution');
     const router = useRouter();
-
-    const institutionSM: InstitutionSocialMedia | null = JSON.parse(institutionSMString);
-    const countrySM: CountrySocialMedia | null = JSON.parse(countrySMString);
 
     const errorComponent = (
         <LayoutContainer footerContent={footerContent}>
@@ -68,35 +66,12 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
         </LayoutContainer>
     );
     // IF NO SOCIAL MEDIA DATA PRESENT, RETURN ERROR COMPONENT
-    if (!institutionSM || !institutionSM || !countrySM || !countrySM) {
+    if (!countryYoutubeScore || !countryYoutubeProfile || !institutionScore || !institutionYoutubeProfile) {
         return errorComponent;
     }
-
-    const institutionScore = JSON.parse(institutionSM.total_score) as TotalScore;
-
-    // Country data
-    const countryScore = JSON.parse(countrySM.avg_total_score) as TotalScoreSet;
-    const countryTwitterScore = JSON.parse(countrySM.avg_twitter_score) as TotalScoreSet;
-    const countryYoutubeScore = JSON.parse(countrySM.avg_youtube_score) as TotalScoreSet;
-    // const countryPercentScore = JSON.parse(countrySM.avg_total_score_percent) as TotalScoreSet;
-    const countryTwitterResults = JSON.parse(countrySM.avg_twitter_profile) as TwitterProfile;
-    const countryYoutubeResults = JSON.parse(countrySM.avg_youtube_profile) as YoutubeProfile;
-
-    // Institution data
-    const twitterProfile = institutionSM.twitter_profile !== null ? JSON.parse(institutionSM.twitter_profile) as TwitterProfile : null;
-    const youtubeProfile = institutionSM.youtube_profile !== null ? JSON.parse(institutionSM.youtube_profile) as YoutubeProfile : null;
-    // const facebookResults = (socialMedia?.facebook_results as unknown) as FacebookResult;
-    // const twitterResults = (socialMedia?.twitter_results as unknown) as TwitterResult;
-    const youtubeData = institutionSM.youtube_data !== null ? JSON.parse(institutionSM.youtube_data) as YoutubeChannelData : null;
-    // const instagramResults = (socialMedia?.instagram_results as unknown) as InstagramResult;
-    // const youtubeLink = youtubeData ? "https://www.youtube.com/channel/" + youtubeData.id : null;
 
     // Url Back
     const urlBack = router.asPath.replace(URL_INSTITUTION_SOCIALMEDIA_YT, '');
-
-    if (!youtubeProfile) {
-        return errorComponent;
-    }
 
     return (
         <LayoutContainer footerContent={footerContent}>
@@ -107,106 +82,108 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
             </Head>
 
             <WhitePaper>
-                <Breadcrumb countryInfo={country} institutionInfo={institution} />
+                <Stack>
+                    <Breadcrumb countryInfo={country} institutionInfo={institution} />
 
-                <Group position='apart'>
-                    <div>
-                        <Title order={3}>Youtube Details</Title>
-                        <Text>All social media profiles at a glance.</Text>
-                    </div>
-                    <Link href={urlBack} passHref>
-                        <Button component='a' variant='light' radius={"md"}>Go back</Button>
-                    </Link>
-                </Group>
+                    <Group position='apart'>
+                        <div>
+                            <Title order={3}>Youtube Details</Title>
+                            <Text>All social media profiles at a glance.</Text>
+                        </div>
+                        <Link href={urlBack} passHref>
+                            <Button component='a' variant='light' radius={"md"}>Go back</Button>
+                        </Link>
+                    </Group>
 
-                <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
+                    <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
 
-                    <Card shadow={"xs"} className={classes.card}>
+                        <Card shadow={"xs"} className={classes.card}>
 
-                        <Title order={4}>Profile statistic</Title>
-                        <Text>Basic information about the institutions twitter profile.</Text>
+                            <Title order={4}>Profile statistic</Title>
+                            <Text>Basic information about the institutions twitter profile.</Text>
 
-                        <Card.Section className={classes.cardSection}>
+                            <Card.Section className={classes.cardSection}>
 
-                            <SmStatRow
-                                title='Subscribers'
-                                countryValue={countryYoutubeResults.subscribers}
-                                institutionValue={youtubeProfile.subscribers}
-                            />
-                            <Divider mt="md" mb="md" />
+                                <SmStatRow
+                                    title='Subscribers'
+                                    countryValue={countryYoutubeProfile.subscribers}
+                                    institutionValue={institutionYoutubeProfile.subscribers}
+                                />
+                                <Divider mt="md" mb="md" />
 
-                            <SmStatRow
-                                title='Total views'
-                                countryValue={countryYoutubeResults.views}
-                                institutionValue={youtubeProfile.views}
-                            />
-                            <Divider mt="md" mb="md" />
-                            <div>
-                                <Text
-                                    color="dimmed"
-                                    transform="uppercase"
-                                    weight={700}
-                                    size="xs"
-                                >
-                                    Description
-                                </Text>
-                                <Text weight={700} size="md" color={youtubeProfile.descriptionGood ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                    {
-                                        youtubeProfile.descriptionGood ? "GOOD LENGTH" : "BAD LENGTH"
-                                    }
-                                </Text>
-                            </div>
-                        </Card.Section>
-                    </Card>
+                                <SmStatRow
+                                    title='Total views'
+                                    countryValue={countryYoutubeProfile.views}
+                                    institutionValue={institutionYoutubeProfile.views}
+                                />
+                                <Divider mt="md" mb="md" />
+                                <div>
+                                    <Text
+                                        color="dimmed"
+                                        transform="uppercase"
+                                        weight={700}
+                                        size="xs"
+                                    >
+                                        Description
+                                    </Text>
+                                    <Text weight={700} size="md" color={institutionYoutubeProfile.descriptionGood ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                        {
+                                            institutionYoutubeProfile.descriptionGood ? "GOOD LENGTH" : "BAD LENGTH"
+                                        }
+                                    </Text>
+                                </div>
+                            </Card.Section>
+                        </Card>
 
-                    <Card shadow={"xs"} className={classes.card}>
+                        <Card shadow={"xs"} className={classes.card}>
 
-                        <Title order={4}>Video statistic</Title>
-                        <Text>Basic information about the institutions twitter profile.</Text>
+                            <Title order={4}>Video statistic</Title>
+                            <Text>Basic information about the institutions twitter profile.</Text>
 
-                        <Card.Section className={classes.cardSection}>
-                            <SmStatRow
-                                title='Total videos'
-                                countryValue={countryYoutubeResults.videos}
-                                institutionValue={youtubeProfile.videos}
-                            />
-                            <Divider mt="md" mb="md" />
-                            <SmStatRow
-                                title='Average likes per video'
-                                countryValue={countryYoutubeResults.averageLikes}
-                                institutionValue={youtubeProfile.averageLikes}
-                            />
-                            <Divider mt="md" mb="md" />
-                            <SmStatRow
-                                title='Average comments per video'
-                                countryValue={countryYoutubeResults.averageComments}
-                                institutionValue={youtubeProfile.averageComments}
-                            />
-                            <Divider mt="md" mb="md" />
-                            <SmStatRow
-                                title='Average views per video'
-                                countryValue={countryYoutubeResults.averageViews}
-                                institutionValue={youtubeProfile.averageViews}
-                            />
-                            <Divider mt="md" mb="md" />
-                            <div>
-                                <Text
-                                    color="dimmed"
-                                    transform="uppercase"
-                                    weight={700}
-                                    size="xs"
-                                >
-                                    Average video tags
-                                </Text>
-                                <Text weight={700} size="md" color={youtubeProfile.videosHaveTags ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                    {
-                                        youtubeProfile.videosHaveTags ? "GOOD AMOUNT" : "BAD AMOUNT"
-                                    }
-                                </Text>
-                            </div>
-                        </Card.Section>
-                    </Card>
-                </SimpleGrid>
+                            <Card.Section className={classes.cardSection}>
+                                <SmStatRow
+                                    title='Total videos'
+                                    countryValue={countryYoutubeProfile.videos}
+                                    institutionValue={institutionYoutubeProfile.videos}
+                                />
+                                <Divider mt="md" mb="md" />
+                                <SmStatRow
+                                    title='Average likes per video'
+                                    countryValue={countryYoutubeProfile.averageLikes}
+                                    institutionValue={institutionYoutubeProfile.averageLikes}
+                                />
+                                <Divider mt="md" mb="md" />
+                                <SmStatRow
+                                    title='Average comments per video'
+                                    countryValue={countryYoutubeProfile.averageComments}
+                                    institutionValue={institutionYoutubeProfile.averageComments}
+                                />
+                                <Divider mt="md" mb="md" />
+                                <SmStatRow
+                                    title='Average views per video'
+                                    countryValue={countryYoutubeProfile.averageViews}
+                                    institutionValue={institutionYoutubeProfile.averageViews}
+                                />
+                                <Divider mt="md" mb="md" />
+                                <div>
+                                    <Text
+                                        color="dimmed"
+                                        transform="uppercase"
+                                        weight={700}
+                                        size="xs"
+                                    >
+                                        Average video tags
+                                    </Text>
+                                    <Text weight={700} size="md" color={institutionYoutubeProfile.videosHaveTags ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                        {
+                                            institutionYoutubeProfile.videosHaveTags ? "GOOD AMOUNT" : "BAD AMOUNT"
+                                        }
+                                    </Text>
+                                </div>
+                            </Card.Section>
+                        </Card>
+                    </SimpleGrid>
+                </Stack>
             </WhitePaper>
         </LayoutContainer>
     )
@@ -222,6 +199,14 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     const socialMedia = institution ? (await getSocialMedia(institution.id)) : null;
     const countrySocialMedia = country ? (await getCountrySocialmedia(country.id)) : null;
 
+    // Country data
+    const countryYoutubeScore = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_youtube_score) as TotalScoreSet : null;
+    const countryYoutubeProfile = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_youtube_profile) as YoutubeProfile : null;
+
+    // Institution data
+    const institutionScore = socialMedia ? JSON.parse(socialMedia.total_score) as TotalScore : null;
+    const institutionYoutubeProfile = socialMedia && socialMedia.youtube_profile ? JSON.parse(socialMedia.youtube_profile) as YoutubeProfile : null;
+
     // Footer Data
     // Get all countries
     const countryList = await getCountries();
@@ -233,8 +218,10 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         props: {
             institution: institution,
             country: country,
-            institutionSMString: JSON.stringify(socialMedia),
-            countrySMString: JSON.stringify(countrySocialMedia),
+            countryYoutubeScore,
+            countryYoutubeProfile,
+            institutionScore,
+            institutionYoutubeProfile,
             footerContent: footerContent
         }
     }
@@ -242,13 +229,11 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 }
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
-
     const paths = await getStaticPathsInstitution(locales || []);
-
     return {
         paths: paths,
         fallback: false
     }
 }
 
-export default InstitutionSocialMedia
+export default InstitutionYoutubePage;

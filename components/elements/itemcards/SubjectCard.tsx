@@ -54,10 +54,7 @@ const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
   const { t } = useTranslation('common');
 
   const Flag = Flags[country?.country_code || ""] || Flags["EU"];
-
-  console.log(data.categories);
-
-
+  
   return (
     <Card withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
 

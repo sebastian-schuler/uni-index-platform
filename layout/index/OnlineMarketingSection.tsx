@@ -28,7 +28,15 @@ const OnlineMarketingSection = ({ simpleLhReports }: Props) => {
 
         <Divider color={'white'} sx={{ opacity: 0.7 }} />
 
-        <SimpleGrid mt={'md'} cols={2} spacing={"lg"}>
+        <SimpleGrid
+          mt={'md'}
+          spacing={"lg"}
+          breakpoints={[
+            { maxWidth: 'sm', cols: 1 },
+            { minWidth: 'sm', cols: 1 },
+            { minWidth: 'md', cols: 2 },
+          ]}
+        >
           {
             simpleLhReports.map((report, i) => (
               <OnlineMarketingCard key={report.institution.id} report={report} />

@@ -1,56 +1,49 @@
 
-import { createStyles, Stack, Text } from '@mantine/core'
-import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client'
+import { ActionIcon, Card, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { Country, Institution, InstitutionSocialMedia } from '@prisma/client'
+import { IconBrandTwitter, IconBrandYoutube } from '@tabler/icons'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import SocialMediaCard from '../../../../../components/elements/itemcards/SocialMediaCard'
 import WhitePaper from '../../../../../components/WhitePaper'
 import Breadcrumb from '../../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../../layout/footer/Footer'
 import LayoutContainer from '../../../../../layout/LayoutContainer'
-import SmHeaderSection from '../../../../../layout/socialmedia/SmHeaderSection'
 import SmOverviewSection from '../../../../../layout/socialmedia/SmOverviewSection'
 import InstitutionNav from '../../../../../layout/subnav/InstitutionNav'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
-import { TotalScore, TotalScoreSet, TwitterProfile, YoutubeChannelData, YoutubeProfile } from '../../../../../lib/types/SocialMediaTypes'
+import { TotalScore, TotalScoreSet } from '../../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
+import { toLink } from '../../../../../lib/util/util'
 
-const useStyles = createStyles((theme) => ({
-    card: {
-        backgroundColor: theme.colors.light[0],
-        borderRadius: theme.radius.sm,
-        border: `1px solid ${theme.colors.gray[2]}`,
-    },
-    title: {
-        fontSize: theme.fontSizes.sm,
-        fontWeight: 700,
-        textTransform: 'uppercase',
-    },
-    cardSection: {
-        padding: theme.spacing.md,
-        borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
-        marginTop: theme.spacing.sm,
-    },
-}));
+export interface SocialMediaLinkProps {
+    twitter: string | null
+    youtube: string | null
+    instagram: string | null
+    facebook: string | null
+}
 
 interface Props {
     institution: Institution,
     country: Country,
-    institutionSMString: string,
-    countrySMString: string,
+    institutionScore: TotalScore | null
+    countryScore: TotalScoreSet | null
+    countryTwitterScore: TotalScoreSet | null
+    countryYoutubeScore: TotalScoreSet | null
+    socialMediaLinks: SocialMediaLinkProps
     footerContent: FooterContent[],
 }
 
-const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerContent, institutionSMString, countrySMString }: Props) => {
+const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, institutionScore, countryScore, countryTwitterScore, countryYoutubeScore, socialMediaLinks, footerContent }: Props) => {
 
-    const { classes, theme } = useStyles();
     const { t, lang } = useTranslation('institution');
+    const router = useRouter();
 
-    const institutionSM: InstitutionSocialMedia | null = JSON.parse(institutionSMString);
-    const countrySM: CountrySocialMedia | null = JSON.parse(countrySMString);
-
-    if (institutionSM === null || institutionSM === undefined || countrySM === null || countrySM === undefined) {
+    if (!institutionScore || !countryScore || !countryTwitterScore || !countryYoutubeScore) {
         return (
             <LayoutContainer footerContent={footerContent}>
 
@@ -68,23 +61,35 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
         )
     }
 
-    const institutionScore = JSON.parse(institutionSM.total_score) as TotalScore;
+    const socialMediaPages: JSX.Element[] = [];
 
-    // Country data
-    const countryScore = JSON.parse(countrySM.avg_total_score) as TotalScoreSet;
-    const countryTwitterScore = JSON.parse(countrySM.avg_twitter_score) as TotalScoreSet;
-    const countryYoutubeScore = JSON.parse(countrySM.avg_youtube_score) as TotalScoreSet;
-    const countryTwitterResults = JSON.parse(countrySM.avg_twitter_profile) as TwitterProfile;
-    const countryYoutubeResults = JSON.parse(countrySM.avg_youtube_profile) as YoutubeProfile;
+    if (socialMediaLinks.twitter) {
+        socialMediaPages.push(
+            <SocialMediaCard
+                key={'twitter'}
+                title='Twitter'
+                url={toLink(router.asPath, "twitter")}
+                icon={<IconBrandTwitter size={24} color={"white"} />}
+                color={"#1DA1F2"}
+                textColor={"white"}
+                lastUpdate={"00/00/0000"}
+            />
+        );
+    }
 
-    // Institution data
-    const twitterProfile = institutionSM.twitter_profile !== null ? JSON.parse(institutionSM.twitter_profile) as TwitterProfile : null;
-    const youtubeProfile = institutionSM.youtube_profile !== null ? JSON.parse(institutionSM.youtube_profile) as YoutubeProfile : null;
-    // const facebookResults = (socialMedia?.facebook_results as unknown) as FacebookResult;
-    // const twitterResults = (socialMedia?.twitter_results as unknown) as TwitterResult;
-    const youtubeData = institutionSM.youtube_data !== null ? JSON.parse(institutionSM.youtube_data) as YoutubeChannelData : null;
-    // const instagramResults = (socialMedia?.instagram_results as unknown) as InstagramResult;
-    // const youtubeLink = youtubeData ? "https://www.youtube.com/channel/" + youtubeData.id : null;
+    if (socialMediaLinks.youtube) {
+        socialMediaPages.push(
+            <SocialMediaCard
+                key={'youtube'}
+                title='Youtube'
+                url={toLink(router.asPath, "youtube")}
+                icon={<IconBrandYoutube size={24} color={"white"} />}
+                color={"#FF0000"}
+                textColor={"white"}
+                lastUpdate={"00/00/0000"} // TODO get last update
+            />
+        );
+    }
 
     return (
         <LayoutContainer footerContent={footerContent}>
@@ -101,24 +106,31 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
             <WhitePaper>
                 <Stack spacing={"lg"}>
 
-                    <SmHeaderSection
-                        institutionSM={institutionSM}
-                        institution={institution}
-                        classes={classes}
-                        showTwitterNavItem={twitterProfile !== null}
-                        showYoutubeNavItem={youtubeProfile !== null}
-                    />
+                    {/* Header Section */}
+                    <Stack>
+                        <div>
+                            <Title order={2}>Social Media Statistics</Title>
+                            <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
+                        </div>
+                        <SimpleGrid
+                            breakpoints={[
+                                { minWidth: 'md', cols: 4, spacing: 'md' },
+                                { minWidth: 'sm', cols: 1, spacing: 'sm' },
+                            ]}
+                            spacing={"xl"}
+                        >
+                            {socialMediaPages}
+                        </SimpleGrid>
+                    </Stack>
 
                     <SmOverviewSection
-                        institutionSM={institutionSM}
+                        socialMediaLinks={socialMediaLinks}
                         country={country}
                         institution={institution}
-                        countrySocialMedia={countrySM}
                         institutionScore={institutionScore}
                         countryPercentScore={countryScore}
                         countryTwitterScore={countryTwitterScore}
                         countryYoutubeScore={countryYoutubeScore}
-                        classes={classes}
                     />
 
                 </Stack>
@@ -138,6 +150,22 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     const socialMedia = institution ? (await getSocialMedia(institution.id)) : null;
     const countrySocialMedia = country ? (await getCountrySocialmedia(country.id)) : null;
 
+    // Institution data
+    const institutionScore = socialMedia ? JSON.parse(socialMedia.total_score) as TotalScore : null;
+
+    // Country data
+    const countryScore = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_total_score) as TotalScoreSet : null;
+    const countryTwitterScore = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_twitter_score) as TotalScoreSet : null;
+    const countryYoutubeScore = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_youtube_score) as TotalScoreSet : null;
+
+    // Social Media Links
+    const socialMediaLinks: SocialMediaLinkProps = {
+        twitter: socialMedia?.twitter_url || null,
+        youtube: socialMedia?.youtube_url || null,
+        instagram: socialMedia?.instagram_url || null,
+        facebook: socialMedia?.facebook_url || null,
+    }
+
     // Footer Data
     // Get all countries
     const countryList = await getCountries();
@@ -147,11 +175,14 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
     return {
         props: {
-            institution: institution,
-            country: country,
-            institutionSMString: JSON.stringify(socialMedia),
-            countrySMString: JSON.stringify(countrySocialMedia),
-            footerContent: footerContent
+            institution,
+            country,
+            institutionScore,
+            countryScore,
+            countryTwitterScore,
+            countryYoutubeScore,
+            socialMediaLinks,
+            footerContent
         }
     }
 
@@ -167,4 +198,4 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
     }
 }
 
-export default InstitutionSocialMedia
+export default InstitutionSocialMediaPage

@@ -1,22 +1,21 @@
 
-import { Button, Card, createStyles, Divider, Group, SimpleGrid, Text, Title } from '@mantine/core'
-import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client'
+import { Button, Card, createStyles, Divider, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { Country, Institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
+import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import SmStatRow from '../../../../../components/elements/socialmedia/SmStatRow'
+import WhitePaper from '../../../../../components/WhitePaper'
 import Breadcrumb from '../../../../../layout/Breadcrumb'
 import { FooterContent } from '../../../../../layout/footer/Footer'
 import LayoutContainer from '../../../../../layout/LayoutContainer'
-import InstitutionNav from '../../../../../layout/subnav/InstitutionNav'
-import WhitePaper from '../../../../../components/WhitePaper'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
-import { TotalScore, TotalScoreSet, TwitterProfile, YoutubeChannelData, YoutubeProfile } from '../../../../../lib/types/SocialMediaTypes'
+import { TotalScore, TotalScoreSet, TwitterProfile } from '../../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION_SOCIALMEDIA_TW } from '../../../../../lib/url-helper/urlConstants'
-import Head from 'next/head'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -39,19 +38,18 @@ const useStyles = createStyles((theme) => ({
 interface Props {
     institution: Institution,
     country: Country,
-    institutionSMString: string,
-    countrySMString: string,
+    countryTwitterScore: TotalScoreSet | null
+    countryTwitterProfile: TwitterProfile | null
+    institutionScore: TotalScoreSet | null
+    institutionTwitterProfile: TwitterProfile | null
     footerContent: FooterContent[],
 }
 
-const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerContent, institutionSMString, countrySMString }: Props) => {
+const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, countryTwitterScore, countryTwitterProfile, institutionScore, institutionTwitterProfile, footerContent }: Props) => {
 
     const { classes, theme } = useStyles();
     const { t, lang } = useTranslation('institution');
     const router = useRouter();
-
-    const institutionSM: InstitutionSocialMedia | null = JSON.parse(institutionSMString);
-    const countrySM: CountrySocialMedia | null = JSON.parse(countrySMString);
 
     const errorComponent = (
         <LayoutContainer footerContent={footerContent}>
@@ -69,36 +67,12 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
     );
 
     // IF NO SOCIAL MEDIA DATA PRESENT, RETURN ERROR COMPONENT
-    if (!institutionSM || !institutionSM || !countrySM || !countrySM) {
+    if (!institutionTwitterProfile || !countryTwitterProfile || !institutionScore || !countryTwitterScore) {
         return errorComponent;
     }
-
-    const institutionScore = JSON.parse(institutionSM.total_score) as TotalScore;
-
-    // Country data
-    const countryScore = JSON.parse(countrySM.avg_total_score) as TotalScoreSet;
-    const countryTwitterScore = JSON.parse(countrySM.avg_twitter_score) as TotalScoreSet;
-    const countryYoutubeScore = JSON.parse(countrySM.avg_youtube_score) as TotalScoreSet;
-    // const countryPercentScore = JSON.parse(countrySM.avg_total_score_percent) as TotalScoreSet;
-    const countryTwitterResults = JSON.parse(countrySM.avg_twitter_profile) as TwitterProfile;
-    const countryYoutubeResults = JSON.parse(countrySM.avg_youtube_profile) as YoutubeProfile;
-
-    // Institution data
-    const twitterProfile = institutionSM.twitter_profile !== null ? JSON.parse(institutionSM.twitter_profile) as TwitterProfile : null;
-    const youtubeProfile = institutionSM.youtube_profile !== null ? JSON.parse(institutionSM.youtube_profile) as YoutubeProfile : null;
-    // const facebookResults = (socialMedia?.facebook_results as unknown) as FacebookResult;
-    // const twitterResults = (socialMedia?.twitter_results as unknown) as TwitterResult;
-    const youtubeData = institutionSM.youtube_data !== null ? JSON.parse(institutionSM.youtube_data) as YoutubeChannelData : null;
-    // const instagramResults = (socialMedia?.instagram_results as unknown) as InstagramResult;
-    // const youtubeLink = youtubeData ? "https://www.youtube.com/channel/" + youtubeData.id : null;
 
     // Url Back
     const urlBack = router.asPath.replace(URL_INSTITUTION_SOCIALMEDIA_TW, '');
-
-    // IF NO SOCIAL MEDIA DATA PRESENT, RETURN ERROR COMPONENT
-    if (!twitterProfile) {
-        return errorComponent;
-    }
 
     return (
         <LayoutContainer footerContent={footerContent}>
@@ -109,119 +83,121 @@ const InstitutionSocialMedia: NextPage<Props> = ({ institution, country, footerC
             </Head>
 
             <WhitePaper>
-                <Breadcrumb countryInfo={country} institutionInfo={institution} />
+                <Stack>
+                    <Breadcrumb countryInfo={country} institutionInfo={institution} />
 
-                <Group position='apart'>
-                    <div>
-                        <Title order={3}>Twitter Details</Title>
-                        <Text>All social media profiles at a glance.</Text>
-                    </div>
-                    <Link href={urlBack} passHref>
-                        <Button component='a' variant='light' radius={"md"}>Go back</Button>
-                    </Link>
-                </Group>
+                    <Group position='apart'>
+                        <div>
+                            <Title order={3}>Twitter Details</Title>
+                            <Text>All social media profiles at a glance.</Text>
+                        </div>
+                        <Link href={urlBack} passHref>
+                            <Button component='a' variant='light' radius={"md"}>Go back</Button>
+                        </Link>
+                    </Group>
 
-                <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
+                    <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
 
-                    <Card shadow={"xs"} className={classes.card}>
+                        <Card shadow={"xs"} className={classes.card}>
 
-                        <Title order={4}>Profile statistic</Title>
-                        <Text>Basic information about the institutions twitter profile.</Text>
+                            <Title order={4}>Profile statistic</Title>
+                            <Text>Basic information about the institutions twitter profile.</Text>
 
-                        <Card.Section className={classes.cardSection}>
+                            <Card.Section className={classes.cardSection}>
 
-                            <SmStatRow
-                                title='Followers'
-                                countryValue={countryTwitterResults.followers}
-                                institutionValue={twitterProfile.followers}
-                            />
-                            <Divider mt="md" mb="md" />
+                                <SmStatRow
+                                    title='Followers'
+                                    countryValue={countryTwitterProfile.followers}
+                                    institutionValue={institutionTwitterProfile.followers}
+                                />
+                                <Divider mt="md" mb="md" />
 
-                            <SmStatRow
-                                title='Following'
-                                countryValue={countryTwitterResults.following}
-                                institutionValue={twitterProfile.following}
-                            />
+                                <SmStatRow
+                                    title='Following'
+                                    countryValue={countryTwitterProfile.following}
+                                    institutionValue={institutionTwitterProfile.following}
+                                />
 
-                            <Divider mt="md" mb="md" />
+                                <Divider mt="md" mb="md" />
 
-                            <SmStatRow
-                                title='List appearances'
-                                countryValue={countryTwitterResults.listed}
-                                institutionValue={twitterProfile.listed}
-                            />
+                                <SmStatRow
+                                    title='List appearances'
+                                    countryValue={countryTwitterProfile.listed}
+                                    institutionValue={institutionTwitterProfile.listed}
+                                />
 
-                            <Divider mt="md" mb="md" />
+                                <Divider mt="md" mb="md" />
 
-                            <div>
-                                <Text
-                                    color="dimmed"
-                                    transform="uppercase"
-                                    weight={700}
-                                    size="xs"
-                                >
-                                    Profile status
-                                </Text>
-                                <Text weight={700} size="md" color={twitterProfile.isVerified ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                    {
-                                        twitterProfile.isVerified ? "VERIFIED" : "NOT VERIFIED"
-                                    }
-                                </Text>
-                            </div>
+                                <div>
+                                    <Text
+                                        color="dimmed"
+                                        transform="uppercase"
+                                        weight={700}
+                                        size="xs"
+                                    >
+                                        Profile status
+                                    </Text>
+                                    <Text weight={700} size="md" color={institutionTwitterProfile.isVerified ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                        {
+                                            institutionTwitterProfile.isVerified ? "VERIFIED" : "NOT VERIFIED"
+                                        }
+                                    </Text>
+                                </div>
 
-                            <Divider mt="md" mb="md" />
+                                <Divider mt="md" mb="md" />
 
-                            <div>
-                                <Text
-                                    color="dimmed"
-                                    transform="uppercase"
-                                    weight={700}
-                                    size="xs"
-                                >
-                                    Website link
-                                </Text>
-                                <Text weight={700} size="md" color={twitterProfile.isWebsiteLinked ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                    {
-                                        twitterProfile.isWebsiteLinked ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
-                                    }
-                                </Text>
-                            </div>
+                                <div>
+                                    <Text
+                                        color="dimmed"
+                                        transform="uppercase"
+                                        weight={700}
+                                        size="xs"
+                                    >
+                                        Website link
+                                    </Text>
+                                    <Text weight={700} size="md" color={institutionTwitterProfile.isWebsiteLinked ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                        {
+                                            institutionTwitterProfile.isWebsiteLinked ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
+                                        }
+                                    </Text>
+                                </div>
 
-                        </Card.Section>
-                    </Card>
+                            </Card.Section>
+                        </Card>
 
-                    <Card shadow={"xs"} className={classes.card}>
+                        <Card shadow={"xs"} className={classes.card}>
 
-                        <Title order={4}>Tweet statistic</Title>
-                        <Text>Basic information about the institutions twitter profile.</Text>
+                            <Title order={4}>Tweet statistic</Title>
+                            <Text>Basic information about the institutions twitter profile.</Text>
 
-                        <Card.Section className={classes.cardSection}>
-                            <SmStatRow
-                                title='Total tweets'
-                                countryValue={countryTwitterResults.tweets}
-                                institutionValue={twitterProfile.tweets}
-                            />
-                            <Divider mt="md" mb="md" />
-                            <SmStatRow
-                                title='Average likes per tweet'
-                                countryValue={countryTwitterResults.avgLikes}
-                                institutionValue={twitterProfile.avgLikes}
-                            />
-                            <Divider mt="md" mb="md" />
-                            <SmStatRow
-                                title='Average replies per tweet'
-                                countryValue={countryTwitterResults.avgReplies}
-                                institutionValue={twitterProfile.avgReplies}
-                            />
-                            <Divider mt="md" mb="md" />
-                            <SmStatRow
-                                title='Average retweets per tweet'
-                                countryValue={countryTwitterResults.avgRetweets}
-                                institutionValue={twitterProfile.avgRetweets}
-                            />
-                        </Card.Section>
-                    </Card>
-                </SimpleGrid>
+                            <Card.Section className={classes.cardSection}>
+                                <SmStatRow
+                                    title='Total tweets'
+                                    countryValue={countryTwitterProfile.tweets}
+                                    institutionValue={institutionTwitterProfile.tweets}
+                                />
+                                <Divider mt="md" mb="md" />
+                                <SmStatRow
+                                    title='Average likes per tweet'
+                                    countryValue={countryTwitterProfile.avgLikes}
+                                    institutionValue={institutionTwitterProfile.avgLikes}
+                                />
+                                <Divider mt="md" mb="md" />
+                                <SmStatRow
+                                    title='Average replies per tweet'
+                                    countryValue={countryTwitterProfile.avgReplies}
+                                    institutionValue={institutionTwitterProfile.avgReplies}
+                                />
+                                <Divider mt="md" mb="md" />
+                                <SmStatRow
+                                    title='Average retweets per tweet'
+                                    countryValue={countryTwitterProfile.avgRetweets}
+                                    institutionValue={institutionTwitterProfile.avgRetweets}
+                                />
+                            </Card.Section>
+                        </Card>
+                    </SimpleGrid>
+                </Stack>
             </WhitePaper>
         </LayoutContainer>
     )
@@ -237,6 +213,14 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     const socialMedia = institution ? (await getSocialMedia(institution.id)) : null;
     const countrySocialMedia = country ? (await getCountrySocialmedia(country.id)) : null;
 
+    // Country data
+    const countryTwitterScore = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_twitter_score) as TotalScoreSet : null;
+    const countryTwitterProfile = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_twitter_profile) as TwitterProfile : null;
+
+    // Institution data
+    const institutionScore = socialMedia ? JSON.parse(socialMedia.total_score) as TotalScore : null;
+    const institutionTwitterProfile = socialMedia && socialMedia.twitter_profile ? JSON.parse(socialMedia.twitter_profile) as TwitterProfile : null;
+
     // Footer Data
     // Get all countries
     const countryList = await getCountries();
@@ -246,10 +230,12 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
     return {
         props: {
-            institution: institution,
-            country: country,
-            institutionSMString: JSON.stringify(socialMedia),
-            countrySMString: JSON.stringify(countrySocialMedia),
+            institution,
+            country,
+            countryTwitterScore,
+            countryTwitterProfile,
+            institutionScore,
+            institutionTwitterProfile,
             footerContent: footerContent
         }
     }
@@ -257,13 +243,11 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 }
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
-
     const paths = await getStaticPathsInstitution(locales || []);
-
     return {
         paths: paths,
         fallback: false
     }
 }
 
-export default InstitutionSocialMedia
+export default InstitutionTwitterPage

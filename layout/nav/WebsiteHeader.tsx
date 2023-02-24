@@ -76,10 +76,14 @@ const useStyles = createStyles((theme) => ({
     marginRight: 5,
   },
 
+  menuDropdown: {
+    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
+  },
+
   menuItem: {
     '&[data-hovered]': {
       backgroundColor: theme.fn.rgba(theme.colors[theme.primaryColor][theme.fn.primaryShade()], 0.85),
-      color: theme.white,
+      color: theme.colors.light[0],
     },
   },
 
@@ -169,6 +173,7 @@ const WebsiteHeader = () => {
             label: classes.menuLabel,
             divider: classes.menuDivider,
             item: classes.menuItem,
+            dropdown: classes.menuDropdown,
           }}
         >
           <Menu.Target>
@@ -221,13 +226,12 @@ const WebsiteHeader = () => {
       <Drawer
         opened={opened}
         onClose={() => toggle()}
-        title="Uni-Index navigation"
-        padding="xl"
+        padding="lg"
         size="lg"
         position='right'
-        closeButtonLabel="Close drawer"
+        withCloseButton={false}
       >
-        <Stack spacing={0}>
+        <Stack spacing={0} mt={HEADER_HEIGHT}>
           {
             items.map((item, i) => (
               <div key={item.key}>

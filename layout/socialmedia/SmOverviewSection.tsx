@@ -1,4 +1,4 @@
-import { Box, Card, Grid, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { Box, Card, createStyles, Grid, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client';
 import {
     IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandYoutube
@@ -11,24 +11,43 @@ import SmProfilesBar from '../../components/elements/socialmedia/charts/SmProfil
 import SocialMediaRadar from '../../components/elements/socialmedia/charts/SmRadar';
 import SmIconLink from '../../components/elements/socialmedia/SmIconLink';
 import SocialMediaStatCard from '../../components/elements/socialmedia/SmStatCard';
+import { SocialMediaLinkProps } from '../../pages/institution/[Country]/[Institution]/social-media';
+
+const useStyles = createStyles((theme) => ({
+    card: {
+        backgroundColor: theme.colors.light[0],
+        borderRadius: theme.radius.sm,
+        border: `1px solid ${theme.colors.gray[2]}`,
+    },
+    title: {
+        fontSize: theme.fontSizes.sm,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+    },
+    cardSection: {
+        padding: theme.spacing.md,
+        borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+        marginTop: theme.spacing.sm,
+    },
+}));
+
 
 interface Props {
-    institutionSM: InstitutionSocialMedia
+    socialMediaLinks: SocialMediaLinkProps
     institution: Institution,
     country: Country,
-    countrySocialMedia: CountrySocialMedia,
     institutionScore: TotalScore,
     countryPercentScore: TotalScoreSet,
     countryTwitterScore: TotalScoreSet,
     countryYoutubeScore: TotalScoreSet,
-    classes: Record<"card" | "title" | "cardSection", string>
 }
 
 const SmOverviewSection: React.FC<Props> = (
-    { institutionSM, institution, country, countrySocialMedia, institutionScore, countryPercentScore, countryTwitterScore, countryYoutubeScore, classes }: Props
+    { socialMediaLinks, institution, country, institutionScore, countryPercentScore, countryTwitterScore, countryYoutubeScore }: Props
 ) => {
 
     const { t, lang } = useTranslation('common');
+    const { classes, theme } = useStyles();
 
     // Graph data
     const graphLabels = [
@@ -110,20 +129,20 @@ const SmOverviewSection: React.FC<Props> = (
                                     Social Media Links
                                 </Text>
                                 {
-                                    institutionSM.youtube_url &&
-                                    <SmIconLink type='youtube' url={institutionSM.youtube_url} label title={`Youtube channel of ${institution.name}`} />
+                                    socialMediaLinks.youtube &&
+                                    <SmIconLink type='youtube' url={socialMediaLinks.youtube} label title={`Youtube channel of ${institution.name}`} />
                                 }
                                 {
-                                    institutionSM.twitter_url &&
-                                    <SmIconLink type='twitter' url={institutionSM.twitter_url} label title={`Twitter profile of ${institution.name}`} />
+                                    socialMediaLinks.twitter &&
+                                    <SmIconLink type='twitter' url={socialMediaLinks.twitter} label title={`Twitter profile of ${institution.name}`} />
                                 }
                                 {
-                                    institutionSM.facebook_url &&
-                                    <SmIconLink type='facebook' url={institutionSM.facebook_url} label title={`Facebook profile of ${institution.name}`} />
+                                    socialMediaLinks.facebook &&
+                                    <SmIconLink type='facebook' url={socialMediaLinks.facebook} label title={`Facebook profile of ${institution.name}`} />
                                 }
                                 {
-                                    institutionSM.instagram_url &&
-                                    <SmIconLink type='instagram' url={institutionSM.instagram_url} label title={`Instagram profile of ${institution.name}`} />
+                                    socialMediaLinks.instagram &&
+                                    <SmIconLink type='instagram' url={socialMediaLinks.instagram} label title={`Instagram profile of ${institution.name}`} />
                                 }
                             </Stack>
                         </Card>
