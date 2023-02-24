@@ -13,6 +13,7 @@ import { DetailedSubject } from '../../../../../lib/types/DetailedDatabaseTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions';
 import { convertSubjectToCardData } from '../../../../../lib/util/conversionUtil';
 import { SubjectCardData } from '../../../../../lib/types/UiHelperTypes';
+import React from 'react';
 
 interface Props {
   institution: Institution,
@@ -53,15 +54,19 @@ const subjects: NextPage<Props> = ({ institution, country, footerContent, subjec
         >
 
           {
-            subjectData.map((subject, i) => (
-              // searchable.visible && (
-              <SubjectCard
-                key={i}
-                data={subject}
-                country={countryList.find(c => c.id === subject.countryId)}
-              />
-              // )
-            ))
+            subjectData.map((subject, i) => {
+
+              const country = countryList.find(c => c.id === subject.countryId);
+              if (!country) return <React.Fragment key={subject.id} />;
+
+              return (
+                <SubjectCard
+                  key={i}
+                  data={subject}
+                  country={country}
+                />
+              )
+            })
           }
 
         </SimpleGrid>

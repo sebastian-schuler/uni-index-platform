@@ -58,8 +58,9 @@ export type InstitutionCardData = {
 
 
 export type SubjectCardData = {
+    id: string
     countryId: string
-    fullUrl: string
+    url: string
     categories: {
         name: string
         url: string
@@ -70,10 +71,12 @@ export type SubjectCardData = {
     durationType: string
     Institution: {
         name: string
+        url: string
     },
     City: {
         name: string
-    }
+        fullUrl: string
+    },
 };
 
 export type StateCardData = {

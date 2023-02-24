@@ -15,7 +15,10 @@ export const getSubjectsByPopularity = async (takeCount: number): Promise<Detail
             City: {
                 include: {
                     State: {
-                        select: { Country: true }
+                        select: {
+                            url: true,
+                            Country: true
+                        }
                     }
                 }
             }

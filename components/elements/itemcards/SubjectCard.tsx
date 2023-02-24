@@ -6,6 +6,8 @@ import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
 import { SubjectCardData } from '../../../lib/types/UiHelperTypes'
+import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS, URL_LOCATION } from '../../../lib/url-helper/urlConstants'
+import { toLink } from '../../../lib/util/util'
 
 const useStyles = createStyles((theme) => ({
 
@@ -45,7 +47,7 @@ const useStyles = createStyles((theme) => ({
 
 type Props = {
   data: SubjectCardData
-  country: Country | undefined
+  country: Country
 }
 
 const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
@@ -54,7 +56,10 @@ const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
   const { t } = useTranslation('common');
 
   const Flag = Flags[country?.country_code || ""] || Flags["EU"];
-  
+
+  const subjectUrl = toLink(URL_INSTITUTION, country.url, data.Institution.url, URL_INSTITUTION_SUBJECTS, data.url);
+  const institutionUrl = toLink(URL_INSTITUTION, country.url, data.Institution.url);
+
   return (
     <Card withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
 
@@ -64,15 +69,25 @@ const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
 
           {/* Header: Subjectname, Institution, City */}
           <Grid.Col span={10}>
-            <Link href={data.fullUrl} passHref>
+
+            <Link href={subjectUrl} passHref>
               <Anchor>
                 <Text size="lg" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1, wordBreak: "break-word" }}>
                   {data.name}
                 </Text>
               </Anchor>
             </Link>
+
             <Text sx={{ lineHeight: 1.2, wordBreak: "break-all", lineBreak: "anywhere" }}>
-              {t('card-subject.subtitle', { institution: data.Institution.name, city: data.City.name })}
+
+              <Link href={institutionUrl} passHref>
+                <Anchor>{data.Institution.name}</Anchor>
+              </Link>
+              {' | '}
+              <Link href={data.City.fullUrl} passHref>
+                <Anchor>{data.City.name}</Anchor>
+              </Link>
+
             </Text>
           </Grid.Col>
 

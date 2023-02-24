@@ -27,13 +27,14 @@ export type DetailedUserAd = UserAd & {
 export type DetailedSubject = (Subject & {
     City: City & {
         State: {
-            Country: Country;
-        };
-    };
+            url: string
+            Country: Country
+        }
+    }
     Institution: Institution;
     SubjectHasSubjectTypes: (SubjectHasSubjectTypes & {
-        SubjectType: SubjectType;
-    })[];
+        SubjectType: SubjectType
+    })[]
 });
 
 // SUBJECT TYPE CARD

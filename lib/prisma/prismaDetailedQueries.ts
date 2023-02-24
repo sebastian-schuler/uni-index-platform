@@ -150,7 +150,10 @@ const getSubjectsDetailedByInstitution = async (institutionId: string): Promise<
             City: {
                 include: {
                     State: {
-                        select: { Country: true }
+                        select: {
+                            url: true,
+                            Country: true
+                        }
                     }
                 }
             }
@@ -178,7 +181,10 @@ export const getSubjectDetailedByUrl = async (subjectUrl: string, institutionId:
             City: {
                 include: {
                     State: {
-                        select: { Country: true }
+                        select: {
+                            url: true,
+                            Country: true
+                        }
                     }
                 }
             }
@@ -205,7 +211,10 @@ export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string):
             City: {
                 include: {
                     State: {
-                        select: { Country: true }
+                        select: {
+                            url: true,
+                            Country: true
+                        }
                     }
                 }
             }

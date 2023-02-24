@@ -27,6 +27,7 @@ import { getAllLhrSimplified } from '../lib/lighthouse/lhrSimplifier';
 import { LhrSimple } from '../lib/types/lighthouse/CustomLhrTypes';
 import { CountryCardData, InstitutionCardData, SubjectCardData } from '../lib/types/UiHelperTypes';
 import Head from 'next/head';
+import React from 'react';
 
 interface Props {
   simpleLhReports: LhrSimple[],
@@ -81,11 +82,17 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
           brandColor
         >
           {
-            subjectData.map((subject, i) => (
-              <Grid.Col key={i} sm={12} md={6} lg={4} sx={{ width: "100%" }}>
-                <SubjectCard data={subject} country={countryList.find(c => c.id === subject.countryId)} />
-              </Grid.Col>
-            ))
+            subjectData.map((subject, i) => {
+
+              const country = countryList.find(c => c.id === subject.countryId);
+              if (!country) return <React.Fragment key={subject.id} />;
+
+              return (
+                <Grid.Col key={subject.id} sm={12} md={6} lg={4} sx={{ width: "100%" }}>
+                  <SubjectCard data={subject} country={country} />
+                </Grid.Col>
+              )
+            })
           }
         </PopularSection>
 

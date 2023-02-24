@@ -115,8 +115,9 @@ export const convertSubjectToCardData = (subj: DetailedSubject, lang: string): S
     categories = categories.slice(0, 3);
 
     return {
+        id: subj.id,
         name: subj.name,
-        fullUrl: toLink(URL_INSTITUTION, subj.City.State.Country.url, subj.Institution.url, URL_INSTITUTION_SUBJECTS, subj.url),
+        url: subj.url,
         countryId: subj.City.State.Country.id,
         degree: subj.degree,
         duration: subj.duration,
@@ -124,9 +125,11 @@ export const convertSubjectToCardData = (subj: DetailedSubject, lang: string): S
         categories: categories,
         Institution: {
             name: subj.Institution.name,
+            url: subj.Institution.url,
         },
         City: {
             name: subj.City.name,
+            fullUrl: toLink(URL_LOCATION, subj.City.State.Country.url, subj.City.State.url, subj.City.url),
         }
     }
 }
