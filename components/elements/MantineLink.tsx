@@ -19,11 +19,9 @@ const MantineLink: React.FC<Props> = ({ url, children, color, type, title }: Pro
             </Anchor>
         ) ||
         type === "internal" && (
-            <Link href={url} passHref>
-                <Anchor component="a" title={title} color={color ? color : "brandOrange.5"}>
-                    {children}
-                </Anchor >
-            </Link >
+            <Anchor component={Link} href={url} title={title} color={color ? color : "brandOrange.5"}>
+                {children}
+            </Anchor >
         ) ||
         type === "scroll" && (
             <Anchor component="a" href={url} title={title} color={color ? color : "brandOrange.5"}>

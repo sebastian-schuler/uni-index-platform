@@ -2,7 +2,7 @@ import { Box, Card, createStyles, Grid, SimpleGrid, Stack, Text, Title } from '@
 import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client';
 import {
     IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandYoutube
-} from '@tabler/icons';
+} from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
 import { TotalScore, TotalScoreSet } from '../../lib/types/SocialMediaTypes';
@@ -102,25 +102,25 @@ const SmOverviewSection: React.FC<Props> = (
                                 title='Twitter'
                                 value={institutionScore?.percent.twitter.total || 0}
                                 diff={calculateSocialMediaDifference(institutionScore?.percent.twitter.total || 0, countryTwitterScore.total)}
-                                icon={IconBrandTwitter}
+                                icon={<IconBrandTwitter />}
                             />
                             <SocialMediaStatCard
                                 title='Youtube'
                                 value={institutionScore?.percent.youtube.total || 0}
                                 diff={calculateSocialMediaDifference(institutionScore?.percent.youtube.total || 0, countryYoutubeScore.total)}
-                                icon={IconBrandYoutube}
+                                icon={<IconBrandYoutube />}
                             />
                             <SocialMediaStatCard
                                 title='Instagram'
                                 value={0}
                                 diff={calculateSocialMediaDifference(0, 0)}
-                                icon={IconBrandInstagram}
+                                icon={<IconBrandInstagram />}
                             />
                             <SocialMediaStatCard
                                 title='Facebook'
                                 value={0}
                                 diff={calculateSocialMediaDifference(0, 0)}
-                                icon={IconBrandFacebook}
+                                icon={<IconBrandFacebook />}
                             />
                         </SimpleGrid>
                         <Card shadow={"xs"} className={classes.card}>

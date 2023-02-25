@@ -1,5 +1,5 @@
 import { Anchor, Box, Collapse, createStyles, Divider, Group, Progress, Table, Text, TypographyStylesProvider, UnstyledButton } from '@mantine/core';
-import { IconChevronDown, IconCircle, IconSquare, IconTriangle } from '@tabler/icons';
+import { IconChevronDown, IconCircle, IconSquare, IconTriangle } from '@tabler/icons-react';
 import React, { ReactNode, useState } from 'react';
 import { LHR_SCORE_BREAKPOINTS, LHR_SCORE_COLORS } from '../../../lib/lighthouse/lhrUtil';
 import Details from '../../../lib/types/lighthouse/audit-details';

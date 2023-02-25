@@ -87,17 +87,18 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
   ]
 
   const categoryCards = data.map((category, index) => {
+
+    const url = toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM, category.url);
+
     return (
-      <Link key={category.url + index} href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM, category.url)} passHref>
-        <Card component='a'>
-          <LhrRingProgress
-            title={category.title}
-            score={category.score}
-            description={category.description}
-            size={"md"}
-          />
-        </Card>
-      </Link>
+      <Card key={category.url + index} component={Link} href={url}>
+        <LhrRingProgress
+          title={category.title}
+          score={category.score}
+          description={category.description}
+          size={"md"}
+        />
+      </Card>
     )
   });
 
@@ -122,7 +123,13 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
             <Text>This analysis is based on Googles Lighthouse tool...</Text>
           </div>
 
-          <SimpleGrid cols={3}>
+          <SimpleGrid
+            breakpoints={[
+              { minWidth: 'sm', cols: 2 },
+              { minWidth: 'md', cols: 3 },
+              { minWidth: 'lg', cols: 4 },
+            ]}
+          >
             {categoryCards}
           </SimpleGrid>
 

@@ -68,9 +68,11 @@ const Performance = ({ institution, country, lhrAudits, lhrCategory, footerConte
 
             <Group position="apart">
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />
-                <Link href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM)}>
-                    <Button variant='outline' component={"a"}>Back to Online Marketing</Button>
-                </Link>
+                <Button
+                    variant='outline'
+                    component={Link}
+                    href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM)}
+                >Back to Online Marketing</Button>
             </Group>
 
             <Space h="md" />

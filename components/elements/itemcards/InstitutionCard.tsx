@@ -1,6 +1,6 @@
 import { Anchor, Card, createStyles, Group, Stack, Text, ThemeIcon } from '@mantine/core'
 import { Country, State } from '@prisma/client'
-import { IconBuilding, IconCategory, IconSchool } from '@tabler/icons'
+import { IconBuilding, IconCategory, IconSchool } from '@tabler/icons-react'
 import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
@@ -76,27 +76,21 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
           <Stack spacing={theme.spacing.xs}>
 
             {/* Name & Name in brackets */}
-            <Link href={urlInstitution} passHref>
-              <Anchor>
-                <Text size="lg" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
-                  {data.Institution.name} <Text size={"xs"}>{data.Institution.nameBrackets}</Text>
-                </Text>
-              </Anchor>
-            </Link>
+            <Anchor component={Link} href={urlInstitution}>
+              <Text size="lg" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
+                {data.Institution.name} <Text size={"xs"}>{data.Institution.nameBrackets}</Text>
+              </Text>
+            </Anchor>
 
             {/* City & State */}
             <Text color={theme.colors.brandGray[2]} sx={{ lineHeight: 1.2 }}>
-              <Link href={urlCity} passHref>
-                <Anchor>
-                  {data.Institution.City.name}
-                </Anchor>
-              </Link>
+              <Anchor component={Link} href={urlCity}>
+                {data.Institution.City.name}
+              </Anchor>
               {', '}
-              <Link href={urlState} passHref>
-                <Anchor>
-                  {getLocalizedName({ lang: lang, state: state })}
-                </Anchor>
-              </Link>
+              <Anchor component={Link} href={urlState}>
+                {getLocalizedName({ lang: lang, state: state })}
+              </Anchor>
             </Text>
 
             {/* Social Media Link icons */}
@@ -153,9 +147,7 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
               {
                 data.biggestCategories.map((category, i) => (
                   <React.Fragment key={i}>
-                    <Link href={category.url} passHref>
-                      <Anchor>{category.name}</Anchor>
-                    </Link>
+                    <Anchor component={Link} href={category.url}>{category.name}</Anchor>
                     {i < data.biggestCategories.length - 1 && ', '}
                   </React.Fragment>
                 ))

@@ -1,3 +1,6 @@
+import { TablerIconsProps } from "@tabler/icons-react";
+import React from 'react';
+
 type Color = {
     r: number;
     g: number;
@@ -16,3 +19,7 @@ export const interpolateBetweenColors = (
 
     return `rgb(${r}, ${g}, ${b})`;
 };
+
+export const addTablerIconProps = (Component: JSX.Element, extraProps: TablerIconsProps) => {
+    return <Component.type {...Component.props} {...extraProps} />;
+}

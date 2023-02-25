@@ -3,7 +3,7 @@ import {
 } from '@mantine/core';
 import { keys } from '@mantine/utils';
 import { Country } from '@prisma/client';
-import { IconChevronDown, IconChevronUp, IconSearch, IconSelector } from '@tabler/icons';
+import { IconChevronDown, IconChevronUp, IconSearch, IconSelector } from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import { useState } from 'react';
 import { SmRankingEntryMinified } from '../../lib/types/SocialMediaTypes';

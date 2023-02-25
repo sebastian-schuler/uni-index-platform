@@ -1,5 +1,5 @@
-import { Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core';
-import { IconBuilding, IconSchool } from '@tabler/icons';
+import { Anchor, Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core';
+import { IconBuilding, IconSchool } from '@tabler/icons-react';
 import Link from 'next/link';
 import React, { memo } from 'react';
 import { PATH_PLACEHOLDER_IMAGES } from '../../../lib/url-helper/urlConstants';
@@ -50,7 +50,7 @@ const LargeAd: React.FC<Props> = ({ link, title, headline, subtext, imgUrl, desc
     const { classes, theme } = useStyles();
 
     const AdCard = (
-        <Card component={disableLink ? "div" : "a"} withBorder radius="md" shadow="sm" className={classes.card} title={title} sx={{ height: colHeight }}>
+        <Card component={"div"} withBorder radius="md" shadow="sm" className={classes.card} title={title} sx={{ height: colHeight }}>
 
             <Card.Section>
                 <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={LARGE_AD_HEIGHT / 2} alt={""} />
@@ -86,9 +86,9 @@ const LargeAd: React.FC<Props> = ({ link, title, headline, subtext, imgUrl, desc
     if (disableLink) return AdCard;
 
     return (
-        <Link href={link} passHref>
+        <Anchor component={Link} href={link}>
             {AdCard}
-        </Link>
+        </Anchor>
     )
 }
 

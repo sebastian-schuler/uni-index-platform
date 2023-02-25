@@ -1,5 +1,5 @@
 import { createStyles, Select } from '@mantine/core';
-import { IconArrowsSort } from '@tabler/icons';
+import { IconArrowsSort } from '@tabler/icons-react';
 import * as React from 'react';
 
 const useStyles = createStyles((theme) => ({

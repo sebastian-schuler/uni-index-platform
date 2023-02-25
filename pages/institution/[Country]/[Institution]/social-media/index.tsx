@@ -1,7 +1,7 @@
 
 import { ActionIcon, Card, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { Country, Institution, InstitutionSocialMedia } from '@prisma/client'
-import { IconBrandTwitter, IconBrandYoutube } from '@tabler/icons'
+import { IconBrandTwitter, IconBrandYoutube } from '@tabler/icons-react'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'

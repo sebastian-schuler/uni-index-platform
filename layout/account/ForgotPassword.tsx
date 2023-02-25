@@ -2,7 +2,7 @@ import {
     Anchor, Box, Button,
     Center, createStyles, Group, Paper, Text, TextInput, Title, useMantineTheme
 } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons';
+import { IconArrowLeft } from '@tabler/icons-react';
 import { useState } from 'react';
 
 const useStyles = createStyles((theme) => ({

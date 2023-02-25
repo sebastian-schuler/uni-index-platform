@@ -1,12 +1,12 @@
 import { Anchor, Card, createStyles, Grid, Group, Stack, Text, ThemeIcon } from '@mantine/core'
 import { Country } from '@prisma/client'
-import { IconAward, IconCalendar, IconCategory } from '@tabler/icons'
+import { IconAward, IconCalendar, IconCategory } from '@tabler/icons-react'
 import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
 import { SubjectCardData } from '../../../lib/types/UiHelperTypes'
-import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS, URL_LOCATION } from '../../../lib/url-helper/urlConstants'
+import { URL_CATEGORY, URL_INSTITUTION, URL_INSTITUTION_SUBJECTS, URL_LOCATION } from '../../../lib/url-helper/urlConstants'
 import { toLink } from '../../../lib/util/util'
 
 const useStyles = createStyles((theme) => ({
@@ -70,24 +70,16 @@ const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
           {/* Header: Subjectname, Institution, City */}
           <Grid.Col span={10}>
 
-            <Link href={subjectUrl} passHref>
-              <Anchor>
-                <Text size="lg" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1, wordBreak: "break-word" }}>
-                  {data.name}
-                </Text>
-              </Anchor>
-            </Link>
+            <Anchor component={Link} href={subjectUrl}>
+              <Text size="lg" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1, wordBreak: "break-word" }}>
+                {data.name}
+              </Text>
+            </Anchor>
 
             <Text sx={{ lineHeight: 1.2, wordBreak: "break-all", lineBreak: "anywhere" }}>
-
-              <Link href={institutionUrl} passHref>
-                <Anchor>{data.Institution.name}</Anchor>
-              </Link>
+              <Anchor component={Link} href={institutionUrl}>{data.Institution.name}</Anchor>
               {' | '}
-              <Link href={data.City.fullUrl} passHref>
-                <Anchor>{data.City.name}</Anchor>
-              </Link>
-
+              <Anchor component={Link} href={data.City.fullUrl}>{data.City.name}</Anchor>
             </Text>
           </Grid.Col>
 
@@ -113,9 +105,7 @@ const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
               {
                 data.categories.map((category, i) => (
                   <React.Fragment key={i}>
-                    <Link href={category.url} passHref>
-                      <Anchor>{category.name}</Anchor>
-                    </Link>
+                    <Anchor component={Link} href={toLink(URL_CATEGORY, category.url)} >{category.name}</Anchor>
                     {i < data.categories.length - 1 && ', '}
                   </React.Fragment>
                 ))

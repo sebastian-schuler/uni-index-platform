@@ -1,10 +1,9 @@
 import {
   Anchor,
-  Burger, Button, Center, createStyles, Divider, Drawer, Group, Header, Menu, Stack, Text, UnstyledButton
+  Burger, Center, createStyles, Divider, Drawer, Group, Header, Menu, Stack, Text, UnstyledButton
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { NextLink } from '@mantine/next';
-import { IconChevronDown } from '@tabler/icons';
+import { IconChevronDown } from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -146,7 +145,7 @@ const WebsiteHeader = () => {
     const menuItems = link.children?.map((item, i) => {
 
       if (item.type === "link")
-        return (<Menu.Item key={item.link} component={NextLink} href={item.link}>{item.label}</Menu.Item>);
+        return (<Menu.Item key={item.link} component={Link} href={item.link}>{item.label}</Menu.Item>);
 
       if (item.type === "divider")
         return (<Menu.Divider key={i} />);
@@ -192,11 +191,9 @@ const WebsiteHeader = () => {
     }
 
     return (
-      <Link key={link.parent.label} href={link.parent.link} passHref>
-        <Anchor component='a' className={classes.link}>
-          <Text component='div' className={isCurrent ? classes.linkActive : undefined}>{link.parent.label}</Text>
-        </Anchor>
-      </Link>
+      <Anchor key={link.parent.label} href={link.parent.link} component={Link} className={classes.link}>
+        <Text component='div' className={isCurrent ? classes.linkActive : undefined}>{link.parent.label}</Text>
+      </Anchor>
     );
   });
 

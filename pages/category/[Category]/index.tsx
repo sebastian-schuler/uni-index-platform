@@ -64,11 +64,15 @@ const SubjectCategoryPage: NextPage<Props> = ({ categoryInfo, subjectData, count
           ]}
         >
           {
-            subjectData.map((subject, i) => (
-              // searchableCountry.visible && (
-              <SubjectCard key={i} data={subject} country={countryList.find(c => c.id === subject.countryId)} />
-              // )
-            ))
+            subjectData.map((subject, i) => {
+
+              const country = countryList.find(c => c.id === subject.countryId);
+              if (!country) return null;
+
+              return (
+                <SubjectCard key={i} data={subject} country={country} />
+              )
+            })
           }
         </SimpleGrid>
 

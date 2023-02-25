@@ -41,9 +41,7 @@ const SubNav = ({ title, pageLinkData, backButton }: Props) => {
                 backButton !== undefined ? (
                     <Group sx={{ justifyContent: 'space-between' }}>
                         <GenericPageHeader title={title} description={""} />
-                        <Link href={backButton.url}>
-                            <Button component='a' radius={"md"} variant='outline'>{backButton.text}</Button>
-                        </Link>
+                        <Button component={Link} href={backButton.url} radius={"md"} variant='outline'>{backButton.text}</Button>
                     </Group>
                 ) : <GenericPageHeader title={title} description={""} />
             }

@@ -1,7 +1,7 @@
 import { ActionIcon, Autocomplete, Box, Button, Center, FileInput, Grid, Group, Paper, SegmentedControl, Stack, Text, Textarea, Title, useMantineTheme } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { Subject } from '@prisma/client';
-import { IconBuilding, IconSchool, IconUpload, IconX } from '@tabler/icons';
+import { IconBuilding, IconSchool, IconUpload, IconX } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import HelpPopover from '../../components/elements/HelpPopover';
 import LargeAd from '../../components/elements/userads/LargeAd';

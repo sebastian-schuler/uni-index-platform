@@ -1,5 +1,5 @@
 import { ActionIcon, createStyles, Menu } from '@mantine/core'
-import { IconCategory2, IconLogin, IconLogout, IconUser } from '@tabler/icons'
+import { IconCategory2, IconLogin, IconLogout, IconUser } from '@tabler/icons-react'
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react'
@@ -50,11 +50,9 @@ const HeaderAccountMenu = () => {
                         </Menu.Dropdown>
                     </Menu>
                 ) : (
-                    <Link href="/login" passHref>
-                        <ActionIcon component='a' size={'lg'} radius={'md'} variant='subtle' className={classes.settingsButton}>
-                            <IconLogin size={20} />
-                        </ActionIcon>
-                    </Link>
+                    <ActionIcon component={Link} href="/login" size={'lg'} radius={'md'} variant='subtle' className={classes.settingsButton}>
+                        <IconLogin size={20} />
+                    </ActionIcon>
                 )
             }
 

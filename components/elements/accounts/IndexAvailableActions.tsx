@@ -3,7 +3,7 @@ import { Card, createStyles, Group, SimpleGrid, Text, UnstyledButton } from '@ma
 import {
     IconBuildingBank, IconCashBanknote,
     IconCoin, IconCreditCard, IconReceipt, IconReceiptRefund, IconReceiptTax, IconRepeat, IconReport
-} from '@tabler/icons';
+} from '@tabler/icons-react';
 
 const useStyles = createStyles((theme) => ({
     card: {

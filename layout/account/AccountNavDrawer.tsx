@@ -1,5 +1,5 @@
 import { Button, createStyles, Group, Navbar } from '@mantine/core';
-import { IconArticle, IconDashboard, IconHelp, IconHistory, IconHome, IconLogout, IconPencilPlus, IconSettings } from '@tabler/icons';
+import { IconArticle, IconDashboard, IconHelp, IconHistory, IconHome, IconLogout, IconPencilPlus, IconSettings } from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -132,15 +132,15 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedEmail }: Props) =>
                 <Group className={classes.header} position="apart">
                     {/* <MantineLogo size={28} /> */}
                     <UserButton
-                        
+
                         email={displayedEmail}
                     />
                 </Group>
                 {links}
                 <Group className={classes.homepageLink} position="apart">
-                    <Link href={"/"} passHref>
                     <Button
-                        component='a'
+                        component={Link}
+                        href={"/"}
                         className={classes.link}
                         variant="subtle"
                         fullWidth
@@ -148,7 +148,6 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedEmail }: Props) =>
                         <IconHome className={classes.linkIcon} stroke={1.5} />
                         <span>Uni-Index Homepage</span>
                     </Button>
-                    </Link>
                 </Group>
             </Navbar.Section>
 

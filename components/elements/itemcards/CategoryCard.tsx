@@ -1,5 +1,5 @@
 import { Card, createStyles, Group, Stack, Text, ThemeIcon } from '@mantine/core'
-import { IconSchool } from '@tabler/icons'
+import { IconSchool } from '@tabler/icons-react'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
@@ -35,34 +35,32 @@ const CategoryCard: React.FC<Props> = ({ subjectType }: Props) => {
 
     const { classes, theme } = useStyles();
     const { t } = useTranslation('common');
-    
+
     return (
-        <Link href={subjectType.url} passHref>
-            <Card component='a' withBorder radius="md" shadow={"sm"} className={classes.card}>
+        <Card component={Link} href={subjectType.url} withBorder radius="md" shadow={"sm"} className={classes.card}>
 
-                <Card.Section className={classes.section}>
-                    <Group position="apart" noWrap sx={{ alignItems: "start" }}>
-                        <Stack spacing={theme.spacing.xs}>
-                            <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>{subjectType.name}</Text>
-                        </Stack>
-                    </Group>
-                </Card.Section>
-
-                <Card.Section className={classes.section}>
-                    <Stack spacing={"sm"}>
-
-                        <Group noWrap>
-                            <ThemeIcon size={24} radius="xl">
-                                <IconSchool size={18} />
-                            </ThemeIcon>
-                            <Text>{t('card-category.label-subjects',{count: subjectType.subjectCount})}</Text>
-                        </Group>
-
+            <Card.Section className={classes.section}>
+                <Group position="apart" noWrap sx={{ alignItems: "start" }}>
+                    <Stack spacing={theme.spacing.xs}>
+                        <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>{subjectType.name}</Text>
                     </Stack>
-                </Card.Section>
+                </Group>
+            </Card.Section>
 
-            </Card>
-        </Link>
+            <Card.Section className={classes.section}>
+                <Stack spacing={"sm"}>
+
+                    <Group noWrap>
+                        <ThemeIcon size={24} radius="xl">
+                            <IconSchool size={18} />
+                        </ThemeIcon>
+                        <Text>{t('card-category.label-subjects', { count: subjectType.subjectCount })}</Text>
+                    </Group>
+
+                </Stack>
+            </Card.Section>
+
+        </Card>
     )
 }
 

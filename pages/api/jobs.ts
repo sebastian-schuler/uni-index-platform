@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import fetch from 'node-fetch';
 import { getJobParameters } from "../../lib/apis/jobsHandler";
 
 let tokenExpiration: Date;

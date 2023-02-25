@@ -1,5 +1,5 @@
-import { Box, Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core'
-import { IconBuilding, IconSchool } from '@tabler/icons'
+import { Anchor, Box, Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core'
+import { IconBuilding, IconSchool } from '@tabler/icons-react'
 import Link from 'next/link'
 import React, { memo } from 'react'
 import { PATH_PLACEHOLDER_IMAGES } from '../../../lib/url-helper/urlConstants'
@@ -49,7 +49,7 @@ const MediumAd: React.FC<Props> = ({ title, link, headline, subtext, description
     const { classes, theme } = useStyles();
 
     const AdCard = (
-        <Card component={disableLink ? "div" : "a"} withBorder radius="md" shadow="sm" p={0} className={classes.card} title={title} sx={{ height: colHeight }}>
+        <Card component={"div"} withBorder radius="md" shadow="sm" p={0} className={classes.card} title={title} sx={{ height: colHeight }}>
 
             <Group noWrap spacing={0} sx={{ alignItems: "start" }}>
 
@@ -92,9 +92,9 @@ const MediumAd: React.FC<Props> = ({ title, link, headline, subtext, description
     if (disableLink) return AdCard;
 
     return (
-        <Link href={link} passHref>
+        <Anchor component={Link} href={link}>
             {AdCard}
-        </Link>
+        </Anchor>
     )
 }
 

@@ -1,4 +1,4 @@
-import { Breadcrumbs, Text } from '@mantine/core';
+import { Breadcrumbs, createStyles, Text } from '@mantine/core';
 import { City, Country, Institution, State, Subject, SubjectType } from '@prisma/client';
 import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
@@ -8,7 +8,23 @@ import MantineLink from '../components/elements/MantineLink';
 import { URL_INSTITUTION, URL_INSTITUTIONS, URL_INSTITUTION_OM, URL_INSTITUTION_OM_ACCESSIBILITY, URL_INSTITUTION_OM_BESTPRACTICES, URL_INSTITUTION_OM_PERFORMANCE, URL_INSTITUTION_OM_PWA, URL_INSTITUTION_OM_SEO, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SOCIALMEDIA_TW, URL_INSTITUTION_SOCIALMEDIA_YT, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING, URL_SOCIAL_MEDIA_STATISTICS, URL_CATEGORY, URL_CATEGORIES } from '../lib/url-helper/urlConstants';
 import { getLocalizedName, toLink } from '../lib/util/util';
 
-type Props = {
+const useStyles = createStyles((theme) => {
+
+    return {
+        root: {
+            alignItems: 'baseline',
+            flexWrap: 'wrap',
+        },
+        separator: {
+            color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+        },
+        breadcrumb: {
+            whiteSpace: 'pre-wrap'
+        }
+    };
+});
+
+interface Props {
 
     countryInfo?: Country | null,
     stateInfo?: State | null,
@@ -24,6 +40,8 @@ type Props = {
 // Generate a breadcrumb based on the routers path / query
 // This allows us to just use the Breadcrumb Object and provide it with the necessary data to achieve a fully functional breadcrumb on every supported page
 const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subjectTypeInfo, subjectInfo, institutionInfo }: Props) => {
+
+    const { classes } = useStyles();
 
     /*
     ================================= TRANSLATION =================================
@@ -42,10 +60,7 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
         if (translated === "") return "" + queryString;
         else return translated;
     }
-
-    const router = useRouter();
-    const query = router.query;
-    const route = router.route;
+    const { query, route } = useRouter();
 
     /*
     ================================= GENERATE BREADCRUMB =================================
@@ -242,7 +257,10 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
 
     // Render Breadcrumbs
     return (
-        <Breadcrumbs separator=">">
+        <Breadcrumbs
+            separator=">"
+            classNames={{ root: classes.root, separator: classes.separator, breadcrumb: classes.breadcrumb }}
+        >
             {
                 links.map((link, i) => (
                     i !== links.length - 1 ? (

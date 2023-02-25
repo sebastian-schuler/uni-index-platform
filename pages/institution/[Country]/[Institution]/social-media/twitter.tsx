@@ -91,9 +91,7 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, country
                             <Title order={3}>Twitter Details</Title>
                             <Text>All social media profiles at a glance.</Text>
                         </div>
-                        <Link href={urlBack} passHref>
-                            <Button component='a' variant='light' radius={"md"}>Go back</Button>
-                        </Link>
+                        <Button component={Link} href={urlBack} variant='light' radius={"md"}>Go back</Button>
                     </Group>
 
                     <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>

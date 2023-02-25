@@ -1,10 +1,8 @@
-import { Card, CardSection, createStyles, SimpleGrid, Space, Text, Title } from '@mantine/core'
+import { Card, CardSection, createStyles, SimpleGrid, Text, Title } from '@mantine/core'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
-import { SmBestCardMinified, SocialMediaDBEntry, TotalScore, YoutubeProfile } from '../../../lib/types/SocialMediaTypes'
-import { URL_INSTITUTION, URL_INSTITUTION_SOCIALMEDIA } from '../../../lib/url-helper/urlConstants'
-import { getLocalizedName, toLink } from '../../../lib/util/util'
+import { SmBestCardMinified } from '../../../lib/types/SocialMediaTypes'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -37,38 +35,36 @@ const BestYoutubeCard: React.FC<Props> = ({ highestYoutube }: Props) => {
     if (highestYoutube.type !== 'youtube') return <></>;
 
     return (
-        <Link href={highestYoutube.Institution.url} passHref>
-            <Card component='a' withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
-                <CardSection className={classes.section} px={"md"} pt={"lg"}>
-                    <Title order={5} mb={"xs"}>{t('social-media.best-yt.title')}</Title>
-                    <Text sx={{ lineHeight: 1.1 }}>
-                        {highestYoutube.Institution.name}, {highestYoutube.Institution.countryName}
-                    </Text>
-                </CardSection>
-                <SimpleGrid cols={4}>
-                    <div>
-                        <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-yt.subs')}</Text>
-                        <Text>{highestYoutube.totalSubscribers}</Text>
-                    </div>
+        <Card component={Link} href={highestYoutube.Institution.url} withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
+            <CardSection className={classes.section} px={"md"} pt={"lg"}>
+                <Title order={5} mb={"xs"}>{t('social-media.best-yt.title')}</Title>
+                <Text sx={{ lineHeight: 1.1 }}>
+                    {highestYoutube.Institution.name}, {highestYoutube.Institution.countryName}
+                </Text>
+            </CardSection>
+            <SimpleGrid cols={4}>
+                <div>
+                    <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-yt.subs')}</Text>
+                    <Text>{highestYoutube.totalSubscribers}</Text>
+                </div>
 
-                    <div>
-                        <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-yt.videos')}</Text>
-                        <Text>{highestYoutube.totalVideos}</Text>
-                    </div>
+                <div>
+                    <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-yt.videos')}</Text>
+                    <Text>{highestYoutube.totalVideos}</Text>
+                </div>
 
-                    <div>
-                        <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-yt.views')}</Text>
-                        <Text>{highestYoutube.avgViews.toFixed(0)}</Text>
-                    </div>
+                <div>
+                    <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-yt.views')}</Text>
+                    <Text>{highestYoutube.avgViews.toFixed(0)}</Text>
+                </div>
 
-                    <div>
-                        <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-yt.comments')}</Text>
-                        <Text>{highestYoutube.avgComments.toFixed(2)}</Text>
-                    </div>
-                </SimpleGrid>
+                <div>
+                    <Text size="sm" weight="bold" color="dimmed" >{t('social-media.best-yt.comments')}</Text>
+                    <Text>{highestYoutube.avgComments.toFixed(2)}</Text>
+                </div>
+            </SimpleGrid>
 
-            </Card>
-        </Link>
+        </Card>
     )
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Popover, Text, Button, ActionIcon } from '@mantine/core';
-import { IconHelp } from '@tabler/icons'
+import { IconHelp } from '@tabler/icons-react'
 
 interface Props {
     helpText: string

@@ -40,26 +40,24 @@ const SocialMediaCard: React.FC<Props> = ({ title, url, icon, color, textColor, 
     const { t } = useTranslation('common');
 
     return (
-        <Link href={url} passHref>
-            <Card component='a' withBorder radius="md" shadow={"sm"} className={classes.card} sx={{ backgroundColor: color }}>
+        <Card component={Link} href={url} withBorder radius="md" shadow={"sm"} className={classes.card} sx={{ backgroundColor: color }}>
 
-                <Card.Section className={classes.section}>
-                    <Group position="apart" noWrap sx={{ alignItems: "start" }}>
-                        <Stack spacing={theme.spacing.xs}>
-                            <Text size="xl" color={textColor} weight={500} sx={{ lineHeight: 1 }}>{title}</Text>
-                        </Stack>
-                        {icon}
-                    </Group>
-                </Card.Section>
-
-                <Card.Section className={classes.section}>
-                    <Stack spacing={"sm"}>
-                        <Text color={textColor}>Last update: {lastUpdate}</Text>
+            <Card.Section className={classes.section}>
+                <Group position="apart" noWrap sx={{ alignItems: "start" }}>
+                    <Stack spacing={theme.spacing.xs}>
+                        <Text size="xl" color={textColor} weight={500} sx={{ lineHeight: 1 }}>{title}</Text>
                     </Stack>
-                </Card.Section>
+                    {icon}
+                </Group>
+            </Card.Section>
 
-            </Card>
-        </Link>
+            <Card.Section className={classes.section}>
+                <Stack spacing={"sm"}>
+                    <Text color={textColor}>Last update: {lastUpdate}</Text>
+                </Stack>
+            </Card.Section>
+
+        </Card>
     )
 }
 

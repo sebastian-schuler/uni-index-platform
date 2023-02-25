@@ -1,5 +1,5 @@
 import { ActionIcon, Autocomplete, Group, SelectItemProps, Text, useMantineTheme } from '@mantine/core';
-import { IconSchool, IconX } from '@tabler/icons';
+import { IconSchool, IconX } from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import React, { forwardRef } from 'react';
 import { InstitutionRegistrationItem } from '../../../../lib/types/AccountHandlingTypes';

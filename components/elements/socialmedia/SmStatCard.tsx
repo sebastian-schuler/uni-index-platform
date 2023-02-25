@@ -1,11 +1,11 @@
-import { Card, createStyles, Group, Text, useMantineTheme } from '@mantine/core';
+import { Card, createStyles, Group, Text } from '@mantine/core';
 import {
-    IconArrowDownRight, IconArrowLeft, IconArrowUpRight, TablerIcon
-} from '@tabler/icons';
+    IconArrowDownRight, IconArrowLeft, IconArrowUpRight
+} from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import { memo } from 'react';
 import { formatNumber } from '../../../lib/util/formattingUtil';
-
+import { addTablerIconProps } from '../../../lib/util/uiUtil';
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -40,16 +40,16 @@ interface Props {
     title: string
     value: number
     diff: number
-    icon: TablerIcon
+    icon: JSX.Element
 }
 
 const SmStatCard = ({ title, value, diff, icon }: Props) => {
 
     const { lang } = useTranslation();
-    const theme = useMantineTheme();
-    const Icon = icon;
     const { classes } = useStyles();
     const DiffIcon = diff > 0 ? IconArrowUpRight : (diff < 0 ? IconArrowDownRight : IconArrowLeft);
+
+    const iconWithProps = addTablerIconProps(icon, { size: 22, stroke: 1.5, className: classes.icon });
 
     return (
         <Card p="md" radius="sm" shadow="xs" key={title} className={classes.root}>
@@ -57,7 +57,7 @@ const SmStatCard = ({ title, value, diff, icon }: Props) => {
                 <Text size="xs" color="dimmed" className={classes.title}>
                     {title}
                 </Text>
-                <Icon className={classes.icon} size={22} stroke={1.5} />
+                {iconWithProps}
             </Group>
 
             <Group align="flex-end" spacing="xs" mt={25}>

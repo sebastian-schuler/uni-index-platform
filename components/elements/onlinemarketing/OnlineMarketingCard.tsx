@@ -34,46 +34,44 @@ const OnlineMarketingCard = ({ report }: Props) => {
     const { t } = useTranslation('common');
 
     return (
-        <Link href={report.institution.slug} passHref>
-            <Card component='a' withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
+        <Card component={Link} href={report.institution.slug} withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
 
-                <CardSection className={classes.section}>
-                    <Text size={"xl"} weight={'bold'}>{report.institution.name}</Text>
-                    <Text>{report.institution.website}</Text>
-                </CardSection>
+            <CardSection className={classes.section}>
+                <Text size={"xl"} weight={'bold'}>{report.institution.name}</Text>
+                <Text>{report.institution.website}</Text>
+            </CardSection>
 
-                <SimpleGrid cols={2}>
+            <SimpleGrid cols={2}>
 
-                    <LhrRingProgress
-                        size='sm'
-                        title={t('online-marketing-category.performance')}
-                        score={report.performanceScore * 100}
-                    />
+                <LhrRingProgress
+                    size='sm'
+                    title={t('online-marketing-category.performance')}
+                    score={report.performanceScore * 100}
+                />
 
-                    <LhrRingProgress
-                        size='sm'
-                        title={t('online-marketing-category.best-practices')}
-                        score={report.bestPracticesScore * 100}
-                    />
+                <LhrRingProgress
+                    size='sm'
+                    title={t('online-marketing-category.best-practices')}
+                    score={report.bestPracticesScore * 100}
+                />
 
-                    <LhrRingProgress
-                        size='sm'
-                        title={t('online-marketing-category.accessibility')}
-                        score={report.accessibilityScore * 100}
-                    />
+                <LhrRingProgress
+                    size='sm'
+                    title={t('online-marketing-category.accessibility')}
+                    score={report.accessibilityScore * 100}
+                />
 
-                    <LhrRingProgress
-                        size='sm'
-                        title={t('online-marketing-category.seo')}
-                        score={report.seoScore * 100}
-                    />
+                <LhrRingProgress
+                    size='sm'
+                    title={t('online-marketing-category.seo')}
+                    score={report.seoScore * 100}
+                />
 
-                </SimpleGrid>
-
+            </SimpleGrid>
 
 
-            </Card>
-        </Link>
+
+        </Card>
     )
 }
 

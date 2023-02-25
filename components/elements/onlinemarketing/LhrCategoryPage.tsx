@@ -20,14 +20,15 @@ interface Props {
 }
 
 const LhrCategoryPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }: Props) => {
+
+    const backLink = toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM);
+
     return (
         <LayoutContainer footerContent={footerContent}>
 
             <Group position="apart">
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />
-                <Link href={toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM)}>
-                    <Button variant='outline' component={"a"}>Back to Online Marketing</Button>
-                </Link>
+                <Button variant='outline' component={Link} href={backLink}>Back to Online Marketing</Button>
             </Group>
 
             <Space h="md" />
