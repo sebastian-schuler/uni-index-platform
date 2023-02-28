@@ -4,11 +4,11 @@ import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
-import GenericPageHeader from '../../../../../components/elements/GenericPageHeader';
-import InstitutionCard from '../../../../../components/elements/itemcards/InstitutionCard';
-import Breadcrumb from '../../../../../layout/Breadcrumb';
-import { FooterContent } from '../../../../../layout/footer/Footer';
-import LayoutContainer from '../../../../../layout/LayoutContainer';
+import GenericPageHeader from '../../../../../components/Block/GenericPageHeader';
+import InstitutionCard from '../../../../../components/Card/InstitutionCard';
+import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb';
+import { FooterContent } from '../../../../../features/Footer/Footer';
+import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper';
 import { getInstitutionsDetailedByCity } from '../../../../../lib/prisma/prismaDetailedQueries';
 import { getCityStateCountryByCity, getCountries } from '../../../../../lib/prisma/prismaQueries';
 import { getCityStateCountryPaths } from '../../../../../lib/prisma/prismaUrlPaths';
@@ -32,7 +32,7 @@ const CityPage: NextPage<Props> = ({ countryList, institutionData, institutionSt
   const { t } = useTranslation('location');
 
   return (
-    <LayoutContainer footerContent={footerContent}>
+    <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
         <title key={"title"}>{t('common:page-title') + " | " + t('city-title', { city: cityInfo.name })}</title>
@@ -83,7 +83,7 @@ const CityPage: NextPage<Props> = ({ countryList, institutionData, institutionSt
 
       </Stack>
 
-    </LayoutContainer >
+    </ResponsiveWrapper >
   )
 }
 

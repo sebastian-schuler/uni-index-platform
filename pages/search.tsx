@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next'
-import SearchResultList from '../components/elements/search/SearchResultList'
-import Breadcrumb from '../layout/Breadcrumb'
-import LayoutContainer from '../layout/LayoutContainer'
+import SearchResultList from '../features/GlobalSearch/SearchResultList'
+import Breadcrumb from '../features/Breadcrumb/Breadcrumb'
+import ResponsiveWrapper from '../components/Container/ResponsiveWrapper'
 import { getGlobalSearchResults } from '../lib/prisma/prismaGlobalSearch'
 import { LinkableCity, LinkableInstitution, LinkableSubject } from '../lib/types/Linkables'
 
@@ -14,7 +14,7 @@ interface Props {
 const Search: NextPage<Props> = ({ subjects, institutions, cities }: Props) => {
 
     return (
-        <LayoutContainer>
+        <ResponsiveWrapper>
 
             <Breadcrumb />
 
@@ -26,7 +26,7 @@ const Search: NextPage<Props> = ({ subjects, institutions, cities }: Props) => {
 
             </div>
 
-        </LayoutContainer>
+        </ResponsiveWrapper>
     )
 }
 

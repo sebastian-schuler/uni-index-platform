@@ -2,9 +2,9 @@
 import { Box, Center, Grid, Loader } from '@mantine/core';
 import useTranslation from 'next-translate/useTranslation';
 import { useEffect, useState } from 'react';
-import BookedAdsTable from '../../components/elements/accounts/BookedAdsTable';
-import IndexAvailableActions from '../../components/elements/accounts/IndexAvailableActions';
-import GroupedStats from '../../components/elements/GroupedStats';
+import AccountAdsTable from '../../features/Account/AccountAdsTable';
+import AccountActions from '../../features/Account/AccountActions';
+import GroupedStats from '../../features/Account/AccountGroupedStats';
 import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
 import { PremiumAdDetailed, UserDataProfile } from '../../lib/types/AccountHandlingTypes';
 
@@ -44,7 +44,7 @@ const AccountPage = () => {
       <Grid>
 
         <Grid.Col xs={12} md={6} lg={4}>
-          <IndexAvailableActions />
+          <AccountActions />
         </Grid.Col>
 
         <Grid.Col lg={8}>
@@ -56,7 +56,7 @@ const AccountPage = () => {
         </Grid.Col>
 
         <Grid.Col lg={12}>
-            <BookedAdsTable data={userBookedAds} />
+            <AccountAdsTable data={userBookedAds} />
         </Grid.Col>
 
       </Grid>

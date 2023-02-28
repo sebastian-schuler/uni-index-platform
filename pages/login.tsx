@@ -7,9 +7,9 @@ import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import MantineLink from '../components/elements/MantineLink';
-import ForgotPassword from '../layout/account/ForgotPassword';
-import LayoutContainer from '../layout/LayoutContainer';
+import MantineLink from '../components/Link/MantineLink';
+import ForgotPassword from '../features/Login/ForgotPassword';
+import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import { useAuth } from '../lib/context/SessionContext';
 import { LoginStatus } from '../lib/types/AccountHandlingTypes';
 import { URL_REGISTER } from '../lib/url-helper/urlConstants';
@@ -93,7 +93,7 @@ const CustomerLogin: NextPage = () => {
   }
 
   return (
-    <LayoutContainer>
+    <ResponsiveWrapper>
 
       <Head>
         <title key={"title"}>{t('common:page-title') + " | " + t('login-tab-title')}</title>
@@ -156,7 +156,7 @@ const CustomerLogin: NextPage = () => {
 
         </Stack>
       </Center>
-    </LayoutContainer>
+    </ResponsiveWrapper>
   )
 
 }

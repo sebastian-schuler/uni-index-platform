@@ -1,8 +1,8 @@
 import { Text, Title } from '@mantine/core';
 import { memo } from 'react';
-import Faq from '../../components/elements/accounts/support/Faq';
+import Faq from '../../features/Account/AccountSupport';
 
-const Support = () => {
+const AccountSupport = () => {
 
   return (
     <div>
@@ -13,4 +13,4 @@ const Support = () => {
   )
 }
 
-export default memo(Support);
+export default memo(AccountSupport);

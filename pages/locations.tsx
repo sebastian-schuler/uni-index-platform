@@ -1,9 +1,9 @@
 import { GetStaticProps, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
-import PremiumList from '../components/container/AdList'
-import CountryList from '../components/container/CountryList'
-import LayoutContainer from '../layout/LayoutContainer'
+import PremiumList from '../features/Ads/AdList'
+import CountryList from '../features/CountryList/CountryList'
+import ResponsiveWrapper from '../components/Container/ResponsiveWrapper'
 import { getDetailedCountries } from '../lib/prisma/prismaDetailedQueries'
 import { getAds } from '../lib/prisma/prismaQueries'
 import { DetailedUserAd } from '../lib/types/DetailedDatabaseTypes'
@@ -22,7 +22,7 @@ const Locations: NextPage<Props> = ({ adsStringified, searchableCountries }: Pro
     const ads: DetailedUserAd[] = JSON.parse(adsStringified);
 
     return (
-        <LayoutContainer>
+        <ResponsiveWrapper>
 
             <Head>
                 <title key={"title"}>{t('common:page-title') + " | " + t('countries-title')}</title>
@@ -36,7 +36,7 @@ const Locations: NextPage<Props> = ({ adsStringified, searchableCountries }: Pro
                 <PremiumList premiumAds={ads} />
             </CountryList>
 
-        </LayoutContainer>
+        </ResponsiveWrapper>
     )
 }
 

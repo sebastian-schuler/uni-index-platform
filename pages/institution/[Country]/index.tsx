@@ -4,11 +4,11 @@ import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
-import GenericPageHeader from '../../../components/elements/GenericPageHeader';
-import InstitutionCard from '../../../components/elements/itemcards/InstitutionCard';
-import Breadcrumb from '../../../layout/Breadcrumb';
-import { FooterContent } from '../../../layout/footer/Footer';
-import LayoutContainer from '../../../layout/LayoutContainer';
+import GenericPageHeader from '../../../components/Block/GenericPageHeader';
+import InstitutionCard from '../../../components/Card/InstitutionCard';
+import Breadcrumb from '../../../features/Breadcrumb/Breadcrumb';
+import { FooterContent } from '../../../features/Footer/Footer';
+import ResponsiveWrapper from '../../../components/Container/ResponsiveWrapper';
 import prisma from '../../../lib/prisma/prisma';
 import { getInstitutionsDetailedByCountry } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
@@ -31,7 +31,7 @@ const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institution
   const countryName = getLocalizedName({ lang: lang, dbTranslated: countryInfo });
 
   return (
-    <LayoutContainer footerContent={footerContent}>
+    <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
         <title key={"title"}>{t('common:page-title') + " | " + t('country-title', { country: countryName })}</title>
@@ -79,7 +79,7 @@ const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institution
 
       </Stack>
 
-    </LayoutContainer>
+    </ResponsiveWrapper>
   )
 }
 

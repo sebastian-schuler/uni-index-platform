@@ -8,14 +8,14 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import { useEffect, useState } from 'react';
-import CountryMapContainer from '../../../components/dynamic/CountryMapContainer';
-import GenericPageHeader from '../../../components/elements/GenericPageHeader';
-import StateCard from '../../../components/elements/itemcards/StateCard';
-import OrderBySelect, { OrderByState } from '../../../components/elements/OrderBySelect';
-import SearchBox from '../../../components/partials/SearchBox';
-import Breadcrumb from '../../../layout/Breadcrumb';
-import { FooterContent } from '../../../layout/footer/Footer';
-import LayoutContainer from '../../../layout/LayoutContainer';
+import CountryMapContainer from '../../../features/Map/CountryMapContainer';
+import GenericPageHeader from '../../../components/Block/GenericPageHeader';
+import StateCard from '../../../components/Card/StateCard';
+import OrderBySelect, { OrderByState } from '../../../components/Select/OrderBySelect';
+import ItemSearch from '../../../components/Searchbox/ItemSearch';
+import Breadcrumb from '../../../features/Breadcrumb/Breadcrumb';
+import { FooterContent } from '../../../features/Footer/Footer';
+import ResponsiveWrapper from '../../../components/Container/ResponsiveWrapper';
 import prisma from '../../../lib/prisma/prisma';
 import { getStatesDetailedByCountry } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
@@ -83,7 +83,7 @@ const CountryPage: NextPage<Props> = ({ searchableStates, countryInfo, footerCon
   }, [orderBy, lang, searchTerm]);
 
   return (
-    <LayoutContainer footerContent={footerContent}>
+    <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
         <title key={"title"}>{t('common:page-title') + " | " + t('country.title', { country: localizedCountryName })}</title>
@@ -112,7 +112,7 @@ const CountryPage: NextPage<Props> = ({ searchableStates, countryInfo, footerCon
             <Stack>
               <Title order={2}>{t('country.list-title', { country: localizedCountryName })}</Title>
               <Group position='apart' >
-                <SearchBox
+                <ItemSearch
                   label={t('country.search-label', { country: localizedCountryName })}
                   placeholder={t('country.search-placeholder')}
                   searchTerm={searchTerm}
@@ -151,7 +151,7 @@ const CountryPage: NextPage<Props> = ({ searchableStates, countryInfo, footerCon
 
       </Stack>
 
-    </LayoutContainer>
+    </ResponsiveWrapper>
   )
 }
 

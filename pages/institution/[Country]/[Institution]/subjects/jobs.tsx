@@ -2,16 +2,16 @@ import { Country, Institution, Subject } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
-import Breadcrumb from '../../../../../layout/Breadcrumb'
-import { FooterContent } from '../../../../../layout/footer/Footer'
-import LayoutContainer from '../../../../../layout/LayoutContainer'
-import SubjectNav from '../../../../../layout/subnav/SubjectNav'
+import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
+import { FooterContent } from '../../../../../features/Footer/Footer'
+import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
+import SubjectNav from '../../../../../features/Navigation/SubjectNav'
 import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../lib/url-helper/urlConstants'
 import { getCountries, getCountry, getInstitution, getSubject } from '../../../../../lib/prisma/prismaQueries'
 import { getDBLocale, toLink } from '../../../../../lib/util/util'
 import { ParsedUrlQuery } from 'querystring'
 import { getJobsFromApi } from '../../../../../lib/apis/jobsHandler'
-import WhitePaper from '../../../../../components/WhitePaper'
+import WhitePaper from '../../../../../components/Paper/WhitePaper'
 import { getSubjectPaths } from '../../../../../lib/prisma/prismaUrlPaths'
 
 type Props = {
@@ -32,7 +32,7 @@ const SubjectJobs: NextPage<Props> = props => {
     const institutionUrl = (query.Institution || "") as string;
 
     return (
-        <LayoutContainer footerContent={props.footerContent}>
+        <ResponsiveWrapper footerContent={props.footerContent}>
 
             <Breadcrumb
                 countryInfo={props.country}
@@ -52,7 +52,7 @@ const SubjectJobs: NextPage<Props> = props => {
                 <p>Jobs</p>
             </WhitePaper>
 
-        </LayoutContainer>
+        </ResponsiveWrapper>
     )
 }
 

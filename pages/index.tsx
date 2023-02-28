@@ -2,16 +2,16 @@ import { Grid, Stack } from '@mantine/core';
 import { Country, State } from '@prisma/client';
 import type { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import PremiumList from '../components/container/AdList';
-import HeroSection from '../layout/index/HeroSection';
-import SearchSection from '../layout/index/SearchSection';
-import SocialMediaSection from '../layout/index/SocialMediaSection';
-import CountryCard from '../components/elements/itemcards/CountryCard';
-import InstitutionCard from '../components/elements/itemcards/InstitutionCard';
-import SubjectCard from '../components/elements/itemcards/SubjectCard';
-import { FooterContent } from '../layout/footer/Footer';
-import PopularSection from '../layout/index/PopularSection';
-import LayoutContainer from '../layout/LayoutContainer';
+import PremiumList from '../features/Ads/AdList';
+import HeroSection from '../features/Index/HeroSection';
+import SearchSection from '../features/Index/SearchSection';
+import SocialMediaSection from '../features/Index/SocialMediaSection';
+import CountryCard from '../components/Card/CountryCard';
+import InstitutionCard from '../components/Card/InstitutionCard';
+import SubjectCard from '../components/Card/SubjectCard';
+import { FooterContent } from '../features/Footer/Footer';
+import PopularSection from '../features/Index/PopularSection';
+import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import { AD_PAGE_INDEX } from '../lib/appConstants';
 import { getPopularDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
 import { getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/prisma/prismaPopularQueries';
@@ -22,7 +22,7 @@ import { SmBestCardMinified, SmRankingEntryMinified, TotalScore } from '../lib/t
 import { URL_INSTITUTIONS, URL_LOCATIONS, URL_CATEGORIES } from '../lib/url-helper/urlConstants';
 import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmBestCard, minifySmRankingItem } from '../lib/util/conversionUtil';
 import { getUniquesFromArray, toLink } from '../lib/util/util';
-import OnlineMarketingSection from '../layout/index/OnlineMarketingSection';
+import OnlineMarketingSection from '../features/Index/OnlineMarketingSection';
 import { getAllLhrSimplified } from '../lib/lighthouse/lhrSimplifier';
 import { LhrSimple } from '../lib/types/lighthouse/CustomLhrTypes';
 import { CountryCardData, InstitutionCardData, SubjectCardData } from '../lib/types/UiHelperTypes';
@@ -52,7 +52,7 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
 
   return (
 
-    <LayoutContainer removeVerticalPadding removeContainerWrapper footerContent={footerContent}>
+    <ResponsiveWrapper removeVerticalPadding removeContainerWrapper footerContent={footerContent}>
 
       <Head>
         <title key={"title"}>{t('page-title')}</title>
@@ -138,7 +138,7 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
 
       </Stack>
 
-    </LayoutContainer>
+    </ResponsiveWrapper>
   )
 }
 

@@ -1,5 +1,5 @@
 import { Stack, Title } from '@mantine/core';
-import LanguageSettings from '../../components/elements/accounts/LanguageSettings';
+import LanguageSettings from '../../features/Account/AccountLangSettings';
 
 const Settings = () => {
 

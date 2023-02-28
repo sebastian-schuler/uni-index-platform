@@ -6,16 +6,16 @@ import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import SmStatRow from '../../../../../components/elements/socialmedia/SmStatRow'
-import WhitePaper from '../../../../../components/WhitePaper'
-import Breadcrumb from '../../../../../layout/Breadcrumb'
-import { FooterContent } from '../../../../../layout/footer/Footer'
-import LayoutContainer from '../../../../../layout/LayoutContainer'
+import WhitePaper from '../../../../../components/Paper/WhitePaper'
+import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
+import { FooterContent } from '../../../../../features/Footer/Footer'
+import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
 import { TotalScore, TotalScoreSet, YoutubeProfile } from '../../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION_SOCIALMEDIA_YT } from '../../../../../lib/url-helper/urlConstants'
+import SmStatRow from '../../../../../features/SocialMedia/SmStatRow'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -52,7 +52,7 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, country
     const router = useRouter();
 
     const errorComponent = (
-        <LayoutContainer footerContent={footerContent}>
+        <ResponsiveWrapper footerContent={footerContent}>
 
             <Head>
                 <title key={"title"}>{t('common:page-title') + " | " + t('social-media-youtube-title-nodata', { institution: institution.name })}</title>
@@ -63,7 +63,7 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, country
             <WhitePaper>
                 <Text>No Youtube data</Text>
             </WhitePaper>
-        </LayoutContainer>
+        </ResponsiveWrapper>
     );
     // IF NO SOCIAL MEDIA DATA PRESENT, RETURN ERROR COMPONENT
     if (!countryYoutubeScore || !countryYoutubeProfile || !institutionScore || !institutionYoutubeProfile) {
@@ -74,7 +74,7 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, country
     const urlBack = router.asPath.replace(URL_INSTITUTION_SOCIALMEDIA_YT, '');
 
     return (
-        <LayoutContainer footerContent={footerContent}>
+        <ResponsiveWrapper footerContent={footerContent}>
 
             <Head>
                 <title key={"title"}>{t('common:page-title') + " | " + t('social-media-youtube-title', { institution: institution.name })}</title>
@@ -183,7 +183,7 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, country
                     </SimpleGrid>
                 </Stack>
             </WhitePaper>
-        </LayoutContainer>
+        </ResponsiveWrapper>
     )
 }
 

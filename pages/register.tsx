@@ -2,9 +2,9 @@ import { Title, useMantineTheme, Text } from '@mantine/core';
 import { GetServerSideProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
-import MantineLink from '../components/elements/MantineLink';
-import RegisterSteps from '../layout/account/RegisterSteps';
-import LayoutContainer from '../layout/LayoutContainer';
+import MantineLink from '../components/Link/MantineLink';
+import RegisterSteps from '../features/Register/RegisterSteps';
+import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import { getInstitutesForUserAccounts } from '../lib/prisma/prismaUserAccounts';
 import { InstitutionRegistrationDBItem, InstitutionRegistrationItem } from '../lib/types/AccountHandlingTypes';
 import { URL_LOGIN } from '../lib/url-helper/urlConstants';
@@ -20,7 +20,7 @@ const Register: NextPage<Props> = props => {
   const { t } = useTranslation('loginLogout');
 
   return (
-    <LayoutContainer>
+    <ResponsiveWrapper>
 
       <Head>
         <title key={"title"}>{t('common:page-title') + " | " + t('signup-tab-title')}</title>
@@ -32,7 +32,7 @@ const Register: NextPage<Props> = props => {
 
       <RegisterSteps registrationInstitutes={props.registrationInstitutes} />
 
-    </LayoutContainer>
+    </ResponsiveWrapper>
   )
 }
 

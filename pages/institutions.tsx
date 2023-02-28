@@ -1,10 +1,10 @@
 import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
-import PremiumList from '../components/container/AdList';
-import CountryList from '../components/container/CountryList';
-import { FooterContent } from '../layout/footer/Footer';
-import LayoutContainer from '../layout/LayoutContainer';
+import PremiumList from '../features/Ads/AdList';
+import CountryList from '../features/CountryList/CountryList';
+import { FooterContent } from '../features/Footer/Footer';
+import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import { AD_PAGE_INSTITUTIONS } from '../lib/appConstants';
 import { getDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
 import { getAds } from '../lib/prisma/prismaQueries';
@@ -31,7 +31,7 @@ const Institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, fo
                 <meta key={"description"} name="description" content={t('institutions-description')} />
             </Head>
 
-            <LayoutContainer footerContent={footerContent}>
+            <ResponsiveWrapper footerContent={footerContent}>
 
                 <CountryList
                     title={t('institutions-title')}
@@ -41,7 +41,7 @@ const Institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, fo
                     <PremiumList premiumAds={ads} />
                 </CountryList>
 
-            </LayoutContainer>
+            </ResponsiveWrapper>
         </>
     )
 }

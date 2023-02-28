@@ -1,19 +1,18 @@
 
-import { ActionIcon, Card, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
-import { Country, Institution, InstitutionSocialMedia } from '@prisma/client'
+import { SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { Country, Institution } from '@prisma/client'
 import { IconBrandTwitter, IconBrandYoutube } from '@tabler/icons-react'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import SocialMediaCard from '../../../../../components/elements/itemcards/SocialMediaCard'
-import WhitePaper from '../../../../../components/WhitePaper'
-import Breadcrumb from '../../../../../layout/Breadcrumb'
-import { FooterContent } from '../../../../../layout/footer/Footer'
-import LayoutContainer from '../../../../../layout/LayoutContainer'
-import SmOverviewSection from '../../../../../layout/socialmedia/SmOverviewSection'
-import InstitutionNav from '../../../../../layout/subnav/InstitutionNav'
+import SocialMediaCard from '../../../../../components/Card/SocialMediaCard'
+import WhitePaper from '../../../../../components/Paper/WhitePaper'
+import { FooterContent } from '../../../../../features/Footer/Footer'
+import SmOverviewSection from '../../../../../features/SocialMedia/SmOverviewSection'
+import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
+import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
+import InstitutionNav from '../../../../../features/Navigation/InstitutionNav'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
 import { TotalScore, TotalScoreSet } from '../../../../../lib/types/SocialMediaTypes'
@@ -45,7 +44,7 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
 
     if (!institutionScore || !countryScore || !countryTwitterScore || !countryYoutubeScore) {
         return (
-            <LayoutContainer footerContent={footerContent}>
+            <ResponsiveWrapper footerContent={footerContent}>
 
                 <Head>
                     <title key={"title"}>{t('common:page-title') + " | " + t('social-media-title-nodata', { institution: institution.name })}</title>
@@ -57,7 +56,7 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
                 <WhitePaper>
                     <Text>No data</Text>
                 </WhitePaper>
-            </LayoutContainer>
+            </ResponsiveWrapper>
         )
     }
 
@@ -92,7 +91,7 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
     }
 
     return (
-        <LayoutContainer footerContent={footerContent}>
+        <ResponsiveWrapper footerContent={footerContent}>
 
             <Head>
                 <title key={"title"}>{t('common:page-title') + " | " + t('social-media-title', { institution: institution.name })}</title>
@@ -136,7 +135,7 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
                 </Stack>
             </WhitePaper>
 
-        </LayoutContainer>
+        </ResponsiveWrapper>
     )
 }
 

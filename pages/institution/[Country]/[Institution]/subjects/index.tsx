@@ -1,12 +1,12 @@
 import { Group, SimpleGrid } from '@mantine/core';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
-import SubjectCard from '../../../../../components/elements/itemcards/SubjectCard';
-import WhitePaper from '../../../../../components/WhitePaper';
-import Breadcrumb from '../../../../../layout/Breadcrumb';
-import { FooterContent } from '../../../../../layout/footer/Footer';
-import LayoutContainer from '../../../../../layout/LayoutContainer';
-import InstitutionNav from '../../../../../layout/subnav/InstitutionNav';
+import SubjectCard from '../../../../../components/Card/SubjectCard';
+import WhitePaper from '../../../../../components/Paper/WhitePaper';
+import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb';
+import { FooterContent } from '../../../../../features/Footer/Footer';
+import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper';
+import InstitutionNav from '../../../../../features/Navigation/InstitutionNav';
 import { getDetailedSubjectsByInstitution } from '../../../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
 import { DetailedSubject } from '../../../../../lib/types/DetailedDatabaseTypes';
@@ -26,7 +26,7 @@ interface Props {
 const subjects: NextPage<Props> = ({ institution, country, footerContent, subjectData, countryList }: Props) => {
 
   return (
-    <LayoutContainer footerContent={footerContent}>
+    <ResponsiveWrapper footerContent={footerContent}>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
 
@@ -73,7 +73,7 @@ const subjects: NextPage<Props> = ({ institution, country, footerContent, subjec
 
       </WhitePaper>
 
-    </LayoutContainer >
+    </ResponsiveWrapper >
   )
 }
 

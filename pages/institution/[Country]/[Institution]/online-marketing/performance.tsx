@@ -5,13 +5,13 @@ import { GetStaticPaths, GetStaticPropsContext } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import Link from 'next/link';
-import LhrAuditList from '../../../../../components/elements/onlinemarketing/LhrAuditList';
-import LhrAuditScore from '../../../../../components/elements/onlinemarketing/LhrAuditScore';
-import LhrRingProgress from '../../../../../components/elements/onlinemarketing/LhrRingProgress';
-import WhitePaper from '../../../../../components/WhitePaper';
-import Breadcrumb from '../../../../../layout/Breadcrumb';
-import { FooterContent } from '../../../../../layout/footer/Footer';
-import LayoutContainer from '../../../../../layout/LayoutContainer';
+import LhrAuditList from '../../../../../features/OnlineMarketing/LhrAuditList';
+import LhrAuditScore from '../../../../../features/OnlineMarketing/LhrAuditScore';
+import LhrRingProgress from '../../../../../features/OnlineMarketing/LhrRingProgress';
+import WhitePaper from '../../../../../components/Paper/WhitePaper';
+import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb';
+import { FooterContent } from '../../../../../features/Footer/Footer';
+import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper';
 import { getMinifiedLhrCategory } from '../../../../../lib/lighthouse/lhrParser';
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
 import { LhrAudit, LhrCategory } from '../../../../../lib/types/lighthouse/CustomLhrTypes';
@@ -59,7 +59,7 @@ const Performance = ({ institution, country, lhrAudits, lhrCategory, footerConte
     const { t, lang } = useTranslation('institution');
 
     return (
-        <LayoutContainer footerContent={footerContent}>
+        <ResponsiveWrapper footerContent={footerContent}>
 
             <Head>
                 <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-performance-title', { institution: institution?.name })}</title>
@@ -125,7 +125,7 @@ const Performance = ({ institution, country, lhrAudits, lhrCategory, footerConte
                 </Grid>
 
             </WhitePaper>
-        </LayoutContainer>
+        </ResponsiveWrapper>
     )
 }
 

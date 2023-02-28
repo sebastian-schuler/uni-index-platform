@@ -1,8 +1,8 @@
 import { MantineProvider } from '@mantine/core'
 import type { AppProps, NextWebVitalsMetric } from 'next/app'
 import { useRouter } from 'next/router'
-import AccountNavigation from '../layout/account/AccountNavigation'
-import WebsiteHeader from '../layout/nav/WebsiteHeader'
+import AccountNavigation from '../features/Account/AccountNavigation'
+import Navbar from '../features/AppShell/Navbar'
 import { AuthProvider } from '../lib/context/SessionContext'
 import { URL_ACCOUNT } from '../lib/url-helper/urlConstants'
 import { toLink } from '../lib/util/util'
@@ -61,7 +61,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               </AccountNavigation>
             ) : (
               <>
-                <WebsiteHeader />
+                <Navbar />
                 <Component {...pageProps} />
               </>
             )

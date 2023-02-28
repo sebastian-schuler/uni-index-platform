@@ -5,11 +5,11 @@ import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
-import GenericPageHeader from '../../../../components/elements/GenericPageHeader';
-import CityCard from '../../../../components/elements/itemcards/CityCard';
-import Breadcrumb from '../../../../layout/Breadcrumb';
-import { FooterContent } from '../../../../layout/footer/Footer';
-import LayoutContainer from '../../../../layout/LayoutContainer';
+import GenericPageHeader from '../../../../components/Block/GenericPageHeader';
+import CityCard from '../../../../components/Card/CityCard';
+import Breadcrumb from '../../../../features/Breadcrumb/Breadcrumb';
+import { FooterContent } from '../../../../features/Footer/Footer';
+import ResponsiveWrapper from '../../../../components/Container/ResponsiveWrapper';
 import prisma from '../../../../lib/prisma/prisma';
 import { getCitiesDetailedByState } from '../../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountryByState, getState } from '../../../../lib/prisma/prismaQueries';
@@ -29,7 +29,7 @@ const StatePage: NextPage<Props> = ({ cityList, stateInfo, countryInfo, footerCo
     const stateName = getLocalizedName({ lang: lang, state: stateInfo });
 
     return (
-        <LayoutContainer footerContent={footerContent}>
+        <ResponsiveWrapper footerContent={footerContent}>
 
             <Head>
                 <title key={"title"}>{t('common:page-title') + " | " + t('state-title', { state: stateName })}</title>
@@ -72,7 +72,7 @@ const StatePage: NextPage<Props> = ({ cityList, stateInfo, countryInfo, footerCo
                 </SimpleGrid>
 
             </Stack>
-        </LayoutContainer>
+        </ResponsiveWrapper>
     )
 }
 

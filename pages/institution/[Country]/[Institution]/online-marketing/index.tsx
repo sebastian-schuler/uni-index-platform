@@ -5,12 +5,12 @@ import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
 import Link from 'next/link'
-import LhrRingProgress from '../../../../../components/elements/onlinemarketing/LhrRingProgress'
-import WhitePaper from '../../../../../components/WhitePaper'
-import Breadcrumb from '../../../../../layout/Breadcrumb'
-import { FooterContent } from '../../../../../layout/footer/Footer'
-import LayoutContainer from '../../../../../layout/LayoutContainer'
-import InstitutionNav from '../../../../../layout/subnav/InstitutionNav'
+import LhrRingProgress from '../../../../../features/OnlineMarketing/LhrRingProgress'
+import WhitePaper from '../../../../../components/Paper/WhitePaper'
+import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
+import { FooterContent } from '../../../../../features/Footer/Footer'
+import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
+import InstitutionNav from '../../../../../features/Navigation/InstitutionNav'
 import { getLhrSimplified } from '../../../../../lib/lighthouse/lhrSimplifier'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { LhrSimple } from '../../../../../lib/types/lighthouse/CustomLhrTypes'
@@ -37,7 +37,7 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
   const { t, lang } = useTranslation('institution');
 
   if (!lhr) return (
-    <LayoutContainer footerContent={footerContent}>
+    <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
         <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-title-nodata', { institution: institution?.name })}</title>
@@ -50,7 +50,7 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
 
       <WhitePaper>No LHR data</WhitePaper>
 
-    </LayoutContainer>
+    </ResponsiveWrapper>
   );
 
   const data: CategoryData[] = [
@@ -103,7 +103,7 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
   });
 
   return (
-    <LayoutContainer footerContent={footerContent}>
+    <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
         <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-title', { institution: institution?.name })}</title>
@@ -136,7 +136,7 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
         </Stack>
 
       </WhitePaper>
-    </LayoutContainer>
+    </ResponsiveWrapper>
   )
 }
 

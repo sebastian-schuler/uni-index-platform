@@ -1,10 +1,10 @@
 import { Title } from '@mantine/core';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react'
-import SmTotalBar from '../../components/elements/socialmedia/charts/SmTotalBar';
-import Breadcrumb from '../../layout/Breadcrumb';
-import LayoutContainer from '../../layout/LayoutContainer';
-import WhitePaper from '../../components/WhitePaper';
+import SmTotalBar from '../../features/Charts/SmTotalBar';
+import Breadcrumb from '../../features/Breadcrumb/Breadcrumb';
+import ResponsiveWrapper from '../../components/Container/ResponsiveWrapper';
+import WhitePaper from '../../components/Paper/WhitePaper';
 import { getCountries } from '../../lib/prisma/prismaQueries';
 import { getAllSocialMedia } from '../../lib/prisma/prismaSocialMedia';
 import { SocialMediaDBEntry, TotalScore } from '../../lib/types/SocialMediaTypes';
@@ -27,7 +27,7 @@ const Statistics: NextPage<Props> = ({ graphRatings }: Props) => {
     const { t } = useTranslation('rankings');
 
     return (
-        <LayoutContainer>
+        <ResponsiveWrapper>
 
             <Head>
                 <title key={"title"}>{t('common:page-title') + " | " + t('seo-sm-statistics-title')}</title>
@@ -42,7 +42,7 @@ const Statistics: NextPage<Props> = ({ graphRatings }: Props) => {
                 <SmTotalBar ratings={graphRatings} />
             </WhitePaper>
 
-        </LayoutContainer>
+        </ResponsiveWrapper>
     )
 }
 

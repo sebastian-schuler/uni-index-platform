@@ -5,13 +5,13 @@ import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import GenericPageHeader from '../components/elements/GenericPageHeader';
-import CategoryCard from '../components/elements/itemcards/CategoryCard';
-import OrderBySelect, { OrderByState } from '../components/elements/OrderBySelect';
-import SearchBox from '../components/partials/SearchBox';
-import Breadcrumb from '../layout/Breadcrumb';
-import { FooterContent } from '../layout/footer/Footer';
-import LayoutContainer from '../layout/LayoutContainer';
+import GenericPageHeader from '../components/Block/GenericPageHeader';
+import CategoryCard from '../components/Card/CategoryCard';
+import OrderBySelect, { OrderByState } from '../components/Select/OrderBySelect';
+import ItemSearch from '../components/Searchbox/ItemSearch';
+import Breadcrumb from '../features/Breadcrumb/Breadcrumb';
+import { FooterContent } from '../features/Footer/Footer';
+import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import { getDetailedSubjectTypes } from '../lib/prisma/prismaDetailedQueries';
 import { getCountries } from '../lib/prisma/prismaQueries';
 import { CategoryCardData, Searchable } from '../lib/types/UiHelperTypes';
@@ -73,7 +73,7 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
     }, [searchTerm, orderBy, lang]);
 
     return (
-        <LayoutContainer footerContent={footerContent}>
+        <ResponsiveWrapper footerContent={footerContent}>
 
             <Head>
                 <title key={"title"}>{t('common:page-title') + " | " + t('category-title')}</title>
@@ -86,7 +86,7 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
                 <GenericPageHeader title={t('category-title')} description={t('category-subtitle')} />
 
                 <Group position='apart' >
-                    <SearchBox
+                    <ItemSearch
                         label={t('subjecttype-search-label')}
                         placeholder={t('subjecttype-search-placeholder')}
                         searchTerm={searchTerm}
@@ -121,7 +121,7 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
                 </Reorder.Group>
             </Stack>
 
-        </LayoutContainer>
+        </ResponsiveWrapper>
     )
 
 }

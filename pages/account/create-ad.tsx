@@ -3,10 +3,10 @@ import { DatePicker } from '@mantine/dates';
 import { Subject } from '@prisma/client';
 import { IconBuilding, IconSchool, IconUpload, IconX } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import HelpPopover from '../../components/elements/HelpPopover';
-import LargeAd from '../../components/elements/userads/LargeAd';
-import MediumAd from '../../components/elements/userads/MediumAd';
-import SmallAd from '../../components/elements/userads/SmallAd';
+import HelpPopover from '../../components/Popover/HelpPopover';
+import AdCardLarge from '../../components/Card/AdCardLarge';
+import AdCardMedium from '../../components/Card/AdCardMedium';
+import AdCardSmall from '../../components/Card/AdCardSmall';
 import { useAuth } from '../../lib/context/SessionContext';
 import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
 import { UserDataProfile } from '../../lib/types/AccountHandlingTypes';
@@ -347,7 +347,7 @@ const CreateAd = () => {
 
                 {
                     adSize === 3 &&
-                    <LargeAd
+                    <AdCardLarge
                         headline={getAdHeadline()}
                         description={description === "" ? "[Description]" : description}
                         subtext='subtext'
@@ -360,7 +360,7 @@ const CreateAd = () => {
                     />
                     ||
                     adSize === 2 &&
-                    <MediumAd
+                    <AdCardMedium
                         headline={getAdHeadline()}
                         subtext='subtext'
                         description={description === "" ? "[Description]" : description}
@@ -374,7 +374,7 @@ const CreateAd = () => {
                     ||
                     adSize === 1 &&
                     <Box sx={{ maxWidth: 260 }}>
-                        <SmallAd
+                        <AdCardSmall
                             headline={getAdHeadline()}
                             subtext='subtext'
                             description={description === "" ? "[Description]" : description}

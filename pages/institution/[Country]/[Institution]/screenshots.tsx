@@ -4,11 +4,11 @@ import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
 import { useState } from 'react'
-import WhitePaper from '../../../../components/WhitePaper'
-import Breadcrumb from '../../../../layout/Breadcrumb'
-import { FooterContent } from '../../../../layout/footer/Footer'
-import LayoutContainer from '../../../../layout/LayoutContainer'
-import InstitutionNav from '../../../../layout/subnav/InstitutionNav'
+import WhitePaper from '../../../../components/Paper/WhitePaper'
+import Breadcrumb from '../../../../features/Breadcrumb/Breadcrumb'
+import { FooterContent } from '../../../../features/Footer/Footer'
+import ResponsiveWrapper from '../../../../components/Container/ResponsiveWrapper'
+import InstitutionNav from '../../../../features/Navigation/InstitutionNav'
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries'
 import { getInstitutionScreenshots } from '../../../../lib/prisma/prismaScreenshots'
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
@@ -56,7 +56,7 @@ const InstitutionScreenshots: NextPage<Props> = ({ institution, country, screens
   });
 
   return (
-    <LayoutContainer footerContent={footerContent}>
+    <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
         <title key={"title"}>{t('common:page-title') + " | " + t('screenshots-title', { institution: institution?.name })}</title>
@@ -100,7 +100,7 @@ const InstitutionScreenshots: NextPage<Props> = ({ institution, country, screens
 
 
 
-    </LayoutContainer>
+    </ResponsiveWrapper>
   )
 }
 
