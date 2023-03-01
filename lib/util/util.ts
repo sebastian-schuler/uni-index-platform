@@ -1,6 +1,5 @@
 import { Country, Institution, State, Subject, SubjectHasSubjectTypes, SubjectType } from "@prisma/client";
-import { DetailedSubjectType } from "../types/DetailedDatabaseTypes";
-import { CountryCardData, Searchable, CategoryCardData, StateCardData } from "../types/UiHelperTypes";
+import { CategoryCardData, CountryCardData, Searchable, StateCardData } from "../types/UiHelperTypes";
 import { URL_CATEGORY } from "../url-helper/urlConstants";
 
 interface LocalizedNameProps {
@@ -118,17 +117,6 @@ export const addDays = (date: Date, days: number) => {
 // Combine classnames into one
 export function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
-}
-
-/**
- * Split a name into the actual name, and whatever is in brackets
- * @param name 
- */
-export const getBracketedName = (name: string) => {
-    let newName = name;
-    const nameBrackets = name.match(/\(.*\)/gi)?.[0] || "";
-    if (nameBrackets !== "") newName = name.replace(nameBrackets, "").trim();
-    return { name: newName, nameBrackets: nameBrackets };
 }
 
 /**

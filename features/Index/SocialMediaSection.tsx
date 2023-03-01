@@ -2,11 +2,10 @@ import { SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { Country } from '@prisma/client'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
+import SocialMediaCard from '../../components/Card/SocialMediaCard'
 import ResponsiveContainer from '../../components/Container/ResponsiveContainer'
 import { SmBestCardMinified, SmRankingEntryMinified } from '../../lib/types/SocialMediaTypes'
-import SmIndexTopRanking from '../SocialMedia/SmIndexTopRanking'
-import BestTwitterCard from './BestTwitterCard'
-import BestYoutubeCard from './BestYoutubeCard'
+import SmIndexTopRanking from './SmIndexTopRanking'
 
 interface Props {
   socialMediaList: SmRankingEntryMinified[]
@@ -30,8 +29,8 @@ const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitter, 
       <SimpleGrid
         mt={'md'}
         breakpoints={[
-          { minWidth: 'md', cols: 2, spacing: 'md' },
-          { minWidth: 'sm', cols: 1, spacing: 'sm' },
+          { minWidth: 'md', cols: 2, spacing: 'lg' },
+          { minWidth: 0, cols: 1, spacing: 'lg', verticalSpacing: 'lg' },
         ]}
       >
 
@@ -40,9 +39,9 @@ const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitter, 
           countries={countries}
         />
 
-        <Stack spacing={"md"}>
-          <BestTwitterCard highestTwitter={highestTwitter} />
-          <BestYoutubeCard highestYoutube={highestYoutube} />
+        <Stack spacing={"lg"}>
+          <SocialMediaCard cardData={highestTwitter} />
+          <SocialMediaCard cardData={highestYoutube} />
         </Stack>
 
       </SimpleGrid>

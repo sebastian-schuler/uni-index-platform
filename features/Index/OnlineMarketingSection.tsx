@@ -1,9 +1,20 @@
-import { Box, Divider, Group, SimpleGrid, Stack, Text, Title, useMantineTheme } from '@mantine/core';
+import { Box, createStyles, Divider, Grid, Group, SimpleGrid, Stack, Text, Title, useMantineTheme } from '@mantine/core';
 import useTranslation from 'next-translate/useTranslation';
 import MantineLink from '../../components/Link/MantineLink';
-import OnlineMarketingCard from '../OnlineMarketing/OnlineMarketingCard';
+import OnlineMarketingCard from '../../components/Card/OnlineMarketingCard';
 import { LhrSimple } from '../../lib/types/lighthouse/CustomLhrTypes';
 import ResponsiveContainer from '../../components/Container/ResponsiveContainer';
+
+const useStyles = createStyles((theme) => ({
+
+  labelBack: {
+    [`@media (min-width: ${theme.breakpoints.md}px)`]: {
+      alignSelf: 'flex-end',
+      textAlign: 'end',
+    },
+  },
+
+}));
 
 interface Props {
   simpleLhReports: LhrSimple[],
@@ -11,20 +22,24 @@ interface Props {
 
 const OnlineMarketingSection = ({ simpleLhReports }: Props) => {
 
-  const theme = useMantineTheme();
+  const { classes, theme } = useStyles();
   const { t } = useTranslation('index');
 
   return (
     <Box sx={{ backgroundColor: theme.colors.brandOrange[5] }}>
       <ResponsiveContainer paddingY>
 
-        <Group mb={"sm"} sx={{ justifyContent: "space-between", alignItems: "flex-end" }} noWrap>
-          <Stack spacing={0}>
-            <Title order={2} color={'white'}>{t('online-marketing.title')}</Title>
+        <Title order={2} color={'white'}>{t('online-marketing.title')}</Title>
+
+        <Grid pb={'sm'}>
+          <Grid.Col md={8} sm={12}>
             <Text color={'white'}>{t('online-marketing.desc')}</Text>
-          </Stack>
-          <MantineLink url={"#"} color={'light.0'} type="internal">{t('online-marketing.label-all')}</MantineLink>
-        </Group>
+          </Grid.Col>
+
+          <Grid.Col md={4} sm={12} className={classes.labelBack}>
+            <MantineLink url={"#"} props={{ color: 'light.0', fw: 500 }} type="internal">{t('online-marketing.label-all')}</MantineLink>
+          </Grid.Col>
+        </Grid>
 
         <Divider color={'white'} sx={{ opacity: 0.7 }} />
 

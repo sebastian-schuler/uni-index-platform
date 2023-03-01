@@ -51,6 +51,7 @@ export type LhrSimple = {
     bestPracticesScore: number
     seoScore: number
     pwaScore: number
+    lastUpdate: number
 }
 
 export type LhrInstitution = {

@@ -1,11 +1,11 @@
 import { Anchor, Box, Collapse, createStyles, Divider, Group, Progress, Table, Text, TypographyStylesProvider, UnstyledButton } from '@mantine/core';
 import { IconChevronDown, IconCircle, IconSquare, IconTriangle } from '@tabler/icons-react';
 import React, { ReactNode, useState } from 'react';
+import MantineLink from '../../components/Link/MantineLink';
 import { LHR_SCORE_BREAKPOINTS, LHR_SCORE_COLORS } from '../../lib/lighthouse/lhrUtil';
 import Details from '../../lib/types/lighthouse/audit-details';
 import { LhrAudit } from '../../lib/types/lighthouse/CustomLhrTypes';
 import { getByteAsKb } from '../../lib/util/calcUtil';
-import { getGenericExternalLink } from '../../lib/util/mantineFactory';
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -97,12 +97,12 @@ const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
                                         <Text color={'cyan'}>{node?.snippet}</Text>
                                     </>
                                 );
-                                tds.push(getGenericExternalLink(item.url));
+                                tds.push(<MantineLink type='external' url={item.url} />);
                                 tds.push(<>{item.wastedMs}</>);
 
                             } else {
                                 // If items have no type
-                                tds.push(getGenericExternalLink(item.url));
+                                tds.push(<MantineLink type='external' url={item.url} />);
                                 tds.push(<>{getByteAsKb(item.totalBytes || 0) + ' KiB'}</>);
                                 tds.push(<>{getByteAsKb(item.wastedBytes || 0) + ' KiB'}</>);
                             }

@@ -1,8 +1,20 @@
 import { DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
 import { SmBestCardMinified, SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry, SocialMediaPages, TotalScore, TwitterProfile, YoutubeProfile } from "../types/SocialMediaTypes";
-import { CountryCardData, StateCardData, SubjectCardData, CategoryCardData, InstitutionCardData } from "../types/UiHelperTypes";
-import { PATH_COUNTRY_IMAGES, URL_INSTITUTION, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SUBJECTS, URL_LOCATION, URL_CATEGORY } from "../url-helper/urlConstants";
-import { getBracketedName, getLocalizedName, getUniqueSubjectTypeCounts, toLink } from "./util";
+import { CategoryCardData, CountryCardData, InstitutionCardData, StateCardData, SubjectCardData } from "../types/UiHelperTypes";
+import { PATH_COUNTRY_IMAGES, URL_CATEGORY, URL_INSTITUTION, URL_INSTITUTION_SOCIALMEDIA, URL_LOCATION } from "../url-helper/urlConstants";
+import { getLocalizedName, getUniqueSubjectTypeCounts, toLink } from "./util";
+
+// ========================== Helper Functions ==========================
+
+// Split a name into the actual name, and whatever is in brackets
+const getBracketedName = (name: string) => {
+    let newName = name;
+    const nameBrackets = name.match(/\(.*\)/gi)?.[0] || "";
+    if (nameBrackets !== "") newName = name.replace(nameBrackets, "").trim();
+    return { name: newName, nameBrackets: nameBrackets };
+}
+
+// ========================== Minify Functions ==========================
 
 /**
  * Minify a ranking entry to only contain the data needed for the ranking table
@@ -36,10 +48,14 @@ export const minifySmBestCard = (item: SocialMediaDBEntry, socialMediaSource: So
 
         return {
             type: "youtube",
+            href: item.youtube_url,
             Institution: {
                 name: item.Institution.name,
-                url: toLink(URL_INSTITUTION, item.Institution.City.State.Country.url, item.Institution.url, URL_INSTITUTION_SOCIALMEDIA),
-                countryName: getLocalizedName({ lang: locale, dbTranslated: item.Institution.City.State.Country }),
+                url: item.Institution.url, // toLink(URL_INSTITUTION,, , URL_INSTITUTION_SOCIALMEDIA),
+            },
+            Country: {
+                name: getLocalizedName({ lang: locale, dbTranslated: item.Institution.City.State.Country }),
+                url: item.Institution.City.State.Country.url,
             },
             youtubeScore: parsedScore.percent.youtube.total,
             totalSubscribers: youtubeProfile.subscribers,
@@ -53,11 +69,20 @@ export const minifySmBestCard = (item: SocialMediaDBEntry, socialMediaSource: So
 
         return {
             type: "twitter",
+            href: item.youtube_url,
             Institution: {
                 name: item.Institution.name,
-                url: toLink(URL_INSTITUTION, item.Institution.City.State.Country.url, item.Institution.url, URL_INSTITUTION_SOCIALMEDIA),
-                countryName: getLocalizedName({ lang: locale, dbTranslated: item.Institution.City.State.Country }),
+                url: item.Institution.url, // toLink(URL_INSTITUTION,, , URL_INSTITUTION_SOCIALMEDIA),
             },
+            Country: {
+                name: getLocalizedName({ lang: locale, dbTranslated: item.Institution.City.State.Country }),
+                url: item.Institution.City.State.Country.url,
+            },
+            // Institution: {
+            //     name: item.Institution.name,
+            //     url: toLink(URL_INSTITUTION, item.Institution.City.State.Country.url, item.Institution.url, URL_INSTITUTION_SOCIALMEDIA),
+            //     countryName: getLocalizedName({ lang: locale, dbTranslated: item.Institution.City.State.Country }),
+            // },
             twitterScore: parsedScore.percent.youtube.total,
             totalFollowers: parsedTwitter.followers,
             avgLikes: parsedTwitter.avgLikes,
@@ -67,6 +92,8 @@ export const minifySmBestCard = (item: SocialMediaDBEntry, socialMediaSource: So
     }
 
 }
+
+// ========================== Conversion Functions ==========================
 
 /**
  * Minifies the DetailedInstitution object to only contain the data needed for the institution card

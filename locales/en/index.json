@@ -1,6 +1,8 @@
 {
-  "page-title": "Uni-Index - Home",
-  "page-description": "Discover top universities & courses with our comprehensive platform. Get insights on web presence & social media profiles. Find your dream education!",
+  "meta":{
+    "title": "Uni-Index - Home",
+    "description": "Discover top universities & courses with our comprehensive platform. Get insights on web presence & social media profiles. Find your dream education!"
+  },
 
   "hero": {
     "title": "Find the most detailed <0>university analysis</0> in Europe",
@@ -39,7 +41,13 @@
   "online-marketing": {
     "title": "Universities with the best website",
     "desc": "We have analysed every university website in Europe. Find out which universities have the best website in terms of performance, best practices, accessibility, and SEO.",
-    "label-all": "See all online marketing analyses"
+    "label-all": "See all online marketing analyses",
+    "categories": {
+      "performance": "Performance",
+      "best-practices": "Best Practices",
+      "accessibility": "Accessibility",
+      "seo": "SEO"
+    }
   },
 
   "search": {

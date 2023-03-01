@@ -1,23 +1,36 @@
-import { Card, CardSection, createStyles, Table, Text, Title } from '@mantine/core';
+import { Anchor, Box, Button, Card, CardSection, createStyles, Flex, Space, Stack, Table, Text, Title } from '@mantine/core';
 import { Country } from '@prisma/client';
 import Trans from 'next-translate/Trans';
 import useTranslation from 'next-translate/useTranslation';
+import Link from 'next/link';
 import React from 'react';
 import MantineLink from '../../components/Link/MantineLink';
+import CardTitle from '../../components/Text/CardTitle';
 import { SmRankingEntryMinified } from '../../lib/types/SocialMediaTypes';
-import { URL_INSTITUTION } from '../../lib/url-helper/urlConstants';
+import { URL_INSTITUTION, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING } from '../../lib/url-helper/urlConstants';
 import { toLink } from '../../lib/util/util';
 
 const useStyles = createStyles((theme) => ({
+
+    card: {
+        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
+        height: "100%",
+    },
 
     scoreColumn: {
         textAlign: 'right',
     },
 
-    section: {
+    topSection: {
         borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
         padding: theme.spacing.md,
         marginBottom: theme.spacing.md,
+    },
+
+    bottomSection: {
+        borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+        padding: theme.spacing.md,
+        marginTop: theme.spacing.md,
     },
 
 }));
@@ -49,9 +62,9 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
     });
 
     return (
-        <Card withBorder radius="md" p="md" shadow="sm" sx={{ backgroundColor: theme.colors.light[0] }}>
-            <CardSection className={classes.section} px={"md"} pt={"lg"}>
-                <Title order={3} size={'h5'} mb={"xs"}>{t('social-media.top-institutions-title')}</Title>
+        <Card p="lg" radius="md" shadow={"sm"} className={classes.card}>
+            <CardSection className={classes.topSection} px={"lg"}>
+                <CardTitle href={toLink(URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING)} text={t('social-media.top-institutions-title')} />
                 <Text sx={{ lineHeight: 1.1 }}>{t('social-media.top-institutions-desc')}</Text>
             </CardSection>
             <Table sx={{ minWidth: 100 }} verticalSpacing="xs">
@@ -64,14 +77,18 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
                 </thead>
                 <tbody>{rows}</tbody>
             </Table>
-            <Text mt={"md"}>
-                <Trans
-                    i18nKey="index:social-media.reference-full-ranking"
-                    components={[
-                        <MantineLink key={"linkSmRanking"} type='internal' title='University social media ranking' url='social-media/ranking' />
-                    ]}
-                />
-            </Text>
+
+            <CardSection className={classes.bottomSection} px={"lg"}>
+                <Text>
+                    <Trans
+                        i18nKey="index:social-media.reference-full-ranking"
+                        components={[
+                            <MantineLink key={"linkSmRanking"} type='internal' title='University social media ranking' url='social-media/ranking' />
+                        ]}
+                    />
+                </Text>
+            </CardSection>
+
         </Card>
     );
 }

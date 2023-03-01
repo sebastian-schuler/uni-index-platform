@@ -14,12 +14,7 @@ const useStyles = createStyles((theme) => ({
 
   card: {
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
-    transition: "all .2s ease-in-out",
     height: "100%",
-
-    '&:hover': {
-      transform: "scale(1.05)",
-    }
   },
 
   section: {
@@ -28,12 +23,6 @@ const useStyles = createStyles((theme) => ({
     paddingRight: theme.spacing.md,
     paddingLeft: theme.spacing.md,
     paddingBottom: theme.spacing.sm,
-  },
-
-  label: {
-    textTransform: 'uppercase',
-    fontSize: theme.fontSizes.xs,
-    fontWeight: 700,
   },
 
   flag: {
@@ -52,7 +41,7 @@ type Props = {
 const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
 
   const { classes, theme } = useStyles();
-  const { lang } = useTranslation('common');
+  const { t, lang } = useTranslation('common');
 
   const youtubeLink = data.InstitutionSocialMedia?.youtube_url;
   const facebookLink = data.InstitutionSocialMedia?.facebook_url;
@@ -97,19 +86,19 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
             <Group spacing={"xs"}>
               {
                 youtubeLink &&
-                <SmIconLink type='youtube' url={youtubeLink} title={`Youtube channel of ${data.Institution.name}`} gray />
+                <SmIconLink type='youtube' url={youtubeLink} title={t('link-titles.yt-profile', { name: data.Institution.name })} gray />
               }
               {
                 twitterLink &&
-                <SmIconLink type='twitter' url={twitterLink} title={`Twitter profile of ${data.Institution.name}`} gray />
+                <SmIconLink type='twitter' url={twitterLink} title={t('link-titles.tw-profile', { name: data.Institution.name })} gray />
               }
               {
                 facebookLink &&
-                <SmIconLink type='facebook' url={facebookLink} title={`Facebook profile of ${data.Institution.name}`} gray />
+                <SmIconLink type='facebook' url={facebookLink} title={t('link-titles.fb-profile', { name: data.Institution.name })} gray />
               }
               {
                 instagramLink &&
-                <SmIconLink type='instagram' url={instagramLink} title={`Instagram profile of ${data.Institution.name}`} gray />
+                <SmIconLink type='instagram' url={instagramLink} title={t('link-titles.in-profile', { name: data.Institution.name })} gray />
               }
             </Group>
           </Stack>
@@ -126,24 +115,24 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
         <Stack spacing={"sm"}>
 
           <Group noWrap>
-            <ThemeIcon size={24} radius="xl">
+            <ThemeIcon size={"md"} radius="xl">
               <IconBuilding size={18} />
             </ThemeIcon>
-            <Text sx={{ lineHeight: 1.2 }}>{data.campusCount} campus location{data.campusCount > 1 ? "s" : ""}</Text>
+            <Text>{t('card-institution.label-locations', { count: data.campusCount })}</Text>
           </Group>
 
           <Group noWrap>
-            <ThemeIcon size={24} radius="xl">
+            <ThemeIcon size={"md"} radius="xl">
               <IconSchool size={18} />
             </ThemeIcon>
-            <Text sx={{ lineHeight: 1.2 }}>{data.subjectCount} subjects</Text>
+            <Text>{t('card-institution.label-subjects', { count: data.subjectCount })}</Text>
           </Group>
 
           <Group noWrap>
-            <ThemeIcon size={24} radius="xl">
+            <ThemeIcon size={"md"} radius="xl">
               <IconCategory size={18} />
             </ThemeIcon>
-            <Text sx={{ lineHeight: 1.2 }}>
+            <Text>
               {
                 data.biggestCategories.map((category, i) => (
                   <React.Fragment key={i}>

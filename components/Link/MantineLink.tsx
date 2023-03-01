@@ -1,30 +1,30 @@
-import { Anchor, DefaultMantineColor } from '@mantine/core'
+import { Anchor, AnchorProps } from '@mantine/core'
 import Link from 'next/link'
 import { ReactNode } from 'react'
 
-interface Props {
+type Props = {
     children?: ReactNode
     url: string
     type: "internal" | "external" | "scroll"
-    color?: DefaultMantineColor
     title?: string
+    props?: AnchorProps
 }
 
-const MantineLink: React.FC<Props> = ({ url, children, color, type, title }: Props) => {
+const MantineLink: React.FC<Props> = ({ url, children, type, title, props }: Props) => {
 
     return (
         type === "external" && (
-            <Anchor component="a" href={url} title={title} color={color ? color : "brandOrange.5"} target={"_blank"}>
+            <Anchor component="a" href={url} title={title} target={"_blank"} {...props}>
                 {children}
             </Anchor>
         ) ||
         type === "internal" && (
-            <Anchor component={Link} href={url} title={title} color={color ? color : "brandOrange.5"}>
+            <Anchor component={Link} href={url} title={title} {...props}>
                 {children}
             </Anchor >
         ) ||
         type === "scroll" && (
-            <Anchor component="a" href={url} title={title} color={color ? color : "brandOrange.5"}>
+            <Anchor component="a" href={url} title={title} {...props}>
                 {children}
             </Anchor>
         ) || <></>

@@ -1,6 +1,5 @@
 {
   "page-title": "Uni-Index",
-
   "page-settings": "Settings",
   "page-settings-language": "Language",
 
@@ -41,6 +40,39 @@
     }
   },
 
+  "card-institution": {
+    "label-locations": {
+      "0": "No campus locations",
+      "one": "One campus location",
+      "other": "{{count}} campus locations"
+    },
+    "label-subjects": {
+      "0": "No subjects available",
+      "one": "One subject available",
+      "other": "{{count}} subjects available"
+    }
+  },
+
+  "card-country": {
+    "label-institutions": {
+      "0": "No institutions",
+      "one": "One institution",
+      "other": "{{countStr}} institutions"
+    },
+    "label-subjects": {
+      "0": "No subjects available",
+      "one": "One subject available",
+      "other": "{{countStr}} subjects available"
+    }
+  },
+
+  "link-titles": {
+    "yt-profile": "Youtube channel of {{name}}",
+    "tw-profile": "Twitter profile of {{name}}",
+    "in-profile": "Instagram profile of {{name}}",
+    "fb-profile": "Facebook profile of {{name}}"
+  },
+
   "breadcrumb-back-to": "Back to {{origin}}",
 
   "countries-search-label": "Search for a country",
@@ -56,13 +88,6 @@
     "0": "No courses",
     "one": "{{count}} Course",
     "other": "{{count}} Courses"
-  },
-
-  "online-marketing-category": {
-    "performance": "Performance",
-    "best-practices": "Best Practices",
-    "accessibility": "Accessibility",
-    "seo": "SEO"
   },
 
   "ads": {

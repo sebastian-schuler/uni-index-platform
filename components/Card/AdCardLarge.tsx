@@ -9,12 +9,7 @@ import { LARGE_AD_HEIGHT } from '../../features/Ads/AdList';
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
-        transition: "all .2s ease-in-out",
         height: "100%",
-
-        '&:hover': {
-            transform: "scale(1.05)",
-        }
     },
 
     title: {
@@ -86,9 +81,9 @@ const AdCardLarge: React.FC<Props> = ({ link, title, headline, subtext, imgUrl, 
     if (disableLink) return AdCard;
 
     return (
-        <Anchor component={Link} href={link}>
+        <Link href={link}>
             {AdCard}
-        </Anchor>
+        </Link>
     )
 }
 

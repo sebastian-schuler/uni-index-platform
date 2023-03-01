@@ -1,17 +1,16 @@
 import { Button, Divider, Grid, Group, SimpleGrid, Space, Text } from '@mantine/core';
-import { NextLink } from '@mantine/next';
 import { Country, Institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import Link from 'next/link';
-import LhrAuditList from '../../../../../features/OnlineMarketing/LhrAuditList';
-import LhrAuditScore from '../../../../../features/OnlineMarketing/LhrAuditScore';
-import LhrRingProgress from '../../../../../features/OnlineMarketing/LhrRingProgress';
+import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper';
 import WhitePaper from '../../../../../components/Paper/WhitePaper';
 import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb';
 import { FooterContent } from '../../../../../features/Footer/Footer';
-import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper';
+import LhrAuditList from '../../../../../features/OnlineMarketing/LhrAuditList';
+import LhrAuditScore from '../../../../../features/OnlineMarketing/LhrAuditScore';
+import LhrRingProgress from '../../../../../features/OnlineMarketing/LhrRingProgress';
 import { getMinifiedLhrCategory } from '../../../../../lib/lighthouse/lhrParser';
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
 import { LhrAudit, LhrCategory } from '../../../../../lib/types/lighthouse/CustomLhrTypes';
@@ -62,8 +61,8 @@ const Performance = ({ institution, country, lhrAudits, lhrCategory, footerConte
         <ResponsiveWrapper footerContent={footerContent}>
 
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-performance-title', { institution: institution?.name })}</title>
-                <meta key={"description"} name="description" content={t('online-marketing-performance-title')} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing.meta.performance-title', { institution: institution?.name })}</title>
+                <meta key={"description"} name="description" content={t('online-marketing.meta.performance-title')} />
             </Head>
 
             <Group position="apart">

@@ -9,23 +9,12 @@ const useStyles = createStyles((theme) => ({
 
     card: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
-        transition: "all .2s ease-in-out",
         height: "100%",
-
-        '&:hover': {
-            transform: "scale(1.05)",
-        }
     },
 
     section: {
         borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
         padding: theme.spacing.md,
-    },
-
-    label: {
-        textTransform: 'uppercase',
-        fontSize: theme.fontSizes.xs,
-        fontWeight: 700,
     },
 
 }));

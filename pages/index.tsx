@@ -55,8 +55,8 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
     <ResponsiveWrapper removeVerticalPadding removeContainerWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('page-title')}</title>
-        <meta key={"description"} name="description" content={t('page-description')} />
+        <title key={"title"}>{t('meta.title')}</title>
+        <meta key={"description"} name="description" content={t('meta.description')} />
       </Head>
 
       <HeroSection />
@@ -125,7 +125,7 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
           {
             countryData.map((country, i) => (
               <Grid.Col key={i} sm={12} md={6} lg={4} sx={{ width: "100%" }}>
-                <CountryCard data={country} />
+                <CountryCard country={country} />
               </Grid.Col>
             ))
           }
@@ -167,7 +167,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   let socialMediaTopList: SmRankingEntryMinified[] = socialMediaRankingList.map((item) => minifySmRankingItem(item));
   socialMediaTopList = socialMediaTopList.sort((a, b) => {
     return b.combinedScore - a.combinedScore;
-  }).slice(0, 10);
+  }).slice(0, 13);
 
   // Highest Youtube score
   socialMediaList.sort((a, b) => {

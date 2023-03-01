@@ -1,9 +1,7 @@
-import { Card, createStyles, Group, Stack, Text, ThemeIcon } from '@mantine/core'
-import { IconSchool } from '@tabler/icons-react'
+import { Card, createStyles, Group, Stack, Text } from '@mantine/core'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
-import { CategoryCardData } from '../../lib/types/UiHelperTypes'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -15,39 +13,37 @@ const useStyles = createStyles((theme) => ({
         borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
         padding: theme.spacing.md,
     },
-
 }));
 
 interface Props {
-    subjectType: CategoryCardData
+    title: string
+    url: string
+    icon: JSX.Element
+    color: string
+    textColor: string
+    lastUpdate: string
 }
 
-const CategoryCard: React.FC<Props> = ({ subjectType }: Props) => {
+const SocialMediaCategoryCard: React.FC<Props> = ({ title, url, icon, color, textColor, lastUpdate }: Props) => {
 
     const { classes, theme } = useStyles();
-    const { t } = useTranslation('common');
+    const { t } = useTranslation('institution');
 
     return (
-        <Card component={Link} href={subjectType.url} withBorder radius="md" shadow={"sm"} className={classes.card}>
+        <Card component={Link} href={url} withBorder radius="md" shadow={"sm"} className={classes.card} sx={{ backgroundColor: color }}>
 
             <Card.Section className={classes.section}>
                 <Group position="apart" noWrap sx={{ alignItems: "start" }}>
                     <Stack spacing={theme.spacing.xs}>
-                        <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>{subjectType.name}</Text>
+                        <Text size="xl" color={textColor} weight={500} sx={{ lineHeight: 1 }}>{title}</Text>
                     </Stack>
+                    {icon}
                 </Group>
             </Card.Section>
 
             <Card.Section className={classes.section}>
                 <Stack spacing={"sm"}>
-
-                    <Group noWrap>
-                        <ThemeIcon size={24} radius="xl">
-                            <IconSchool size={18} />
-                        </ThemeIcon>
-                        <Text>{t('card-category.label-subjects', { count: subjectType.subjectCount })}</Text>
-                    </Group>
-
+                    <Text color={textColor}>{t('social-media.card-lastupdate', { date: lastUpdate })}</Text>
                 </Stack>
             </Card.Section>
 
@@ -55,4 +51,4 @@ const CategoryCard: React.FC<Props> = ({ subjectType }: Props) => {
     )
 }
 
-export default CategoryCard
+export default SocialMediaCategoryCard

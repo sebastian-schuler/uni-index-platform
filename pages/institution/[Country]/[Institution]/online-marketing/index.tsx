@@ -1,4 +1,4 @@
-import { Stack, Text } from '@mantine/core'
+import { Group, Stack, Text } from '@mantine/core'
 import { Card, SimpleGrid, Title } from '@mantine/core'
 import { Country, Institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
@@ -17,6 +17,9 @@ import { LhrSimple } from '../../../../../lib/types/lighthouse/CustomLhrTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION, URL_INSTITUTION_OM } from '../../../../../lib/url-helper/urlConstants'
 import { toLink } from '../../../../../lib/util/util'
+import dayjs from 'dayjs';
+import MantineLink from '../../../../../components/Link/MantineLink'
+import Trans from 'next-translate/Trans'
 
 interface CategoryData {
   title: string,
@@ -40,8 +43,8 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
     <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-title-nodata', { institution: institution?.name })}</title>
-        <meta key={"description"} name="description" content={t('online-marketing-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing.meta.title-nodata', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('online-marketing.meta.description')} />
       </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
@@ -55,32 +58,32 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
 
   const data: CategoryData[] = [
     {
-      title: "Performance",
-      description: "Values are estimated and may vary. The performance score is calculated directly from these metrics.",
+      title: t('online-marketing.categories.performance-header'),
+      description: t('online-marketing.categories.performance-text'),
       url: "performance",
       score: lhr.performanceScore * 100
     },
     {
-      title: "SEO",
-      description: "Values are estimated and may vary. The performance score is calculated directly from these metrics.",
+      title: t('online-marketing.categories.seo-header'),
+      description: t('online-marketing.categories.seo-text'),
       url: "seo",
       score: lhr.seoScore * 100
     },
     {
-      title: "Best Practices",
-      description: "Values are estimated and may vary. The performance score is calculated directly from these metrics.",
+      title: t('online-marketing.categories.bestpractices-header'),
+      description: t('online-marketing.categories.bestpractices-text'),
       url: "best-practices",
       score: lhr.bestPracticesScore * 100
     },
     {
-      title: "Accessibility",
-      description: "Values are estimated and may vary. The performance score is calculated directly from these metrics.",
+      title: t('online-marketing.categories.accessibility-header'),
+      description: t('online-marketing.categories.accessibility-text'),
       url: "accessibility",
       score: lhr.accessibilityScore * 100
     },
     {
-      title: "PWA",
-      description: "Values are estimated and may vary. The performance score is calculated directly from these metrics.",
+      title: t('online-marketing.categories.pwa-header'),
+      description: t('online-marketing.categories.pwa-text'),
       url: "pwa",
       score: lhr.pwaScore * 100
     },
@@ -102,12 +105,14 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
     )
   });
 
+  const lastUpdate = dayjs(lhr.lastUpdate * 1000).format('DD/MM/YYYY');
+
   return (
     <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-title', { institution: institution?.name })}</title>
-        <meta key={"description"} name="description" content={t('online-marketing-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing.meta.title', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('online-marketing.meta.description')} />
       </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
@@ -119,9 +124,20 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
         <Stack>
 
           <div>
-            <Title order={2}>Online Marketing Analysis</Title>
-            <Text>This analysis is based on Googles Lighthouse tool...</Text>
+            <Title order={2}>{t('online-marketing.header')}</Title>
+            <Text>{t('online-marketing.header-text', { name: institution.name })}</Text>
           </div>
+
+          <Group position='apart'>
+            <Text>{t('online-marketing.label-lastupdate', { date: lastUpdate })}</Text>
+            <Text>
+              <Trans
+                i18nKey='institution:online-marketing.label-website'
+                components={[<MantineLink key={'label-website'} type='external' url={lhr.institution.website} />]}
+                values={{ label: lhr.institution.website }}
+              />
+            </Text>
+          </Group>
 
           <SimpleGrid
             breakpoints={[

@@ -25,8 +25,8 @@ const PwaPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }
     return (
         <>
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-pwa-title', { institution: institution?.name })}</title>
-                <meta key={"description"} name="description" content={t('online-marketing-pwa-title')} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing.meta.pwa-title', { institution: institution?.name })}</title>
+                <meta key={"description"} name="description" content={t('online-marketing.meta.pwa-title')} />
             </Head>
 
             <LhrCategoryPage

@@ -6,7 +6,7 @@ import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import SocialMediaCard from '../../../../../components/Card/SocialMediaCard'
+import SocialMediaCategoryCard from '../../../../../components/Card/SocialMediaCategoryCard'
 import WhitePaper from '../../../../../components/Paper/WhitePaper'
 import { FooterContent } from '../../../../../features/Footer/Footer'
 import SmOverviewSection from '../../../../../features/SocialMedia/SmOverviewSection'
@@ -47,8 +47,8 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
             <ResponsiveWrapper footerContent={footerContent}>
 
                 <Head>
-                    <title key={"title"}>{t('common:page-title') + " | " + t('social-media-title-nodata', { institution: institution.name })}</title>
-                    <meta key={"description"} name="description" content={t('social-media-description', { institution: institution.name })} />
+                    <title key={"title"}>{t('common:page-title') + " | " + t('social-media.title-nodata', { institution: institution.name })}</title>
+                    <meta key={"description"} name="description" content={t('social-media.description', { institution: institution.name })} />
                 </Head>
 
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />
@@ -64,7 +64,7 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
 
     if (socialMediaLinks.twitter) {
         socialMediaPages.push(
-            <SocialMediaCard
+            <SocialMediaCategoryCard
                 key={'twitter'}
                 title='Twitter'
                 url={toLink(router.asPath, "twitter")}
@@ -78,7 +78,7 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
 
     if (socialMediaLinks.youtube) {
         socialMediaPages.push(
-            <SocialMediaCard
+            <SocialMediaCategoryCard
                 key={'youtube'}
                 title='Youtube'
                 url={toLink(router.asPath, "youtube")}
@@ -94,8 +94,8 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
         <ResponsiveWrapper footerContent={footerContent}>
 
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('social-media-title', { institution: institution.name })}</title>
-                <meta key={"description"} name="description" content={t('social-media-description', { institution: institution.name })} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('social-media.title', { institution: institution.name })}</title>
+                <meta key={"description"} name="description" content={t('social-media.description', { institution: institution.name })} />
             </Head>
 
             <Breadcrumb countryInfo={country} institutionInfo={institution} />
@@ -108,8 +108,8 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
                     {/* Header Section */}
                     <Stack>
                         <div>
-                            <Title order={2}>Social Media Statistics</Title>
-                            <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
+                            <Title order={2}>{t('social-media.header')}</Title>
+                            <Text>{t('social-media.header-text', { name: institution.name })}</Text>
                         </div>
                         <SimpleGrid
                             breakpoints={[

@@ -6,36 +6,20 @@ import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
 import { SubjectCardData } from '../../lib/types/UiHelperTypes'
-import { URL_CATEGORY, URL_INSTITUTION, URL_INSTITUTION_SUBJECTS, URL_LOCATION } from '../../lib/url-helper/urlConstants'
+import { URL_CATEGORY, URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../lib/url-helper/urlConstants'
 import { toLink } from '../../lib/util/util'
 
 const useStyles = createStyles((theme) => ({
 
   card: {
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
-    transition: "all .2s ease-in-out",
     height: "100%",
-
-    '&:hover': {
-      transform: "scale(1.05)",
-    }
   },
 
   section: {
     borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
       }`,
     padding: theme.spacing.md,
-  },
-
-  titleContainer: {
-    display: 'flex',
-
-  },
-
-  label: {
-    textTransform: 'uppercase',
-    fontSize: theme.fontSizes.xs,
-    fontWeight: 700,
   },
 
   flag: {

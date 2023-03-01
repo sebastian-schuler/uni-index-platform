@@ -1,5 +1,5 @@
 import { Box, Card, createStyles, Grid, SimpleGrid, Stack, Text, Title } from '@mantine/core';
-import { Country, Institution } from '@prisma/client';
+import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client';
 import {
     IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandYoutube
 } from '@tabler/icons-react';
@@ -7,22 +7,17 @@ import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
 import { TotalScore, TotalScoreSet } from '../../lib/types/SocialMediaTypes';
 import { getLocalizedName } from '../../lib/util/util';
-import { SocialMediaLinkProps } from '../../pages/institution/[Country]/[Institution]/social-media';
 import SmProfilesBar from '../Charts/SmProfilesBar';
 import SocialMediaRadar from '../Charts/SmRadar';
-import SmIconLink from './SmIconLink';
+import { SocialMediaLinkProps } from '../../pages/institution/[Country]/[Institution]/social-media';
 import SmStatCard from './SmStatCard';
+import SmIconLink from './SmIconLink';
 
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colors.light[0],
         borderRadius: theme.radius.sm,
         border: `1px solid ${theme.colors.gray[2]}`,
-    },
-    title: {
-        fontSize: theme.fontSizes.sm,
-        fontWeight: 700,
-        textTransform: 'uppercase',
     },
     cardSection: {
         padding: theme.spacing.md,
@@ -46,7 +41,7 @@ const SmOverviewSection: React.FC<Props> = (
     { socialMediaLinks, institution, country, institutionScore, countryPercentScore, countryTwitterScore, countryYoutubeScore }: Props
 ) => {
 
-    const { t, lang } = useTranslation('common');
+    const { t, lang } = useTranslation('institution');
     const { classes, theme } = useStyles();
 
     // Graph data
@@ -125,24 +120,42 @@ const SmOverviewSection: React.FC<Props> = (
                         </SimpleGrid>
                         <Card shadow={"xs"} className={classes.card}>
                             <Stack spacing={"sm"}>
-                                <Text size="xs" color="dimmed" className={classes.title}>
-                                    Social Media Links
-                                </Text>
+                                <Text size="sm" weight={"bold"} color="dimmed" transform='uppercase'>{t('social-media.header-links')}</Text>
                                 {
                                     socialMediaLinks.youtube &&
-                                    <SmIconLink type='youtube' url={socialMediaLinks.youtube} label title={`Youtube channel of ${institution.name}`} />
+                                    <SmIconLink
+                                        type='youtube'
+                                        url={socialMediaLinks.youtube}
+                                        label
+                                        title={t('common:link-titles.yt-profile', { name: institution.name })}
+                                    />
                                 }
                                 {
                                     socialMediaLinks.twitter &&
-                                    <SmIconLink type='twitter' url={socialMediaLinks.twitter} label title={`Twitter profile of ${institution.name}`} />
+                                    <SmIconLink
+                                        type='twitter'
+                                        url={socialMediaLinks.twitter}
+                                        label
+                                        title={t('common:link-titles.tw-profile', { name: institution.name })}
+                                    />
                                 }
                                 {
                                     socialMediaLinks.facebook &&
-                                    <SmIconLink type='facebook' url={socialMediaLinks.facebook} label title={`Facebook profile of ${institution.name}`} />
+                                    <SmIconLink
+                                        type='facebook'
+                                        url={socialMediaLinks.facebook}
+                                        label
+                                        title={t('common:link-titles.fb-profile', { name: institution.name })}
+                                    />
                                 }
                                 {
                                     socialMediaLinks.instagram &&
-                                    <SmIconLink type='instagram' url={socialMediaLinks.instagram} label title={`Instagram profile of ${institution.name}`} />
+                                    <SmIconLink
+                                        type='instagram'
+                                        url={socialMediaLinks.instagram}
+                                        label
+                                        title={t('common:link-titles.in-profile', { name: institution.name })}
+                                    />
                                 }
                             </Stack>
                         </Card>

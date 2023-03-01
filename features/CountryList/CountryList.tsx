@@ -96,7 +96,7 @@ const CountryList = ({ title, subtitle, searchableCountries, children }: Props) 
                                     <Reorder.Item key={countryCardData.countryCode} as={"div"} value={searchableCountry}>
                                         <CountryCard
                                             key={i}
-                                            data={countryCardData}
+                                            country={countryCardData}
                                         />
                                     </Reorder.Item>
                                 )

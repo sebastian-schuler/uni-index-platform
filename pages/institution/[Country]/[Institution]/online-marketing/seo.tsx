@@ -24,8 +24,8 @@ const SeoPage = ({ institution, country, lhrAudits, lhrCategory, footerContent }
     return (
         <>
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-seo-title', { institution: institution?.name })}</title>
-                <meta key={"description"} name="description" content={t('online-marketing-seo-title')} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing.meta.seo-title', { institution: institution?.name })}</title>
+                <meta key={"description"} name="description" content={t('online-marketing.meta.seo-title')} />
             </Head>
             
             <LhrCategoryPage

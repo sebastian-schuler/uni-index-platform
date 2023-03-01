@@ -10,12 +10,7 @@ import { getLocalizedName, toLink } from '../../lib/util/util'
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
-        transition: "all .2s ease-in-out",
         height: "100%",
-
-        '&:hover': {
-            transform: "scale(1.05)",
-        }
     },
 
     section: {

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { existsSync } from 'fs';
 import fs from 'fs/promises';
 import path from 'path';
@@ -35,6 +36,7 @@ export const getLhrSimplified = async (id: string) => {
         bestPracticesScore: lhReport.categories[2].score || 0,
         accessibilityScore: lhReport.categories[3].score || 0,
         pwaScore: lhReport.categories[4].score || 0,
+        lastUpdate: dayjs(parsedFile.fetchTime).unix()
     }
     report.total = (report.performanceScore + report.accessibilityScore + report.bestPracticesScore + report.seoScore + report.pwaScore) / 5;
     return report;

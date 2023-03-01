@@ -24,8 +24,8 @@ const BestPracticesPage = ({ institution, country, lhrAudits, lhrCategory, foote
     return (
         <>
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing-bestpractices-title', { institution: institution?.name })}</title>
-                <meta key={"description"} name="description" content={t('online-marketing-bestpractices-title')} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing.meta.bestpractices-title', { institution: institution?.name })}</title>
+                <meta key={"description"} name="description" content={t('online-marketing.meta.bestpractices-title')} />
             </Head>
 
             <LhrCategoryPage

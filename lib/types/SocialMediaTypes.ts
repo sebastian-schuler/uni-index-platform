@@ -38,25 +38,26 @@ export interface SmRankingEntryMinified {
     twitterScore: number,
 }
 
-export type SmBestCardMinified = {
-    type: "youtube"
+type SmBestCardBase = {
+    href: string | null
     Institution: {
         name: string
         url: string
-        countryName: string
     }
+    Country: {
+        name: string
+        url: string
+    }
+}
+export type SmBestCardMinified = SmBestCardBase & {
+    type: "youtube"
     youtubeScore: number,
     totalSubscribers: number,
     totalVideos: number,
     avgViews: number,
     avgComments: number,
-} | {
+} | SmBestCardBase & {
     type: "twitter"
-    Institution: {
-        name: string
-        url: string
-        countryName: string
-    }
     twitterScore: number
     totalFollowers: number
     totalTweets: number

@@ -1,11 +1,10 @@
 import { Group, RingProgress, Stack, Text, Title } from '@mantine/core'
 import React from 'react'
 import { getLhrScoreColor } from '../../lib/lighthouse/lhrUtil'
-import { interpolateBetweenColors } from '../../lib/util/uiUtil'
 
 interface Props {
     score: number,
-    title: string,
+    title: string | JSX.Element,
     description?: string,
     size: "lg" | "md" | "sm"
 }

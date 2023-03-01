@@ -6,12 +6,14 @@ import Navbar from '../features/AppShell/Navbar'
 import { AuthProvider } from '../lib/context/SessionContext'
 import { URL_ACCOUNT } from '../lib/url-helper/urlConstants'
 import { toLink } from '../lib/util/util'
-import '../styles/globals.css'
-import appTheme from '../styles/theme'
+import '../theme/globals.css'
+import appTheme from '../theme/theme'
 import * as gtag from '../lib/analytics/gtag'
 import Head from 'next/head'
 import Script from 'next/script'
 import { useEffect } from 'react'
+import ErrorBoundary from '../features/ErrorBoundary/ErrorBoundary'
+import DevMessagePopover from '../features/DevMessagePopover'
 
 function MyApp({ Component, pageProps }: AppProps) {
 
@@ -48,27 +50,31 @@ function MyApp({ Component, pageProps }: AppProps) {
         src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
       />
 
-      <AuthProvider>
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={appTheme}
-        >
-          {
-            asPath.startsWith(toLink(URL_ACCOUNT)) ? (
-              <AccountNavigation>
-                <Component {...pageProps} />
-              </AccountNavigation>
-            ) : (
-              <>
-                <Navbar />
-                <Component {...pageProps} />
-              </>
-            )
-          }
+      <ErrorBoundary>
+        <AuthProvider>
+          <MantineProvider
+            withGlobalStyles
+            withNormalizeCSS
+            theme={appTheme}
+          >
+            {
+              asPath.startsWith(toLink(URL_ACCOUNT)) ? (
+                <AccountNavigation>
+                  <Component {...pageProps} />
+                </AccountNavigation>
+              ) : (
+                <>
+                  <Navbar />
+                  <Component {...pageProps} />
+                </>
+              )
+            }
 
-        </MantineProvider>
-      </AuthProvider>
+            <DevMessagePopover />
+
+          </MantineProvider>
+        </AuthProvider>
+      </ErrorBoundary>
     </>
   )
 }
