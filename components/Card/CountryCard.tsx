@@ -5,6 +5,7 @@ import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
 import { CountryCardData } from '../../lib/types/UiHelperTypes'
+import CardTitle from '../Text/CardTitle'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -42,11 +43,10 @@ const CountryCard: React.FC<Props> = ({ country }: Props) => {
 
             <Card.Section className={classes.section}>
                 <Group position="apart" noWrap sx={{ alignItems: "start" }}>
-                    <Anchor component={Link} href={country.url}>
-                        <Text size="xl" weight={500} color={theme.colors.brandGray[3]} sx={{ lineHeight: 1 }}>
-                            {country.name}
-                        </Text>
-                    </Anchor>
+                    <CardTitle
+                        href={country.url}
+                        text={country.name}
+                    />
                     <Flag className={classes.flag} />
                 </Group>
             </Card.Section>

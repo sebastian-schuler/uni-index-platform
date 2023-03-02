@@ -18,7 +18,6 @@
         "*.jsx": "${capture}.js",
         "*.tsx": "${capture}.ts",
         ".eslintrc.*": ".eslintignore, .editorconfig, .prettierrc",
-        "tsconfig.json": "tsconfig.*.json, package.json, .gitignore",
         "next.config.js": "i18n.js"
     },
 }

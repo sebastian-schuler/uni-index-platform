@@ -51,7 +51,6 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
   const { t } = useTranslation('index');
 
   return (
-
     <ResponsiveWrapper removeVerticalPadding removeContainerWrapper footerContent={footerContent}>
 
       <Head>

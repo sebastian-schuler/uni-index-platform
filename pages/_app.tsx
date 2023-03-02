@@ -1,23 +1,20 @@
 import { MantineProvider } from '@mantine/core'
 import type { AppProps, NextWebVitalsMetric } from 'next/app'
-import { useRouter } from 'next/router'
-import AccountNavigation from '../features/Account/AccountNavigation'
-import Navbar from '../features/AppShell/Navbar'
-import { AuthProvider } from '../lib/context/SessionContext'
-import { URL_ACCOUNT } from '../lib/url-helper/urlConstants'
-import { toLink } from '../lib/util/util'
-import '../theme/globals.css'
-import appTheme from '../theme/theme'
-import * as gtag from '../lib/analytics/gtag'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import Script from 'next/script'
 import { useEffect } from 'react'
-import ErrorBoundary from '../features/ErrorBoundary/ErrorBoundary'
+import Shell from '../features/AppShell/Shell'
 import DevMessagePopover from '../features/DevMessagePopover'
+import ErrorBoundary from '../features/ErrorBoundary/ErrorBoundary'
+import * as gtag from '../lib/analytics/gtag'
+import { AuthProvider } from '../lib/context/SessionContext'
+import '../theme/globals.css'
+import appTheme from '../theme/theme'
 
 function MyApp({ Component, pageProps }: AppProps) {
 
-  const { asPath, events } = useRouter();
+  const { events } = useRouter();
 
   useEffect(() => {
     const handleRouteChange = (url: string) => gtag.pageview(url);
@@ -57,18 +54,10 @@ function MyApp({ Component, pageProps }: AppProps) {
             withNormalizeCSS
             theme={appTheme}
           >
-            {
-              asPath.startsWith(toLink(URL_ACCOUNT)) ? (
-                <AccountNavigation>
-                  <Component {...pageProps} />
-                </AccountNavigation>
-              ) : (
-                <>
-                  <Navbar />
-                  <Component {...pageProps} />
-                </>
-              )
-            }
+
+            <Shell>
+              <Component {...pageProps} />
+            </Shell>
 
             <DevMessagePopover />
 

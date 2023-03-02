@@ -8,6 +8,7 @@ import React from 'react'
 import { SubjectCardData } from '../../lib/types/UiHelperTypes'
 import { URL_CATEGORY, URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../lib/url-helper/urlConstants'
 import { toLink } from '../../lib/util/util'
+import CardTitle from '../Text/CardTitle'
 
 const useStyles = createStyles((theme) => ({
 
@@ -53,18 +54,14 @@ const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
 
           {/* Header: Subjectname, Institution, City */}
           <Grid.Col span={10}>
-
-            <Anchor component={Link} href={subjectUrl}>
-              <Text size="lg" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1, wordBreak: "break-word" }}>
-                {data.name}
+            <Stack spacing={theme.spacing.xs}>
+              <CardTitle href={subjectUrl} text={data.name} />
+              <Text lh={1.2}>
+                <Anchor lh={1.1} component={Link} href={institutionUrl}>{data.Institution.name}</Anchor>
+                {' | '}
+                <Anchor lh={1.1} component={Link} href={data.City.fullUrl}>{data.City.name}</Anchor>
               </Text>
-            </Anchor>
-
-            <Text sx={{ lineHeight: 1.2, wordBreak: "break-all", lineBreak: "anywhere" }}>
-              <Anchor component={Link} href={institutionUrl}>{data.Institution.name}</Anchor>
-              {' | '}
-              <Anchor component={Link} href={data.City.fullUrl}>{data.City.name}</Anchor>
-            </Text>
+            </Stack>
           </Grid.Col>
 
           {/* Header: Country Flag */}

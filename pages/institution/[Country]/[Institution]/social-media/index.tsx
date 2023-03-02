@@ -18,6 +18,7 @@ import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma
 import { TotalScore, TotalScoreSet } from '../../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { toLink } from '../../../../../lib/util/util'
+import dayjs from 'dayjs'
 
 export interface SocialMediaLinkProps {
     twitter: string | null
@@ -29,6 +30,7 @@ export interface SocialMediaLinkProps {
 interface Props {
     institution: Institution,
     country: Country,
+    lastUpdate: number,
     institutionScore: TotalScore | null
     countryScore: TotalScoreSet | null
     countryTwitterScore: TotalScoreSet | null
@@ -37,7 +39,7 @@ interface Props {
     footerContent: FooterContent[],
 }
 
-const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, institutionScore, countryScore, countryTwitterScore, countryYoutubeScore, socialMediaLinks, footerContent }: Props) => {
+const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, lastUpdate, institutionScore, countryScore, countryTwitterScore, countryYoutubeScore, socialMediaLinks, footerContent }: Props) => {
 
     const { t, lang } = useTranslation('institution');
     const router = useRouter();
@@ -71,7 +73,6 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
                 icon={<IconBrandTwitter size={24} color={"white"} />}
                 color={"#1DA1F2"}
                 textColor={"white"}
-                lastUpdate={"00/00/0000"}
             />
         );
     }
@@ -85,10 +86,11 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
                 icon={<IconBrandYoutube size={24} color={"white"} />}
                 color={"#FF0000"}
                 textColor={"white"}
-                lastUpdate={"00/00/0000"} // TODO get last update
             />
         );
     }
+
+    const lastUpdateString = dayjs(lastUpdate).format('DD.MM.YYYY');
 
     return (
         <ResponsiveWrapper footerContent={footerContent}>
@@ -110,13 +112,13 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, ins
                         <div>
                             <Title order={2}>{t('social-media.header')}</Title>
                             <Text>{t('social-media.header-text', { name: institution.name })}</Text>
+                            <Text>{t('label-lastupdate', { date: lastUpdateString })}</Text>
                         </div>
                         <SimpleGrid
                             breakpoints={[
                                 { minWidth: 'md', cols: 4, spacing: 'md' },
-                                { minWidth: 'sm', cols: 1, spacing: 'sm' },
+                                { minWidth: 'sm', cols: 2, spacing: 'sm' },
                             ]}
-                            spacing={"xl"}
                         >
                             {socialMediaPages}
                         </SimpleGrid>
@@ -165,6 +167,9 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         facebook: socialMedia?.facebook_url || null,
     }
 
+    // Last Update
+    const lastUpdate = socialMedia ? Number(socialMedia.last_update) : 0;
+
     // Footer Data
     // Get all countries
     const countryList = await getCountries();
@@ -176,6 +181,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         props: {
             institution,
             country,
+            lastUpdate,
             institutionScore,
             countryScore,
             countryTwitterScore,

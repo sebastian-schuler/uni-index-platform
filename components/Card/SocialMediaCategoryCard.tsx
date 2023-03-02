@@ -3,10 +3,18 @@ import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
 
-const useStyles = createStyles((theme) => ({
+type StyleParams = {
+    color: string
+}
+
+const useStyles = createStyles((theme, _params: StyleParams) => ({
     card: {
-        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
+        backgroundColor: _params.color,
         height: "100%",
+
+        '&:hover': {
+            backgroundColor: theme.fn.lighten(_params.color, 0.2),
+        }
     },
 
     section: {
@@ -21,16 +29,15 @@ interface Props {
     icon: JSX.Element
     color: string
     textColor: string
-    lastUpdate: string
 }
 
-const SocialMediaCategoryCard: React.FC<Props> = ({ title, url, icon, color, textColor, lastUpdate }: Props) => {
+const SocialMediaCategoryCard: React.FC<Props> = ({ title, url, icon, color, textColor }: Props) => {
 
-    const { classes, theme } = useStyles();
+    const { classes, theme } = useStyles({ color: color });
     const { t } = useTranslation('institution');
 
     return (
-        <Card component={Link} href={url} withBorder radius="md" shadow={"sm"} className={classes.card} sx={{ backgroundColor: color }}>
+        <Card component={Link} href={url} withBorder radius="md" shadow={"sm"} className={classes.card}>
 
             <Card.Section className={classes.section}>
                 <Group position="apart" noWrap sx={{ alignItems: "start" }}>
@@ -39,12 +46,6 @@ const SocialMediaCategoryCard: React.FC<Props> = ({ title, url, icon, color, tex
                     </Stack>
                     {icon}
                 </Group>
-            </Card.Section>
-
-            <Card.Section className={classes.section}>
-                <Stack spacing={"sm"}>
-                    <Text color={textColor}>{t('social-media.card-lastupdate', { date: lastUpdate })}</Text>
-                </Stack>
             </Card.Section>
 
         </Card>

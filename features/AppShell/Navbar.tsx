@@ -1,18 +1,13 @@
 import {
   Anchor,
-  Burger, Center, createStyles, Divider, Drawer, Group, Header, Menu, Stack, Text, UnstyledButton
+  Burger, Center, createStyles, Group, Header, Menu, Text, UnstyledButton
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown } from '@tabler/icons-react';
-import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { URL_CATEGORIES, URL_CATEGORY, URL_INSTITUTION, URL_INSTITUTIONS, URL_LOCATION, URL_LOCATIONS } from '../../lib/url-helper/urlConstants';
-import { toLink } from '../../lib/util/util';
 import ResponsiveContainer from '../../components/Container/ResponsiveContainer';
 import NavbarAccountMenu from './NavbarAccountMenu';
-
-export const HEADER_HEIGHT = 64;
+import { HEADER_HEIGHT, MenuLink } from './Shell';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -101,58 +96,21 @@ const useStyles = createStyles((theme) => ({
 
 }));
 
-type MenuLink = {
-  label: string;
-  link: string;
+
+type Props = {
+  opened: boolean
+  toggle: () => void
+  data: MenuLink[]
 }
 
-type MenuChildren = MenuLink & { type: 'link' } | { type: 'divider' } | { type: 'label', text: string };
+const Navbar: React.FC<Props> = ({ opened, toggle, data }: Props) => {
 
-type MenuLinkRoot = {
-  parent: MenuLink
-  rootUrl: string[];
-  children: MenuChildren[]
-}
-
-const Navbar: React.FC = () => {
-
-  const { t } = useTranslation("common");
-
-  const links: MenuLinkRoot[] = [
-    { parent: { label: t('nav.home'), link: "/" }, rootUrl: [""], children: [] },
-    { parent: { label: t('nav.locations'), link: toLink(URL_LOCATIONS) }, rootUrl: [URL_LOCATION], children: [] },
-    { parent: { label: t('nav.categories'), link: toLink(URL_CATEGORIES) }, rootUrl: [URL_CATEGORY, URL_CATEGORIES], children: [] },
-    { parent: { label: t('nav.institutions'), link: toLink(URL_INSTITUTIONS) }, rootUrl: [URL_INSTITUTION], children: [] },
-    {
-      parent: { label: t('nav.analysis.title'), link: "/social-media" }, rootUrl: ["social-media"], children: [
-        { type: 'label', text: t('nav.analysis.social-media-label') },
-        { type: 'link', label: t('nav.analysis.social-media-ranking'), link: "/social-media/ranking" },
-        { type: 'link', label: t('nav.analysis.social-media-statistics'), link: "/social-media/statistics" },
-        { type: 'divider' },
-        { type: 'label', text: t('nav.analysis.online-marketing-label') },
-        { type: 'link', label: t('nav.analysis.online-marketing-ranking'), link: "#ranking" },
-        { type: 'link', label: t('nav.analysis.online-marketing-statistics'), link: "#statistics" },
-      ]
-    },
-  ];
-
-  const [opened, { toggle }] = useDisclosure(false);
   const { classes, cx } = useStyles();
   const router = useRouter();
 
-  const items = links.map((link) => {
+  const items = data.map((link) => {
 
-    const menuItems = link.children?.map((item, i) => {
-
-      if (item.type === "link")
-        return (<Menu.Item key={item.link} component={Link} href={item.link}>{item.label}</Menu.Item>);
-
-      if (item.type === "divider")
-        return (<Menu.Divider key={i} />);
-
-      if (item.type === "label")
-        return (<Menu.Label key={i}>{item.text}</Menu.Label>);
-    });
+    if (link.type === "divider" || link.type === "label") return null;
 
     // Check if the route is the current route
     let isCurrent = link.rootUrl.some((url) => {
@@ -161,10 +119,31 @@ const Navbar: React.FC = () => {
       return false;
     });
 
-    if (menuItems && menuItems.length > 0) {
+    let menuItems: (JSX.Element | null)[] = [];
+
+    // Render a dropdown menu
+    if (link.type === "group") {
+
+      menuItems = link.children.map((item, i) => {
+        
+        if (item.type === "link") {
+          return (<Menu.Item key={item.link} component={Link} href={item.link}>{item.label}</Menu.Item>);
+        }
+
+        if (item.type === "divider") {
+          return (<Menu.Divider key={i} />);
+        }
+
+        if (item.type === "label") {
+          return (<Menu.Label key={i}>{item.label}</Menu.Label>);
+        }
+
+        return null;
+      });
+
       return (
         <Menu
-          key={link.parent.label}
+          key={link.label}
           trigger="hover"
           exitTransitionDuration={100}
           classNames={{
@@ -179,7 +158,7 @@ const Navbar: React.FC = () => {
             <UnstyledButton className={classes.link} sx={{ userSelect: 'none' }}>
               <Center>
                 <div className={classes.linkLabel}>
-                  <Text component='div' className={isCurrent ? classes.linkActive : undefined}>{link.parent.label}</Text>
+                  <Text component='div' className={isCurrent ? classes.linkActive : undefined}>{link.label}</Text>
                 </div>
                 <IconChevronDown size={12} stroke={1.5} />
               </Center>
@@ -191,55 +170,32 @@ const Navbar: React.FC = () => {
     }
 
     return (
-      <Anchor key={link.parent.label} href={link.parent.link} component={Link} className={classes.link}>
-        <Text component='div' className={isCurrent ? classes.linkActive : undefined}>{link.parent.label}</Text>
+      <Anchor key={link.label} href={link.link} component={Link} className={classes.link}>
+        <Text component='div' className={isCurrent ? classes.linkActive : undefined}>{link.label}</Text>
       </Anchor>
     );
   });
 
   return (
-    <>
-      <Header height={HEADER_HEIGHT} className={classes.header} fixed >
-        <ResponsiveContainer>
-          <div className={classes.inner}>
-            <Text size={'xl'} weight={"bolder"}>Uni-Index</Text>
-            <Group spacing={4} className={classes.links}>
-              <Group spacing={4}>
-                {items}
-              </Group>
-              <NavbarAccountMenu />
+    <Header height={HEADER_HEIGHT} className={classes.header} fixed >
+      <ResponsiveContainer>
+        <div className={classes.inner}>
+          <Text size={'xl'} weight={"bolder"}>Uni-Index</Text>
+          <Group spacing={4} className={classes.links}>
+            <Group spacing={4}>
+              {items}
             </Group>
-            <Burger
-              opened={opened}
-              onClick={toggle}
-              className={classes.burger}
-              size="sm"
-              color="#fff"
-            />
-          </div>
-        </ResponsiveContainer>
-      </Header>
-
-      <Drawer
-        opened={opened}
-        onClose={() => toggle()}
-        padding="lg"
-        size="lg"
-        position='right'
-        withCloseButton={false}
-      >
-        <Stack spacing={0} mt={HEADER_HEIGHT}>
-          {
-            items.map((item, i) => (
-              <div key={item.key}>
-                {item}
-                {i !== items.length - 1 && <Divider p={0} m={0} />}
-              </div>
-            ))
-          }
-        </Stack>
-      </Drawer>
-    </>
+            <NavbarAccountMenu />
+          </Group>
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            className={classes.burger}
+            color="#fff"
+          />
+        </div>
+      </ResponsiveContainer>
+    </Header>
   );
 }
 

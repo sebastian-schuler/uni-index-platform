@@ -7,8 +7,10 @@ import Link from 'next/link'
 import React, { memo } from 'react'
 import SmIconLink from '../../features/SocialMedia/SmIconLink'
 import { InstitutionCardData } from '../../lib/types/UiHelperTypes'
-import { URL_INSTITUTION, URL_LOCATION } from '../../lib/url-helper/urlConstants'
+import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS, URL_LOCATION } from '../../lib/url-helper/urlConstants'
 import { getLocalizedName, toLink } from '../../lib/util/util'
+import MantineLink from '../Link/MantineLink'
+import CardTitle from '../Text/CardTitle'
 
 const useStyles = createStyles((theme) => ({
 
@@ -65,11 +67,14 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
           <Stack spacing={theme.spacing.xs}>
 
             {/* Name & Name in brackets */}
-            <Anchor component={Link} href={urlInstitution}>
-              <Text size="lg" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
-                {data.Institution.name} <Text size={"xs"}>{data.Institution.nameBrackets}</Text>
-              </Text>
-            </Anchor>
+            <CardTitle
+              href={urlInstitution}
+              text={
+                <>
+                  {data.Institution.name}{data.Institution.nameBrackets !== "" && <Text size={"xs"}>{data.Institution.nameBrackets}</Text>}
+                </>
+              }
+            />
 
             {/* City & State */}
             <Text color={theme.colors.brandGray[2]} sx={{ lineHeight: 1.2 }}>
@@ -125,7 +130,7 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
             <ThemeIcon size={"md"} radius="xl">
               <IconSchool size={18} />
             </ThemeIcon>
-            <Text>{t('card-institution.label-subjects', { count: data.subjectCount })}</Text>
+            <MantineLink type='internal' url={toLink(urlInstitution, URL_INSTITUTION_SUBJECTS)}>{t('card-institution.label-subjects', { count: data.subjectCount })}</MantineLink>
           </Group>
 
           <Group noWrap>

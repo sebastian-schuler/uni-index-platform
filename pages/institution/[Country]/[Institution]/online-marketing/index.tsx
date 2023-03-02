@@ -1,25 +1,23 @@
-import { Group, Stack, Text } from '@mantine/core'
-import { Card, SimpleGrid, Title } from '@mantine/core'
+import { Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { Country, Institution } from '@prisma/client'
+import dayjs from 'dayjs'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
+import Trans from 'next-translate/Trans'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
-import Link from 'next/link'
-import LhrRingProgress from '../../../../../features/OnlineMarketing/LhrRingProgress'
+import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
+import MantineLink from '../../../../../components/Link/MantineLink'
 import WhitePaper from '../../../../../components/Paper/WhitePaper'
 import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
 import { FooterContent } from '../../../../../features/Footer/Footer'
-import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
 import InstitutionNav from '../../../../../features/Navigation/InstitutionNav'
+import LhrCategoryCard from '../../../../../features/OnlineMarketing/LhrCategoryCard'
 import { getLhrSimplified } from '../../../../../lib/lighthouse/lhrSimplifier'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { LhrSimple } from '../../../../../lib/types/lighthouse/CustomLhrTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION, URL_INSTITUTION_OM } from '../../../../../lib/url-helper/urlConstants'
 import { toLink } from '../../../../../lib/util/util'
-import dayjs from 'dayjs';
-import MantineLink from '../../../../../components/Link/MantineLink'
-import Trans from 'next-translate/Trans'
 
 interface CategoryData {
   title: string,
@@ -41,18 +39,13 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
 
   if (!lhr) return (
     <ResponsiveWrapper footerContent={footerContent}>
-
       <Head>
         <title key={"title"}>{t('common:page-title') + " | " + t('online-marketing.meta.title-nodata', { institution: institution?.name })}</title>
         <meta key={"description"} name="description" content={t('online-marketing.meta.description')} />
       </Head>
-
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
-
       <InstitutionNav title={institution.name} />
-
       <WhitePaper>No LHR data</WhitePaper>
-
     </ResponsiveWrapper>
   );
 
@@ -90,22 +83,19 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
   ]
 
   const categoryCards = data.map((category, index) => {
-
     const url = toLink(URL_INSTITUTION, country.url, institution.url, URL_INSTITUTION_OM, category.url);
-
     return (
-      <Card key={category.url + index} component={Link} href={url}>
-        <LhrRingProgress
-          title={category.title}
-          score={category.score}
-          description={category.description}
-          size={"md"}
-        />
-      </Card>
+      <LhrCategoryCard
+        key={index}
+        title={category.title}
+        score={category.score}
+        description={category.description}
+        url={url}
+      />
     )
   });
 
-  const lastUpdate = dayjs(lhr.lastUpdate * 1000).format('DD/MM/YYYY');
+  const lastUpdate = dayjs(lhr.lastUpdate * 1000).format('DD/MM/YYYY'); // Unix timestamp is in seconds and dayjs expects milliseconds
 
   return (
     <ResponsiveWrapper footerContent={footerContent}>
@@ -116,11 +106,9 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
       </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
-
       <InstitutionNav title={institution.name} />
 
       <WhitePaper>
-
         <Stack>
 
           <div>
@@ -129,7 +117,7 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
           </div>
 
           <Group position='apart'>
-            <Text>{t('online-marketing.label-lastupdate', { date: lastUpdate })}</Text>
+            <Text>{t('label-lastupdate', { date: lastUpdate })}</Text>
             <Text>
               <Trans
                 i18nKey='institution:online-marketing.label-website'
@@ -141,16 +129,15 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
 
           <SimpleGrid
             breakpoints={[
-              { minWidth: 'sm', cols: 2 },
-              { minWidth: 'md', cols: 3 },
-              { minWidth: 'lg', cols: 4 },
+              { minWidth: 'sm', cols: 1 },
+              { minWidth: 'md', cols: 2 },
+              { minWidth: 'lg', cols: 2 },
             ]}
           >
             {categoryCards}
           </SimpleGrid>
 
         </Stack>
-
       </WhitePaper>
     </ResponsiveWrapper>
   )

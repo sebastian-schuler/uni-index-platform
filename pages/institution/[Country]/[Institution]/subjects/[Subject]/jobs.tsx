@@ -2,17 +2,17 @@ import { Country, Institution, Subject } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
-import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
-import { FooterContent } from '../../../../../features/Footer/Footer'
-import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
-import SubjectNav from '../../../../../features/Navigation/SubjectNav'
-import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../lib/url-helper/urlConstants'
-import { getCountries, getCountry, getInstitution, getSubject } from '../../../../../lib/prisma/prismaQueries'
-import { getDBLocale, toLink } from '../../../../../lib/util/util'
+import Breadcrumb from '../../../../../../features/Breadcrumb/Breadcrumb'
+import { FooterContent } from '../../../../../../features/Footer/Footer'
+import ResponsiveWrapper from '../../../../../../components/Container/ResponsiveWrapper'
+import SubjectNav from '../../../../../../features/Navigation/SubjectNav'
+import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../../lib/url-helper/urlConstants'
+import { getCountries, getCountry, getInstitution, getSubject } from '../../../../../../lib/prisma/prismaQueries'
+import { getDBLocale, toLink } from '../../../../../../lib/util/util'
 import { ParsedUrlQuery } from 'querystring'
-import { getJobsFromApi } from '../../../../../lib/apis/jobsHandler'
-import WhitePaper from '../../../../../components/Paper/WhitePaper'
-import { getSubjectPaths } from '../../../../../lib/prisma/prismaUrlPaths'
+import { getJobsFromApi } from '../../../../../../lib/apis/jobsHandler'
+import WhitePaper from '../../../../../../components/Paper/WhitePaper'
+import { getSubjectPaths } from '../../../../../../lib/prisma/prismaUrlPaths'
 
 type Props = {
     country: Country | null,
@@ -22,22 +22,22 @@ type Props = {
     footerContent: FooterContent[],
 }
 
-const SubjectJobs: NextPage<Props> = props => {
+const SubjectJobs: NextPage<Props> = ({ country, institution, subject, footerContent }: Props) => {
 
     const query = useRouter().query;
 
-    const title = props.subject?.name + " - " + props.subject?.degree;
+    const title = subject?.name + " - " + subject?.degree;
 
     const countryUrl = (query.Country || "") as string;
     const institutionUrl = (query.Institution || "") as string;
 
     return (
-        <ResponsiveWrapper footerContent={props.footerContent}>
+        <ResponsiveWrapper footerContent={footerContent}>
 
             <Breadcrumb
-                countryInfo={props.country}
-                institutionInfo={props.institution}
-                subjectInfo={props.subject}
+                countryInfo={country}
+                institutionInfo={institution}
+                subjectInfo={subject}
             />
 
             <SubjectNav

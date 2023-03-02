@@ -1,21 +1,73 @@
-import { Button, createStyles, Group, Stack, Tabs } from '@mantine/core';
+import { Button, createStyles, Group, Stack, Tabs, TabsProps } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 import GenericPageHeader from '../Block/GenericPageHeader';
 
-const useStyles = createStyles((theme) => ({
+function StyledTabs(props: TabsProps) {
+    return (
+        <Tabs
+            unstyled
+            styles={(theme) => ({
+                tab: {
+                    ...theme.fn.focusStyles(),
+                    backgroundColor: 'inherit',
+                    color: theme.colors.light[0],
+                    border: 'none',
+                    padding: `${theme.spacing.sm}px ${theme.spacing.md}px`,
+                    cursor: 'pointer',
+                    fontSize: theme.fontSizes.lg,
+                    alignItems: 'center',
+                    justifyContent: 'center',
 
-    tabLabel: {
-        fontSize: theme.fontSizes.lg,
-    },
+                    '&:hover': {
+                        backgroundColor: theme.fn.lighten('inherit', 0.1),
+                    },
 
-    root: {
-        backgroundColor: theme.colors.light[0],
-        paddingTop: theme.spacing.lg,
-    },
+                    '&:disabled': {
+                        opacity: 0.5,
+                        cursor: 'not-allowed',
+                    },
 
-}));
+                    '&[data-active]': {
+                        backgroundColor: theme.colors.brandOrange[5],
+                        borderColor: theme.colors.brandOrange[5],
+                        color: theme.white,
+
+                        '&:hover': {
+                            backgroundColor: theme.fn.lighten(theme.colors.brandOrange[5], 0.3),
+                        },
+
+                    },
+                },
+                tabIcon: {
+                    marginRight: theme.spacing.xs,
+                    display: 'flex',
+                    alignItems: 'center',
+                },
+                tabsList: {
+                    display: 'grid',
+
+                    [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+                        gridTemplateColumns: '50% 50%',
+                    },
+                    [`@media (min-width: ${theme.breakpoints.md}px)`]: {
+                        gridTemplateColumns: 'none',
+                        gridAutoFlow: 'column',
+                        gridAutoColumns: '1fr',
+                    },
+                },
+                tabLabel: {
+                    whiteSpace: 'nowrap',
+                },
+                root: {
+                    backgroundColor: theme.colors.brandGray[4],
+                }
+            })}
+            {...props}
+        />
+    );
+}
 
 interface Props {
     title: string,
@@ -31,7 +83,6 @@ interface Props {
 
 const SubNav = ({ title, pageLinkData, backButton }: Props) => {
 
-    const { classes } = useStyles();
     const router = useRouter();
     const path = router.asPath;
 
@@ -45,20 +96,22 @@ const SubNav = ({ title, pageLinkData, backButton }: Props) => {
                     </Group>
                 ) : <GenericPageHeader title={title} description={""} />
             }
-
-            <Tabs
-                classNames={classes}
+            <StyledTabs
                 value={path}
                 onTabChange={(value) => router.push(value as string)}
             >
-                <Tabs.List>
+                <Tabs.List grow sx={{ flexWrap: 'wrap' }}>
                     {
                         pageLinkData.map((page, i) => (
-                            <Tabs.Tab key={i} value={page.url}>{page.name}</Tabs.Tab>
+                            <Tabs.Tab key={i} value={page.url} >
+                                <Link href={page.url}>
+                                    {page.name}
+                                </Link>
+                            </Tabs.Tab>
                         ))
                     }
                 </Tabs.List>
-            </Tabs>
+            </StyledTabs>
         </Stack>
     )
 }
