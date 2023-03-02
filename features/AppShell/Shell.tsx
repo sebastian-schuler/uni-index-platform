@@ -2,7 +2,7 @@ import React from 'react'
 import { useRouter } from 'next/router';
 import { toLink } from '../../lib/util/util';
 import { URL_ACCOUNT, URL_NEWS } from '../../lib/url-helper/urlConstants';
-import AccountNavigation from '../Account/AccountNavigation';
+import AccountNavigation from './AccountNavigation';
 import Navbar from './Navbar';
 import { useDisclosure } from '@mantine/hooks';
 import useTranslation from 'next-translate/useTranslation';

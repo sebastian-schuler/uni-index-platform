@@ -1,7 +1,7 @@
 import { ActionIcon, Autocomplete, Box, Button, Center, FileInput, Grid, Group, Paper, SegmentedControl, Stack, Text, Textarea, Title, useMantineTheme } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { Subject } from '@prisma/client';
-import { IconBuilding, IconSchool, IconUpload, IconX } from '@tabler/icons-react';
+import { IconArticle, IconBuilding, IconLink, IconSchool, IconUpload, IconX } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import HelpPopover from '../../components/Popover/HelpPopover';
 import AdCardLarge from '../../components/Card/AdCardLarge';
@@ -11,7 +11,10 @@ import { useAuth } from '../../lib/context/SessionContext';
 import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
 import { UserDataProfile } from '../../lib/types/AccountHandlingTypes';
 
-interface SubjectAutofill {
+type LinkType = "link" | "post";
+type LinkedItemType = "institution" | "subject";
+
+type SubjectAutofill = {
     value: string
     subject: Subject
 }
@@ -28,8 +31,10 @@ const CreateAd = () => {
     const theme = useMantineTheme();
     const SECONDARY_AD_HEIGHT = PRIMARY_AD_HEIGHT / 2 - theme.spacing.lg / 2;
 
-    // Ad settings
-    const [adType, setAdType] = useState<"institution" | "subject">("institution");
+    // Ad type
+    const [adLinkType, setAdLinkType] = useState<LinkType>("link");
+    // Ad linked item
+    const [adLinkedItemType, setAdLinkedItemType] = useState<LinkedItemType>("institution");
     const [adSize, setAdSize] = useState<number>(2);
     // Ad subject
     const [formAvailableSubjects, setFormAvailableSubjects] = useState<SubjectAutofill[]>([]);
@@ -48,6 +53,10 @@ const CreateAd = () => {
     // COST
     const daysBooked = until === null ? 0 : Math.round(Math.abs((Date.now() - (until.getTime())) / (24 * 60 * 60 * 1000))) + 1;
 
+    /**
+     * Calculates the total cost of the ad
+     * @returns 
+     */
     const getAdTotalCost = (): number => {
         let cost = 0;
         if (adSize === 1) {
@@ -60,6 +69,10 @@ const CreateAd = () => {
         return cost;
     }
 
+    /**
+     * Sets the image to the new image if it is a valid image
+     * @param newImage 
+     */
     const handleSetImage = (newImage: File) => {
         if (newImage.type === "image/jpeg" || newImage.type === "image/png")
             setImage(newImage);
@@ -67,10 +80,13 @@ const CreateAd = () => {
             setImage(null);
     }
 
+    /**
+     * Submits the form to the server
+     */
     const submitForm = async () => {
 
         let formData = new FormData();
-        formData.append("type", adType);
+        formData.append("type", adLinkedItemType);
         formData.append("size", adSize.toString());
 
         if (until !== null) {
@@ -82,7 +98,7 @@ const CreateAd = () => {
         if ((adSize === 2 || adSize === 3) && image !== null) {
             formData.append("image", image);
         }
-        if (adType === "subject" && selectedAdSubject !== undefined) {
+        if (adLinkedItemType === "subject" && selectedAdSubject !== undefined) {
             formData.append("subject", selectedAdSubject.subject.id.toString());
         }
 
@@ -99,8 +115,10 @@ const CreateAd = () => {
 
     }
 
+    /**
+     * Creates an object url for the image and sets it as the image filepath
+     */
     useEffect(() => {
-
         let objectUrl = "";
         if (image !== null) {
             objectUrl = URL.createObjectURL(image)
@@ -111,8 +129,10 @@ const CreateAd = () => {
         return () => URL.revokeObjectURL(objectUrl)
     }, [image])
 
+    /**
+     * Gets the subjects from the api and sets them as the available subjects
+     */
     useEffect(() => {
-
         const getSubjects = async () => {
             const userDataRes = await getUserDataFromApi({ userSubjects: true, profile: true });
             if (userDataRes === null || userDataRes.status !== "SUCCESS") return;
@@ -127,12 +147,15 @@ const CreateAd = () => {
         return () => { }
     }, [token])
 
+    /**
+     * Gets the headline of the ad
+     * @returns 
+     */
     const getAdHeadline = (): string => {
-
-        if (adType === "subject") {
+        if (adLinkedItemType === "subject") {
             if (selectedAdSubject === null) return "[Title]";
             return selectedAdSubject?.subject.name || "[Title]";
-        } else if (adType === "institution") {
+        } else if (adLinkedItemType === "institution") {
             return userData?.institution?.name || "[Institution Name]";
         } else {
             return "[Title]";
@@ -140,7 +163,7 @@ const CreateAd = () => {
     }
 
     return (
-        <Grid sx={{ maxWidth: 1000 }}>
+        <Grid sx={{ maxWidth: theme.breakpoints.lg }}>
 
             <Grid.Col sm={12} md={6}>
                 <Paper p="lg" shadow="sm" radius="md" sx={{ backgroundColor: theme.colors.light[0] }}>
@@ -148,46 +171,82 @@ const CreateAd = () => {
                     <Title order={1} size="h5" mb={"lg"}>Create new ad</Title>
 
                     <Stack>
-                        <Box>
+                        <div>
                             <Group position="apart">
                                 <Text size={"sm"}>Type of ad</Text>
                                 <HelpPopover helpText='Do you want your ad to link to your entire institution page, or just one specific subject?' size={theme.fontSizes.lg} />
                             </Group>
                             <SegmentedControl
                                 radius={theme.radius.md}
-                                value={adType}
+                                value={adLinkType}
                                 color="brandOrange"
-                                size='sm'
+                                size='md'
                                 fullWidth
-                                onChange={(value) => setAdType(value as "institution" | "subject")}
+                                onChange={(value) => setAdLinkType(value as LinkType)}
                                 data={[
                                     {
                                         label:
                                             <Center>
-                                                <IconBuilding size={16} />
-                                                <Box ml={10}>Institution</Box>
+                                                <IconLink size={16} />
+                                                <Box ml={10}>Link</Box>
                                             </Center>,
-                                        value: 'institution'
+                                        value: 'link'
                                     },
                                     {
                                         label:
                                             <Center>
-                                                <IconSchool size={16} />
-                                                <Box ml={10}>Subject</Box>
+                                                <IconArticle size={16} />
+                                                <Box ml={10}>Post</Box>
                                             </Center>,
-                                        value: 'subject'
+                                        value: 'post'
                                     },
                                 ]}
                             />
-                        </Box>
+                        </div>
+                        {
+                            adLinkType === "link" &&
+                            <div>
+                                <Group position="apart">
+                                    <Text size={"sm"}>Linked item</Text>
+                                    <HelpPopover helpText='Do you want your ad to link to your entire institution page, or just one specific subject?' size={theme.fontSizes.lg} />
+                                </Group>
+                                <SegmentedControl
+                                    radius={theme.radius.md}
+                                    value={adLinkedItemType}
+                                    color="brandOrange"
+                                    size='md'
+                                    fullWidth
+                                    onChange={(value) => setAdLinkedItemType(value as "institution" | "subject")}
+                                    data={[
+                                        {
+                                            label:
+                                                <Center>
+                                                    <IconBuilding size={16} />
+                                                    <Box ml={10}>Institution</Box>
+                                                </Center>,
+                                            value: 'institution'
+                                        },
+                                        {
+                                            label:
+                                                <Center>
+                                                    <IconSchool size={16} />
+                                                    <Box ml={10}>Subject</Box>
+                                                </Center>,
+                                            value: 'subject'
+                                        },
+                                    ]}
+                                />
+                            </div>
+                        }
 
-                        {adType === "subject" && (
+                        {adLinkedItemType === "subject" && adLinkType === "link" && (
                             <Box>
                                 <Group position="apart">
                                     <Text size={"sm"}>Subject</Text>
                                     <HelpPopover helpText='Select the subject you want to advertise for.' size={theme.fontSizes.lg} />
                                 </Group>
                                 <Autocomplete
+                                    size='md'
                                     value={selectedAdSubject?.value}
                                     onChange={(value) => {
                                         setSelectedAdSubject(formAvailableSubjects.find((subject) => subject.value === value));
@@ -214,32 +273,23 @@ const CreateAd = () => {
                                 radius={theme.radius.md}
                                 value={adSize.toString()}
                                 color="brandOrange"
-                                size='sm'
+                                size='md'
                                 fullWidth
                                 onChange={(value) => setAdSize(parseInt(value))}
                                 data={[
                                     {
                                         label:
-                                            <Center>
-                                                <IconBuilding size={16} />
-                                                <Box ml={10}>Large</Box>
-                                            </Center>,
+                                            <Center>Large</Center>,
                                         value: "3"
                                     },
                                     {
                                         label:
-                                            <Center>
-                                                <IconSchool size={16} />
-                                                <Box ml={10}>Medium</Box>
-                                            </Center>,
+                                            <Center>Medium</Center>,
                                         value: "2"
                                     },
                                     {
                                         label:
-                                            <Center>
-                                                <IconSchool size={16} />
-                                                <Box ml={10}>Small</Box>
-                                            </Center>,
+                                            <Center>Small</Center>,
                                         value: "1"
                                     },
                                 ]}
@@ -354,7 +404,7 @@ const CreateAd = () => {
                         title={getAdHeadline()}
                         link='#'
                         colHeight={PRIMARY_AD_HEIGHT}
-                        adType={adType}
+                        adType={adLinkedItemType}
                         imgUrl={imageFilepath}
                         disableLink
                     />
@@ -367,7 +417,7 @@ const CreateAd = () => {
                         title={getAdHeadline()}
                         link='#'
                         colHeight={SECONDARY_AD_HEIGHT}
-                        adType={adType}
+                        adType={adLinkedItemType}
                         imgUrl={imageFilepath}
                         disableLink
                     />
@@ -380,7 +430,7 @@ const CreateAd = () => {
                             description={description === "" ? "[Description]" : description}
                             title={getAdHeadline()}
                             link='#'
-                            adType={adType}
+                            adType={adLinkedItemType}
                             colHeight={SECONDARY_AD_HEIGHT}
                             disableLink
                         />

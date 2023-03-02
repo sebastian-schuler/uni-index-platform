@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useAuth } from '../../lib/context/SessionContext';
-import AccountUserButton from './AccountUserButton';
+import AccountUserButton from '../Account/AccountUserButton';
 
 const useStyles = createStyles((theme, _params, getRef) => {
     const icon = getRef('icon');
@@ -130,9 +130,7 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedEmail }: Props) =>
         <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }} className={classes.root}>
             <Navbar.Section grow>
                 <Group className={classes.header} position="apart">
-                    {/* <MantineLogo size={28} /> */}
                     <AccountUserButton
-
                         email={displayedEmail}
                     />
                 </Group>

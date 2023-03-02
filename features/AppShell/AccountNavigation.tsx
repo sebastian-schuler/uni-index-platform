@@ -54,6 +54,7 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
 
     return (
         <AppShell
+            padding={'lg'}
             styles={{
                 main: {
                     background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
