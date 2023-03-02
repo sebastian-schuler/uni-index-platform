@@ -1,8 +1,7 @@
-import { Anchor, Box, Button, Card, CardSection, createStyles, Flex, Space, Stack, Table, Text, Title } from '@mantine/core';
+import { Card, CardSection, createStyles, Table, Text } from '@mantine/core';
 import { Country } from '@prisma/client';
 import Trans from 'next-translate/Trans';
 import useTranslation from 'next-translate/useTranslation';
-import Link from 'next/link';
 import React from 'react';
 import MantineLink from '../../components/Link/MantineLink';
 import CardTitle from '../../components/Text/CardTitle';
@@ -62,23 +61,27 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
     });
 
     return (
-        <Card p="lg" radius="md" shadow={"sm"} className={classes.card}>
-            <CardSection className={classes.topSection} px={"lg"}>
+        <Card radius="md" shadow={"sm"} className={classes.card}>
+            
+            <CardSection className={classes.topSection}>
                 <CardTitle href={toLink(URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING)} text={t('social-media.top-institutions-title')} />
                 <Text sx={{ lineHeight: 1.1 }}>{t('social-media.top-institutions-desc')}</Text>
             </CardSection>
-            <Table sx={{ minWidth: 100 }} verticalSpacing="xs">
-                <thead>
-                    <tr>
-                        <th>{t('social-media.top-table-col-institution')}</th>
-                        <th>{t('social-media.top-table-col-country')}</th>
-                        <th>{t('social-media.top-table-col-score')}</th>
-                    </tr>
-                </thead>
-                <tbody>{rows}</tbody>
-            </Table>
 
-            <CardSection className={classes.bottomSection} px={"lg"}>
+            <CardSection px={"md"}>
+                <Table sx={{ minWidth: 100 }} verticalSpacing="xs">
+                    <thead>
+                        <tr>
+                            <th>{t('social-media.top-table-col-institution')}</th>
+                            <th>{t('social-media.top-table-col-country')}</th>
+                            <th>{t('social-media.top-table-col-score')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows}</tbody>
+                </Table>
+            </CardSection>
+
+            <CardSection className={classes.bottomSection}>
                 <Text>
                     <Trans
                         i18nKey="index:social-media.reference-full-ranking"

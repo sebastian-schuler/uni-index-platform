@@ -1,4 +1,4 @@
-import { Button, createStyles, Group, Stack, Tabs, TabsProps } from '@mantine/core';
+import { Button, Group, Stack, Tabs, TabsProps } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
@@ -14,7 +14,7 @@ function StyledTabs(props: TabsProps) {
                     backgroundColor: 'inherit',
                     color: theme.colors.light[0],
                     border: 'none',
-                    padding: `${theme.spacing.sm}px ${theme.spacing.md}px`,
+                    padding: `${theme.spacing.sm} ${theme.spacing.md}`,
                     cursor: 'pointer',
                     fontSize: theme.fontSizes.lg,
                     alignItems: 'center',
@@ -48,10 +48,10 @@ function StyledTabs(props: TabsProps) {
                 tabsList: {
                     display: 'grid',
 
-                    [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+                    [`@media (min-width: ${theme.breakpoints.sm})`]: {
                         gridTemplateColumns: '50% 50%',
                     },
-                    [`@media (min-width: ${theme.breakpoints.md}px)`]: {
+                    [`@media (min-width: ${theme.breakpoints.md})`]: {
                         gridTemplateColumns: 'none',
                         gridAutoFlow: 'column',
                         gridAutoColumns: '1fr',

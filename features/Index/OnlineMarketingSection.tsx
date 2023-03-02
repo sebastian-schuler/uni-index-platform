@@ -1,14 +1,16 @@
-import { Box, createStyles, Divider, Grid, Group, SimpleGrid, Stack, Text, Title, useMantineTheme } from '@mantine/core';
+import { Box, createStyles, Divider, Grid, SimpleGrid, Text, Title } from '@mantine/core';
 import useTranslation from 'next-translate/useTranslation';
-import MantineLink from '../../components/Link/MantineLink';
 import OnlineMarketingCard from '../../components/Card/OnlineMarketingCard';
-import { LhrSimple } from '../../lib/types/lighthouse/CustomLhrTypes';
 import ResponsiveContainer from '../../components/Container/ResponsiveContainer';
+import MantineLink from '../../components/Link/MantineLink';
+import { LhrSimple } from '../../lib/types/lighthouse/CustomLhrTypes';
 
 const useStyles = createStyles((theme) => ({
 
   labelBack: {
-    [`@media (min-width: ${theme.breakpoints.md}px)`]: {
+    fontWeight: 500,
+    color: 'white',
+    [`@media (min-width: ${theme.breakpoints.md})`]: {
       alignSelf: 'flex-end',
       textAlign: 'end',
     },
@@ -30,14 +32,13 @@ const OnlineMarketingSection = ({ simpleLhReports }: Props) => {
       <ResponsiveContainer paddingY>
 
         <Title order={2} color={'white'}>{t('online-marketing.title')}</Title>
-
         <Grid pb={'sm'}>
           <Grid.Col md={8} sm={12}>
             <Text color={'white'}>{t('online-marketing.desc')}</Text>
           </Grid.Col>
 
           <Grid.Col md={4} sm={12} className={classes.labelBack}>
-            <MantineLink url={"#"} props={{ color: 'light.0', fw: 500 }} type="internal">{t('online-marketing.label-all')}</MantineLink>
+            <MantineLink url={"#"} props={{ color: 'white' }} type="internal">{t('online-marketing.label-all')}</MantineLink>
           </Grid.Col>
         </Grid>
 

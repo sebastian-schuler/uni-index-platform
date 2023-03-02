@@ -1,4 +1,4 @@
-import { Button, createStyles, Group, Navbar } from '@mantine/core';
+import { Button, createStyles, getStylesRef, Group, Navbar } from '@mantine/core';
 import { IconArticle, IconDashboard, IconHelp, IconHistory, IconHome, IconLogout, IconPencilPlus, IconSettings } from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
@@ -7,8 +7,8 @@ import React, { useState } from 'react';
 import { useAuth } from '../../lib/context/SessionContext';
 import AccountUserButton from '../Account/AccountUserButton';
 
-const useStyles = createStyles((theme, _params, getRef) => {
-    const icon = getRef('icon');
+const useStyles = createStyles((theme, _params) => {
+    const icon = getStylesRef('icon');
     return {
 
         root: {
@@ -17,14 +17,14 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
         header: {
             paddingBottom: theme.spacing.md,
-            marginBottom: theme.spacing.md * 1.5,
+            marginBottom: `calc(${theme.spacing.md} * 1.5)`,
             borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
                 }`,
         },
 
         homepageLink: {
             paddingTop: theme.spacing.md,
-            marginTop: theme.spacing.md * 1.5,
+            marginTop: `calc(${theme.spacing.md} * 1.5)`,
             borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
                 }`,
         },

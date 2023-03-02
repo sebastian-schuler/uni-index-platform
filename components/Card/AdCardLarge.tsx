@@ -15,7 +15,7 @@ const useStyles = createStyles((theme) => ({
     title: {
         display: 'block',
         marginTop: theme.spacing.md,
-        marginBottom: theme.spacing.xs / 2,
+        marginBottom: `calc(${theme.spacing.xs} / 2)`,
     },
 
     section: {
@@ -59,7 +59,7 @@ const AdCardLarge: React.FC<Props> = ({ link, title, headline, subtext, imgUrl, 
                         </Text>
                         <Text sx={{ lineHeight: 1.2 }}>{subtext}</Text>
                     </Stack>
-                    <ThemeIcon color={theme.colors.brandOrange[5]} size={"xl"} radius="xl" className={classes.icon}>
+                    <ThemeIcon size={"xl"} radius="xl" className={classes.icon}>
                         {
                             adType === "subject" ? <IconSchool size={32} /> : <IconBuilding size={28} />
                         }

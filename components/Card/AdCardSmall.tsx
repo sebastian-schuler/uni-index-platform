@@ -6,18 +6,13 @@ import React, { memo } from 'react';
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
-        transition: "all .2s ease-in-out",
         height: "100%",
-
-        '&:hover': {
-            transform: "scale(1.05)",
-        }
     },
 
     title: {
         display: 'block',
         marginTop: theme.spacing.md,
-        marginBottom: theme.spacing.xs / 2,
+        marginBottom: `calc(${theme.spacing.xs} / 2)`,
     },
 
     section: {
@@ -50,14 +45,14 @@ const AdCardSmall: React.FC<Props> = ({ title, link, headline, subtext, descript
             <Card.Section className={classes.section}>
                 <Group position="apart" noWrap sx={{ alignItems: "start" }}>
                     <Stack spacing={theme.spacing.xs}>
-                        <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
+                        <Text size="lg" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
                             {headline}
                         </Text>
                         <Text sx={{ lineHeight: 1.2 }}>{subtext}</Text>
                     </Stack>
-                    <ThemeIcon color={theme.colors.brandOrange[5]} size={"lg"} radius="xl" className={classes.icon}>
+                    <ThemeIcon size={"md"} radius="xl" className={classes.icon}>
                         {
-                            adType === "subject" ? <IconSchool size={24} /> : <IconBuilding size={22} />
+                            adType === "subject" ? <IconSchool size={18} /> : <IconBuilding size={16} />
                         }
                     </ThemeIcon>
                 </Group>
@@ -77,9 +72,9 @@ const AdCardSmall: React.FC<Props> = ({ title, link, headline, subtext, descript
     if (disableLink) return AdCard;
 
     return (
-        <Anchor component={Link} href={link}>
+        <Link href={link}>
             {AdCard}
-        </Anchor>
+        </Link>
     )
 }
 

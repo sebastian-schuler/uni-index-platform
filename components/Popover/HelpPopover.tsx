@@ -4,7 +4,7 @@ import { IconHelp } from '@tabler/icons-react'
 
 interface Props {
     helpText: string
-    size: number
+    size: number | string
 }
 const HelpPopover = ({ helpText, size }: Props) => {
     return (

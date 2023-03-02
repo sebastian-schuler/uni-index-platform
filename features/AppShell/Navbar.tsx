@@ -125,7 +125,7 @@ const Navbar: React.FC<Props> = ({ opened, toggle, data }: Props) => {
     if (link.type === "group") {
 
       menuItems = link.children.map((item, i) => {
-        
+
         if (item.type === "link") {
           return (<Menu.Item key={item.link} component={Link} href={item.link}>{item.label}</Menu.Item>);
         }
@@ -145,7 +145,7 @@ const Navbar: React.FC<Props> = ({ opened, toggle, data }: Props) => {
         <Menu
           key={link.label}
           trigger="hover"
-          exitTransitionDuration={100}
+          transitionProps={{ exitDuration: 100 }}
           classNames={{
             itemLabel: classes.menuItemLabel,
             label: classes.menuLabel,

@@ -1,4 +1,3 @@
-import { ThemeContext } from '@emotion/react';
 import { DefaultMantineColor, MantineThemeOverride, Tuple } from '@mantine/core';
 
 type ExtendedCustomColors = 'brandOrange' | 'brandGray' | 'twitter' | 'youtube' | 'facebook' | 'instagram' | DefaultMantineColor;
@@ -23,34 +22,34 @@ const appTheme: MantineThemeOverride = {
   },
   fontFamily: 'roboto, arial, sans-serif',
   fontSizes: {
-    xs: 10,
-    sm: 12,
-    md: 14,
-    lg: 16,
-    xl: 20,
+    xs: '0.625rem',
+    sm: '0.75rem',
+    md: '0.875rem',
+    lg: '1rem',
+    xl: '1.25rem',
   },
   white: '#F3F4F7',
   primaryColor: 'brandOrange',
   primaryShade: 5,
   defaultRadius: 'md',
   spacing: {
-    xs: 4,
-    sm: 8,
-    md: 16,
-    lg: 32,
-    xl: 64,
+    xs: '0.25rem',
+    sm: '0.5rem',
+    md: '1rem',
+    lg: '2rem',
+    xl: '4rem',
   },
   breakpoints: {
-    xs: 576,
-    sm: 768,
-    md: 992,
-    lg: 1200,
-    xl: 1400,
+    xs: '36rem',
+    sm: '48rem',
+    md: '64rem',
+    lg: '75rem',
+    xl: '88rem',
   },
   components: {
     Anchor: {
       defaultProps: {
-        color: 'brandOrange',
+        color: 'brandOrange.5',
       }
     },
     TypographyStylesProvider: {

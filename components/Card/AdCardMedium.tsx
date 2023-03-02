@@ -1,4 +1,4 @@
-import { Anchor, Box, Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core'
+import { Anchor, Box, Card, createStyles, Group, Image, Stack, Text, ThemeIcon, Flex } from '@mantine/core'
 import { IconBuilding, IconSchool } from '@tabler/icons-react'
 import Link from 'next/link'
 import React, { memo } from 'react'
@@ -8,18 +8,13 @@ import { toLink } from '../../lib/util/util'
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.light[0],
-        transition: "all .2s ease-in-out",
         height: "100%",
-
-        '&:hover': {
-            transform: "scale(1.05)",
-        }
     },
 
     title: {
         display: 'block',
         marginTop: theme.spacing.md,
-        marginBottom: theme.spacing.xs / 2,
+        marginBottom: `calc(${theme.spacing.xs} / 2)`,
     },
 
     section: {
@@ -50,15 +45,13 @@ const AdCardMedium: React.FC<Props> = ({ title, link, headline, subtext, descrip
 
     const AdCard = (
         <Card component={"div"} withBorder radius="md" shadow="sm" p={0} className={classes.card} title={title} sx={{ height: colHeight }}>
-
-            <Group noWrap spacing={0} sx={{ alignItems: "start" }}>
+            <Flex>
 
                 <Box sx={{ width: "50%" }}>
                     <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} alt={""} />
                 </Box>
 
-                <Box sx={{ flex: 1, height: "100%" }}>
-
+                <Box px={'md'} sx={{ flex: 1 }}>
                     <Card.Section className={classes.section}>
                         <Group position="apart" noWrap sx={{ alignItems: "start" }}>
                             <Stack spacing={theme.spacing.xs}>
@@ -67,7 +60,7 @@ const AdCardMedium: React.FC<Props> = ({ title, link, headline, subtext, descrip
                                 </Text>
                                 <Text sx={{ lineHeight: 1.2 }}>{subtext}</Text>
                             </Stack>
-                            <ThemeIcon color={theme.colors.brandOrange[5]} size={"lg"} radius="xl" className={classes.icon}>
+                            <ThemeIcon size={"lg"} radius="xl" className={classes.icon}>
                                 {
                                     adType === "subject" ? <IconSchool size={24} /> : <IconBuilding size={22} />
                                 }
@@ -82,19 +75,18 @@ const AdCardMedium: React.FC<Props> = ({ title, link, headline, subtext, descrip
                         </Text>
 
                     </Card.Section>
-
                 </Box>
 
-            </Group>
+            </Flex>
         </Card>
     )
 
     if (disableLink) return AdCard;
 
     return (
-        <Anchor component={Link} href={link}>
+        <Link href={link}>
             {AdCard}
-        </Anchor>
+        </Link>
     )
 }
 

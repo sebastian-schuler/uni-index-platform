@@ -1,5 +1,5 @@
-import { ActionIcon, Autocomplete, Box, Button, Center, FileInput, Grid, Group, Paper, SegmentedControl, Stack, Text, Textarea, Title, useMantineTheme } from '@mantine/core';
-import { DatePicker } from '@mantine/dates';
+import { ActionIcon, Autocomplete, Box, Button, Center, FileInput, Grid, Group, Paper, px, SegmentedControl, Stack, Text, Textarea, Title, useMantineTheme } from '@mantine/core';
+import { DatePicker, DatePickerInput } from '@mantine/dates';
 import { Subject } from '@prisma/client';
 import { IconArticle, IconBuilding, IconLink, IconSchool, IconUpload, IconX } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -29,7 +29,7 @@ const CreateAd = () => {
 
     const { token } = useAuth();
     const theme = useMantineTheme();
-    const SECONDARY_AD_HEIGHT = PRIMARY_AD_HEIGHT / 2 - theme.spacing.lg / 2;
+    const SECONDARY_AD_HEIGHT = PRIMARY_AD_HEIGHT / 2 - px(theme.spacing.lg) / 2;
 
     // Ad type
     const [adLinkType, setAdLinkType] = useState<LinkType>("link");
@@ -343,13 +343,13 @@ const CreateAd = () => {
                                 <Text size={"sm"}>Book ad until</Text>
                                 <HelpPopover helpText='How long you want to book your ad for. Starting from the day after the booking until the day of your choosing, inclusive.' size={theme.fontSizes.lg} />
                             </Group>
-                            <DatePicker
+                            <DatePickerInput
                                 placeholder='Select until date'
                                 value={until}
                                 onChange={setUntil}
                                 radius={theme.radius.md}
                                 excludeDate={(date) => date.getTime() < Date.now()}
-                                dayStyle={(date) => {
+                                getDayProps={(date) => {
 
                                     const today = new Date();
                                     const tomorrow = new Date(today);

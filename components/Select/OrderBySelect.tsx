@@ -35,9 +35,7 @@ const OrderBySelect: React.FC<Props> = ({ orderBy, handleChange }: Props) => {
             icon={<IconArrowsSort size={14} />}
             onChange={(value) => handleChange(value as OrderByState)}
             classNames={classes}
-            transition="pop-top-left"
-            transitionDuration={100}
-            transitionTimingFunction="ease"
+            transitionProps={{ transition: "pop-top-left", duration: 100, timingFunction: "ease" }}
         />
     )
 }

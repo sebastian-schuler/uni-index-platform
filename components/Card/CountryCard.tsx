@@ -1,8 +1,7 @@
-import { Anchor, Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core'
+import { Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core'
 import { IconBuilding, IconSchool } from '@tabler/icons-react'
 import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
-import Link from 'next/link'
 import React from 'react'
 import { CountryCardData } from '../../lib/types/UiHelperTypes'
 import CardTitle from '../Text/CardTitle'
@@ -36,9 +35,9 @@ const CountryCard: React.FC<Props> = ({ country }: Props) => {
     const Flag = Flags[country.countryCode || ""] || Flags["EU"];
 
     return (
-        <Card p="lg" radius="md" shadow={"sm"} className={classes.card}>
+        <Card radius="md" shadow={"sm"} className={classes.card}>
             <Card.Section>
-                <Image src={country.imgSrc} alt={country.name} height={180} />
+                <Image src={country.imgSrc} alt={country.name} fit="cover" height={180} />
             </Card.Section>
 
             <Card.Section className={classes.section}>

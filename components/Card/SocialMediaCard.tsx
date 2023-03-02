@@ -76,7 +76,7 @@ const SocialMediaCard: React.FC<Props> = ({ cardData }: Props) => {
                 <Group position='apart' noWrap>
                     <Stack spacing={'sm'}>
                         <CardTitle href={socialMediaUrl} text={title} />
-                        <Text size={'lg'} lh={1}>
+                        <Text size={'md'} lh={1}>
                             <Anchor component={Link} href={institutionUrl} lh={1}>{cardData.Institution.name}</Anchor>
                             {" | "}
                             <Anchor component={Link} href={countryUrl} lh={1}>{cardData.Country.name}</Anchor>

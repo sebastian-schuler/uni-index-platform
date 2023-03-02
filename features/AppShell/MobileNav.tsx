@@ -88,7 +88,7 @@ const MobileNav: React.FC<Props> = ({ opened, toggle, data }: Props) => {
                 <NavLink
                     key={i}
                     label={item.label}
-                    childrenOffset={theme.spacing.md * 2}
+                    childrenOffset={theme.spacing.lg}
                     active={isCurrentRoute(item.rootUrl)}
                     className={classes.link}
                 >

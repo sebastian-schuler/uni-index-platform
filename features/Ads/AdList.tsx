@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, SimpleGrid, Text, Title, useMantineTheme } from '@mantine/core'
+import { Box, Divider, Grid, px, SimpleGrid, Text, Title, useMantineTheme } from '@mantine/core'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import { DetailedUserAd } from '../../lib/types/DetailedDatabaseTypes'
@@ -25,7 +25,7 @@ const PremiumList: React.FC<Props> = ({ premiumAds, wrapInContainer }: Props) =>
     const theme = useMantineTheme();
 
     const AD_SPACING = theme.spacing.lg;
-    const MEDIUM_AD_HEIGHT = LARGE_AD_HEIGHT / 2 - AD_SPACING / 2;
+    const MEDIUM_AD_HEIGHT = LARGE_AD_HEIGHT / 2 - px(AD_SPACING) / 2;
 
     const largeAds = premiumAds.filter((ad) => { return ad.size === 3 });
     const mediumAds = premiumAds.filter((ad) => { return ad.size === 2 });
@@ -104,7 +104,7 @@ const PremiumList: React.FC<Props> = ({ premiumAds, wrapInContainer }: Props) =>
                         ]}
                     />
                 </Text>
-                
+
                 <Divider mt={4} mb={24} />
 
                 <SimpleGrid cols={2} spacing={AD_SPACING} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
