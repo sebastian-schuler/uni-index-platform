@@ -23,8 +23,8 @@ const InstitutionReviews: NextPage<Props> = ({ institution, country, footerConte
     <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('reviews-title', { institution: institution?.name })}</title>
-        <meta key={"description"} name="description" content={t('reviews-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('meta.reviews-title', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('meta.reviews-description')} />
       </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />

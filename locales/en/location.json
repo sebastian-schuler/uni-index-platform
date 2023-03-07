@@ -1,12 +1,26 @@
 {
-  "countries-title": "Countries",
-  "countries-subtitle": "Find any university course in a country of your choice.",
-  "countries-description": "Discover top universities by country all over Europe and find the perfect match for your studies.",
+  "meta": {
+    "countries-title": "Countries",
+    "countries-description": "Discover top universities by country all over Europe and find the perfect match for your studies.",
+
+    "country-title": "States in {{country}}",
+    "country-description": "Discover top universities in {{country}} by state and find the perfect match for your studies.",
+
+    "state-title": "Cities in {{state}}",
+    "state-description": "Discover top universities in {{state}} by city and find the perfect match for your studies.",
+
+    "city-title": "Universities in {{city}}",
+    "city-description": "Discover top universities in {{city}} and find the perfect match for your studies."
+  },
+
+  "countries": {
+    "title": "Countries",
+    "subtitle": "Find any university course in a country of your choice."
+  },
 
   "country": {
-    "title": "States in {{country}}",
+    "title": "{{country}}",
     "subtitle": "Look through the list of states in {{country}} and find the best university for you.",
-    "description": "Discover top universities in {{country}} by state and find the perfect match for your studies.",
     "country-map-title": "Map of states in {{country}}",
     "list-title": "List of states in {{country}}",
     "search-label": "Search for a state in {{country}}",
@@ -14,12 +28,12 @@
   },
 
   "state": {
-    "title": "Cities in {{state}}",
-    "subtitle": "Look through the list of cities in {{state}} and find the best university for you.",
-    "description": "Discover top universities in {{state}} by state and find the perfect match for your studies."
+    "title": "{{state}}",
+    "subtitle": "Look through the list of cities in {{state}} and find the best university for you."
   },
 
-  "city-title": "Universities in {{city}}",
-  "city-subtitle": "Look through the list of universities in {{city}} and find the best match for you.",
-  "city-description": "Discover top universities in {{city}} and find the perfect match for your studies."
+  "city": {
+    "title": "{{city}}",
+    "subtitle": "Look through the list of universities in {{city}} and find the best match for you."
+  }
 }

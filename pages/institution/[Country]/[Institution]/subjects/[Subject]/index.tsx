@@ -1,6 +1,8 @@
 import { Stack, Text } from '@mantine/core'
 import { Country, Institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
+import useTranslation from 'next-translate/useTranslation'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import ResponsiveWrapper from '../../../../../../components/Container/ResponsiveWrapper'
@@ -26,6 +28,7 @@ interface Props {
 
 const SubjectFromInstitutionPage: NextPage<Props> = ({ country, institution, subject, footerContent }: Props) => {
 
+    const { t } = useTranslation('institution');
     const query = useRouter().query;
 
     const title = subject?.name + " - " + subject?.degree;
@@ -36,6 +39,11 @@ const SubjectFromInstitutionPage: NextPage<Props> = ({ country, institution, sub
 
     return (
         <ResponsiveWrapper footerContent={footerContent}>
+
+            <Head>
+                <title key={"title"}>{t('common:page-title') + " | " + t('meta.subject-title', { institution: institution?.name, subject: subject.name })}</title>
+                <meta key={"description"} name="description" content={t('meta.subject-description', { institution: institution?.name, subject: subject.name })} />
+            </Head>
 
             <Breadcrumb
                 countryInfo={country}

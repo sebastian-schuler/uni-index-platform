@@ -15,21 +15,17 @@ type Props = {
 const SubjectNav = ({ title, backButton }: Props) => {
 
     const { t, lang } = useTranslation('institution');
-    const langContent = {
-        profile: t('subject-profile'),
-        jobs: t('subject-jobs'),
-    }
 
     const query = useRouter().query;
     const urlBasePath = `/${URL_INSTITUTION}/${query.Country}/${query.Institution}/${URL_INSTITUTION_SUBJECTS}/${query.Subject}`;
 
     const pageLinks = [
         {
-            name: langContent.profile,
+            name: t('subject.tab-profile'),
             url: urlBasePath
         },
         {
-            name: langContent.jobs,
+            name: t('subject.tab-jobs'),
             url: urlBasePath + "/jobs"
         },
     ]

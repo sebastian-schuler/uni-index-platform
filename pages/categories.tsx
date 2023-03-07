@@ -76,14 +76,14 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
         <ResponsiveWrapper footerContent={footerContent}>
 
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('category-title')}</title>
-                <meta key={"description"} name="description" content={t('category-description')} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('meta.categories-title')}</title>
+                <meta key={"description"} name="description" content={t('meta.categories-description')} />
             </Head>
 
             <Breadcrumb />
 
             <Stack>
-                <GenericPageHeader title={t('category-title')} description={t('category-subtitle')} />
+                <GenericPageHeader title={t('categories.title')} description={t('categories.subtitle')} />
 
                 <Group position='apart' >
                     <ItemSearch

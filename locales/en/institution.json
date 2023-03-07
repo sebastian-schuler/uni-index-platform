@@ -1,21 +1,47 @@
 {
-  "institutions-title": "Institutions",
-  "institutions-subtitle": "Find any university in a country of your choice.",
-  "institutions-description": "Discover top universities all over Europe and find the perfect match for your studies.",
+  "meta": {
+    "institutions-title": "Institutions",
+    "institutions-description": "Discover top universities all over Europe and find the perfect match for your studies.",
 
-  "country-title": "Institutions in {{country}}",
-  "country-description": "Search through a comprehensive list of all academic institutions in {{country}}.",
+    "country-title": "Institutions in {{country}}",
+    "country-description": "Search through a comprehensive list of all academic institutions in {{country}}.",
 
-  "profile-title": "{{country}} | {{institution}}",
-  "profile-description": "Find all information, analyses, and contact details on {{institution}} in {{country}}.",
+    "profile-title": "{{country}} | {{institution}}",
+    "profile-description": "Find all information, analyses, and contact details on {{institution}} in {{country}}.",
 
-  "reviews-title": "Reviews | {{institution}}",
-  "reviews-description": "Read reviews of {{institution}} to learn more about the institution.",
+    "reviews-title": "Reviews | {{institution}}",
+    "reviews-description": "Read reviews of {{institution}} to learn more about the institution.",
 
-  "screenshots-title": "Screenshots | {{institution}}",
-  "screenshots-description": "See screenshots of {{institution}} to learn more about the institution.",
+    "screenshots-title": "Screenshots | {{institution}}",
+    "screenshots-description": "See screenshots of {{institution}} to learn more about the institution.",
 
-  "label-lastupdate": "Last update: {{date}}",
+    "subjects-title": "Subjects | {{institution}}",
+    "subjects-description": "Find all subjects offered by {{institution}}.",
+
+    "subject-title": "{{subject}} | {{institution}}",
+    "subject-description": "Find out more about {{subject}} offered by {{institution}}."
+  },
+
+  "institutions": {
+    "title": "Institutions",
+    "subtitle": "Find any university in a country of your choice."
+  },
+
+  "institution": {
+    "subtitle": "Find all universities and institutions located in {{institution}}.",
+    "tab-profile": "Profile",
+    "tab-courses": "Subjects",
+    "tab-screenshots": "Screenshots",
+    "tab-reviews": "Reviews",
+    "tab-social-media": "Social Media",
+    "tab-online-marketing": "Online Marketing",
+    "label-lastupdate": "Last update: {{date}}"
+  },
+
+  "subject": {
+    "tab-profile": "Profile",
+    "tab-jobs": "Jobs"
+  },
 
   "social-media": {
     "title": "Social Media | {{institution}}",
@@ -66,15 +92,5 @@
     },
     "label-show-details": "Show details of {{category}}",
     "label-score": "Score"
-  },
-
-  "tab-profile": "Profile",
-  "tab-courses": "Subjects",
-  "tab-screenshots": "Screenshots",
-  "tab-reviews": "Reviews",
-  "tab-social-media": "Social Media",
-  "tab-online-marketing": "Online Marketing",
-
-  "subject-profile": "Profile",
-  "subject-jobs": "Jobs"
+  }
 }

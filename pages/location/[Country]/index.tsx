@@ -87,15 +87,15 @@ const CountryPage: NextPage<Props> = ({ searchableStates, countryInfo, footerCon
     <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('country.title', { country: localizedCountryName })}</title>
-        <meta key={"description"} name="description" content={t('country.description', { country: localizedCountryName })} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('meta.country-title', { country: localizedCountryName })}</title>
+        <meta key={"description"} name="description" content={t('meta.country-description', { country: localizedCountryName })} />
       </Head>
 
       <Breadcrumb countryInfo={countryInfo} />
 
       <Stack>
 
-        <GenericPageHeader title={localizedCountryName} description={t('country.subtitle', { country: localizedCountryName })} />
+        <GenericPageHeader title={t('country.title', { country: localizedCountryName })} description={t('country.subtitle', { country: localizedCountryName })} />
 
         <Grid>
 

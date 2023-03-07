@@ -43,10 +43,10 @@ const Footer: NextPage<Props> = props => {
     footerData.push({ title: t('footer.about-title'), content: aboutLinks });
 
     const accountLinks: FooterContentItem[] = [
-        { url: toLink(URL_LOGIN), name: t('footer.account-login') },
-        { url: toLink(URL_REGISTER), name: t('footer.account-register') },
+        { url: toLink(URL_LOGIN), name: t('account.login') },
+        { url: toLink(URL_REGISTER), name: t('account.register') },
     ]
-    footerData.push({ title: t('footer.account-title'), content: accountLinks });
+    footerData.push({ title: t('account.view'), content: accountLinks });
 
     if (props.footerContent !== undefined) {
         // For each List of footer data

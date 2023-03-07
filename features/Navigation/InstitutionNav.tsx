@@ -16,27 +16,27 @@ const InstitutionNav = ({ title }: Props) => {
 
     const pageLinks = [
         {
-            name: t('tab-profile'),
+            name: t('institution.tab-profile'),
             url: urlBasePath
         },
         {
-            name: t('tab-social-media'),
+            name: t('institution.tab-social-media'),
             url: urlBasePath + "/social-media"
         },
         {
-            name: t('tab-online-marketing'),
+            name: t('institution.tab-online-marketing'),
             url: urlBasePath + "/online-marketing"
         },
         {
-            name: t('tab-courses'),
+            name: t('institution.tab-courses'),
             url: urlBasePath + "/subjects"
         },
         {
-            name: t('tab-screenshots'),
+            name: t('institution.tab-screenshots'),
             url: urlBasePath + "/screenshots"
         },
         {
-            name: t('tab-reviews'),
+            name: t('institution.tab-reviews'),
             url: urlBasePath + "/reviews"
         },
     ]

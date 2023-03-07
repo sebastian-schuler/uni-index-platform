@@ -1,19 +1,57 @@
+import { Stack, Title, List, Divider, Anchor } from '@mantine/core'
+import useTranslation from 'next-translate/useTranslation'
+import Head from 'next/head'
+import Link from 'next/link'
 import React from 'react'
+import GenericPageHeader from '../../components/Block/GenericPageHeader'
+import ResponsiveWrapper from '../../components/Container/ResponsiveWrapper'
+import Breadcrumb from '../../features/Breadcrumb/Breadcrumb'
+import { URL_ANALYSIS, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING, URL_SOCIAL_MEDIA_STATISTICS } from '../../lib/url-helper/urlConstants'
+import { toLink } from '../../lib/util/util'
 
 
 const AnalysisPage = () => {
 
-    // { type: 'label', label: t('nav.analysis.social-media-label') },
-    // { type: 'link', label: t('nav.analysis.social-media-ranking'), link: "/social-media/ranking", rootUrl: [] },
-    // { type: 'link', label: t('nav.analysis.social-media-statistics'), link: "/social-media/statistics", rootUrl: [] },
-    // { type: 'label', label: t('nav.analysis.online-marketing-label') },
-    // { type: 'link', label: t('nav.analysis.online-marketing-ranking'), link: "#ranking", rootUrl: [] },
-    // { type: 'link', label: t('nav.analysis.online-marketing-statistics'), link: "#statistics", rootUrl: [] },
+  const { t } = useTranslation('analysis');
 
   return (
-    <div>
+    <ResponsiveWrapper>
 
-    </div>
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('meta.analysis-title')}</title>
+        <meta key={"description"} name="description" content={t('meta.analysis-description')} />
+      </Head>
+
+      <Breadcrumb />
+
+      <Stack>
+        <GenericPageHeader title={t('analysis.title')} description={t('analysis.subtitle')} />
+
+        <Title order={2}>{t('analysis.social-media.title')}</Title>
+        <List>
+          <List.Item>
+            <Anchor component={Link} href={toLink(URL_ANALYSIS, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING)}>
+              {t('analysis.social-media.label-ranking')}
+            </Anchor>
+          </List.Item>
+
+          <List.Item>
+            <Anchor component={Link} href={toLink(URL_ANALYSIS, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_STATISTICS)}>
+              {t('analysis.social-media.label-statistics')}
+            </Anchor>
+          </List.Item>
+        </List>
+
+        <Divider />
+
+        <Title order={2}>{t('analysis.online-marketing')}</Title>
+        <List>
+
+        </List>
+
+      </Stack>
+
+    </ResponsiveWrapper>
   )
 }
 

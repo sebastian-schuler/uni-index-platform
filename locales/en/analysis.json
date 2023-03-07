@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "analysis-title": "Analysis - Overview",
+    "analysis-description": "A collection of different social media and online marketing analyses of universities in Europe.",
+
+    "seo-sm-ranking-title": "Social Media Ranking",
+    "seo-sm-ranking-description": "The Social Media Ranking is a list of the best university social media profiles in Europe.",
+
+    "seo-sm-statistics-title": "Social Media Statistics",
+    "seo-sm-statistics-description": "Social Media statistics of all universities social media profiles in Europe."
+  },
+
+  "analysis": {
+    "title": "Analysis: Overview",
+    "subtitle": "The Social Media Analysis is a list of the best university social media profiles in Europe.",
+
+    "social-media": {
+      "title": "Social Media",
+      "label-ranking": "Social Media Ranking",
+      "label-statistics": "Social Media Statistics"
+    },
+
+    "online-marketing": "Online Marketing"
+  }
+}

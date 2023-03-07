@@ -3,13 +3,12 @@ import { Country, State } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import GenericPageHeader from '../../../../components/Block/GenericPageHeader';
 import CityCard from '../../../../components/Card/CityCard';
+import ResponsiveWrapper from '../../../../components/Container/ResponsiveWrapper';
 import Breadcrumb from '../../../../features/Breadcrumb/Breadcrumb';
 import { FooterContent } from '../../../../features/Footer/Footer';
-import ResponsiveWrapper from '../../../../components/Container/ResponsiveWrapper';
 import prisma from '../../../../lib/prisma/prisma';
 import { getCitiesDetailedByState } from '../../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountryByState, getState } from '../../../../lib/prisma/prismaQueries';
@@ -32,14 +31,14 @@ const StatePage: NextPage<Props> = ({ cityList, stateInfo, countryInfo, footerCo
         <ResponsiveWrapper footerContent={footerContent}>
 
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('state-title', { state: stateName })}</title>
-                <meta key={"description"} name="description" content={t('state-description', { state: stateName })} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('meta.state-title', { state: stateName })}</title>
+                <meta key={"description"} name="description" content={t('meta.state-description', { state: stateName })} />
             </Head>
 
             <Breadcrumb countryInfo={countryInfo} stateInfo={stateInfo} />
 
             <Stack>
-                <GenericPageHeader title={getLocalizedName({ lang: lang, state: stateInfo })} description={t('state-subtitle', { state: stateName })} />
+                <GenericPageHeader title={t('state.title', { state: stateName })} description={t('state.subtitle', { state: stateName })} />
 
                 <Group position='apart' >
                     {/* <SearchBox

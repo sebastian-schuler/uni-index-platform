@@ -1,38 +1,105 @@
 {
   "page-title": "Uni-Index",
-  "variable-example": "Eine Variable nutzen {{count}}",
-  "page-settings": "Einstellungen",
-  "page-settings-language": "Sprache",
 
-  "nav-home": "Startseite",
-  "nav-locations": "Standorte",
-  "nav-subjects": "Fächer",
-  "nav-institutions": "Institute",
+  "account": {
+    "view": "Account",
+    "login": "Login",
+    "register": "Registrieren"
+  },
 
-  "breadcrumb-back-to": "Zurück zu {{origin}}",
+  "nav": {
+    "home": "Startseite",
+    "news": "Neuigkeiten",
+    "search": "Suche",
+    "locations": "Standorte",
+    "categories": "Studiengangsrichtungen",
+    "institutions": "Institutionen",
+    "analysis": "Analysen",
+    "mobile-title": "Menü öffnen",
+    "language": "Sprache",
+    "account": "Account"
+  },
 
-  "global-search": "Alles durchsuchen",
-  "ad-label": "Anzeigen",
+  "breadcrumbs": {
+    "social-media-statistics": "Social-Media Statistiken",
+    "social-media-ranking": "Social-Media Rangliste"
+  },
+
+  "card-state": {
+    "label-cities": {
+      "0": "Keine Städte",
+      "one": "Eine Stadt mit Institutionen",
+      "other": "{{count}} Städte mit Institutionen"
+    },
+    "label-subjects": {
+      "0": "Keine Studiengänge",
+      "one": "Ein Studiengang",
+      "other": "{{count}} Studiengänge"
+    }
+  },
+
+  "card-category": {
+    "label-subjects": {
+      "0": "Keine Studiengänge",
+      "one": "Ein Studiengang",
+      "other": "{{count}} Studiengänge"
+    }
+  },
+  
+  "card-institution": {
+    "label-city": "Stadt:",
+    "label-state": "Bundesland:",
+    "label-locations": {
+      "0": "Keine Campus-Standorte",
+      "one": "Einen Campus-Standort",
+      "other": "{{count}} Campus-Standorte"
+    },
+    "label-subjects": {
+      "0": "Keine Studiengänge",
+      "one": "Ein Studiengang",
+      "other": "{{count}} Studiengänge"
+    }
+  },
+
+  "card-country": {
+    "label-institutions": {
+      "0": "Keine Institutionen",
+      "one": "Eine Institution",
+      "other": "{{countStr}} Institutionen"
+    },
+    "label-subjects": {
+      "0": "Keine Studiengänge",
+      "one": "Ein Studiengang",
+      "other": "{{count}} Studiengänge"
+    }
+  },
+
+  "card-city": {
+    "label-universities": {
+      "0": "Keine Institutionen",
+      "one": "Eine Institution",
+      "other": "{{countStr}} Institutionen"
+    }
+  },
+
+  "link-titles": {
+    "yt-profile": "Youtube-Channel von {{name}}",
+    "tw-profile": "Twitter-Profil von {{name}}",
+    "in-profile": "Instagram-Profile von {{name}}",
+    "fb-profile": "Facebook-Profile von {{name}}"
+  },
 
   "countries-search-label": "Ein Land suchen",
   "countries-search-placeholder": "z.B. Deutschland",
 
-  "title-popular-courses": "Beliebte Studiengänge",
-  "title-popular-institutions": "Beliebte Hochschulen",
-  "title-popular-locations": "Beliebte Orte",
-  "link-all-courses": "Alle Studiengänge anzeigen",
-  "link-all-institutions": "Alle Hochschulen anzeigen",
-  "link-all-locations": "Alle Standorte anzeigen",
-
-  "card-label-universities": {
-    "0": "Keine Hochschulen",
-    "one": "Eine Hochschule",
-    "other": "{{count}} Hochschulen"
+  "ads": {
+    "title": "Werbung",
+    "desc": "Wir nutzen Anzeigen, die von Universitäten gebucht werden, um unsere Mission zu unterstützen. <0>Mehr erfahren</0>"
   },
 
-  "card-label-courses": {
-    "0": "Keine Studiengänge",
-    "one": "Ein Studiengang",
-    "other": "{{count}} Studiengänge"
+  "footer": {
+    "about-title": "Über uns",
+    "about-imprint": "Impressum",
+    "about-privacy": "Datenschutzbestimmungen"
   }
 }

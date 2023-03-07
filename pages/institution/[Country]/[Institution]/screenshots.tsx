@@ -59,8 +59,8 @@ const InstitutionScreenshots: NextPage<Props> = ({ institution, country, screens
     <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('screenshots-title', { institution: institution?.name })}</title>
-        <meta key={"description"} name="description" content={t('screenshots-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('meta.screenshots-title', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('meta.screenshots-description')} />
       </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />

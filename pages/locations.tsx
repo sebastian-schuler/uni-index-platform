@@ -25,12 +25,12 @@ const Locations: NextPage<Props> = ({ adsStringified, searchableCountries }: Pro
         <ResponsiveWrapper>
 
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('countries-title')}</title>
-                <meta key={"description"} name="description" content={t('countries-description')} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('meta.countries-title')}</title>
+                <meta key={"description"} name="description" content={t('meta.countries-description')} />
             </Head>
             <CountryList
-                title={t('countries-title')}
-                subtitle={t('countries-subtitle')}
+                title={t('countries.title')}
+                subtitle={t('countries.subtitle')}
                 searchableCountries={searchableCountries}
             >
                 <PremiumList premiumAds={ads} />

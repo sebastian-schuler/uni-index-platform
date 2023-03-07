@@ -1,10 +1,12 @@
 import { Burger, createStyles, Divider, Flex, Group, Header, Text, Title, UnstyledButton } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons-react';
+import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import ResponsiveContainer from '../../components/Container/ResponsiveContainer';
+import { URL_LOGIN, URL_REGISTER, URL_SEARCH } from '../../lib/url-helper/urlConstants';
 import { LocaleItem } from '../../locales/localeUtil';
 import { MenuLink } from './Shell';
 
@@ -110,11 +112,15 @@ const BrandNavbar: React.FC<Props> = ({ data, locales, handleSelectLang, selecte
     const { classes, cx, theme } = useStyles();
     const router = useRouter();
 
+    const { t } = useTranslation('common');
+
+    const largeScreen = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
+    const height = largeScreen ? 200 : 100;
+
     const langLinks = locales.map((locale, i) => {
         return <UnstyledButton
-            key={locale.id}
+            key={locale.id} onClick={() => handleSelectLang(i)}
             className={cx(classes.languageLink, { [classes.languageLinkActive]: i === selectedLanguageIndex })}
-            onClick={() => handleSelectLang(i)}
         >
             {locale.text}
         </UnstyledButton>
@@ -129,12 +135,14 @@ const BrandNavbar: React.FC<Props> = ({ data, locales, handleSelectLang, selecte
         });
 
         return (
-            <UnstyledButton key={i} component={Link} href={link.link} className={cx(classes.link, { [classes.linkActive]: isCurrent })}>{link.label}</UnstyledButton>
+            <UnstyledButton
+                key={i} component={Link} href={link.link}
+                className={cx(classes.link, { [classes.linkActive]: isCurrent })}
+            >
+                {link.label}
+            </UnstyledButton>
         );
     });
-
-    const largeScreen = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-    const height = largeScreen ? 200 : 100;
 
     return (
         <Header height={height} className={classes.root}>
@@ -146,21 +154,21 @@ const BrandNavbar: React.FC<Props> = ({ data, locales, handleSelectLang, selecte
                     </Group>
 
                     <Group position='apart' sx={{ flex: 1, flexGrow: 1 }}>
-                        <Title>Uni-Index</Title>
+                        <Title>{t('page-title')}</Title>
                         <Group className={classes.buttonList}>
-                            <UnstyledButton className={classes.button}>
+                            <UnstyledButton component={Link} href={URL_SEARCH} className={classes.button}>
                                 <Group spacing={'sm'}>
                                     <IconSearch size={18} />
-                                    <Text>Search</Text>
+                                    <Text>{t('nav.search')}</Text>
                                 </Group>
                             </UnstyledButton>
                             <Divider size="sm" orientation="vertical" />
-                            <UnstyledButton className={classes.button}>
-                                <Text>Login</Text>
+                            <UnstyledButton component={Link} href={URL_LOGIN} className={classes.button}>
+                                <Text>{t('account.login')}</Text>
                             </UnstyledButton>
                             <Divider size="sm" orientation="vertical" />
-                            <UnstyledButton className={classes.button}>
-                                <Text>Register</Text>
+                            <UnstyledButton component={Link} href={URL_REGISTER} className={classes.button}>
+                                <Text>{t('account.register')}</Text>
                             </UnstyledButton>
                         </Group>
 
@@ -168,6 +176,7 @@ const BrandNavbar: React.FC<Props> = ({ data, locales, handleSelectLang, selecte
                             opened={drawerOpened}
                             onClick={toggleDrawer}
                             className={classes.burger}
+                            title={t('nav.mobile-title')}
                         />
                     </Group>
 

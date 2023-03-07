@@ -16,7 +16,7 @@ const NewsPage = () => {
 
         <ResponsiveWrapper>
 
-            WIP: News Page
+            todo
 
         </ResponsiveWrapper>
     </>

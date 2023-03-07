@@ -1,11 +1,21 @@
 {
-    "category-title": "Categories | Fields of study",
-    "category-subtitle": "Find any category and all of its available courses.",
-    "category-description": "Find courses all over Europe by fields of study.",
+    "meta": {
+        "categories-title": "Categories | Fields of study",
+        "categories-description": "Find courses all over Europe by fields of study.",
 
-    "subject-title": "{{subject}}",
-    "subject-subtitle": "Find any subject of your choice.",
-    "subject-description": "Find courses all over Europe by fields of study.",
+        "category-title": "{{subject}}",
+        "category-description": "Find courses all over Europe by fields of study."
+    },
+
+    "categories": {
+        "title": "Categories",
+        "subtitle": "Find any category and all of its available courses."
+    },
+
+    "category": {
+        "title": "{{category}}",
+        "subtitle": "Find all subjects in the category {{category}}."
+    },
 
     "subjecttype-search-label": "Search for a subject type",
     "subjecttype-search-placeholder": "e.g. Marketing"

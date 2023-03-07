@@ -1,23 +1,28 @@
 {
   "page-title": "Uni-Index",
-  "page-settings": "Settings",
-  "page-settings-language": "Language",
+
+  "account": {
+    "view": "Account",
+    "login": "Login",
+    "register": "Register"
+  },
 
   "nav": {
     "home": "Home",
     "news": "News",
+    "search": "Search",
     "locations": "Where to study",
     "categories": "Categories",
     "institutions": "Institutions",
-    "analysis": {
-      "title": "Analysis",
-      "social-media-label": "Social Media",
-      "social-media-ranking": "Ranking",
-      "social-media-statistics": "Statistics",
-      "online-marketing-label": "Online Marketing",
-      "online-marketing-ranking": "Ranking",
-      "online-marketing-statistics": "Statistics"
-    }
+    "analysis": "Analysis",
+    "mobile-title": "Open menu",
+    "language": "Language",
+    "account": "Account"
+  },
+
+  "breadcrumbs": {
+    "social-media-statistics": "Social-Media Statistics",
+    "social-media-ranking": "Social-Media Ranking"
   },
 
   "card-state": {
@@ -69,6 +74,14 @@
     }
   },
 
+  "card-city": {
+    "label-universities": {
+      "0": "No institutions",
+      "one": "{{count}} institutions",
+      "other": "{{count}} institutions"
+    }
+  },
+
   "link-titles": {
     "yt-profile": "Youtube channel of {{name}}",
     "tw-profile": "Twitter profile of {{name}}",
@@ -76,22 +89,8 @@
     "fb-profile": "Facebook profile of {{name}}"
   },
 
-  "breadcrumb-back-to": "Back to {{origin}}",
-
   "countries-search-label": "Search for a country",
   "countries-search-placeholder": "e.g. Germany",
-
-  "card-label-universities": {
-    "0": "No institutions",
-    "one": "{{count}} institutions",
-    "other": "{{count}} institutions"
-  },
-
-  "card-label-courses": {
-    "0": "No courses",
-    "one": "{{count}} Course",
-    "other": "{{count}} Courses"
-  },
 
   "ads": {
     "title": "Ads",
@@ -99,10 +98,7 @@
   },
 
   "footer": {
-    "account-title": "Account",
-    "account-login": "Login",
-    "account-register": "Register",
-    "about-title": "About",
+    "about-title": "About us",
     "about-imprint": "Imprint",
     "about-privacy": "Privacy Policy"
   }

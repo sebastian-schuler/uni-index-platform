@@ -34,15 +34,15 @@ const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institution
     <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('country-title', { country: countryName })}</title>
-        <meta key={"description"} name="description" content={t('country-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('meta.country-title', { country: countryName })}</title>
+        <meta key={"description"} name="description" content={t('meta.country-description')} />
       </Head>
 
       <Breadcrumb countryInfo={countryInfo} />
 
       <Stack>
 
-        <GenericPageHeader title={countryInfo.name} description={`Find universities located in ${countryInfo.name}`} />
+        <GenericPageHeader title={countryInfo.name} description={t('institution.subtitle', { institution: countryInfo.name })} />
 
         <Group position='apart' >
           {/* <SearchBox

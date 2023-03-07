@@ -53,7 +53,7 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
     <ResponsiveWrapper removeVerticalPadding removeContainerWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('meta.title')}</title>
+        <title key={"title"}>{t('common:page-title')+' | '+t('meta.title')}</title>
         <meta key={"description"} name="description" content={t('meta.description')} />
       </Head>
 

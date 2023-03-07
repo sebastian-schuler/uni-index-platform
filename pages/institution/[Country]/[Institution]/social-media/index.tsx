@@ -112,7 +112,7 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, las
                         <div>
                             <Title order={2}>{t('social-media.header')}</Title>
                             <Text>{t('social-media.header-text', { name: institution.name })}</Text>
-                            <Text>{t('label-lastupdate', { date: lastUpdateString })}</Text>
+                            <Text>{t('institution.label-lastupdate', { date: lastUpdateString })}</Text>
                         </div>
                         <SimpleGrid
                             breakpoints={[

@@ -9,7 +9,7 @@ module.exports = {
     "rgx:/(institution)s?/?([Country])?/?([Institution])?/?.*": ["institution"], // s? Can be removed if we ever decide to call List Pages without s, eg. locations -> location
     "rgx:/(account)s?/?.*": ["account"],
     "rgx:/(login|register)": ["loginLogout"],
-    "rgx:/(social-media)/?.*": ["rankings"],
+    "rgx:/(analysis)/?.*": ["analysis"],
     "rgx:/(news)/?.*": ["news"],
   },
   defaultNS: "common"

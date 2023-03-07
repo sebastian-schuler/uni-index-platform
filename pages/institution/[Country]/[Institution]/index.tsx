@@ -29,8 +29,8 @@ const InstitutionPage: NextPage<Props> = ({ institution, country, wikipediaConte
     <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('profile-title', { country: countryName, institution: institution?.name })}</title>
-        <meta key={"description"} name="description" content={t('profile-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('meta.profile-title', { country: countryName, institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('meta.profile-description')} />
       </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />

@@ -14,6 +14,8 @@ import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticP
 import { convertSubjectToCardData } from '../../../../../lib/util/conversionUtil';
 import { SubjectCardData } from '../../../../../lib/types/UiHelperTypes';
 import React from 'react';
+import Head from 'next/head';
+import useTranslation from 'next-translate/useTranslation';
 
 interface Props {
   institution: Institution,
@@ -25,8 +27,15 @@ interface Props {
 
 const subjects: NextPage<Props> = ({ institution, country, footerContent, subjectData, countryList }: Props) => {
 
+  const { t, lang } = useTranslation('institution');
+
   return (
     <ResponsiveWrapper footerContent={footerContent}>
+
+      <Head>
+        <title key={"title"}>{t('common:page-title') + " | " + t('meta.subjects-title', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('meta.subjects-description')} />
+      </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
 

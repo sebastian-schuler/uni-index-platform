@@ -30,7 +30,7 @@ const CityCard: React.FC<Props> = ({ city }: Props) => {
 
     const { t } = useTranslation('common');
     const langContent = {
-        universityLabel: t('card-label-universities', { count: city._count.InstitutionLocation }),
+        universityLabel: t('card-city.label-universities', { count: city._count.InstitutionLocation }),
     }
 
     return (

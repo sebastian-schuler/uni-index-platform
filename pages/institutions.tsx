@@ -27,15 +27,15 @@ const Institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, fo
     return (
         <>
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('institutions-title')}</title>
-                <meta key={"description"} name="description" content={t('institutions-description')} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('meta.institutions-title')}</title>
+                <meta key={"description"} name="description" content={t('meta.institutions-description')} />
             </Head>
 
             <ResponsiveWrapper footerContent={footerContent}>
 
                 <CountryList
-                    title={t('institutions-title')}
-                    subtitle={t('institutions-subtitle')}
+                    title={t('institutions.title')}
+                    subtitle={t('institutions.subtitle')}
                     searchableCountries={searchableCountries}
                 >
                     <PremiumList premiumAds={ads} />

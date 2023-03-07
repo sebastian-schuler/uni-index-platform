@@ -1,3 +1,71 @@
 {
-    
-}
+    "meta":{
+      "title": "Startseite",
+      "description": "Entdecken Sie die besten Institutionen und Studiengänge mit unserer umfassenden Plattform. Erhalten Sie Einblicke in Webpräsenz und Social-Media-Profile. Finden Sie die perfekte Institution für Sie!"
+    },
+  
+    "hero": {
+      "title": "Hier finden Sie die ausführlichste <0>Hochschulanalyse</0> in Europa.",
+      "desc": "Suchen Sie nach Fach, Institution oder Kursname, um Institutionskurse von über 1000 Universitäten in Europa zu finden. Informieren Sie sich über das Ranking in den sozialen Medien oder lesen Sie die Bewertungen anderer Studenten, um zu entscheiden, welcher Studiengang der richtige für Sie ist.",
+      "label-button": "Weitere Informationen"
+    },
+  
+    "social-media": {
+      "title": "Social-Media Rangliste",
+      "desc": "Wir haben die Social-Media-Präsenz von über 1000 Universitäten in Europa analysiert. Finden Sie heraus, welche Universitäten in den sozialen Medien am aktivsten sind und welche nicht.",
+  
+      "top-institutions-title": "Spitzenuniversitäten in den sozialen Medien",
+      "top-institutions-desc": "Entdecken Sie die aktivsten Institutionen in den sozialen Medien. Dies ist die kombinierte Rangliste aller Social-Media-Plattformen.",
+      "top-table-col-institution": "Institution",
+      "top-table-col-country": "Land",
+      "top-table-col-score": "Bewertung",
+      "reference-full-ranking": "Unser gesamtes Social-Media Ranking finden Sie <0>hier</0>.",
+  
+      "best-yt": {
+        "title": "Beste Institution auf YouTube",
+        "subs": "Abonnenten gesamt",
+        "videos": "Videos gesamt",
+        "views": "Durchschnittliche Aufrufe",
+        "comments": "Durchschnittliche Kommentare"
+      },
+  
+      "best-tw": {
+        "title": "Beste Institution auf Twitter",
+        "followers": "Follower gesamt",
+        "tweets": "Tweets gesamt",
+        "retweets": "Durchschnittliche Retweets",
+        "likes": "Durchschnittliche Likes"
+      }
+    },
+  
+    "online-marketing": {
+      "title": "Institutionen mit der besten Website",
+      "desc": "Wir haben alle Hochschul-Websites in Europa analysiert. Finden Sie heraus, welche Universitäten die beste Website in Bezug auf Leistung, Best Practices, Barrierefreiheit und SEO haben.",
+      "label-all": "Alle Online-Marketing-Analysen anzeigen",
+      "categories": {
+        "performance": "Performance",
+        "best-practices": "Beste Praktiken",
+        "accessibility": "Barrierefreiheit",
+        "seo": "SEO"
+      }
+    },
+  
+    "search": {
+      "title": "Alles durchsuchen",
+      "desc": "Suchen Sie nach einer Hochschule, einem Studiengang oder einem Fach, um die detailliertesten Hochschulanalysen in Europa zu finden.",
+      "placeholder": "Suche nach einer Universität, einem Kurs oder einem Fach"
+    },
+  
+    "popular": {
+      "title-courses": "Studiengänge, die Sie sich ansehen müssen",
+      "desc-courses": "Entdecken Sie die beliebtesten Studiengänge in Europa. Erfahren Sie mehr über sie und was sie beinhalten.",
+      "title-institutions": "Trending Institutionen",
+      "desc-institutions": "Entdecken Sie die beliebtesten Institutionen in Europa. Finden Sie heraus, welches die beliebtesten Universitäten sind und was sie anbieten.",
+      "title-locations": "Die beliebtesten Länder für ein Studium",
+      "desc-locations": "Entdecken Sie die beliebtesten Länder zum Studieren und welche Universitäten Sie sich ansehen sollten.",
+      "label-all-courses": "Alle Studiengänge anzeigen",
+      "label-all-institutions": "Alle Institutionen anzeigen",
+      "label-all-locations": "Alle Länder anzeigen"
+    }
+  }
+  

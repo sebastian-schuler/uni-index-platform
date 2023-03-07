@@ -1,17 +1,16 @@
-import { Space, Text, Title } from '@mantine/core'
+import { Stack, Text, Title } from '@mantine/core'
 import { Country } from '@prisma/client'
 import { GetStaticProps, NextPage } from 'next'
-import Breadcrumb from '../../features/Breadcrumb/Breadcrumb'
-import { FooterContent } from '../../features/Footer/Footer'
-import ResponsiveWrapper from '../../components/Container/ResponsiveWrapper'
-import SmRankingTable from '../../features/SocialMedia/SmRankingTable'
-import WhitePaper from '../../components/Paper/WhitePaper'
-import { getCountries } from '../../lib/prisma/prismaQueries'
-import { getSocialMediaRanking } from '../../lib/prisma/prismaSocialMedia'
-import { SmRankingEntryMinified } from '../../lib/types/SocialMediaTypes'
-import { minifySmRankingItem } from '../../lib/util/conversionUtil'
-import Head from 'next/head'
 import useTranslation from 'next-translate/useTranslation'
+import Head from 'next/head'
+import ResponsiveWrapper from '../../../components/Container/ResponsiveWrapper'
+import Breadcrumb from '../../../features/Breadcrumb/Breadcrumb'
+import { FooterContent } from '../../../features/Footer/Footer'
+import SmRankingTable from '../../../features/SocialMedia/SmRankingTable'
+import { getCountries } from '../../../lib/prisma/prismaQueries'
+import { getSocialMediaRanking } from '../../../lib/prisma/prismaSocialMedia'
+import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes'
+import { minifySmRankingItem } from '../../../lib/util/conversionUtil'
 
 interface Props {
     countries: Country[],
@@ -22,31 +21,28 @@ interface Props {
 
 const SocialMediaRanking: NextPage<Props> = ({ countries, socialMediaList, filtedOutCount, footerContent }: Props) => {
 
-    const { t } = useTranslation('rankings');
+    const { t } = useTranslation('analysis');
 
     return (
         <ResponsiveWrapper footerContent={footerContent}>
 
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('seo-sm-ranking-title')}</title>
-                <meta key={"description"} name="description" content={t('seo-sm-ranking-description')} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('meta.seo-sm-ranking-title')}</title>
+                <meta key={"description"} name="description" content={t('meta.seo-sm-ranking-description')} />
             </Head>
 
             <Breadcrumb />
 
-            <Title mb={"md"}>Social-Media Ranking</Title>
+            <Stack>
+                <Title mb={"md"}>Social-Media Ranking</Title>
 
-            <WhitePaper py={"lg"}>
-
-                <Space h="lg" />
                 <SmRankingTable
                     countries={countries}
                     socialMediaList={socialMediaList}
                 />
 
                 <Text mt={"lg"}>{filtedOutCount} institutions are not being displayed, due to having a score of 0.</Text>
-
-            </WhitePaper>
+            </Stack>
 
         </ResponsiveWrapper>
     )

@@ -1,13 +1,13 @@
 import { Title } from '@mantine/core';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react'
-import SmTotalBar from '../../features/Charts/SmTotalBar';
-import Breadcrumb from '../../features/Breadcrumb/Breadcrumb';
-import ResponsiveWrapper from '../../components/Container/ResponsiveWrapper';
-import WhitePaper from '../../components/Paper/WhitePaper';
-import { getCountries } from '../../lib/prisma/prismaQueries';
-import { getAllSocialMedia } from '../../lib/prisma/prismaSocialMedia';
-import { SocialMediaDBEntry, TotalScore } from '../../lib/types/SocialMediaTypes';
+import SmTotalBar from '../../../features/Charts/SmTotalBar';
+import Breadcrumb from '../../../features/Breadcrumb/Breadcrumb';
+import ResponsiveWrapper from '../../../components/Container/ResponsiveWrapper';
+import WhitePaper from '../../../components/Paper/WhitePaper';
+import { getCountries } from '../../../lib/prisma/prismaQueries';
+import { getAllSocialMedia } from '../../../lib/prisma/prismaSocialMedia';
+import { SocialMediaDBEntry, TotalScore } from '../../../lib/types/SocialMediaTypes';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 
@@ -24,14 +24,14 @@ interface Props {
 const Statistics: NextPage<Props> = ({ graphRatings }: Props) => {
 
     // const socialMedia = JSON.parse(socialMediaStringified);
-    const { t } = useTranslation('rankings');
+    const { t } = useTranslation('analysis');
 
     return (
         <ResponsiveWrapper>
 
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('seo-sm-statistics-title')}</title>
-                <meta key={"description"} name="description" content={t('seo-sm-statistics-description')} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('meta.seo-sm-statistics-title')}</title>
+                <meta key={"description"} name="description" content={t('meta.seo-sm-statistics-description')} />
             </Head>
 
             <Breadcrumb />

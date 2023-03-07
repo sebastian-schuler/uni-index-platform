@@ -1,10 +1,13 @@
-import { Box, createStyles, Drawer, Group, NavLink, Stack, Text, ActionIcon } from '@mantine/core';
+import { ActionIcon, createStyles, Divider, Drawer, Group, NavLink, Stack, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconX } from '@tabler/icons-react';
+import { IconSearch, IconX } from '@tabler/icons-react';
+import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import ResponsiveContainer from '../../components/Container/ResponsiveContainer';
+import { URL_LOGIN, URL_REGISTER, URL_SEARCH } from '../../lib/url-helper/urlConstants';
+import { LocaleItem } from '../../locales/localeUtil';
 import { MenuLink } from './Shell';
 
 const useStyles = createStyles((theme) => ({
@@ -14,13 +17,13 @@ const useStyles = createStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         textDecoration: 'none',
-        padding: `${theme.spacing.sm}px ${theme.spacing.md}px`,
+        padding: `${theme.spacing.sm} ${theme.spacing.md}`,
         borderRadius: theme.radius.sm,
         lineHeight: 1,
-        fontWeight: 500,
+        fontSize: theme.fontSizes.lg,
 
         [`& .mantine-NavLink-label`]: {
-            fontSize: theme.fontSizes.xl,
+            fontSize: theme.fontSizes.lg,
             lineHeight: 1,
         },
 
@@ -35,16 +38,13 @@ const useStyles = createStyles((theme) => ({
         },
     },
 
-    linkChild: {
-        [`& .mantine-NavLink-label`]: {
-            fontSize: theme.fontSizes.lg,
-            lineHeight: 1,
-        },
-    },
-
     label: {
         color: theme.colors.brandGray[0],
         marginTop: theme.spacing.sm,
+    },
+
+    searchLink: {
+
     }
 }));
 
@@ -52,12 +52,16 @@ type Props = {
     opened: boolean
     toggle: () => void
     data: MenuLink[]
+    locales: LocaleItem[]
+    handleSelectLang: (index: number) => void
+    selectedLanguageIndex: number
 }
 
-const MobileNav: React.FC<Props> = ({ opened, toggle, data }: Props) => {
+const MobileNav: React.FC<Props> = ({ opened, toggle, data, locales, handleSelectLang, selectedLanguageIndex }: Props) => {
 
     const { classes, cx, theme } = useStyles();
     const router = useRouter();
+    const { t } = useTranslation('common');
 
     const largeScreen = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
     const height = largeScreen ? 200 : 100;
@@ -71,22 +75,28 @@ const MobileNav: React.FC<Props> = ({ opened, toggle, data }: Props) => {
         });
     }
 
-    const createItem = (item: MenuLink, i: number, isChild?: boolean) => {
+    const links = data.map((item, i) => {
         const isActive = isCurrentRoute(item.rootUrl);
         return (
             <NavLink
                 key={i} label={item.label} active={isActive}
                 component={Link} href={item.link}
-                className={cx(classes.link, { [classes.linkChild]: isChild }, { [classes.linkActive]: isActive })}
+                className={cx(classes.link, { [classes.linkActive]: isActive })}
                 onClick={() => toggle()}
             />
         );
-    };
+    });
 
-    const links = data.map((item, i) => createItem(item, i));
+    const langLinks = locales.map((locale, i) => {
+        const isActive = i === selectedLanguageIndex;
+        return <NavLink
+            key={locale.id} onClick={() => handleSelectLang(i)}
+            label={locale.text} active={isActive}
+            className={cx(classes.link, { [classes.linkActive]: isActive })}
+        />
+    });
 
     return (
-
         <Drawer
             opened={opened}
             onClose={() => toggle()}
@@ -98,16 +108,51 @@ const MobileNav: React.FC<Props> = ({ opened, toggle, data }: Props) => {
         >
             <ResponsiveContainer>
                 <Group position='apart' h={height}>
-                    <Text size='xl' weight={700}>Menu</Text>
+                    <Text size='xl' weight={700}>{t('page-title')}</Text>
                     <ActionIcon size={'lg'} onClick={() => toggle()}>
                         <IconX size={28} color={theme.black} />
                     </ActionIcon>
                 </Group>
+
+                <NavLink
+                    label={t('nav.search')} component={Link}
+                    href={URL_SEARCH} onClick={() => toggle()}
+                    icon={<IconSearch size={18} color={theme.black} />}
+                    className={cx(classes.link)}
+                />
+
+                <Divider my={'md'} />
+
                 <Stack spacing={'sm'}>
-                    {
-                        links.map((item) => item)
-                    }
+                    {links.map((item) => item)}
                 </Stack>
+
+                <Divider my={'md'} />
+
+                <Stack spacing={'sm'}>
+
+                    <Text size={'lg'} weight={'bold'}>{t('nav.account')}</Text>
+                    <NavLink
+                        label={t('account.login')}
+                        component={Link} href={URL_LOGIN}
+                        className={classes.link}
+                        onClick={() => toggle()}
+                    />
+                    <NavLink
+                        label={t('account.register')}
+                        component={Link} href={URL_REGISTER}
+                        className={classes.link}
+                        onClick={() => toggle()}
+                    />
+                </Stack>
+
+                <Divider my={'md'} />
+
+                <Stack spacing={'sm'}>
+                    <Text size={'lg'} weight={'bold'}>{t('nav.language')}</Text>
+                    {langLinks}
+                </Stack>
+
             </ResponsiveContainer>
         </Drawer>
     )

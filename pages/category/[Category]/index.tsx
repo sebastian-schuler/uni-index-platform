@@ -34,15 +34,15 @@ const SubjectCategoryPage: NextPage<Props> = ({ categoryInfo, subjectData, count
     <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('subject-title', { subject: courseTypeName })}</title>
-        <meta key={"description"} name="description" content={t('subject-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('meta.category-title', { subject: courseTypeName })}</title>
+        <meta key={"description"} name="description" content={t('meta.category-description')} />
       </Head>
 
       <Breadcrumb subjectTypeInfo={categoryInfo} />
 
       <Stack>
 
-        <GenericPageHeader title={courseTypeName} description={"Find courses of this type"} />
+        <GenericPageHeader title={t('category.title', { category: courseTypeName })} description={t('category.subtitle', { category: courseTypeName })} />
 
         <Group position='apart' >
           {/* <SearchBox

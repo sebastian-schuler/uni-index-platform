@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router';
 import { toLink } from '../../lib/util/util';
-import { URL_ACCOUNT, URL_NEWS, URL_SOCIAL_MEDIA } from '../../lib/url-helper/urlConstants';
+import { URL_ACCOUNT, URL_ANALYSIS, URL_NEWS, URL_SOCIAL_MEDIA } from '../../lib/url-helper/urlConstants';
 import AccountNavigation from './AccountNavigation';
 import Navbar from './Navbar';
 import { useDisclosure } from '@mantine/hooks';
@@ -41,7 +41,7 @@ const Shell: React.FC<Props> = ({ children }: Props) => {
         { label: t('nav.locations'), link: toLink(URL_LOCATIONS), rootUrl: [URL_LOCATION] },
         { label: t('nav.categories'), link: toLink(URL_CATEGORIES), rootUrl: [URL_CATEGORY, URL_CATEGORIES] },
         { label: t('nav.institutions'), link: toLink(URL_INSTITUTIONS), rootUrl: [URL_INSTITUTION] },
-        { label: t('nav.analysis.title'), link: toLink('analysis'), rootUrl: [URL_SOCIAL_MEDIA] },
+        { label: t('nav.analysis'), link: toLink(URL_ANALYSIS), rootUrl: [URL_ANALYSIS] },
         { label: t('nav.news'), link: toLink(URL_NEWS), rootUrl: [URL_NEWS] },
     ];
 
@@ -62,15 +62,13 @@ const Shell: React.FC<Props> = ({ children }: Props) => {
                             toggleDrawer={toggle}
                             drawerOpened={opened}
                         />
-                        {/* <Navbar
-                            opened={opened}
-                            toggle={toggle}
-                            data={links}
-                        /> */}
                         <MobileNav
                             opened={opened}
                             toggle={toggle}
                             data={links}
+                            locales={locales}
+                            handleSelectLang={handleSelectLang}
+                            selectedLanguageIndex={selectedIndex}
                         />
                         {children}
                     </>

@@ -35,8 +35,8 @@ const CityPage: NextPage<Props> = ({ countryList, institutionData, institutionSt
     <ResponsiveWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('city-title', { city: cityInfo.name })}</title>
-        <meta key={"description"} name="description" content={t('city-description', { city: cityInfo.name })} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('meta.city-title', { city: cityInfo.name })}</title>
+        <meta key={"description"} name="description" content={t('meta.city-description', { city: cityInfo.name })} />
       </Head>
 
       <Breadcrumb
@@ -46,7 +46,7 @@ const CityPage: NextPage<Props> = ({ countryList, institutionData, institutionSt
       />
 
       <Stack>
-        <GenericPageHeader title={cityInfo.name} description={t('city-subtitle', { city: cityInfo.name })} />
+        <GenericPageHeader title={t('city.title', { city: cityInfo.name })} description={t('city.subtitle', { city: cityInfo.name })} />
 
         <Group position='apart' >
           {/* <SearchBox

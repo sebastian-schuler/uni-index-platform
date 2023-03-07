@@ -9,7 +9,7 @@ import {
 } from 'chart.js';
 import React from 'react';
 import { Bar, Line } from 'react-chartjs-2';
-import { SmStatisticGraphRatings } from '../../pages/social-media/statistics';
+import { SmStatisticGraphRatings } from '../../pages/analysis/social-media/statistics';
 
 ChartJS.register(
     CategoryScale,

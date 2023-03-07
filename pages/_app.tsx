@@ -1,4 +1,5 @@
 import { MantineProvider } from '@mantine/core'
+import useTranslation from 'next-translate/useTranslation'
 import type { AppProps, NextWebVitalsMetric } from 'next/app'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -15,6 +16,7 @@ import appTheme from '../theme/theme'
 function MyApp({ Component, pageProps }: AppProps) {
 
   const { events } = useRouter();
+  const { t } = useTranslation('common');
 
   useEffect(() => {
     const handleRouteChange = (url: string) => gtag.pageview(url);
@@ -28,6 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     <>
       <Head>
+        <title key={"title"}>{t('page-title')}</title>
         <script
           dangerouslySetInnerHTML={{
             __html: `

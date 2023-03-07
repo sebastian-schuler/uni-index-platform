@@ -117,7 +117,7 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
           </div>
 
           <Group position='apart'>
-            <Text>{t('label-lastupdate', { date: lastUpdate })}</Text>
+            <Text>{t('institution.label-lastupdate', { date: lastUpdate })}</Text>
             <Text>
               <Trans
                 i18nKey='institution:online-marketing.label-website'

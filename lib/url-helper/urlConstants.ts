@@ -24,6 +24,7 @@ export const URL_NEWS = "news";
 
 export const URL_SEARCH= "search";
 
+export const URL_ANALYSIS = "analysis";
 export const URL_SOCIAL_MEDIA = "social-media";
 export const URL_SOCIAL_MEDIA_RANKING = "ranking";
 export const URL_SOCIAL_MEDIA_STATISTICS = "statistics";

@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 import MantineLink from '../../components/Link/MantineLink';
-import { URL_INSTITUTION, URL_INSTITUTIONS, URL_INSTITUTION_OM, URL_INSTITUTION_OM_ACCESSIBILITY, URL_INSTITUTION_OM_BESTPRACTICES, URL_INSTITUTION_OM_PERFORMANCE, URL_INSTITUTION_OM_PWA, URL_INSTITUTION_OM_SEO, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SOCIALMEDIA_TW, URL_INSTITUTION_SOCIALMEDIA_YT, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING, URL_SOCIAL_MEDIA_STATISTICS, URL_CATEGORY, URL_CATEGORIES } from '../../lib/url-helper/urlConstants';
+import { URL_INSTITUTION, URL_INSTITUTIONS, URL_INSTITUTION_OM, URL_INSTITUTION_OM_ACCESSIBILITY, URL_INSTITUTION_OM_BESTPRACTICES, URL_INSTITUTION_OM_PERFORMANCE, URL_INSTITUTION_OM_PWA, URL_INSTITUTION_OM_SEO, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SOCIALMEDIA_TW, URL_INSTITUTION_SOCIALMEDIA_YT, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING, URL_SOCIAL_MEDIA_STATISTICS, URL_CATEGORY, URL_CATEGORIES, URL_ANALYSIS } from '../../lib/url-helper/urlConstants';
 import { getLocalizedName, toLink } from '../../lib/util/util';
 
 const useStyles = createStyles((theme) => {
@@ -54,6 +54,9 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
         categories: t('nav.categories'),
         institutions: t('nav.institutions'),
         search: t('global-search'),
+        analysis: t('nav.analysis'),
+        socialMediaStatistic: t('breadcrumbs.social-media-statistics'),
+        socialMediaRanking: t('breadcrumbs.social-media-ranking'),
     }
 
     const checkTranslationNull = (queryString: string | string[] | undefined, translated: string) => {
@@ -237,19 +240,23 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
             url: toLink(URL_SEARCH)
         });
 
-    } else if (route.startsWith(toLink(URL_SOCIAL_MEDIA))) {
+    } else if (route.startsWith(toLink(URL_ANALYSIS))) {
+        links.push({
+            name: langContent.analysis,
+            url: toLink(URL_ANALYSIS)
+        });
 
-        if (route.startsWith(toLink(URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING))) {
+        if (route.startsWith(toLink(URL_ANALYSIS, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING))) {
             // SOCIAL MEDIA RANKING PATH
             links.push({
-                name: "Social Media Ranking",
-                url: toLink(URL_SOCIAL_MEDIA_RANKING)
+                name: langContent.socialMediaRanking,
+                url: toLink(URL_ANALYSIS, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING)
             });
-        } else if (route.startsWith(toLink(URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_STATISTICS))) {
+        } else if (route.startsWith(toLink(URL_ANALYSIS, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_STATISTICS))) {
             // SOCIAL MEDIA TWITTER PATH
             links.push({
-                name: "Social Media Statistics",
-                url: toLink(URL_SOCIAL_MEDIA_STATISTICS)
+                name: langContent.socialMediaStatistic,
+                url: toLink(URL_ANALYSIS, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_STATISTICS)
             });
         }
 
