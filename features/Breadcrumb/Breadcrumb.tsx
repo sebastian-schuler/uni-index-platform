@@ -53,7 +53,7 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
         locations: t('nav.locations'),
         categories: t('nav.categories'),
         institutions: t('nav.institutions'),
-        search: t('global-search'),
+        search: t('nav.search'),
         analysis: t('nav.analysis'),
         socialMediaStatistic: t('breadcrumbs.social-media-statistics'),
         socialMediaRanking: t('breadcrumbs.social-media-ranking'),
@@ -236,7 +236,7 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
     } else if (route.startsWith(toLink(URL_SEARCH))) {
         // SEARCH PATH
         links.push({
-            name: langContent.search + ": '" + query.q + "'",
+            name: langContent.search,
             url: toLink(URL_SEARCH)
         });
 

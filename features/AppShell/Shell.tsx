@@ -1,17 +1,15 @@
-import React, { useState } from 'react'
-import { useRouter } from 'next/router';
-import { toLink } from '../../lib/util/util';
-import { URL_ACCOUNT, URL_ANALYSIS, URL_NEWS, URL_SOCIAL_MEDIA } from '../../lib/url-helper/urlConstants';
-import AccountNavigation from './AccountNavigation';
-import Navbar from './Navbar';
 import { useDisclosure } from '@mantine/hooks';
-import useTranslation from 'next-translate/useTranslation';
-import { URL_CATEGORIES, URL_CATEGORY, URL_INSTITUTION, URL_INSTITUTIONS, URL_LOCATION, URL_LOCATIONS } from '../../lib/url-helper/urlConstants';
-import MobileNav from './MobileNav';
-import BrandNavbar from './BrandNavbar';
-import i18nConfig from '../../i18n';
-import { getLanguageById, LocaleItem } from '../../locales/localeUtil';
 import setLanguage from 'next-translate/setLanguage';
+import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import i18nConfig from '../../i18n';
+import { URL_ACCOUNT, URL_ANALYSIS, URL_CATEGORIES, URL_CATEGORY, URL_INSTITUTION, URL_INSTITUTIONS, URL_LOCATION, URL_LOCATIONS, URL_NEWS } from '../../lib/url-helper/urlConstants';
+import { toLink } from '../../lib/util/util';
+import { getLanguageById, LocaleItem } from '../../locales/localeUtil';
+import AccountNavigation from './AccountNavigation';
+import BrandNavbar from './BrandNavbar';
+import MobileNav from './MobileNav';
 
 export type MenuLink = { label: string, link: string, rootUrl: string[] }
 

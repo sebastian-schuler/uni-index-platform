@@ -6,42 +6,39 @@ import { getGlobalSearchResults } from '../lib/prisma/prismaGlobalSearch'
 import { LinkableCity, LinkableInstitution, LinkableSubject } from '../lib/types/Linkables'
 
 interface Props {
-    subjects: LinkableSubject[]
-    institutions: LinkableInstitution[],
-    cities: LinkableCity[],
+
 }
 
-const Search: NextPage<Props> = ({ subjects, institutions, cities }: Props) => {
+const Search: NextPage<Props> = ({ }: Props) => {
 
     return (
         <ResponsiveWrapper>
 
             <Breadcrumb />
 
-            <div className='flex flex-col gap-4'>
+            Search Page
 
-                <SearchResultList header='Subjects' resSubject={subjects} />
+
+                {/* <SearchResultList header='Subjects' resSubject={subjects} />
                 <SearchResultList header='Institutions' resInstitution={institutions} />
-                <SearchResultList header='Cities' resCities={cities} />
-
-            </div>
+                <SearchResultList header='Cities' resCities={cities} /> */}
 
         </ResponsiveWrapper>
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+// export const getServerSideProps: GetServerSideProps = async (context) => {
 
-    const { q } = context.query;
-    const res = await getGlobalSearchResults(q as string);
+//     const { q } = context.query;
+//     const res = await getGlobalSearchResults(q as string);
 
-    return {
-        props: {
-            subjects: res.subjects,
-            institutions: res.institutions,
-            cities: res.cities,
-        }
-    }
-}
+//     return {
+//         props: {
+//             subjects: res.subjects,
+//             institutions: res.institutions,
+//             cities: res.cities,
+//         }
+//     }
+// }
 
 export default Search

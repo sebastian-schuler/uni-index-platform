@@ -1,5 +1,4 @@
-import { Burger, createStyles, Divider, Flex, Group, Header, Text, Title, UnstyledButton } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
+import { Burger, createStyles, Divider, Flex, Group, Header, MediaQuery, Text, Title, UnstyledButton } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
@@ -7,8 +6,13 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import ResponsiveContainer from '../../components/Container/ResponsiveContainer';
 import { URL_LOGIN, URL_REGISTER, URL_SEARCH } from '../../lib/url-helper/urlConstants';
+import { toLink } from '../../lib/util/util';
 import { LocaleItem } from '../../locales/localeUtil';
 import { MenuLink } from './Shell';
+
+type HeaderProps = {
+    children: React.ReactNode
+}
 
 const useStyles = createStyles((theme) => ({
 
@@ -111,11 +115,7 @@ const BrandNavbar: React.FC<Props> = ({ data, locales, handleSelectLang, selecte
 
     const { classes, cx, theme } = useStyles();
     const router = useRouter();
-
     const { t } = useTranslation('common');
-
-    const largeScreen = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-    const height = largeScreen ? 200 : 100;
 
     const langLinks = locales.map((locale, i) => {
         return <UnstyledButton
@@ -144,8 +144,25 @@ const BrandNavbar: React.FC<Props> = ({ data, locales, handleSelectLang, selecte
         );
     });
 
+    const CustomHeader: React.FC<HeaderProps> = ({ children }: HeaderProps) => {
+        return (
+            <>
+                <MediaQuery largerThan="md" styles={{ display: 'none' }}>
+                    <Header height={100} className={classes.root}>
+                        {children}
+                    </Header>
+                </MediaQuery>
+                <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
+                    <Header height={200} className={classes.root}>
+                        {children}
+                    </Header>
+                </MediaQuery>
+            </>
+        )
+    }
+
     return (
-        <Header height={height} className={classes.root}>
+        <CustomHeader>
             <ResponsiveContainer props={{ h: '100%' }}>
                 <Flex direction={'column'} h={'100%'}>
 
@@ -156,18 +173,18 @@ const BrandNavbar: React.FC<Props> = ({ data, locales, handleSelectLang, selecte
                     <Group position='apart' sx={{ flex: 1, flexGrow: 1 }}>
                         <Title>{t('page-title')}</Title>
                         <Group className={classes.buttonList}>
-                            <UnstyledButton component={Link} href={URL_SEARCH} className={classes.button}>
+                            <UnstyledButton component={Link} href={toLink(URL_SEARCH)} className={classes.button}>
                                 <Group spacing={'sm'}>
                                     <IconSearch size={18} />
                                     <Text>{t('nav.search')}</Text>
                                 </Group>
                             </UnstyledButton>
                             <Divider size="sm" orientation="vertical" />
-                            <UnstyledButton component={Link} href={URL_LOGIN} className={classes.button}>
+                            <UnstyledButton component={Link} href={toLink(URL_LOGIN)} className={classes.button}>
                                 <Text>{t('account.login')}</Text>
                             </UnstyledButton>
                             <Divider size="sm" orientation="vertical" />
-                            <UnstyledButton component={Link} href={URL_REGISTER} className={classes.button}>
+                            <UnstyledButton component={Link} href={toLink(URL_REGISTER)} className={classes.button}>
                                 <Text>{t('account.register')}</Text>
                             </UnstyledButton>
                         </Group>
@@ -186,7 +203,7 @@ const BrandNavbar: React.FC<Props> = ({ data, locales, handleSelectLang, selecte
 
                 </Flex>
             </ResponsiveContainer>
-        </Header>
+        </CustomHeader>
     )
 }
 

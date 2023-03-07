@@ -25,7 +25,7 @@ interface Props {
   countryList: Country[]
 }
 
-const subjects: NextPage<Props> = ({ institution, country, footerContent, subjectData, countryList }: Props) => {
+const SubjectsPage = ({ institution, country, footerContent, subjectData, countryList }: Props) => {
 
   const { t, lang } = useTranslation('institution');
 
@@ -126,4 +126,4 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
   }
 }
 
-export default subjects;
+export default SubjectsPage;

@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import ResponsiveContainer from '../../components/Container/ResponsiveContainer';
 import { URL_LOGIN, URL_REGISTER, URL_SEARCH } from '../../lib/url-helper/urlConstants';
+import { toLink } from '../../lib/util/util';
 import { LocaleItem } from '../../locales/localeUtil';
 import { MenuLink } from './Shell';
 
@@ -116,7 +117,7 @@ const MobileNav: React.FC<Props> = ({ opened, toggle, data, locales, handleSelec
 
                 <NavLink
                     label={t('nav.search')} component={Link}
-                    href={URL_SEARCH} onClick={() => toggle()}
+                    href={toLink(URL_SEARCH)} onClick={() => toggle()}
                     icon={<IconSearch size={18} color={theme.black} />}
                     className={cx(classes.link)}
                 />
@@ -134,13 +135,13 @@ const MobileNav: React.FC<Props> = ({ opened, toggle, data, locales, handleSelec
                     <Text size={'lg'} weight={'bold'}>{t('nav.account')}</Text>
                     <NavLink
                         label={t('account.login')}
-                        component={Link} href={URL_LOGIN}
+                        component={Link} href={toLink(URL_LOGIN)}
                         className={classes.link}
                         onClick={() => toggle()}
                     />
                     <NavLink
                         label={t('account.register')}
-                        component={Link} href={URL_REGISTER}
+                        component={Link} href={toLink(URL_REGISTER)}
                         className={classes.link}
                         onClick={() => toggle()}
                     />
