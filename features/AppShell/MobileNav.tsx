@@ -1,8 +1,11 @@
-import { createStyles, Divider, Drawer, NavLink, Stack, Text } from '@mantine/core';
+import { Box, createStyles, Drawer, Group, NavLink, Stack, Text, ActionIcon } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
+import { IconX } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { HEADER_HEIGHT, MenuLink } from './Shell';
+import ResponsiveContainer from '../../components/Container/ResponsiveContainer';
+import { MenuLink } from './Shell';
 
 const useStyles = createStyles((theme) => ({
 
@@ -56,6 +59,9 @@ const MobileNav: React.FC<Props> = ({ opened, toggle, data }: Props) => {
     const { classes, cx, theme } = useStyles();
     const router = useRouter();
 
+    const largeScreen = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
+    const height = largeScreen ? 200 : 100;
+
     // Check if the route is the current route
     const isCurrentRoute = (rootUrl: string[]) => {
         return rootUrl.some((url) => {
@@ -66,36 +72,15 @@ const MobileNav: React.FC<Props> = ({ opened, toggle, data }: Props) => {
     }
 
     const createItem = (item: MenuLink, i: number, isChild?: boolean) => {
-        if (item.type === "link") {
-            const isActive = isCurrentRoute(item.rootUrl);
-            return (
-                <NavLink
-                    key={i} label={item.label} active={isActive}
-                    component={Link} href={item.link}
-                    className={cx(classes.link, { [classes.linkChild]: isChild }, { [classes.linkActive]: isActive })}
-                    onClick={() => toggle()}
-                />
-            );
-        }
-        if (item.type === "divider") {
-            return (<Divider key={i} />);
-        }
-        if (item.type === "label") {
-            return (<Text key={i} className={classes.label}>{item.label}</Text>);
-        }
-        if (item.type === "group") {
-            return (
-                <NavLink
-                    key={i}
-                    label={item.label}
-                    childrenOffset={theme.spacing.lg}
-                    active={isCurrentRoute(item.rootUrl)}
-                    className={classes.link}
-                >
-                    {item.children.map((child, y) => createItem(child, y, true))}
-                </NavLink>
-            );
-        }
+        const isActive = isCurrentRoute(item.rootUrl);
+        return (
+            <NavLink
+                key={i} label={item.label} active={isActive}
+                component={Link} href={item.link}
+                className={cx(classes.link, { [classes.linkChild]: isChild }, { [classes.linkActive]: isActive })}
+                onClick={() => toggle()}
+            />
+        );
     };
 
     const links = data.map((item, i) => createItem(item, i));
@@ -105,16 +90,25 @@ const MobileNav: React.FC<Props> = ({ opened, toggle, data }: Props) => {
         <Drawer
             opened={opened}
             onClose={() => toggle()}
-            padding="lg"
-            size="lg"
+            padding={0}
+            size="sm"
             position='right'
             withCloseButton={false}
+            zIndex={1000000}
         >
-            <Stack spacing={'sm'} mt={HEADER_HEIGHT}>
-                {
-                    links.map((item) => item)
-                }
-            </Stack>
+            <ResponsiveContainer>
+                <Group position='apart' h={height}>
+                    <Text size='xl' weight={700}>Menu</Text>
+                    <ActionIcon size={'lg'} onClick={() => toggle()}>
+                        <IconX size={28} color={theme.black} />
+                    </ActionIcon>
+                </Group>
+                <Stack spacing={'sm'}>
+                    {
+                        links.map((item) => item)
+                    }
+                </Stack>
+            </ResponsiveContainer>
         </Drawer>
     )
 }

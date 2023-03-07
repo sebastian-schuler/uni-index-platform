@@ -19,7 +19,7 @@ const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitter, 
   const { t } = useTranslation('index');
 
   return (
-    <ResponsiveContainer id='socialMediaSection' paddingY>
+    <ResponsiveContainer props={{ id: 'socialMediaSection' }} paddingY>
 
       <Stack spacing={0}>
         <Title order={2}>{t('social-media.title')}</Title>

@@ -28,7 +28,8 @@ const appTheme: MantineThemeOverride = {
     lg: '1rem',
     xl: '1.25rem',
   },
-  white: '#F3F4F7',
+  black: '#212121', // #212121
+  white: '#FFF', // #F3F4F7
   primaryColor: 'brandOrange',
   primaryShade: 5,
   defaultRadius: 'md',
@@ -48,6 +49,11 @@ const appTheme: MantineThemeOverride = {
   },
   components: {
     Anchor: {
+      styles: (theme) => ({
+        root: {
+          textUnderlineOffset: '0.25em',
+        },
+      }),
       defaultProps: {
         color: 'brandOrange.5',
       }

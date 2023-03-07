@@ -1,21 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router';
 import { toLink } from '../../lib/util/util';
-import { URL_ACCOUNT, URL_NEWS } from '../../lib/url-helper/urlConstants';
+import { URL_ACCOUNT, URL_NEWS, URL_SOCIAL_MEDIA } from '../../lib/url-helper/urlConstants';
 import AccountNavigation from './AccountNavigation';
 import Navbar from './Navbar';
 import { useDisclosure } from '@mantine/hooks';
 import useTranslation from 'next-translate/useTranslation';
 import { URL_CATEGORIES, URL_CATEGORY, URL_INSTITUTION, URL_INSTITUTIONS, URL_LOCATION, URL_LOCATIONS } from '../../lib/url-helper/urlConstants';
 import MobileNav from './MobileNav';
+import BrandNavbar from './BrandNavbar';
+import i18nConfig from '../../i18n';
+import { getLanguageById, LocaleItem } from '../../locales/localeUtil';
+import setLanguage from 'next-translate/setLanguage';
 
-export const HEADER_HEIGHT = 64;
-
-export type MenuLink =
-    { type: 'link', label: string, link: string, rootUrl: string[] } |
-    { type: 'divider' } |
-    { type: 'label', label: string } |
-    { type: 'group', label: string, children: MenuLink[], rootUrl: string[] }
+export type MenuLink = { label: string, link: string, rootUrl: string[] }
 
 type Props = {
     children: React.ReactNode
@@ -23,26 +21,28 @@ type Props = {
 
 const Shell: React.FC<Props> = ({ children }: Props) => {
 
-    const { t } = useTranslation("common");
+    const { t, lang } = useTranslation("common");
     const { asPath } = useRouter();
+
+    // Mobile nav
     const [opened, { toggle }] = useDisclosure(false);
 
+    // Language changing
+    const locales = i18nConfig.locales.map(locale => getLanguageById(locale)).filter(locale => locale !== undefined) as LocaleItem[];
+    const [selectedIndex, setSelectedIndex] = useState(locales.findIndex(x => x.id === lang));
+    const handleSelectLang = (index: number) => {
+        setSelectedIndex(index);
+        if (lang != locales[index].id) setLanguage(locales[index].id);
+    }
+
+    // Data
     const links: MenuLink[] = [
-        { type: 'link', label: t('nav.home'), link: "/", rootUrl: [""] },
-        { type: 'link', label: t('nav.news'), link: toLink(URL_NEWS), rootUrl: [URL_NEWS] },
-        { type: 'link', label: t('nav.locations'), link: toLink(URL_LOCATIONS), rootUrl: [URL_LOCATION] },
-        { type: 'link', label: t('nav.categories'), link: toLink(URL_CATEGORIES), rootUrl: [URL_CATEGORY, URL_CATEGORIES] },
-        { type: 'link', label: t('nav.institutions'), link: toLink(URL_INSTITUTIONS), rootUrl: [URL_INSTITUTION] },
-        {
-            type: 'group', label: t('nav.analysis.title'), rootUrl: ["social-media"], children: [
-                { type: 'label', label: t('nav.analysis.social-media-label') },
-                { type: 'link', label: t('nav.analysis.social-media-ranking'), link: "/social-media/ranking", rootUrl: [] },
-                { type: 'link', label: t('nav.analysis.social-media-statistics'), link: "/social-media/statistics", rootUrl: [] },
-                { type: 'label', label: t('nav.analysis.online-marketing-label') },
-                { type: 'link', label: t('nav.analysis.online-marketing-ranking'), link: "#ranking", rootUrl: [] },
-                { type: 'link', label: t('nav.analysis.online-marketing-statistics'), link: "#statistics", rootUrl: [] },
-            ]
-        },
+        { label: t('nav.home'), link: "/", rootUrl: [""] },
+        { label: t('nav.locations'), link: toLink(URL_LOCATIONS), rootUrl: [URL_LOCATION] },
+        { label: t('nav.categories'), link: toLink(URL_CATEGORIES), rootUrl: [URL_CATEGORY, URL_CATEGORIES] },
+        { label: t('nav.institutions'), link: toLink(URL_INSTITUTIONS), rootUrl: [URL_INSTITUTION] },
+        { label: t('nav.analysis.title'), link: toLink('analysis'), rootUrl: [URL_SOCIAL_MEDIA] },
+        { label: t('nav.news'), link: toLink(URL_NEWS), rootUrl: [URL_NEWS] },
     ];
 
     return (
@@ -54,11 +54,19 @@ const Shell: React.FC<Props> = ({ children }: Props) => {
                     </AccountNavigation>
                 ) : (
                     <>
-                        <Navbar
+                        <BrandNavbar
+                            data={links}
+                            locales={locales}
+                            handleSelectLang={handleSelectLang}
+                            selectedLanguageIndex={selectedIndex}
+                            toggleDrawer={toggle}
+                            drawerOpened={opened}
+                        />
+                        {/* <Navbar
                             opened={opened}
                             toggle={toggle}
                             data={links}
-                        />
+                        /> */}
                         <MobileNav
                             opened={opened}
                             toggle={toggle}

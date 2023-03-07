@@ -47,7 +47,6 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
   institutionStates, socialMediaList, highestTwitter, highestYoutube, footerContent }: Props) => {
 
   const ads: DetailedUserAd[] = JSON.parse(adsStringified);
-
   const { t } = useTranslation('index');
 
   return (

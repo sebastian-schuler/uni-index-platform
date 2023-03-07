@@ -18,7 +18,7 @@ const ResponsiveWrapper: NextPage<Props> = props => {
     const theme = useMantineTheme();
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", height: "calc(100vh - " + HEADER_HEIGHT + "px)", marginTop: theme.spacing.xl }}>
+        <Box sx={{ display: "flex", flexDirection: "column", height: "calc(100vh - " + HEADER_HEIGHT + "px)", marginTop: HEADER_HEIGHT }}>
             <Box component={'main'} sx={{ flex: 2 }}>
                 {
                     removeContainerWrapper ? children :

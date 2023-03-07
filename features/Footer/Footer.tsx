@@ -4,7 +4,7 @@ import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import MantineLink from '../../components/Link/MantineLink';
 import { Searchable } from '../../lib/types/UiHelperTypes';
-import { URL_LOGIN, URL_REGISTER } from '../../lib/url-helper/urlConstants';
+import { URL_ABOUT, URL_IMPRINT, URL_LOGIN, URL_REGISTER } from '../../lib/url-helper/urlConstants';
 import { getLocalizedName, toLink } from '../../lib/util/util';
 import ResponsiveContainer from '../../components/Container/ResponsiveContainer';
 import FooterLanguageChoice from './FooterLanguageChoice';
@@ -37,9 +37,14 @@ const Footer: NextPage<Props> = props => {
     const footerData: FooterContentList[] = [];
     const { t, lang } = useTranslation();
 
+    const aboutLinks: FooterContentItem[] = [
+        { url: toLink(URL_ABOUT, URL_IMPRINT), name: t('footer.about-imprint') }
+    ]
+    footerData.push({ title: t('footer.about-title'), content: aboutLinks });
+
     const accountLinks: FooterContentItem[] = [
         { url: toLink(URL_LOGIN), name: t('footer.account-login') },
-        { url: toLink(URL_REGISTER), name: t('footer.account-register') }
+        { url: toLink(URL_REGISTER), name: t('footer.account-register') },
     ]
     footerData.push({ title: t('footer.account-title'), content: accountLinks });
 
@@ -69,7 +74,7 @@ const Footer: NextPage<Props> = props => {
 
     return (
         <Box component={'footer'} sx={{ backgroundColor: theme.colors.brandGray[5], color: theme.white }}>
-            <ResponsiveContainer sx={{ paddingTop: 64, paddingBottom: 32 }}>
+            <ResponsiveContainer props={{ pt: 'xl', pb: 'lg' }} >
 
                 <Grid gutter={1}>
                     {

@@ -42,6 +42,8 @@
   },
 
   "card-institution": {
+    "label-city": "City:",
+    "label-state": "State:",
     "label-locations": {
       "0": "No campus locations",
       "one": "One campus location",
@@ -99,6 +101,9 @@
   "footer": {
     "account-title": "Account",
     "account-login": "Login",
-    "account-register": "Register"
+    "account-register": "Register",
+    "about-title": "About",
+    "about-imprint": "Imprint",
+    "about-privacy": "Privacy Policy"
   }
 }

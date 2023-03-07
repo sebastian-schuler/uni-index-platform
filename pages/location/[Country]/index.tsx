@@ -23,6 +23,7 @@ import { DetailedState } from '../../../lib/types/DetailedDatabaseTypes';
 import { Searchable, StateCardData } from '../../../lib/types/UiHelperTypes';
 import { convertStateToCardData } from '../../../lib/util/conversionUtil';
 import { generateSearchable, getLocalizedName } from '../../../lib/util/util';
+import { getStaticPathsCountries } from '../../../lib/url-helper/staticPathFunctions';
 
 interface Props {
   searchableStates: Searchable[],
@@ -156,26 +157,7 @@ const CountryPage: NextPage<Props> = ({ searchableStates, countryInfo, footerCon
 }
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
-
-  const countries = await prisma.country.findMany();
-
-  let paths: {
-    params: ParsedUrlQuery;
-    locale?: string | undefined;
-  }[] = [];
-
-  // Add locale to every possible path
-  locales?.forEach((locale) => {
-    countries.forEach((country) => {
-      paths.push({
-        params: {
-          Country: country.url,
-        },
-        locale,
-      });
-    })
-  });
-
+  const paths = await getStaticPathsCountries(locales);
   return {
     paths: paths,
     fallback: false

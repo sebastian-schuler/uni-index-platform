@@ -1,4 +1,5 @@
 import { ParsedUrlQuery } from "querystring";
+import { getCountries } from "../prisma/prismaQueries";
 import { getInstitutionPaths } from "../prisma/prismaUrlPaths";
 
 interface StaticPathsResult {
@@ -10,7 +11,9 @@ interface StaticPathsResult {
  * Get static paths of all /institution/[country]/[institution] pages
  * @param locales 
  */
-export const getStaticPathsInstitution = async (locales: string[]): Promise<StaticPathsResult[]> => {
+export const getStaticPathsInstitution = async (locales: string[] | undefined): Promise<StaticPathsResult[]> => {
+
+    if (!locales) throw new Error("No locales provided to getStaticPathsInstitution");
 
     const institutions = await getInstitutionPaths();
 
@@ -48,6 +51,32 @@ export const getStaticPathsInstitution = async (locales: string[]): Promise<Stat
                 });
             }
 
+        })
+    });
+
+    return paths;
+}
+
+export const getStaticPathsCountries = async (locales: string[] | undefined): Promise<StaticPathsResult[]> => {
+
+    if (!locales) throw new Error("No locales provided to getStaticPathsCountries");
+
+    const countries = await getCountries();
+
+    let paths: {
+        params: ParsedUrlQuery;
+        locale?: string | undefined;
+    }[] = [];
+
+    // Add locale to every possible path
+    locales?.forEach((locale) => {
+        countries.forEach((country) => {
+            paths.push({
+                params: {
+                    Country: country.url,
+                },
+                locale,
+            });
         })
     });
 

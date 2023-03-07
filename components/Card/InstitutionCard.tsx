@@ -78,13 +78,11 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
 
             {/* City & State */}
             <Text color={theme.colors.brandGray[2]} sx={{ lineHeight: 1.2 }}>
-              <Anchor component={Link} href={urlCity}>
-                {data.Institution.City.name}
-              </Anchor>
-              {', '}
-              <Anchor component={Link} href={urlState}>
-                {getLocalizedName({ lang: lang, state: state })}
-              </Anchor>
+              {t('card-institution.label-city')}{' '}
+              <Anchor component={Link} href={urlCity}>{data.Institution.City.name}</Anchor>
+              {' | '}
+              {t('card-institution.label-state')}{' '}
+              <Anchor component={Link} href={urlState}>{getLocalizedName({ lang: lang, state: state })}</Anchor>
             </Text>
 
             {/* Social Media Link icons */}

@@ -30,6 +30,7 @@ const PremiumList: React.FC<Props> = ({ premiumAds, wrapInContainer }: Props) =>
     const largeAds = premiumAds.filter((ad) => { return ad.size === 3 });
     const mediumAds = premiumAds.filter((ad) => { return ad.size === 2 });
     const smallAds = premiumAds.filter((ad) => { return ad.size === 1 });
+    // largeAds.push(largeAds[0])
 
     const renderAd = (ad: DetailedUserAd, i: number, colHeight: number) => {
 
@@ -108,12 +109,13 @@ const PremiumList: React.FC<Props> = ({ premiumAds, wrapInContainer }: Props) =>
                 <Divider mt={4} mb={24} />
 
                 <SimpleGrid cols={2} spacing={AD_SPACING} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                    {/* <Skeleton height={PRIMARY_COL_HEIGHT} radius="md" animate={false} /> */}
-                    {
-                        largeAds.map((ad, i) => (
-                            renderAd(ad, i, LARGE_AD_HEIGHT)
-                        ))
-                    }
+                    <div>
+                        {
+                            largeAds.map((ad, i) => (
+                                renderAd(ad, i, LARGE_AD_HEIGHT)
+                            ))
+                        }
+                    </div>
                     <Grid gutter={AD_SPACING}>
                         {
                             mediumAds.map((ad, i) => (
@@ -129,15 +131,6 @@ const PremiumList: React.FC<Props> = ({ premiumAds, wrapInContainer }: Props) =>
                                 </Grid.Col>
                             ))
                         }
-                        {/* <Grid.Col>
-                            <Skeleton height={SECONDARY_COL_HEIGHT} radius="md" animate={true} />
-                        </Grid.Col> */}
-                        {/* <Grid.Col span={6}>
-                            <Skeleton height={SECONDARY_COL_HEIGHT} radius="md" animate={false} />
-                        </Grid.Col>
-                        <Grid.Col span={6}>
-                            <Skeleton height={SECONDARY_COL_HEIGHT} radius="md" animate={false} />
-                        </Grid.Col> */}
                     </Grid>
                 </SimpleGrid>
 

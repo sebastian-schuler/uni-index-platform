@@ -1,4 +1,4 @@
-import { Container, createStyles, Sx } from '@mantine/core';
+import { Container, ContainerProps, createStyles, Sx } from '@mantine/core';
 import React from 'react';
 
 const useStyles = createStyles((theme) => ({
@@ -6,7 +6,7 @@ const useStyles = createStyles((theme) => ({
         paddingLeft: 0,
         paddingRight: 0,
 
-        '@media (max-width: 1200px)': {
+        [`@media (max-width: ${theme.breakpoints.xl})`]: {
             paddingLeft: 64,
             paddingRight: 64,
         },
@@ -32,18 +32,17 @@ interface Props {
     children: React.ReactNode
     paddingY?: boolean
     skipContainer?: boolean
-    sx?: Sx
-    id?: string
+    props?: ContainerProps
 }
 
-const ResponsiveContainer: React.FC<Props> = ({ children, paddingY, skipContainer, sx, id }: Props) => {
+const ResponsiveContainer: React.FC<Props> = ({ children, paddingY, skipContainer, props }: Props) => {
 
     const { classes } = useStyles();
 
     if (skipContainer) return (<>{children}</>);
 
     return (
-        <Container id={id} size={"lg"} py={paddingY ? "xl" : undefined} className={classes.container} sx={sx}>
+        <Container size={"lg"} py={paddingY ? "xl" : undefined} className={classes.container} {...props}>
             {children}
         </Container >
     )
