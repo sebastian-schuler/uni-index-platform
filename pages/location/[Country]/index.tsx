@@ -136,7 +136,7 @@ const CountryPage: NextPage<Props> = ({ searchableStates, countryInfo, footerCon
                     dataList.filter((searchable) => searchable.visible).map((searchableState, i) => {
                       const state = searchableState.data as StateCardData;
                       return (
-                        <Reorder.Item key={state.id} as={"div"} value={searchableState}>
+                        <Reorder.Item key={state.id} as={"div"} value={searchableState} drag={false}>
                           <StateCard key={state.id} state={state} />
                         </Reorder.Item>
                       )

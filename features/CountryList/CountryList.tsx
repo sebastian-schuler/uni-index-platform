@@ -93,7 +93,7 @@ const CountryList = ({ title, subtitle, searchableCountries, children }: Props) 
 
                                 const countryCardData = searchableCountry.data as CountryCardData;
                                 return (
-                                    <Reorder.Item key={countryCardData.countryCode} as={"div"} value={searchableCountry}>
+                                    <Reorder.Item key={countryCardData.countryCode} as={"div"} value={searchableCountry} drag={false}>
                                         <CountryCard
                                             key={i}
                                             country={countryCardData}

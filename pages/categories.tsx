@@ -110,7 +110,7 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
                             dataList.filter((val) => val.visible).map((searchable, i) => {
                                 const data = searchable.data as CategoryCardData;
                                 return (
-                                    <Reorder.Item key={data.id} as={"div"} value={searchable}>
+                                    <Reorder.Item key={data.id} as={"div"} value={searchable} drag={false}>
                                         <CategoryCard key={data.id} subjectType={data} />
                                     </Reorder.Item>
                                 );
