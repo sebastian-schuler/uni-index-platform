@@ -1,0 +1,16 @@
+{
+  "meta": {},
+
+  "categories": {
+    "country": "Country",
+    "state": "State",
+    "city": "City",
+    "institution": "Institution",
+    "category": "Subject Category",
+    "subject": "Subject"
+  },
+
+  "title": "Search",
+  "search-button-alt": "Start search",
+  "search-placeholder": "Search anything"
+}

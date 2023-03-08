@@ -11,6 +11,7 @@ module.exports = {
     "rgx:/(login|register)": ["loginLogout"],
     "rgx:/(analysis)/?.*": ["analysis"],
     "rgx:/(news)/?.*": ["news"],
+    "rgx:/(search)/?.*": ["search"],
   },
   defaultNS: "common"
 };

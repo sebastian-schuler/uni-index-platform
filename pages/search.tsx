@@ -13,6 +13,7 @@ import React from 'react';
 import GenericPageHeader from '../components/Block/GenericPageHeader';
 import { useRouter } from 'next/router';
 import { prismaGlobalSearch } from '../lib/prisma/prismaGlobalSearch';
+import useTranslation from 'next-translate/useTranslation';
 
 const useStyles = createStyles((theme) => ({
 
@@ -28,6 +29,7 @@ const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
 
     const { theme } = useStyles();
     const router = useRouter();
+    const { t } = useTranslation('search');
 
     const [searchTerm, setSearchTerm] = useState(q || "");
     const [isLoading, setLoading] = useState(false);
@@ -56,26 +58,26 @@ const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
 
         if (result.type === "country") {
             url = toLink(URL_LOCATION, result.url);
-            tag = <Text size={'sm'} color={'gray.6'}>Country</Text>
+            tag = <Text size={'sm'} color={'gray.6'}>{t('categories.country')}</Text>
 
         } else if (result.type === "state") {
             url = toLink(URL_LOCATION, result.countryUrl, result.url);
             text = result.countryName;
-            tag = <Text size={'sm'} color={'gray.6'}>State</Text>
+            tag = <Text size={'sm'} color={'gray.6'}>{t('categories.state')}</Text>
 
         } else if (result.type === "city") {
             url = toLink(URL_LOCATION, result.countryUrl, result.stateUrl, result.url);
             text = result.countryName + " - " + result.stateName;
-            tag = <Text size={'sm'} color={'gray.6'}>City</Text>
+            tag = <Text size={'sm'} color={'gray.6'}>{t('categories.city')}</Text>
 
         } else if (result.type === "institution") {
             url = toLink(URL_INSTITUTION, result.url);
-            tag = <Text size={'sm'} color={'gray.6'}>Institution</Text>
+            tag = <Text size={'sm'} color={'gray.6'}>{t('categories.institution')}</Text>
 
         } else if (result.type === "subject") {
             url = toLink(URL_INSTITUTION, result.countryUrl, result.institutionUrl, URL_INSTITUTION_SUBJECTS, result.url);
             text = result.countryName + ' | ' + result.institutionName;
-            tag = <Text size={'sm'} color={'gray.6'}>Subject</Text>
+            tag = <Text size={'sm'} color={'gray.6'}>{t('categories.subject')}</Text>
 
         }
 
@@ -96,9 +98,15 @@ const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
 
             <Breadcrumb />
 
-            <GenericPageHeader title='Search' description='' />
+            <GenericPageHeader title={t('title')} description='' />
 
-            <SimpleGrid cols={2} mt={'lg'}>
+            <SimpleGrid
+                mt={'lg'}
+                breakpoints={[
+                    { minWidth: 'xs', cols: 1 },
+                    { minWidth: 'sm', cols: 2 },
+                ]}
+            >
                 <TextInput
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.currentTarget.value)}
@@ -113,7 +121,7 @@ const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
                     rightSection={
                         <ActionIcon
                             size={32} radius="xl" color={theme.primaryColor} variant="filled"
-                            onClick={() => runSearch(searchTerm)}
+                            onClick={() => runSearch(searchTerm)} title={t('search-button-alt')}
                         >
                             {theme.dir === 'ltr' ? (
                                 <IconArrowRight size="1.1rem" stroke={1.5} />
@@ -122,7 +130,7 @@ const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
                             )}
                         </ActionIcon>
                     }
-                    placeholder="Search anything"
+                    placeholder={t('search-placeholder')}
                     rightSectionWidth={42}
                 />
 
