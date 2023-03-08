@@ -1,4 +1,5 @@
 import { Country, Institution, State, Subject, SubjectHasSubjectTypes, SubjectType } from "@prisma/client";
+import { SearchedStateResult } from "../types/SearchTypes";
 import { CategoryCardData, CountryCardData, Searchable, StateCardData } from "../types/UiHelperTypes";
 import { URL_CATEGORY } from "../url-helper/urlConstants";
 
@@ -6,7 +7,7 @@ interface LocalizedNameProps {
     lang: string,
     any?: SubjectType | undefined | null,
     dbTranslated?: Country | null
-    state?: State | null,
+    state?: State | SearchedStateResult | null,
     subject?: Subject | null,
     institution?: Institution | null,
     searchable?: Searchable | null
