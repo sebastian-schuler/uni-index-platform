@@ -41,13 +41,9 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
             produce((draft) => {
                 draft.sort((a, b) => {
                     if (orderBy === "az") {
-                        const aName = getLocalizedName({ lang: lang, searchable: a }); // TODO: Searchable should already be localized so that we don't have to do this
-                        const bName = getLocalizedName({ lang: lang, searchable: b });
-                        return aName.localeCompare(bName);
+                        return a.data.name.localeCompare(b.data.name);
                     } else if (orderBy === "za") {
-                        const aName = getLocalizedName({ lang: lang, searchable: a });
-                        const bName = getLocalizedName({ lang: lang, searchable: b });
-                        return bName.localeCompare(aName);
+                        return b.data.name.localeCompare(a.data.name);
                     } else if (orderBy === "popularity") {
                         return b.data.popularity - a.data.popularity;
                     } else {
@@ -105,7 +101,6 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
                             { maxWidth: 600, cols: 1, spacing: 'sm' },
                         ]}
                     >
-
                         {
                             dataList.filter((val) => val.visible).map((searchable, i) => {
                                 const data = searchable.data as CategoryCardData;
@@ -116,7 +111,6 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
                                 );
                             })
                         }
-
                     </SimpleGrid>
                 </Reorder.Group>
             </Stack>

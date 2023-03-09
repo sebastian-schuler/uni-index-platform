@@ -1,6 +1,6 @@
 import { Country, Institution, State, Subject, SubjectHasSubjectTypes, SubjectType } from "@prisma/client";
 import { SearchedStateResult } from "../types/SearchTypes";
-import { CategoryCardData, CountryCardData, Searchable, StateCardData } from "../types/UiHelperTypes";
+import { CategoryCardData, CityCardData, CountryCardData, Searchable, StateCardData } from "../types/UiHelperTypes";
 import { URL_CATEGORY } from "../url-helper/urlConstants";
 
 interface LocalizedNameProps {
@@ -52,6 +52,8 @@ type GenerateSearchableProps = {
     type: "Category", data: CategoryCardData[]
 } | {
     type: "State", data: StateCardData[]
+} | {
+    type: "City", data: CityCardData[]
 }
 export const generateSearchable = (props: GenerateSearchableProps) => { // TODO add other objects, eg. states
     const arr: Searchable[] = [];
@@ -71,9 +73,15 @@ export const generateSearchable = (props: GenerateSearchableProps) => { // TODO 
             arr.push({ type: "State", visible: true, data: val });
         });
 
+    } else if (props.type === "City") {
+        props.data.forEach((val) => {
+            arr.push({ type: "City", visible: true, data: val });
+        });
     }
+
     return arr;
 }
+
 
 // Database only contains Englisch and Native Columns, this function returns English in case another locale is selected (e.g. spanish)
 export const getDBLocale = (locale: string | undefined) => {

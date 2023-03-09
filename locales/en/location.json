@@ -9,7 +9,7 @@
     "state-title": "Cities in {{state}}",
     "state-description": "Discover top universities in {{state}} by city and find the perfect match for your studies.",
 
-    "city-title": "Universities in {{city}}",
+    "city-title": "Institutions in {{city}}",
     "city-description": "Discover top universities in {{city}} and find the perfect match for your studies."
   },
 
@@ -29,7 +29,9 @@
 
   "state": {
     "title": "{{state}}",
-    "subtitle": "Look through the list of cities in {{state}} and find the best university for you."
+    "subtitle": "Look through the list of cities in {{state}} and find the best university for you.",
+    "search-label": "Search for a city name or area code in {{state}}",
+    "search-placeholder": "e.g. Berlin"
   },
 
   "city": {

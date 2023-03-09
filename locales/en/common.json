@@ -75,9 +75,10 @@
   },
 
   "card-city": {
+    "label-areacodes": "Area codes: {{codes}}",
     "label-universities": {
       "0": "No institutions",
-      "one": "{{count}} institutions",
+      "one": "{{count}} institution",
       "other": "{{count}} institutions"
     }
   },

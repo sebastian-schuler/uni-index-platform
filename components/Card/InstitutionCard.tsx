@@ -64,7 +64,7 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
       <Card.Section className={classes.section}>
         <Group position="apart" noWrap sx={{ alignItems: "start" }} spacing="sm">
 
-          <Stack spacing={theme.spacing.xs}>
+          <Stack spacing={theme.spacing.sm}>
 
             {/* Name & Name in brackets */}
             <CardTitle

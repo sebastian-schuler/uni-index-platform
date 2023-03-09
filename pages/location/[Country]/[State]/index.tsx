@@ -1,5 +1,6 @@
 import { Group, SimpleGrid, Stack } from '@mantine/core';
 import { Country, State } from '@prisma/client';
+import { Reorder } from 'framer-motion';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
@@ -12,20 +13,67 @@ import { FooterContent } from '../../../../features/Footer/Footer';
 import prisma from '../../../../lib/prisma/prisma';
 import { getCitiesDetailedByState } from '../../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountryByState, getState } from '../../../../lib/prisma/prismaQueries';
-import { DetailedCity } from '../../../../lib/types/DetailedDatabaseTypes';
-import { getLocalizedName } from '../../../../lib/util/util';
+import { CityCardData, Searchable } from '../../../../lib/types/UiHelperTypes';
+import { convertCityToCardData } from '../../../../lib/util/conversionUtil';
+import { generateSearchable, getLocalizedName } from '../../../../lib/util/util';
+import { useState, useEffect } from 'react';
+import OrderBySelect, { OrderByState } from '../../../../components/Select/OrderBySelect';
+import produce from 'immer';
+import ItemSearch from '../../../../components/Searchbox/ItemSearch';
 
 interface Props {
-    cityList: DetailedCity[],
+    searchables: Searchable[],
     stateInfo: State,
     countryInfo: Country,
     footerContent: FooterContent[]
 }
 
-const StatePage: NextPage<Props> = ({ cityList, stateInfo, countryInfo, footerContent }: Props) => {
+const StatePage: NextPage<Props> = ({ searchables, stateInfo, countryInfo, footerContent }: Props) => {
 
     const { t, lang } = useTranslation('location');
     const stateName = getLocalizedName({ lang: lang, state: stateInfo });
+
+    // DATA LISTS
+    const [dataList, setDataList] = useState<Searchable[]>(searchables);
+
+    // Filter
+    const [orderBy, setOrderBy] = useState<OrderByState>("popularity");
+    const [searchTerm, setSearchTerm] = useState<string>("");
+
+    useEffect(() => {
+        setDataList(
+            produce((draft) => {
+                draft.sort((a, b) => {
+                    if (orderBy === "az") {
+                        return a.data.name.localeCompare(b.data.name);
+                    } else if (orderBy === "za") {
+                        return b.data.name.localeCompare(a.data.name);
+                    } else if (orderBy === "popularity") {
+                        return b.data.popularity - a.data.popularity;
+                    } else {
+                        return 0;
+                    }
+                });
+
+                if (searchTerm === "") {
+                    draft.forEach((searchable) => searchable.visible = true);
+                } else {
+                    draft.forEach((searchable) => {
+                        const data = searchable.data as CityCardData;
+                        if (
+                            data.name.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+                            data.areaCodes.some((areaCode) => areaCode.startsWith(searchTerm))
+                            ) {
+                            searchable.visible = true;
+                        } else {
+                            searchable.visible = false;
+                        }
+                    });
+                }
+            })
+        );
+
+    }, [searchTerm, orderBy, lang]);
 
     return (
         <ResponsiveWrapper footerContent={footerContent}>
@@ -41,16 +89,41 @@ const StatePage: NextPage<Props> = ({ cityList, stateInfo, countryInfo, footerCo
                 <GenericPageHeader title={t('state.title', { state: stateName })} description={t('state.subtitle', { state: stateName })} />
 
                 <Group position='apart' >
-                    {/* <SearchBox
-                        label={langContent.searchLabel}
-                        placeholder={langContent.searchPlaceholder}
-                        searchableList={dataList}
-                        setSearchableList={setDataList}
+                    <ItemSearch
+                        label={t('state.search-label',{state: stateName})}
+                        placeholder={t('state.search-placeholder')}
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
                     />
-                    <OrderBySelect orderBy={orderBy} handleChange={handleOrderChange} /> */}
+                    <OrderBySelect orderBy={orderBy} handleChange={setOrderBy} />
                 </Group>
 
-                <SimpleGrid
+                <Reorder.Group values={dataList} onReorder={setDataList} as={"div"}>
+                    <SimpleGrid
+                        cols={4}
+                        spacing="lg"
+                        breakpoints={[
+                            { maxWidth: 980, cols: 3, spacing: 'md' },
+                            { maxWidth: 755, cols: 2, spacing: 'sm' },
+                            { maxWidth: 600, cols: 1, spacing: 'sm' },
+                        ]}
+                    >
+
+                        {
+                            dataList.filter((val) => val.visible).map((searchable, i) => {
+                                const data = searchable.data as CityCardData;
+                                return (
+                                    <Reorder.Item key={data.id} as={"div"} value={searchable} drag={false}>
+                                        <CityCard key={data.id} city={data} />
+                                    </Reorder.Item>
+                                );
+                            })
+                        }
+
+                    </SimpleGrid>
+                </Reorder.Group>
+
+                {/* <SimpleGrid
                     cols={4}
                     spacing="lg"
                     breakpoints={[
@@ -61,14 +134,15 @@ const StatePage: NextPage<Props> = ({ cityList, stateInfo, countryInfo, footerCo
                 >
 
                     {
-                        cityList.map((city, i) => (
-                            // searchable.visible && (
-                            <CityCard key={i} city={city} /> //TODO make searchable
-                            // )
-                        ))
+                        searchables.map((searchable, i) => {
+                            const data = searchable.data as CityCardData;
+                            return (
+                                <CityCard key={i} city={data} />
+                            )
+                        })
                     }
 
-                </SimpleGrid>
+                </SimpleGrid> */}
 
             </Stack>
         </ResponsiveWrapper>
@@ -113,11 +187,15 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 export async function getStaticProps(context: GetStaticPropsContext) {
 
     let stateUrl = "" + context?.params?.State;
+    const lang = context.locale || "en";
 
     // Selected State information
     const stateInfo = await getState(stateUrl);
     const countryInfo = await getCountryByState(stateUrl);
     const cities = await getCitiesDetailedByState(stateUrl);
+    // Convert to CityCardData and generate Searchable
+    const countryData: CityCardData[] = cities.map(city => convertCityToCardData(city, lang));
+    const searchables: Searchable[] = generateSearchable({ type: "City", data: countryData });
 
     // Footer Data
     // Get all countries
@@ -127,7 +205,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     ]
 
     return {
-        props: { cityList: cities, stateInfo: stateInfo, countryInfo: countryInfo?.Country, footerContent: footerContent }
+        props: { searchables, stateInfo, countryInfo: countryInfo?.Country, footerContent }
     }
 
 }

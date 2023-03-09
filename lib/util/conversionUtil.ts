@@ -1,6 +1,6 @@
-import { DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
+import { DetailedCity, DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
 import { SmBestCardMinified, SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry, SocialMediaPages, TotalScore, TwitterProfile, YoutubeProfile } from "../types/SocialMediaTypes";
-import { CategoryCardData, CountryCardData, InstitutionCardData, StateCardData, SubjectCardData } from "../types/UiHelperTypes";
+import { CategoryCardData, CityCardData, CountryCardData, InstitutionCardData, StateCardData, SubjectCardData } from "../types/UiHelperTypes";
 import { PATH_COUNTRY_IMAGES, URL_CATEGORY, URL_INSTITUTION, URL_LOCATION } from "../url-helper/urlConstants";
 import { getLocalizedName, getUniqueSubjectTypeCounts, toLink } from "./util";
 
@@ -193,5 +193,19 @@ export const convertStateToCardData = (state: DetailedState, lang: string): Stat
         cityCount: state._count.City,
         subjectCount: subjects,
         popularity: state.popularity_score,
+    }
+}
+
+export const convertCityToCardData = (city: DetailedCity, lang: string): CityCardData => {
+
+    const institutionCount = city._count.InstitutionLocation;
+
+    return {
+        id: city.id,
+        name: city.name,
+        fullUrl: toLink(URL_LOCATION, city.State.Country.url, city.State.url, city.url),
+        institutionCount: institutionCount,
+        areaCodes: city.postcodes,
+        popularity: city.popularity_score,
     }
 }

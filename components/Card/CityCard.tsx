@@ -3,9 +3,8 @@ import { IconBuilding } from '@tabler/icons-react'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import React from 'react'
-import { DetailedCity } from '../../lib/types/DetailedDatabaseTypes'
-import { URL_LOCATION } from '../../lib/url-helper/urlConstants'
-import { getLocalizedName, toLink } from '../../lib/util/util'
+import { CityCardData } from '../../lib/types/UiHelperTypes'
+import CardTitle from '../Text/CardTitle'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -21,29 +20,26 @@ const useStyles = createStyles((theme) => ({
 }));
 
 type Props = {
-    city: DetailedCity
+    city: CityCardData
 }
 
 const CityCard: React.FC<Props> = ({ city }: Props) => {
 
     const { classes, theme } = useStyles();
-
     const { t } = useTranslation('common');
-    const langContent = {
-        universityLabel: t('card-city.label-universities', { count: city._count.InstitutionLocation }),
-    }
 
     return (
-        <Card component={Link} href={toLink(URL_LOCATION, city.State.Country.url, city.State.url, city.url)} withBorder radius="md" shadow={"sm"} className={classes.card}>
+        <Card withBorder radius="md" shadow={"sm"} className={classes.card}>
 
             <Card.Section className={classes.section}>
                 <Group position="apart" noWrap sx={{ alignItems: "start" }}>
-                    <Stack spacing={theme.spacing.xs}>
-                        <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
-                            {city.name}
-                        </Text>
-                        <Text size={"sm"}>
-                            {getLocalizedName({ lang: 'en', state: city.State })}
+                    <Stack spacing={theme.spacing.sm}>
+                        <CardTitle
+                            href={city.fullUrl}
+                            text={city.name}
+                        />
+                        <Text color={theme.colors.brandGray[2]} sx={{ lineHeight: 1.2 }}>
+                            {t('card-city.label-areacodes', { codes: city.areaCodes.join(", ") })}
                         </Text>
                     </Stack>
                 </Group>
@@ -56,7 +52,7 @@ const CityCard: React.FC<Props> = ({ city }: Props) => {
                         <ThemeIcon color={theme.colors.brandOrange[5]} size={24} radius="xl">
                             <IconBuilding size={18} />
                         </ThemeIcon>
-                        <Text>{langContent.universityLabel}</Text>
+                        <Text>{t('card-city.label-universities', { count: city.institutionCount })}</Text>
                     </Group>
 
                 </Stack>

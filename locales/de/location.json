@@ -1,4 +1,41 @@
 {
-  "countries-title": "Länder",
-  "countries-title-sub": "Finden Sie einen beliebigen Studiengang in einem Land Ihrer Wahl."
+  "meta": {
+    "countries-title": "Länder",
+    "countries-description": "Entdecken Sie die besten Universitäten in ganz Europa und finden Sie das perfekte Angebot für Ihr Studium.",
+
+    "country-title": "Bundesländer in {{country}}",
+    "country-description": "Entdecken Sie die besten Universitäten in {{country}} nach Bundesland und finden Sie das perfekte Angebot für Ihr Studium.",
+
+    "state-title": "Städte in {{state}}",
+    "state-description": "Entdecken Sie die Top-Universitäten in {{state}} nach Stadt und finden Sie das perfekte Angebot für Ihr Studium.",
+
+    "city-title": "Institutionen in {{city}}",
+    "city-description": "Entdecken Sie die besten Universitäten in {{city}} und finden Sie die perfekte Lösung für Ihr Studium."
+  },
+
+  "countries": {
+    "title": "Länder",
+    "subtitle": "Finden Sie einen beliebigen Studiengang in einem Land Ihrer Wahl."
+  },
+
+  "country": {
+    "title": "{{country}}",
+    "subtitle": "Sehen Sie sich die Liste der Bundesländer in {{country}} an und finden Sie die beste Universität für Sie.",
+    "country-map-title": "Karte der Bundesländer in {{country}}",
+    "list-title": "Liste der Bundesländer in {{country}}",
+    "search-label": "Ein Bundesland in {{country}} suchen",
+    "search-placeholder": "e.g. Rheinland-Pfalz"
+  },
+
+  "state": {
+    "title": "{{state}}",
+    "subtitle": "Sehen Sie sich die Liste der Städte in {{state}} an und finden Sie die beste Universität für Sie.",
+    "search-label": "Nach einem Städtenamen oder einer PLZ in {{state}} suchen",
+    "search-placeholder": "e.g. Berlin"
+  },
+
+  "city": {
+    "title": "{{city}}",
+    "subtitle": "Sehen Sie sich die Liste der Universitäten in {{city}} an und finden Sie die für Sie passende."
+  }
 }

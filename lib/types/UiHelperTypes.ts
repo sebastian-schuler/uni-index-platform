@@ -10,6 +10,10 @@ export type Searchable = {
     type: "State"
     visible: boolean,
     data: StateCardData
+} | {
+    type: "City"
+    visible: boolean,
+    data: CityCardData
 }
 
 export type CountryCardData = {
@@ -85,5 +89,14 @@ export type StateCardData = {
     url: string
     cityCount: number
     subjectCount: number
+    popularity: number
+}
+
+export type CityCardData = {
+    id: string
+    name: string
+    fullUrl: string
+    areaCodes: string[]
+    institutionCount: number
     popularity: number
 }
