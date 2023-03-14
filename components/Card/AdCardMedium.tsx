@@ -30,7 +30,6 @@ const useStyles = createStyles((theme) => ({
 interface Props {
     link: string
     title: string
-    headline: string
     subtext: string
     description: string
     imgUrl?: string
@@ -39,7 +38,7 @@ interface Props {
     disableLink?: boolean
 }
 
-const AdCardMedium: React.FC<Props> = ({ title, link, headline, subtext, description, imgUrl, colHeight, adType, disableLink }: Props) => {
+const AdCardMedium: React.FC<Props> = ({ title, link, subtext, description, imgUrl, colHeight, adType, disableLink }: Props) => {
 
     const { classes, theme } = useStyles();
 
@@ -56,7 +55,7 @@ const AdCardMedium: React.FC<Props> = ({ title, link, headline, subtext, descrip
                         <Group position="apart" noWrap sx={{ alignItems: "start" }}>
                             <Stack spacing={theme.spacing.xs}>
                                 <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
-                                    {headline}
+                                    {title}
                                 </Text>
                                 <Text sx={{ lineHeight: 1.2 }}>{subtext}</Text>
                             </Stack>

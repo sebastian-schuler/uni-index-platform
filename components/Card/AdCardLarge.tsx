@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { memo } from 'react';
 import { PATH_PLACEHOLDER_IMAGES } from '../../lib/url-helper/urlConstants';
 import { toLink } from '../../lib/util/util';
-import { LARGE_AD_HEIGHT } from '../../features/Ads/AdList';
+import { LARGE_AD_HEIGHT } from '../../features/Ads/AdContainer';
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -31,7 +31,6 @@ const useStyles = createStyles((theme) => ({
 interface Props {
     link: string
     title: string
-    headline: string
     subtext: string
     imgUrl?: string
     description: string
@@ -40,7 +39,7 @@ interface Props {
     disableLink?: boolean
 }
 
-const AdCardLarge: React.FC<Props> = ({ link, title, headline, subtext, imgUrl, description, colHeight, adType, disableLink }: Props) => {
+const AdCardLarge: React.FC<Props> = ({ link, title, subtext, imgUrl, description, colHeight, adType, disableLink }: Props) => {
 
     const { classes, theme } = useStyles();
 
@@ -55,7 +54,7 @@ const AdCardLarge: React.FC<Props> = ({ link, title, headline, subtext, imgUrl, 
                 <Group position="apart" noWrap sx={{ alignItems: "start" }}>
                     <Stack spacing={theme.spacing.xs}>
                         <Text size="xl" color={theme.colors.brandGray[3]} weight={500} sx={{ lineHeight: 1 }}>
-                            {headline}
+                            {title}
                         </Text>
                         <Text sx={{ lineHeight: 1.2 }}>{subtext}</Text>
                     </Stack>

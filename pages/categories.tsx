@@ -7,29 +7,33 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import GenericPageHeader from '../components/Block/GenericPageHeader';
 import CategoryCard from '../components/Card/CategoryCard';
-import OrderBySelect, { OrderByState } from '../components/Select/OrderBySelect';
+import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import ItemSearch from '../components/Searchbox/ItemSearch';
+import OrderBySelect, { OrderByState } from '../components/Select/OrderBySelect';
+import AdContainer from '../features/Ads/AdContainer';
 import Breadcrumb from '../features/Breadcrumb/Breadcrumb';
 import { FooterContent } from '../features/Footer/Footer';
-import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
+import { getAdCardArray } from '../lib/ads/adConverter';
+import { AD_PAGE_CATEGORIES } from '../lib/appConstants';
 import { getDetailedSubjectTypes } from '../lib/prisma/prismaDetailedQueries';
 import { getCountries } from '../lib/prisma/prismaQueries';
-import { CategoryCardData, Searchable } from '../lib/types/UiHelperTypes';
+import { AdCardData, CategoryCardData, Searchable } from '../lib/types/UiHelperTypes';
 import { convertCategoryToCardData } from '../lib/util/conversionUtil';
 import { generateSearchable, getLocalizedName } from '../lib/util/util';
 
 interface Props {
-    searchableSubjectTypes: Searchable[]
+    ads: AdCardData[][],
+    categories: Searchable[]
     footerContent: FooterContent[]
 }
 
-const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Props) => {
+const Subjects: NextPage<Props> = ({ ads, categories, footerContent }: Props) => {
 
     // TRANSLATION
     const { t, lang } = useTranslation('category');
 
     // DATA LISTS
-    const [dataList, setDataList] = useState<Searchable[]>(searchableSubjectTypes);
+    const [dataList, setDataList] = useState<Searchable[]>(categories);
 
     // Filter
     const [orderBy, setOrderBy] = useState<OrderByState>("popularity");
@@ -115,6 +119,11 @@ const Subjects: NextPage<Props> = ({ searchableSubjectTypes, footerContent }: Pr
                 </Reorder.Group>
             </Stack>
 
+            <AdContainer
+                ads={ads}
+                wrapInContainer
+            />
+
         </ResponsiveWrapper>
     )
 
@@ -129,7 +138,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
     // Convert to card data
     const cardData = detailedSubjectTypes.map((subjectType) => convertCategoryToCardData(subjectType, lang));
     // Generate searchable array
-    const searchableSubjectTypes: Searchable[] = generateSearchable({ type: "Category", data: cardData });
+    const categories: Searchable[] = generateSearchable({ type: "Category", data: cardData });
+
+    // Ads
+    const ads = await getAdCardArray(AD_PAGE_CATEGORIES, lang);
 
     // Footer Data
     const countryList = await getCountries();
@@ -138,7 +150,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     ]
 
     return {
-        props: { searchableSubjectTypes, footerContent }
+        props: {
+            ads,
+            categories,
+            footerContent
+        }
     }
 
 }

@@ -100,3 +100,14 @@ export type CityCardData = {
     institutionCount: number
     popularity: number
 }
+
+export type AdCardData = {
+    id: string
+    fullUrl: string
+    title: string
+    subtext: string
+    description: string | null
+    imageUrl: string | null
+    type: string
+    sizeCost: number
+}

@@ -105,7 +105,7 @@ export const getInstitutesByCity = async (cityUrl: string, orderBy: OrderBy) => 
  * 
  * @param placementLocation 
  */
-export const getAds = async (placementLocation: string): Promise<DetailedUserAd[]> => {
+export const getAds = async (placementLocation: string): Promise<DetailedUserAd[]> => {  
     return await prisma.userAd.findMany({
         include: {
             Subject: {
@@ -118,11 +118,29 @@ export const getAds = async (placementLocation: string): Promise<DetailedUserAd[
                 }
             },
             User: {
-                include: {
+                select: {
                     Institution: {
-                        include: {
-                            City: { include: { State: { include: { Country: true } } } },
-                            InstitutionLocation: { include: { City: true } }
+                        select: {
+                            url: true,
+                            name: true,
+                            City: {
+                                select: {
+                                    State: {
+                                        select: {
+                                            Country: { select: { url: true } }
+                                        }
+                                    }
+                                }
+                            },
+                            InstitutionLocation: {
+                                select: {
+                                    City: {
+                                        select: {
+                                            name: true,
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

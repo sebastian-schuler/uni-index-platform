@@ -398,7 +398,6 @@ const CreateAd = () => {
                 {
                     adSize === 3 &&
                     <AdCardLarge
-                        headline={getAdHeadline()}
                         description={description === "" ? "[Description]" : description}
                         subtext='subtext'
                         title={getAdHeadline()}
@@ -411,7 +410,6 @@ const CreateAd = () => {
                     ||
                     adSize === 2 &&
                     <AdCardMedium
-                        headline={getAdHeadline()}
                         subtext='subtext'
                         description={description === "" ? "[Description]" : description}
                         title={getAdHeadline()}
@@ -425,7 +423,6 @@ const CreateAd = () => {
                     adSize === 1 &&
                     <Box sx={{ maxWidth: 260 }}>
                         <AdCardSmall
-                            headline={getAdHeadline()}
                             subtext='subtext'
                             description={description === "" ? "[Description]" : description}
                             title={getAdHeadline()}

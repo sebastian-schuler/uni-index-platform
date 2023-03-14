@@ -1,4 +1,4 @@
-import { City, Country, Institution, InstitutionLocation, UserAd, State, Subject, SubjectType, User, SubjectHasSubjectTypes } from "@prisma/client";
+import { City, Country, Institution, State, Subject, SubjectHasSubjectTypes, SubjectType, UserAd } from "@prisma/client";
 
 // Detailed types contain all information for cards
 
@@ -9,18 +9,24 @@ export type DetailedUserAd = UserAd & {
             SubjectType: SubjectType;
         })[];
     }) | null;
-    User: User & {
-        Institution: Institution & {
-            City: City & {
-                State: State & {
-                    Country: Country;
-                };
+    User: {
+        Institution: {
+            url: string;
+            name: string;
+            City: {
+                State: {
+                    Country: {
+                        url: string;
+                    }
+                }
             };
-            InstitutionLocation: (InstitutionLocation & {
-                City: City
-            })[]
-        };
-    };
+            InstitutionLocation: {
+                City: {
+                    name: string;
+                }
+            }[];
+        }
+    }
 };
 
 // SUBJECT CARD

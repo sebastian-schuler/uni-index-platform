@@ -64,7 +64,8 @@ const Footer: NextPage<Props> = props => {
             } else if (val.type === "Searchable") {
                 const searchable = val.data as Searchable[];
                 searchable.forEach(val => {
-                    dataRow.content.push({ name: getLocalizedName({ lang: lang, searchable: val }), url: toLink(val.data.url) })
+                    const url = val.type === "City" ? val.data.fullUrl : toLink(val.data.url);
+                    dataRow.content.push({ name: getLocalizedName({ lang: lang, searchable: val }), url: url })
                 });
             }
 

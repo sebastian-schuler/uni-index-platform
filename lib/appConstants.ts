@@ -3,3 +3,4 @@
 export const AD_PAGE_INDEX = "index";
 export const AD_PAGE_INSTITUTIONS = "institutions";
 export const AD_PAGE_LOCATIONS = "locations";
+export const AD_PAGE_CATEGORIES = "categories";

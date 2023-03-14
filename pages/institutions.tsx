@@ -1,28 +1,26 @@
 import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
-import PremiumList from '../features/Ads/AdList';
+import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
+import AdContainer from '../features/Ads/AdContainer';
 import CountryList from '../features/CountryList/CountryList';
 import { FooterContent } from '../features/Footer/Footer';
-import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
+import { getAdCardArray } from '../lib/ads/adConverter';
 import { AD_PAGE_INSTITUTIONS } from '../lib/appConstants';
 import { getDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
-import { getAds } from '../lib/prisma/prismaQueries';
-import { DetailedUserAd } from '../lib/types/DetailedDatabaseTypes';
-import { CountryCardData, Searchable } from '../lib/types/UiHelperTypes';
+import { AdCardData, CountryCardData, Searchable } from '../lib/types/UiHelperTypes';
 import { convertCountryToCardData } from '../lib/util/conversionUtil';
 import { generateSearchable } from '../lib/util/util';
 
 interface Props {
-    stringifiedAds: string,
+    ads: AdCardData[][],
     searchableCountries: Searchable[],
     footerContent: FooterContent[],
 }
 
-const Institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, footerContent }: Props) => {
+const Institutions: NextPage<Props> = ({ ads, searchableCountries, footerContent }: Props) => {
 
     const { t } = useTranslation('institution');
-    const ads: DetailedUserAd[] = JSON.parse(stringifiedAds);
 
     return (
         <>
@@ -38,7 +36,7 @@ const Institutions: NextPage<Props> = ({ stringifiedAds, searchableCountries, fo
                     subtitle={t('institutions.subtitle')}
                     searchableCountries={searchableCountries}
                 >
-                    <PremiumList premiumAds={ads} />
+                    <AdContainer ads={ads} />
                 </CountryList>
 
             </ResponsiveWrapper>
@@ -55,8 +53,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const searchableCountries = generateSearchable({ type: "Country", data: countryData });
 
     // Ads
-    const ads: DetailedUserAd[] = await getAds(AD_PAGE_INSTITUTIONS);
-    const stringifiedAds = JSON.stringify(ads);
+    const ads = await getAdCardArray(AD_PAGE_INSTITUTIONS, lang);
 
     const footerContent: FooterContent[] = [
         { title: "Countries", data: searchableCountries, type: "Searchable" },
@@ -64,9 +61,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     return {
         props: {
-            stringifiedAds: stringifiedAds,
-            searchableCountries: searchableCountries,
-            footerContent: footerContent
+            ads,
+            searchableCountries,
+            footerContent,
         }
     }
 

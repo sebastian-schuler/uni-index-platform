@@ -2,36 +2,37 @@ import { Grid, Stack } from '@mantine/core';
 import { Country, State } from '@prisma/client';
 import type { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import PremiumList from '../features/Ads/AdList';
-import HeroSection from '../features/Index/HeroSection';
-import SearchSection from '../features/Index/SearchSection';
-import SocialMediaSection from '../features/Index/SocialMediaSection';
+import Head from 'next/head';
+import React from 'react';
 import CountryCard from '../components/Card/CountryCard';
 import InstitutionCard from '../components/Card/InstitutionCard';
 import SubjectCard from '../components/Card/SubjectCard';
-import { FooterContent } from '../features/Footer/Footer';
-import PopularSection from '../features/Index/PopularSection';
 import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
+import AdContainer from '../features/Ads/AdContainer';
+import { FooterContent } from '../features/Footer/Footer';
+import HeroSection from '../features/Index/HeroSection';
+import OnlineMarketingSection from '../features/Index/OnlineMarketingSection';
+import PopularSection from '../features/Index/PopularSection';
+import SearchSection from '../features/Index/SearchSection';
+import SocialMediaSection from '../features/Index/SocialMediaSection';
+import { getAdCardArray } from '../lib/ads/adConverter';
 import { AD_PAGE_INDEX } from '../lib/appConstants';
+import { getAllLhrSimplified } from '../lib/lighthouse/lhrSimplifier';
 import { getPopularDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
 import { getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/prisma/prismaPopularQueries';
-import { getAds, getCountries } from '../lib/prisma/prismaQueries';
+import { getCountries } from '../lib/prisma/prismaQueries';
 import { getAllSocialMedia, getSocialMediaRanking } from '../lib/prisma/prismaSocialMedia';
-import { DetailedCountry, DetailedInstitution, DetailedSubject, DetailedUserAd } from '../lib/types/DetailedDatabaseTypes';
+import { DetailedCountry, DetailedInstitution, DetailedSubject } from '../lib/types/DetailedDatabaseTypes';
+import { LhrSimple } from '../lib/types/lighthouse/CustomLhrTypes';
 import { SmBestCardMinified, SmRankingEntryMinified, TotalScore } from '../lib/types/SocialMediaTypes';
-import { URL_INSTITUTIONS, URL_LOCATIONS, URL_CATEGORIES } from '../lib/url-helper/urlConstants';
+import { AdCardData, CountryCardData, InstitutionCardData, SubjectCardData } from '../lib/types/UiHelperTypes';
+import { URL_CATEGORIES, URL_INSTITUTIONS, URL_LOCATIONS } from '../lib/url-helper/urlConstants';
 import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmBestCard, minifySmRankingItem } from '../lib/util/conversionUtil';
 import { getUniquesFromArray, toLink } from '../lib/util/util';
-import OnlineMarketingSection from '../features/Index/OnlineMarketingSection';
-import { getAllLhrSimplified } from '../lib/lighthouse/lhrSimplifier';
-import { LhrSimple } from '../lib/types/lighthouse/CustomLhrTypes';
-import { CountryCardData, InstitutionCardData, SubjectCardData } from '../lib/types/UiHelperTypes';
-import Head from 'next/head';
-import React from 'react';
 
 interface Props {
   simpleLhReports: LhrSimple[],
-  adsStringified: string,
+  ads: AdCardData[][],
   institutionData: InstitutionCardData[],
   subjectData: SubjectCardData[],
   countryData: CountryCardData[],
@@ -43,17 +44,17 @@ interface Props {
   footerContent: FooterContent[],
 }
 
-const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionData, subjectData, countryData, countryList,
+const Home: NextPage<Props> = ({ simpleLhReports, ads, institutionData, subjectData, countryData, countryList,
   institutionStates, socialMediaList, highestTwitter, highestYoutube, footerContent }: Props) => {
 
-  const ads: DetailedUserAd[] = JSON.parse(adsStringified);
+  // const ads: DetailedUserAd[] = JSON.parse(adsStringified);
   const { t } = useTranslation('index');
 
   return (
     <ResponsiveWrapper removeVerticalPadding removeContainerWrapper footerContent={footerContent}>
 
       <Head>
-        <title key={"title"}>{t('common:page-title')+' | '+t('meta.title')}</title>
+        <title key={"title"}>{t('common:page-title') + ' | ' + t('meta.title')}</title>
         <meta key={"description"} name="description" content={t('meta.description')} />
       </Head>
 
@@ -129,8 +130,8 @@ const Home: NextPage<Props> = ({ simpleLhReports, adsStringified, institutionDat
           }
         </PopularSection>
 
-        <PremiumList
-          premiumAds={ads}
+        <AdContainer
+          ads={ads}
           wrapInContainer
         />
 
@@ -186,9 +187,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
   // === ONLINE MARKETING ===
   const simpleLhReports = await getAllLhrSimplified(4);
 
-  // === ADS ===
-  const ads: DetailedUserAd[] = await getAds(AD_PAGE_INDEX);
-  const adsStringified = JSON.stringify(ads);
+  // Ads
+  const ads = await getAdCardArray(AD_PAGE_INDEX, lang);
 
   // Footer Data
   const countryList = await getCountries();
@@ -200,7 +200,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       simpleLhReports,
-      adsStringified,
+      ads,
       institutionData,
       subjectData,
       countryList,

@@ -1,6 +1,6 @@
-import { DetailedCity, DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
+import { DetailedCity, DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType, DetailedUserAd } from "../types/DetailedDatabaseTypes";
 import { SmBestCardMinified, SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry, SocialMediaPages, TotalScore, TwitterProfile, YoutubeProfile } from "../types/SocialMediaTypes";
-import { CategoryCardData, CityCardData, CountryCardData, InstitutionCardData, StateCardData, SubjectCardData } from "../types/UiHelperTypes";
+import { AdCardData, CategoryCardData, CityCardData, CountryCardData, InstitutionCardData, StateCardData, SubjectCardData } from "../types/UiHelperTypes";
 import { PATH_COUNTRY_IMAGES, URL_CATEGORY, URL_INSTITUTION, URL_LOCATION } from "../url-helper/urlConstants";
 import { getLocalizedName, getUniqueSubjectTypeCounts, toLink } from "./util";
 
@@ -209,3 +209,4 @@ export const convertCityToCardData = (city: DetailedCity, lang: string): CityCar
         popularity: city.popularity_score,
     }
 }
+

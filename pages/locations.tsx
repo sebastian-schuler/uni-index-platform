@@ -1,25 +1,24 @@
 import { GetStaticProps, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
-import PremiumList from '../features/Ads/AdList'
-import CountryList from '../features/CountryList/CountryList'
 import ResponsiveWrapper from '../components/Container/ResponsiveWrapper'
+import AdContainer from '../features/Ads/AdContainer'
+import CountryList from '../features/CountryList/CountryList'
+import { getAdCardArray } from '../lib/ads/adConverter'
+import { AD_PAGE_LOCATIONS } from '../lib/appConstants'
 import { getDetailedCountries } from '../lib/prisma/prismaDetailedQueries'
-import { getAds } from '../lib/prisma/prismaQueries'
-import { DetailedUserAd } from '../lib/types/DetailedDatabaseTypes'
-import { CountryCardData, Searchable } from '../lib/types/UiHelperTypes'
+import { AdCardData, CountryCardData, Searchable } from '../lib/types/UiHelperTypes'
 import { convertCountryToCardData } from '../lib/util/conversionUtil'
 import { generateSearchable } from '../lib/util/util'
 
 interface Props {
-    searchableCountries: Searchable[]
-    adsStringified: string
+    ads: AdCardData[][],
+    countries: Searchable[]
 }
 
-const Locations: NextPage<Props> = ({ adsStringified, searchableCountries }: Props) => {
+const Locations: NextPage<Props> = ({ ads, countries }: Props) => {
 
     const { t } = useTranslation('location');
-    const ads: DetailedUserAd[] = JSON.parse(adsStringified);
 
     return (
         <ResponsiveWrapper>
@@ -31,9 +30,9 @@ const Locations: NextPage<Props> = ({ adsStringified, searchableCountries }: Pro
             <CountryList
                 title={t('countries.title')}
                 subtitle={t('countries.subtitle')}
-                searchableCountries={searchableCountries}
+                searchableCountries={countries}
             >
-                <PremiumList premiumAds={ads} />
+                <AdContainer ads={ads} />
             </CountryList>
 
         </ResponsiveWrapper>
@@ -48,13 +47,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const countryData: CountryCardData[] = countries.map(country => convertCountryToCardData(country, lang, "location"));
     const searchableCountries: Searchable[] = generateSearchable({ type: "Country", data: countryData });
 
-    const ads: DetailedUserAd[] = await getAds("locations");
-    const allAds = JSON.stringify(ads);
+    // Ads
+    const ads = await getAdCardArray(AD_PAGE_LOCATIONS, lang);
 
     return {
         props: {
-            searchableCountries: searchableCountries,
-            adsStringified: allAds,
+            countries: searchableCountries,
+            ads,
         }
     }
 
