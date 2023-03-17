@@ -43,3 +43,4 @@ export const PATH_INSTITUTION_SCREENSHOTS = "images/screenshots";
 // ABOUT
 export const URL_ABOUT = "about";
 export const URL_IMPRINT = "imprint";
+export const URL_PRIVACY = "privacy-policy";

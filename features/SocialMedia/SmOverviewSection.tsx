@@ -73,7 +73,7 @@ const SmOverviewSection: React.FC<Props> = (
             <Title order={3}>Overview</Title>
             <Text>All social media profiles at a glance.</Text>
             <Grid>
-                <Grid.Col span={8}>
+                <Grid.Col md={8} order={2} orderMd={1}>
                     <Card shadow={"xs"} className={classes.card}>
                         <SocialMediaRadar
                             countryName={getLocalizedName({ lang: lang, dbTranslated: country })}
@@ -90,22 +90,28 @@ const SmOverviewSection: React.FC<Props> = (
                     </Card>
                 </Grid.Col>
 
-                <Grid.Col span={4}>
+                <Grid.Col md={4} order={1} orderMd={2}>
                     <Stack>
-                        <SimpleGrid cols={1}>
+                        <SimpleGrid
+                            breakpoints={[
+                                { minWidth: 'sm', cols: 2 },
+                            ]}
+                        >
                             <SmStatCard
                                 title='Twitter'
                                 value={institutionScore?.percent.twitter.total || 0}
                                 diff={calculateSocialMediaDifference(institutionScore?.percent.twitter.total || 0, countryTwitterScore.total)}
                                 icon={<IconBrandTwitter />}
+                                color={theme.colors.twitter[4]}
                             />
                             <SmStatCard
                                 title='Youtube'
                                 value={institutionScore?.percent.youtube.total || 0}
                                 diff={calculateSocialMediaDifference(institutionScore?.percent.youtube.total || 0, countryYoutubeScore.total)}
                                 icon={<IconBrandYoutube />}
+                                color={theme.colors.youtube[4]}
                             />
-                            <SmStatCard
+                            {/* <SmStatCard
                                 title='Instagram'
                                 value={0}
                                 diff={calculateSocialMediaDifference(0, 0)}
@@ -116,7 +122,7 @@ const SmOverviewSection: React.FC<Props> = (
                                 value={0}
                                 diff={calculateSocialMediaDifference(0, 0)}
                                 icon={<IconBrandFacebook />}
-                            />
+                            /> */}
                         </SimpleGrid>
                         <Card shadow={"xs"} className={classes.card}>
                             <Stack spacing={"sm"}>

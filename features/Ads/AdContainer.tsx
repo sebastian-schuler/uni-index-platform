@@ -82,9 +82,9 @@ const AdContainer: React.FC<Props> = ({ ads, wrapInContainer }: Props) => {
         // A large ad is rendered alone in a column
         if (ads.at(0)?.sizeCost === 4) {
             return (
-                <div>
+                <div key={key}>
                     {
-                        ads.map((ad, i) => renderAd(ad, LARGE_AD_HEIGHT))
+                        ads.map((ad) => renderAd(ad, LARGE_AD_HEIGHT))
                     }
                 </div>
             );
@@ -95,14 +95,14 @@ const AdContainer: React.FC<Props> = ({ ads, wrapInContainer }: Props) => {
             return (
                 <Grid key={key} gutter={AD_SPACING}>
                     {
-                        mediumAds.map((ad, i) => (
+                        mediumAds.map((ad) => (
                             <Grid.Col key={"col" + ad.id}>
                                 {renderAd(ad, MEDIUM_AD_HEIGHT)}
                             </Grid.Col>
                         ))
                     }
                     {
-                        smallAds.map((ad, i) => (
+                        smallAds.map((ad) => (
                             <Grid.Col key={"col" + ad.id} span={6}>
                                 {renderAd(ad, MEDIUM_AD_HEIGHT)}
                             </Grid.Col>
@@ -136,10 +136,10 @@ const AdContainer: React.FC<Props> = ({ ads, wrapInContainer }: Props) => {
         }
 
         return (
-            <>
+            <React.Fragment key={i}>
                 {renderAdCol(left, "left" + i)}
                 {renderAdCol(right, "right" + i)}
-            </>
+            </React.Fragment>
         )
     });
 

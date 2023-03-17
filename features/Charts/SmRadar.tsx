@@ -59,12 +59,10 @@ const SmRadar: React.FC<Props> = ({ institutionName, countryName, labels, dataIn
     };
 
     return (
-        <div>
-            <Radar
-                data={data}
-                options={options}
-            />
-        </div>
+        <Radar
+            data={data}
+            options={options}
+        />
     )
 }
 

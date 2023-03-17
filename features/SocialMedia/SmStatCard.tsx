@@ -7,7 +7,11 @@ import { memo } from 'react';
 import { formatNumber } from '../../lib/util/formattingUtil';
 import { addTablerIconProps } from '../../lib/util/uiUtil';
 
-const useStyles = createStyles((theme) => ({
+type StyleProps = {
+    color: string
+}
+
+const useStyles = createStyles((theme, { color }: StyleProps) => ({
     root: {
         backgroundColor: theme.colors.light[0],
         border: `1px solid ${theme.colors.gray[2]}`,
@@ -26,13 +30,14 @@ const useStyles = createStyles((theme) => ({
     },
 
     icon: {
-        color: theme.colorScheme === 'dark' ? theme.colors.dark[3] : theme.colors.gray[5],
+        color: color,
     },
 
     title: {
         fontSize: theme.fontSizes.sm,
         fontWeight: 700,
         textTransform: 'uppercase',
+        color: color,
     },
 }));
 
@@ -41,12 +46,13 @@ interface Props {
     value: number
     diff: number
     icon: JSX.Element
+    color: string
 }
 
-const SmStatCard = ({ title, value, diff, icon }: Props) => {
+const SmStatCard = ({ title, value, diff, icon, color }: Props) => {
 
     const { lang } = useTranslation();
-    const { classes } = useStyles();
+    const { classes } = useStyles({ color });
     const DiffIcon = diff > 0 ? IconArrowUpRight : (diff < 0 ? IconArrowDownRight : IconArrowLeft);
 
     const iconWithProps = addTablerIconProps(icon, { size: 22, stroke: 1.5, className: classes.icon });
@@ -54,7 +60,7 @@ const SmStatCard = ({ title, value, diff, icon }: Props) => {
     return (
         <Card p="md" radius="sm" shadow="xs" key={title} className={classes.root}>
             <Group position="apart">
-                <Text size="xs" color="dimmed" className={classes.title}>
+                <Text className={classes.title}>
                     {title}
                 </Text>
                 {iconWithProps}

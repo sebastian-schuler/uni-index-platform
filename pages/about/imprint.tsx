@@ -1,8 +1,11 @@
-import { Stack, Text, Title } from '@mantine/core'
+import { Stack, Text, Title, Anchor } from '@mantine/core'
+import Link from 'next/link'
 import React from 'react'
 import ResponsiveWrapper from '../../components/Container/ResponsiveWrapper'
 import MantineLink from '../../components/Link/MantineLink'
 import EncryptedEmail from '../../components/Text/EncryptedEmail'
+import { URL_ABOUT, URL_PRIVACY } from '../../lib/url-helper/urlConstants'
+import { toLink } from '../../lib/util/util'
 
 const Imprint = () => {
     return (
@@ -37,6 +40,29 @@ const Imprint = () => {
                     <Title order={2} size={'h5'} pb={'xs'}>Projekt</Title>
                     <Text>Forschungsprojekt n*soria</Text>
                     <Text>Website: <MantineLink type='external' url='https://www.nsoria.io'>n*soria</MantineLink></Text>
+                </div>
+
+                <div>
+                    <Title order={2} size={'h5'} pb={'xs'}>Vertretungsberechtigt</Title>
+                    <Text>Die Hochschule Kaiserslautern wird gesetzlich durch den Präsidenten Prof. Dr.-Ing. Hans-Joachim Schmidt vertreten.</Text>
+                    <Text>Die Hochschule Kaiserslautern ist eine Körperschaft des Öffentlichen Rechts.</Text>
+                </div>
+
+                <div>
+                    <Title order={2} size={'h5'} pb={'xs'}>Zuständige Aufsichtsbehörde</Title>
+                    <Text>Ministerium für Wissenschaft, Weiterbildung und Kultur des Landes Rheinland-Pfalz</Text>
+                    <Text>Mittlere Bleiche 61</Text>
+                    <Text>55116 Mainz</Text>
+                </div>
+
+                <div>
+                    <Title order={2} size={'h5'} pb={'xs'}>Umsatzsteueridentifikationsnummer</Title>
+                    <Text>DE 812 609 430 (gemäß § 27a Umsatzsteuergesetz)</Text>
+                </div>
+
+                <div>
+                    <Title order={2} size={'h5'} pb={'xs'}>Datenschutzerklärung</Title>
+                    <Text>Weitere Informationen finden Sie hier: <Anchor component={Link} href={toLink(URL_ABOUT, URL_PRIVACY)}>Datenschutz</Anchor></Text>
                 </div>
 
             </Stack>
