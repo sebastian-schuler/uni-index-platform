@@ -129,4 +129,7 @@ dist
 # Results of Code Counter VS Code extension
 .VSCodeCounter
 
+# Public folder
 public/images/screenshots
+public/sitemap*.*
+public/robots.txt

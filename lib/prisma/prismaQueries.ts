@@ -17,7 +17,9 @@ export const getCountries = async () => {
 
 // Return all subject types, ordered by localized name
 export const getSubjectTypes = async () => {
-    return await prisma.subjectType.findMany({})
+    return await prisma.subjectType.findMany({
+        orderBy: { name_en: "asc" }
+    })
 }
 
 // ===========================================================
@@ -105,7 +107,7 @@ export const getInstitutesByCity = async (cityUrl: string, orderBy: OrderBy) => 
  * 
  * @param placementLocation 
  */
-export const getAds = async (placementLocation: string): Promise<DetailedUserAd[]> => {  
+export const getAds = async (placementLocation: string): Promise<DetailedUserAd[]> => {
     return await prisma.userAd.findMany({
         include: {
             Subject: {

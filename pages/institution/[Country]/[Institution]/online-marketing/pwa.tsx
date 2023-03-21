@@ -62,7 +62,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
     const lhr = await getMinifiedLhrCategory(lhrData, "pwa");
 
-    console.log("categories", lhr.categories)
     return {
         props: {
             institution,

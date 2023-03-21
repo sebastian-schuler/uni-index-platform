@@ -5,13 +5,7 @@ import prisma from './prisma';
 
 const likeStr = (searchTerm: string) => `%${searchTerm}%`;
 
-// ===========================================================
-// ================= GLOBAL SEARCH FUNCTION =================
-// ===========================================================
-
 export const prismaGlobalSearch = async (searchTerm: string, lang: string): Promise<SearchResult[]> => {
-
-    console.log("TEST");
 
     // COUNTRY SEARCH
     const countryResults: Country[] = await prisma.$queryRaw`SELECT * FROM "Country" WHERE name ILIKE ${likeStr(searchTerm)};`

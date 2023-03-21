@@ -16,6 +16,6 @@
     "incremental": true,
     "suppressImplicitAnyIndexErrors": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next-sitemap.config.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

@@ -1,76 +1,93 @@
-import { Group, SimpleGrid, Stack } from '@mantine/core';
-import { Reorder } from 'framer-motion';
-import produce from 'immer';
-import { GetStaticProps, NextPage } from 'next';
+import { Group, SimpleGrid, Stack, Text } from '@mantine/core';
+import { GetServerSideProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import GenericPageHeader from '../components/Block/GenericPageHeader';
 import CategoryCard from '../components/Card/CategoryCard';
 import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
-import ItemSearch from '../components/Searchbox/ItemSearch';
-import OrderBySelect, { OrderByState } from '../components/Select/OrderBySelect';
+import CustomPagination from '../components/Pagination/CustomPagination';
+import ItemApiSearch from '../components/Searchbox/ItemApiSearch';
+import OrderBySelect from '../components/Select/OrderBySelect';
 import AdContainer from '../features/Ads/AdContainer';
 import Breadcrumb from '../features/Breadcrumb/Breadcrumb';
 import { FooterContent } from '../features/Footer/Footer';
 import { getAdCardArray } from '../lib/ads/adConverter';
 import { AD_PAGE_CATEGORIES } from '../lib/appConstants';
-import { getDetailedSubjectTypes } from '../lib/prisma/prismaDetailedQueries';
+import SITE_URL from '../lib/globalUrl';
 import { getCountries } from '../lib/prisma/prismaQueries';
-import { AdCardData, CategoryCardData, Searchable } from '../lib/types/UiHelperTypes';
+import { searchSubjectTypes } from '../lib/prisma/prismaSearch';
+import { AdCardData, CategoryCardData } from '../lib/types/UiHelperTypes';
+import { OrderCategoryBy } from '../lib/types/zod/zodOrderBy';
+import { URL_CATEGORIES } from '../lib/url-helper/urlConstants';
 import { convertCategoryToCardData } from '../lib/util/conversionUtil';
-import { generateSearchable, getLocalizedName } from '../lib/util/util';
+import { toLink } from '../lib/util/util';
+
+export const CATEGORY_PER_PAGE = 32;
 
 interface Props {
     ads: AdCardData[][],
-    categories: Searchable[]
+    pageCount: number | null,
+    categories: CategoryCardData[]
     footerContent: FooterContent[]
 }
 
-const Subjects: NextPage<Props> = ({ ads, categories, footerContent }: Props) => {
+const Subjects: NextPage<Props> = ({ ads, pageCount, categories, footerContent }: Props) => {
+
+    const router = useRouter();
+    // Query params
+    const currentPage = router.query.page ? parseInt(router.query.page as string) : 1;
+    const searchQuery = router.query.q ? router.query.q as string : undefined;
+    const orderQuery = router.query.order ? router.query.order as OrderCategoryBy : undefined;
 
     // TRANSLATION
     const { t, lang } = useTranslation('category');
 
-    // DATA LISTS
-    const [dataList, setDataList] = useState<Searchable[]>(categories);
-
     // Filter
-    const [orderBy, setOrderBy] = useState<OrderByState>("popularity");
-    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [orderBy, setOrderBy] = useState<OrderCategoryBy>(orderQuery ? orderQuery : "az");
+    const [searchTerm, setSearchTerm] = useState<string>(searchQuery ? searchQuery as string : "");
 
-    useEffect(() => {
+    const getCanonicalLink = () => {
+        const localePart = router.locale === router.defaultLocale ? "" : router.locale + "/";
+        const pageNumber = currentPage > 1 ? "/page=" + currentPage : "";
+        return `${SITE_URL}/${localePart}${URL_CATEGORIES}${pageNumber}`
+    }
 
-        setDataList(
-            produce((draft) => {
-                draft.sort((a, b) => {
-                    if (orderBy === "az") {
-                        return a.data.name.localeCompare(b.data.name);
-                    } else if (orderBy === "za") {
-                        return b.data.name.localeCompare(a.data.name);
-                    } else if (orderBy === "popularity") {
-                        return b.data.popularity - a.data.popularity;
-                    } else {
-                        return 0;
-                    }
-                });
+    const getPrevLink = () => {
+        const localePart = router.locale === router.defaultLocale ? "" : router.locale + "/";
+        const pageNumber = "/page=" + (currentPage - 1);
+        return `${SITE_URL}/${localePart}${URL_CATEGORIES}${pageNumber}`
+    }
 
-                if (searchTerm === "") {
-                    draft.forEach((searchable) => searchable.visible = true);
-                } else {
-                    draft.forEach((searchable) => {
+    const getNextLink = () => {
+        const localePart = router.locale === router.defaultLocale ? "" : router.locale + "/";
+        const pageNumber = "/page=" + (currentPage + 1);
+        return `${SITE_URL}/${localePart}${URL_CATEGORIES}${pageNumber}`
+    }
 
-                        if (getLocalizedName({ lang: lang, searchable: searchable })?.toLowerCase().startsWith(searchTerm.toLowerCase())) {
-                            searchable.visible = true;
-                        } else {
-                            searchable.visible = false;
-                        }
-                    });
-                }
-            })
-        );
+    const runSearch = async (q: string | undefined, order: OrderCategoryBy) => {
+        if (q && q.length <= 2) return;
+        router.push({
+            pathname: toLink(URL_CATEGORIES),
+            query: q ? {
+                q,
+                order,
+            } : {
+                order,
+            },
+        });
+    }
 
-    }, [searchTerm, orderBy, lang]);
+    const cancelSearch = () => {
+        setSearchTerm("");
+        router.push({
+            pathname: toLink(URL_CATEGORIES),
+            query: {
+                order: orderBy,
+            },
+        });
+    }
 
     return (
         <ResponsiveWrapper footerContent={footerContent}>
@@ -78,6 +95,10 @@ const Subjects: NextPage<Props> = ({ ads, categories, footerContent }: Props) =>
             <Head>
                 <title key={"title"}>{t('common:page-title') + " | " + t('meta.categories-title')}</title>
                 <meta key={"description"} name="description" content={t('meta.categories-description')} />
+                {pageCount && <link rel="canonical" href={getCanonicalLink()} />}
+                {pageCount && currentPage > 1 && <link rel='prev' href={getPrevLink()} />}
+                {pageCount && currentPage < pageCount && <link rel='next' href={getNextLink()} />}
+                {(searchQuery || orderQuery) && <meta name="robots" content="noindex, nofollow" />}
             </Head>
 
             <Breadcrumb />
@@ -86,38 +107,63 @@ const Subjects: NextPage<Props> = ({ ads, categories, footerContent }: Props) =>
                 <GenericPageHeader title={t('categories.title')} description={t('categories.subtitle')} />
 
                 <Group position='apart' >
-                    <ItemSearch
-                        label={t('subjecttype-search-label')}
-                        placeholder={t('subjecttype-search-placeholder')}
-                        searchTerm={searchTerm}
-                        setSearchTerm={setSearchTerm}
+                    <ItemApiSearch
+                        label='Search for a category'
+                        placeholder={t('subjecttype-search-label')}
+                        onSearch={() => runSearch(searchTerm, orderBy)}
+                        value={searchTerm}
+                        setValue={setSearchTerm}
+                        onCancel={cancelSearch}
                     />
-                    <OrderBySelect orderBy={orderBy} handleChange={setOrderBy} />
+                    <OrderBySelect variant='categories' orderBy={orderBy} handleChange={(state) => {
+                        setOrderBy(state);
+                        runSearch(searchQuery, state)
+                    }} />
                 </Group>
 
-                <Reorder.Group values={dataList} onReorder={setDataList} as={"div"}>
-                    <SimpleGrid
-                        cols={4}
-                        spacing="lg"
-                        breakpoints={[
-                            { maxWidth: 980, cols: 3, spacing: 'md' },
-                            { maxWidth: 755, cols: 2, spacing: 'sm' },
-                            { maxWidth: 600, cols: 1, spacing: 'sm' },
-                        ]}
-                    >
-                        {
-                            dataList.filter((val) => val.visible).map((searchable, i) => {
-                                const data = searchable.data as CategoryCardData;
-                                return (
-                                    <Reorder.Item key={data.id} as={"div"} value={searchable} drag={false}>
-                                        <CategoryCard key={data.id} subjectType={data} />
-                                    </Reorder.Item>
-                                );
-                            })
-                        }
-                    </SimpleGrid>
-                </Reorder.Group>
+                <Group>
+                    {
+                        searchQuery ? (
+                            <Text>{`${categories.length} Results for "${searchTerm}"`}</Text>
+                        ) : (
+                            <>
+                                <Text>Results from{" "}
+                                    <Text component='span' weight={'bold'}>{`${categories.at(0)?.name}`}</Text>
+                                    {" to "}
+                                    <Text component='span' weight={'bold'}>{`${categories.at(-1)?.name}`}</Text>
+                                    {` (${(currentPage - 1) * categories.length} - ${currentPage * categories.length})`}
+                                </Text>
+                            </>
+                        )
+                    }
+                </Group>
+
+                <SimpleGrid
+                    spacing="lg"
+                    breakpoints={[
+                        { minWidth: 'md', cols: 3, spacing: 'md' },
+                        { minWidth: 'sm', cols: 2, spacing: 'sm' },
+                    ]}
+                >
+                    {
+                        categories.map((category, i) => {
+                            return (
+                                <CategoryCard key={category.id} subjectType={category} />
+                            )
+                        })
+                    }
+                </SimpleGrid>
             </Stack>
+
+            {
+                pageCount && !searchQuery && (
+                    <CustomPagination
+                        currentPage={currentPage}
+                        pageCount={pageCount}
+                        rootPath={"/categories"}
+                    />
+                )
+            }
 
             <AdContainer
                 ads={ads}
@@ -129,16 +175,33 @@ const Subjects: NextPage<Props> = ({ ads, categories, footerContent }: Props) =>
 
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const lang = context.locale || "en";
+    const pageIndex = context.query.page ? parseInt(context.query.page as string) : 1;
+    const orderBy = context.query.order ? context.query.order as OrderCategoryBy : "az";
+    const searchQuery = context.query.q ? context.query.q as string : null;
+    const limit = CATEGORY_PER_PAGE;
+
+    const detailedSubjectTypes = await searchSubjectTypes(searchQuery, orderBy);
+
+    let dataSlice = detailedSubjectTypes;
+    let pageCount: null | number = null
 
     // Detailed Subject Types
-    const detailedSubjectTypes = await getDetailedSubjectTypes();
+    if (!searchQuery) {
+        dataSlice = detailedSubjectTypes.slice((pageIndex - 1) * limit, pageIndex * limit);
+        pageCount = Math.ceil(detailedSubjectTypes.length / limit);
+
+        if (pageIndex > pageCount) {
+            return {
+                notFound: true,
+            }
+        }
+    }
+
     // Convert to card data
-    const cardData = detailedSubjectTypes.map((subjectType) => convertCategoryToCardData(subjectType, lang));
-    // Generate searchable array
-    const categories: Searchable[] = generateSearchable({ type: "Category", data: cardData });
+    const categories = dataSlice.map((subjectType) => convertCategoryToCardData(subjectType, lang));
 
     // Ads
     const ads = await getAdCardArray(AD_PAGE_CATEGORIES, lang);
@@ -152,6 +215,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     return {
         props: {
             ads,
+            pageCount,
             categories,
             footerContent
         }

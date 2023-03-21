@@ -15,7 +15,7 @@ const useStyles = createStyles((theme) => ({
         borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
         padding: theme.spacing.md,
         marginBottom: theme.spacing.md,
-        lineHeight: 1,
+        lineHeight: 1.8,
     },
 
 }));

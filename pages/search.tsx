@@ -7,7 +7,7 @@ import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import Breadcrumb from '../features/Breadcrumb/Breadcrumb';
 import SITE_URL from '../lib/globalUrl';
 import { SearchResult } from '../lib/types/SearchTypes';
-import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS, URL_LOCATION, URL_SEARCH } from '../lib/url-helper/urlConstants';
+import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS, URL_LOCATION, URL_SEARCH, URL_SEARCH_GLOBAL } from '../lib/url-helper/urlConstants';
 import { toLink } from '../lib/util/util';
 import React from 'react';
 import GenericPageHeader from '../components/Block/GenericPageHeader';
@@ -40,7 +40,7 @@ const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
         setLoading(true);
 
         // Update the URL
-        router.replace(`/${URL_SEARCH}?q=${q}`, undefined, { shallow: true });
+        router.replace(`/${URL_SEARCH}/${URL_SEARCH_GLOBAL}?q=${q}`, undefined, { shallow: true });
 
         // Fetch the data
         const res = await fetch(`${SITE_URL}/api/search?q=${q}`);

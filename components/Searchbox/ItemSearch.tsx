@@ -2,7 +2,7 @@ import { createStyles, TextInput } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
 import { NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
-import { memo, useState } from 'react'
+import { useState } from 'react'
 
 const useStyles = createStyles((theme) => ({
     input: {

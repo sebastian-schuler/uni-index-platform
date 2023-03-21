@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prismaGlobalSearch } from "../../lib/prisma/prismaGlobalSearch";
+import { prismaGlobalSearch } from "../../../lib/prisma/prismaGlobalSearch";
 
-const jobsHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+const GlobalSearch = async (req: NextApiRequest, res: NextApiResponse) => {
 
     let searchTerm = req.query.q;
     let lang = typeof req.query.lang === 'string' ? req.query.lang : 'en';
@@ -16,4 +16,4 @@ const jobsHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json({ searchResult });
 }
 
-export default jobsHandler;
+export default GlobalSearch;

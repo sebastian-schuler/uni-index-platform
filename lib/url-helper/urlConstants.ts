@@ -23,6 +23,8 @@ export const URL_LOCATIONS = "locations";
 export const URL_NEWS = "news";
 
 export const URL_SEARCH= "search";
+export const URL_SEARCH_GLOBAL= "global";
+export const URL_SEARCH_CATEGORIES= "categories";
 
 export const URL_ANALYSIS = "analysis";
 export const URL_SOCIAL_MEDIA = "social-media";
