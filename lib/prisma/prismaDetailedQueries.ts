@@ -1,8 +1,9 @@
-import { Country, SubjectType } from "@prisma/client";
+import { Country, Institution, Subject, SubjectType } from "@prisma/client";
 import prisma from './prisma';
 import { getCountries, getSubjectTypes } from "./prismaQueries";
 import { DetailedCity, DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
 import { getCountriesByPopularity } from "./prismaPopularQueries";
+import { OrderBy } from "../types/OrderBy";
 
 // ===========================================================
 // ================= COUNTRY =============
@@ -199,7 +200,10 @@ export const getSubjectDetailedByUrl = async (subjectUrl: string, institutionId:
 }
 
 // Return DetailedSubjects, where SubjectType is URL parameter 
-export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string): Promise<DetailedSubject[]> => {
+export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string, orderBy: OrderBy, filteredSubjects?: Subject[]): Promise<DetailedSubject[]> => {
+
+    const subjectIds = filteredSubjects?.map((subject) => subject.id);
+
     return await prisma.subject.findMany({
         include: {
             SubjectHasSubjectTypes: {
@@ -220,13 +224,22 @@ export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string):
             }
         },
         where: {
-            SubjectHasSubjectTypes: {
-                some: {
-                    SubjectType: {
-                        url: subjectCategoryUrl
+            AND: {
+                id: {
+                    in: subjectIds
+                },
+                SubjectHasSubjectTypes: {
+                    some: {
+                        SubjectType: {
+                            url: subjectCategoryUrl
+                        }
                     }
                 }
             }
+        },
+        orderBy: {
+            name: orderBy === "popularity" ? undefined : orderBy === "az" ? "asc" : "desc",
+            popularity_score: orderBy === "popularity" ? "desc" : undefined
         }
     });
 }
@@ -234,17 +247,6 @@ export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string):
 // ===========================================================
 // ================= STATE =============
 // ===========================================================
-
-// export const getDetailedSubjectTypes = async () => {
-//     const types = await getSubjectTypes();
-
-//     const detailed: DetailedSubjectType[] = await Promise.all(types.map(async (type) => {
-//         const subjectCount: number = await getSubjectTypeSubjectCount(type.url);
-//         return { ...type, subjectCount };
-//     }));
-
-//     return detailed;
-// }
 
 // Return DetailedSubjects, where SubjectType is URL parameter 
 export const getStatesDetailedByCountry = async (countryUrl: string): Promise<DetailedState[]> => {
@@ -287,7 +289,10 @@ export const getStatesDetailedByCountry = async (countryUrl: string): Promise<De
 // ================= INSTITUTION =============
 // =========================================================== 
 
-export const getInstitutionsDetailedByCountry = async (countryId: string): Promise<DetailedInstitution[]> => {
+export const getInstitutionsDetailedByCountry = async (countryId: string, orderBy: OrderBy, filteredInstitutions?: Institution[]): Promise<DetailedInstitution[]> => {
+
+    const institutionIds = filteredInstitutions?.map((institution) => institution.id);
+
     return await prisma.institution.findMany({
         include: {
             InstitutionSocialMedia: {
@@ -324,18 +329,27 @@ export const getInstitutionsDetailedByCountry = async (countryId: string): Promi
             }
         },
         where: {
-            OR: [
-                {
-                    City: { State: { Country: { id: countryId } } }
+            AND: {
+                id: {
+                    in: institutionIds
                 },
-                {
-                    InstitutionLocation: {
-                        some: {
-                            City: { State: { Country: { id: countryId } } }
+                OR: [
+                    {
+                        City: { State: { Country: { id: countryId } } }
+                    },
+                    {
+                        InstitutionLocation: {
+                            some: {
+                                City: { State: { Country: { id: countryId } } }
+                            }
                         }
                     }
-                }
-            ]
+                ]
+            }
+        },
+        orderBy: {
+            name: orderBy === "popularity" ? undefined : orderBy === "az" ? "asc" : "desc",
+            popularity_score: orderBy === "popularity" ? "desc" : undefined
         }
     })
 }

@@ -2,8 +2,6 @@ import { Subject } from '@prisma/client';
 import { DetailedUserAd } from '../types/DetailedDatabaseTypes';
 import prisma from './prisma';
 
-type OrderBy = "asc" | "desc";
-
 // ===========================================================
 // ================= FULL DEFAULT GETTER FUNCTIONS ===========
 // ===========================================================
@@ -22,86 +20,23 @@ export const getSubjectTypes = async () => {
     })
 }
 
+// Return all subject types, ordered by localized name
+export const getSubjects = async (categoryId: number) => {
+    return await prisma.subject.findMany({
+        where: {
+            SubjectHasSubjectTypes: {
+                some: {
+                    subject_type_id: categoryId
+                }
+            }
+        }
+    })
+}
+
+
 // ===========================================================
 // ============ SPECIFIED MANY GETTER FUNCTIONS ==============
 // ===========================================================
-
-// Return Subjects + corresponding Institution, where SubjectName is parameter 
-export const getSubjectsInstitutionByName = async (subjectName: string) => {
-    return await prisma.subject.findMany({
-        include: {
-            Institution: true,
-            City: {
-                select: {
-                    State: {
-                        select: { Country: true }
-                    }
-                }
-            }
-        },
-        where: {
-            name: subjectName
-        }
-    });
-}
-
-// Return States + corresponding City+Country, where Country is URL parameter, order by localized name
-export const getStatesCountryCityByCountry = async (locale: string, countryUrl: string, orderBy: OrderBy) => {
-    return await prisma.state.findMany({
-        include: {
-            Country: true,
-            City: true,
-        },
-        where: {
-            Country: {
-                url: {
-                    equals: countryUrl
-                }
-            }
-        },
-        orderBy: {
-            ["name_" + locale]: orderBy
-        }
-    })
-}
-
-// Return Cities, where State is URL parameter, order by name
-export const getCitiesByState = async (stateUrl: string, orderBy: OrderBy) => {
-    return await prisma.city.findMany({
-        where: {
-            State: {
-                url: { equals: stateUrl }
-            }
-        },
-        orderBy: {
-            name: orderBy
-        }
-    })
-}
-
-// Return Institutes, where City is URL parameter, order by name
-// TODO check if only select is appropriate
-export const getInstitutesByCity = async (cityUrl: string, orderBy: OrderBy) => {
-    return await prisma.institution.findMany({
-        select: {
-            id: true,
-            name: true,
-            url: true,
-        },
-        where: {
-            Subject: {
-                some: {
-                    City: {
-                        url: cityUrl
-                    }
-                }
-            }
-        },
-        orderBy: {
-            name: orderBy
-        }
-    })
-}
 
 /**
  * 
@@ -162,8 +97,7 @@ export const getAds = async (placementLocation: string): Promise<DetailedUserAd[
 // ===========================================================
 
 // Return single State + corresponding Country, where State is URL parameter
-// TODO rename
-export const getCountryByState = async (stateUrl: string) => {
+export const getCountryStateByStateUrl = async (stateUrl: string) => {
     return await prisma.state.findUnique({
         where: {
             url: stateUrl
@@ -171,57 +105,6 @@ export const getCountryByState = async (stateUrl: string) => {
         select: {
             Country: true
         }
-    });
-}
-
-// Return single Subject + corresponding Institution, where Subject is URL parameter
-// TODO use this as template
-export const getSubjectInstitutionBySubject = async (subjectUrl: string, institutionUrl: string) => {
-
-    const institutionId = (await getInstitutionIdByUrl(institutionUrl))?.id ?? null;
-
-    if (institutionId !== null) return null;
-
-    return await prisma.subject.findUnique({
-        where: {
-            url_institution_id: {
-                url: subjectUrl,
-                institution_id: institutionId || ""
-            }
-        },
-        include: {
-            Institution: true
-        }
-    });
-}
-
-// Return single Subject + corresponding Institution, where Subject is URL parameter
-// TODO Could return correct object directly?
-export const getCountrySubjectBySubject = async (subjectUrl: string, institutionUrl: string) => {
-
-    const institutionId = (await getInstitutionIdByUrl(institutionUrl))?.id ?? null;
-
-    // If no city/institution is found, return null
-    if (institutionId === null) return Promise<null>;
-
-    return await prisma.subject.findUnique({
-        select: {
-            City: {
-                select: {
-                    State: {
-                        select: {
-                            Country: true
-                        }
-                    }
-                }
-            }
-        },
-        where: {
-            url_institution_id: {
-                url: subjectUrl,
-                institution_id: institutionId
-            }
-        },
     });
 }
 
@@ -238,6 +121,13 @@ export const getCityStateCountryByCity = async (cityUrl: string) => {
     });
 }
 
+export const getInstitutionsByCountry = async (countryId: string) => {
+    return await prisma.institution.findMany({
+        where: {
+            City: { State: { Country: { id: countryId } } }
+        }
+    });
+}
 
 
 // ===========================================================
@@ -246,13 +136,11 @@ export const getCityStateCountryByCity = async (cityUrl: string) => {
 
 
 export const getCountry = async (countryUrl: string) => {
-
     return await prisma.country.findUnique({
         where: {
             url: countryUrl
         }
     });
-
 }
 
 type GetInstitutionProps = { institutionUrl: string } | { institutionId: string }

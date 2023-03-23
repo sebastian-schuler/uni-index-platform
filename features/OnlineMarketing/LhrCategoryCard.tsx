@@ -58,11 +58,14 @@ const LhrCategoryCard: React.FC<Props> = ({ title, score, description, url }: Pr
     return (
         <Card withBorder p="md" radius="md" className={classes.card}>
             <div className={classes.inner}>
-                <Stack>
-                    <Text size="xl" className={classes.label}>
-                        {title}
-                    </Text>
-                    <Text>{description}</Text>
+
+                <Stack justify={"space-between"}>
+                    <Stack>
+                        <Text size="xl" className={classes.label}>
+                            {title}
+                        </Text>
+                        <Text>{description}</Text>
+                    </Stack>
                     <MantineLink type='internal' url={url}>{t('online-marketing.label-show-details', { category: title })}</MantineLink>
                 </Stack>
 

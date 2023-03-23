@@ -4,18 +4,17 @@ import React from 'react';
 
 const useStyles = createStyles((theme) => ({
     title: {
-        fontSize: theme.fontSizes.xl,
+        fontSize: theme.fontSizes.lg,
         transition: 'all 0.1s ease-in-out',
         textDecoration: 'none',
         color: theme.colors.brandGray[3],
         fontWeight: 500,
-        lineHeight: 1,
+        lineHeight: 1.5,
         wordBreak: 'break-word',
+        hyphens: 'auto',
 
         '&:hover': {
-            // color: theme.fn.lighten(theme.colors.brandOrange[5], 0.25),
             color: theme.colors.brandOrange[5],
-            // textDecoration: 'none',
         }
     },
 }));
@@ -25,14 +24,15 @@ type Props = {
     href: string
     title?: string
     props?: AnchorProps
+    lang? : string
 }
 
-const CardTitle: React.FC<Props> = ({ text, href, title, props }: Props) => {
+const CardTitle: React.FC<Props> = ({ text, href, title, props, lang }: Props) => {
 
     const { classes } = useStyles();
 
     return (
-        <Anchor className={classes.title} component={Link} href={href} title={title} {...props}>
+        <Anchor lang={lang} className={classes.title} component={Link} href={href} title={title} {...props}>
             {text}
         </Anchor>
     )

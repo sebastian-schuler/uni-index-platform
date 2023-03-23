@@ -87,7 +87,7 @@ const SubNav = ({ title, pageLinkData, backButton }: Props) => {
     const path = router.asPath;
 
     return (
-        <Stack>
+        <Stack mb={'xl'}>
             {
                 backButton !== undefined ? (
                     <Group sx={{ justifyContent: 'space-between' }}>

@@ -55,7 +55,7 @@ const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
           {/* Header: Subjectname, Institution, City */}
           <Grid.Col span={10}>
             <Stack spacing={theme.spacing.xs}>
-              <CardTitle href={subjectUrl} text={data.name} />
+              <CardTitle href={subjectUrl} text={data.name} lang={country?.country_code}/>
               <Text lh={1.2}>
                 <Anchor lh={1.1} component={Link} href={institutionUrl}>{data.Institution.name}</Anchor>
                 {' | '}

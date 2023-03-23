@@ -111,3 +111,12 @@ export type AdCardData = {
     type: string
     sizeCost: number
 }
+
+export type ArticleCardData = {
+    id: string
+    url: string
+    title: string
+    excerpt: string
+    imageUrl: string | null
+    date: number
+}

@@ -15,23 +15,23 @@ import appTheme from '../theme/theme'
 
 function MyApp({ Component, pageProps }: AppProps) {
 
-  const { events } = useRouter();
+  // const { events } = useRouter();
   const { t } = useTranslation('common');
 
-  useEffect(() => {
-    const handleRouteChange = (url: string) => gtag.pageview(url);
-    events.on('routeChangeComplete', handleRouteChange)
-    return () => {
-      events.off('routeChangeComplete', handleRouteChange)
-    }
-  }, [events]);
+  // useEffect(() => {
+  //   const handleRouteChange = (url: string) => gtag.pageview(url);
+  //   events.on('routeChangeComplete', handleRouteChange)
+  //   return () => {
+  //     events.off('routeChangeComplete', handleRouteChange)
+  //   }
+  // }, [events]);
 
   return (
 
     <>
       <Head>
         <title key={"title"}>{t('page-title')}</title>
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -42,13 +42,13 @@ function MyApp({ Component, pageProps }: AppProps) {
               });
             `,
           }}
-        />
+        /> */}
       </Head>
 
-      <Script
+      {/* <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-      />
+      /> */}
 
       <ErrorBoundary>
         <AuthProvider>

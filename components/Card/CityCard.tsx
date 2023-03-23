@@ -39,7 +39,7 @@ const CityCard: React.FC<Props> = ({ city }: Props) => {
                             text={city.name}
                         />
                         <Text color={theme.colors.brandGray[2]} sx={{ lineHeight: 1.2 }}>
-                            {t('card-city.label-areacodes', { codes: city.areaCodes.join(", ") })}
+                            {t('card-city.label-areacodes', { count: city.areaCodes.length, codes: city.areaCodes.join(", ") })}
                         </Text>
                     </Stack>
                 </Group>

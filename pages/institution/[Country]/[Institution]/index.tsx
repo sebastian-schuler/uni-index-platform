@@ -37,11 +37,9 @@ const InstitutionPage: NextPage<Props> = ({ institution, country, wikipediaConte
 
       <InstitutionNav title={institution?.name || ""} />
 
-      <WhitePaper>
-        <Title order={2}>About</Title>
-        <Text>{wikipediaContent}</Text>
-        <Text size={"sm"} color="dimmed">Source: Wikipedia</Text>
-      </WhitePaper>
+      <Title order={2}>About</Title>
+      <Text>{wikipediaContent}</Text>
+      <Text size={"sm"} color="dimmed">Source: Wikipedia</Text>
 
     </ResponsiveWrapper>
   )

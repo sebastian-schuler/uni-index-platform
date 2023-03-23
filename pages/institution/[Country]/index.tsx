@@ -1,34 +1,103 @@
-import { Group, SimpleGrid, Stack } from '@mantine/core';
+import { Group, SimpleGrid, Stack, Text, useMantineTheme } from '@mantine/core';
 import { Country, State } from '@prisma/client';
-import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
+import Trans from 'next-translate/Trans';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
-import { ParsedUrlQuery } from 'querystring';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import GenericPageHeader from '../../../components/Block/GenericPageHeader';
 import InstitutionCard from '../../../components/Card/InstitutionCard';
+import ResponsiveWrapper from '../../../components/Container/ResponsiveWrapper';
+import CustomPagination from '../../../components/Pagination/CustomPagination';
+import ItemApiSearch from '../../../components/Searchbox/ItemApiSearch';
+import OrderBySelect from '../../../components/Select/OrderBySelect';
+import AdContainer from '../../../features/Ads/AdContainer';
 import Breadcrumb from '../../../features/Breadcrumb/Breadcrumb';
 import { FooterContent } from '../../../features/Footer/Footer';
-import ResponsiveWrapper from '../../../components/Container/ResponsiveWrapper';
-import prisma from '../../../lib/prisma/prisma';
+import SITE_URL from '../../../lib/globalUrl';
 import { getInstitutionsDetailedByCountry } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
+import { searchInstitutions } from '../../../lib/prisma/prismaSearch';
 import { DetailedInstitution } from '../../../lib/types/DetailedDatabaseTypes';
-import { InstitutionCardData } from '../../../lib/types/UiHelperTypes';
+import { OrderBy } from '../../../lib/types/OrderBy';
+import { AdCardData, InstitutionCardData } from '../../../lib/types/UiHelperTypes';
+import { URL_INSTITUTION } from '../../../lib/url-helper/urlConstants';
 import { convertInstitutionToCardData } from '../../../lib/util/conversionUtil';
-import { getLocalizedName, getUniquesFromArray } from '../../../lib/util/util';
+import { getLocalizedName, getUniquesFromArray, toLink } from '../../../lib/util/util';
 
-interface Props {
+export const INSTITUTIONS_PER_PAGE = 30;
+
+type Props = {
   institutionData: InstitutionCardData[],
   institutionStates: State[],
+  pageCount: number | null,
   countryInfo: Country,
   countryList: Country[],
+  ads: AdCardData[][],
   footerContent: FooterContent[],
 }
 
-const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institutionStates, countryInfo, countryList, footerContent }: Props) => {
+const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institutionStates, pageCount, countryInfo, countryList, ads, footerContent }: Props) => {
 
   const { t, lang } = useTranslation('institution');
+
+  // Query params
+  const router = useRouter();
+  const currentPage = router.query.page ? parseInt(router.query.page as string) : 1;
+  const searchQuery = router.query.q ? router.query.q as string : undefined;
+  const orderQuery = router.query.order ? router.query.order as OrderBy : undefined;
+
+  // Filter
+  const [orderBy, setOrderBy] = useState<OrderBy>(orderQuery ? orderQuery : "az");
+  const [searchTerm, setSearchTerm] = useState<string>(searchQuery ? searchQuery as string : "");
+
+  // Meta Data
+  const getCanonicalLink = () => {
+    const localePart = router.locale === router.defaultLocale ? "" : router.locale + "/";
+    const pageNumber = currentPage > 1 ? "/page=" + currentPage : "";
+    return `${SITE_URL}/${localePart}${URL_INSTITUTION}/${countryInfo.url}${pageNumber}`
+  }
+
+  const getPrevLink = () => {
+    const localePart = router.locale === router.defaultLocale ? "" : router.locale + "/";
+    const pageNumber = "/page=" + (currentPage - 1);
+    return `${SITE_URL}/${localePart}${URL_INSTITUTION}/${countryInfo.url}${pageNumber}`
+  }
+
+  const getNextLink = () => {
+    const localePart = router.locale === router.defaultLocale ? "" : router.locale + "/";
+    const pageNumber = "/page=" + (currentPage + 1);
+    return `${SITE_URL}/${localePart}${URL_INSTITUTION}/${countryInfo.url}${pageNumber}`
+  }
+
+  // UI
   const countryName = getLocalizedName({ lang: lang, dbTranslated: countryInfo });
+  const theme = useMantineTheme();
+
+  // Search
+  const runSearch = async (q: string | undefined, order: OrderBy) => {
+    if (q && q.length <= 2) return;
+    router.push({
+      pathname: toLink(URL_INSTITUTION, countryInfo.url),
+      query: q ? {
+        q,
+        order,
+      } : {
+        order,
+      },
+    });
+  }
+
+  const cancelSearch = () => {
+    setSearchTerm("");
+    router.push({
+      pathname: toLink(URL_INSTITUTION, countryInfo.url),
+      query: {
+        order: orderBy,
+      },
+    });
+  }
 
   return (
     <ResponsiveWrapper footerContent={footerContent}>
@@ -36,93 +105,139 @@ const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institution
       <Head>
         <title key={"title"}>{t('common:page-title') + " | " + t('meta.country-title', { country: countryName })}</title>
         <meta key={"description"} name="description" content={t('meta.country-description')} />
+        {pageCount && <link rel="canonical" href={getCanonicalLink()} />}
+        {pageCount && currentPage > 1 && <link rel='prev' href={getPrevLink()} />}
+        {pageCount && currentPage < pageCount && <link rel='next' href={getNextLink()} />}
+        {(searchQuery || orderQuery) && <meta name="robots" content="noindex, nofollow" />}
       </Head>
 
       <Breadcrumb countryInfo={countryInfo} />
 
       <Stack>
 
-        <GenericPageHeader title={countryInfo.name} description={t('institution.subtitle', { institution: countryInfo.name })} />
+        <GenericPageHeader title={t('location.title', { institution: countryInfo.name })} description={t('location.subtitle', { institution: countryInfo.name })} />
 
         <Group position='apart' >
-          {/* <SearchBox
-            label={langContent.searchLabel}
-            placeholder={langContent.searchPlaceholder}
-            searchableList={dataList}
-            setSearchableList={setDataList}
+          <ItemApiSearch
+            label={t('location.search-label')}
+            placeholder={t('location.search-placeholder')}
+            onSearch={() => runSearch(searchTerm, orderBy)}
+            value={searchTerm}
+            setValue={setSearchTerm}
+            onCancel={cancelSearch}
           />
-          <OrderBySelect orderBy={orderBy} handleChange={handleOrderChange} /> */}
+          <OrderBySelect
+            variant='default'
+            orderBy={orderBy}
+            handleChange={(state) => {
+              setOrderBy(state);
+              runSearch(searchQuery, state)
+            }}
+          />
+        </Group>
+
+        <Group>
+          {
+            searchQuery ? (
+              <Text>{t('location.search-results-label', { count: institutionData.length, query: searchTerm })}</Text>
+            ) : (
+              <Text>
+                <Trans
+                  i18nKey="institution:location.page-results-label"
+                  components={[<Text key={0} component='span' weight={'bold'} />, <Text key={1} component='span' weight={'bold'} />]}
+                  values={{
+                    fromName: institutionData.at(0)?.Institution.name,
+                    toName: institutionData.at(-1)?.Institution.name,
+                    from: (currentPage - 1) * institutionData.length + 1,
+                    to: currentPage * institutionData.length,
+                  }}
+                />
+              </Text>
+            )
+          }
         </Group>
 
         <SimpleGrid
           cols={4}
           spacing="lg"
           breakpoints={[
-            { maxWidth: 980, cols: 3, spacing: 'md' },
-            { maxWidth: 755, cols: 2, spacing: 'sm' },
-            { maxWidth: 600, cols: 1, spacing: 'sm' },
+            { minWidth: theme.breakpoints.lg, cols: 3, spacing: 'md' },
+            { minWidth: theme.breakpoints.sm, cols: 2, spacing: 'sm' },
+            { minWidth: theme.breakpoints.xs, cols: 1, spacing: 'sm' },
           ]}
         >
           {
             institutionData.map((institute, i) => (
-              // searchableCountry.visible && (
               <InstitutionCard
                 key={i}
                 data={institute}
                 country={countryList.find(c => c.id === institute.mainCountryId)}
                 state={institutionStates.find(c => c.id === institute.mainStateId)}
               />
-              // )
             ))
           }
         </SimpleGrid>
 
       </Stack>
 
+      {
+        pageCount && !searchQuery && (
+          <CustomPagination
+            currentPage={currentPage}
+            pageCount={pageCount}
+            rootPath={toLink(URL_INSTITUTION, countryInfo.url)}
+          />
+        )
+      }
+
+      <AdContainer
+        ads={ads}
+        wrapInContainer
+      />
+
     </ResponsiveWrapper>
   )
 }
 
-export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
 
-  const countries = await prisma.country.findMany();
-
-  let paths: {
-    params: ParsedUrlQuery;
-    locale?: string | undefined;
-  }[] = [];
-
-  // Add locale to every possible path
-  locales?.forEach((locale) => {
-    countries.forEach((country) => {
-      paths.push({
-        params: {
-          Country: country.url,
-        },
-        locale,
-      });
-    })
-  });
-
-  return {
-    paths: paths,
-    fallback: false
-  }
-}
-
-export async function getStaticProps(context: GetStaticPropsContext) {
-
-  const countryUrl = "" + context?.params?.Country;
   const lang = context.locale || "en";
+  const pageIndex = context.query.page ? parseInt(context.query.page as string) : 1;
+  const orderBy = context.query.order ? context.query.order as OrderBy : "az";
+  const searchQuery = context.query.q ? context.query.q as string : null;
+  const countryUrl = "" + context?.params?.Country;
+  const limit = INSTITUTIONS_PER_PAGE;
 
   const countryInfo = await getCountry(countryUrl);
-  const institutions: DetailedInstitution[] = countryInfo !== null ? (await getInstitutionsDetailedByCountry(countryInfo.id)) : [];
+  if (countryInfo === null) {
+    return {
+      notFound: true,
+    }
+  }
+
+  const searchedInstitutions = searchQuery ? (await searchInstitutions(searchQuery)) : undefined;
+  const institutions: DetailedInstitution[] = await getInstitutionsDetailedByCountry(countryInfo.id, orderBy, searchedInstitutions);
+
+  let dataSlice = institutions;
+  let pageCount: null | number = null;
+
+  // Detailed Subject Types
+  if (!searchQuery) {
+    dataSlice = institutions.slice((pageIndex - 1) * limit, pageIndex * limit);
+    pageCount = Math.ceil(institutions.length / limit);
+
+    if (pageIndex > pageCount) {
+      return {
+        notFound: true,
+      }
+    }
+  }
 
   // Convert to CardData to lower size
-  const institutionData: InstitutionCardData[] = institutions.map(inst => convertInstitutionToCardData(inst, lang));
+  const institutionData: InstitutionCardData[] = dataSlice.map(inst => convertInstitutionToCardData(inst, lang));
 
   // List of states for institutes
-  const institutionStates = getUniquesFromArray({ type: "State", data: institutions.map(inst => inst.City.State) }) as State[];
+  const institutionStates = getUniquesFromArray({ type: "State", data: dataSlice.map(inst => inst.City.State) }) as State[];
 
   // Footer Data
   // Get all countries
@@ -131,16 +246,17 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     { title: "Countries", data: countryList, type: "Country" },
   ]
 
-  return {
-    props: {
-      institutionData,
-      institutionStates,
-      countryInfo,
-      countryList,
-      footerContent,
-    }
+  const props: Props = {
+    institutionData,
+    institutionStates,
+    pageCount,
+    countryInfo,
+    countryList,
+    ads: [],
+    footerContent,
   }
 
+  return { props };
 }
 
 export default InstitutionCountryIndex;

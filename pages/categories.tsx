@@ -1,5 +1,6 @@
 import { Group, SimpleGrid, Stack, Text } from '@mantine/core';
 import { GetServerSideProps, NextPage } from 'next';
+import Trans from 'next-translate/Trans';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -19,7 +20,7 @@ import SITE_URL from '../lib/globalUrl';
 import { getCountries } from '../lib/prisma/prismaQueries';
 import { searchSubjectTypes } from '../lib/prisma/prismaSearch';
 import { AdCardData, CategoryCardData } from '../lib/types/UiHelperTypes';
-import { OrderCategoryBy } from '../lib/types/zod/zodOrderBy';
+import { OrderCategoryBy } from '../lib/types/OrderBy';
 import { URL_CATEGORIES } from '../lib/url-helper/urlConstants';
 import { convertCategoryToCardData } from '../lib/util/conversionUtil';
 import { toLink } from '../lib/util/util';
@@ -48,6 +49,7 @@ const Subjects: NextPage<Props> = ({ ads, pageCount, categories, footerContent }
     const [orderBy, setOrderBy] = useState<OrderCategoryBy>(orderQuery ? orderQuery : "az");
     const [searchTerm, setSearchTerm] = useState<string>(searchQuery ? searchQuery as string : "");
 
+    // Meta data
     const getCanonicalLink = () => {
         const localePart = router.locale === router.defaultLocale ? "" : router.locale + "/";
         const pageNumber = currentPage > 1 ? "/page=" + currentPage : "";
@@ -66,6 +68,7 @@ const Subjects: NextPage<Props> = ({ ads, pageCount, categories, footerContent }
         return `${SITE_URL}/${localePart}${URL_CATEGORIES}${pageNumber}`
     }
 
+    // Search
     const runSearch = async (q: string | undefined, order: OrderCategoryBy) => {
         if (q && q.length <= 2) return;
         router.push({
@@ -108,32 +111,40 @@ const Subjects: NextPage<Props> = ({ ads, pageCount, categories, footerContent }
 
                 <Group position='apart' >
                     <ItemApiSearch
-                        label='Search for a category'
-                        placeholder={t('subjecttype-search-label')}
+                        label={t('categories.search-label')}
+                        placeholder={t('categories.search-placeholder')}
                         onSearch={() => runSearch(searchTerm, orderBy)}
                         value={searchTerm}
                         setValue={setSearchTerm}
                         onCancel={cancelSearch}
                     />
-                    <OrderBySelect variant='categories' orderBy={orderBy} handleChange={(state) => {
-                        setOrderBy(state);
-                        runSearch(searchQuery, state)
-                    }} />
+                    <OrderBySelect
+                        variant='categories'
+                        orderBy={orderBy}
+                        handleChange={(state) => {
+                            setOrderBy(state);
+                            runSearch(searchQuery, state)
+                        }}
+                    />
                 </Group>
 
                 <Group>
                     {
                         searchQuery ? (
-                            <Text>{`${categories.length} Results for "${searchTerm}"`}</Text>
+                            <Text>{t('categories.search-results-label', { count: categories.length, query: searchTerm })}</Text>
                         ) : (
-                            <>
-                                <Text>Results from{" "}
-                                    <Text component='span' weight={'bold'}>{`${categories.at(0)?.name}`}</Text>
-                                    {" to "}
-                                    <Text component='span' weight={'bold'}>{`${categories.at(-1)?.name}`}</Text>
-                                    {` (${(currentPage - 1) * categories.length} - ${currentPage * categories.length})`}
-                                </Text>
-                            </>
+                            <Text>
+                                <Trans
+                                    i18nKey="category:categories.page-results-label"
+                                    components={[<Text key={0} component='span' weight={'bold'} />, <Text key={1} component='span' weight={'bold'} />]}
+                                    values={{
+                                        fromName: categories.at(0)?.name,
+                                        toName: categories.at(-1)?.name,
+                                        from: (currentPage - 1) * categories.length + 1,
+                                        to: currentPage * categories.length,
+                                    }}
+                                />
+                            </Text>
                         )
                     }
                 </Group>
@@ -186,7 +197,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const detailedSubjectTypes = await searchSubjectTypes(searchQuery, orderBy);
 
     let dataSlice = detailedSubjectTypes;
-    let pageCount: null | number = null
+    let pageCount: null | number = null;
 
     // Detailed Subject Types
     if (!searchQuery) {

@@ -52,18 +52,6 @@ export const getSubjectPaths = async () => {
     });
 }
 
-export const getSubjectSubjectTypePaths = async () => {
-    return await prisma.subject.findMany({
-        include: {
-            SubjectHasSubjectTypes: {
-                include: {
-                    SubjectType: true
-                }
-            }
-        }
-    });
-}
-
 export const getCityStateCountryPaths = async () => {
     return await prisma.city.findMany({
         select: {

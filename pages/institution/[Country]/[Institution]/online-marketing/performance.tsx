@@ -76,54 +76,51 @@ const Performance = ({ institution, country, lhrAudits, lhrCategory, footerConte
 
             <Space h="md" />
 
-            <WhitePaper>
+            <Grid mt={"md"}>
+                <Grid.Col span={12}>
+                    <LhrRingProgress
+                        title={lhrCategory.title || ""}
+                        score={(lhrCategory.score || 0) * 100}
+                        description={"Values are estimated and may vary. The performance score is calculated directly from these metrics."}
+                        size={"lg"}
+                    />
+                </Grid.Col>
 
-                <Grid mt={"md"}>
-                    <Grid.Col span={12}>
-                        <LhrRingProgress
-                            title={lhrCategory.title || ""}
-                            score={(lhrCategory.score || 0) * 100}
-                            description={"Values are estimated and may vary. The performance score is calculated directly from these metrics."}
-                            size={"lg"}
-                        />
-                    </Grid.Col>
+                <Grid.Col span={12}>
+                    <Text size={"lg"} weight={600}>Metrics</Text>
+                    <SimpleGrid cols={2}>
+                        <div>
+                            {getMetricsCol(audits, 0, 3)}
+                        </div>
+                        <div>
+                            {getMetricsCol(audits, 3, 6)}
+                        </div>
+                    </SimpleGrid>
+                </Grid.Col>
 
-                    <Grid.Col span={12}>
-                        <Text size={"lg"} weight={600}>Metrics</Text>
-                        <SimpleGrid cols={2}>
-                            <div>
-                                {getMetricsCol(audits, 0, 3)}
-                            </div>
-                            <div>
-                                {getMetricsCol(audits, 3, 6)}
-                            </div>
-                        </SimpleGrid>
-                    </Grid.Col>
+                <Grid.Col span={12}>
 
-                    <Grid.Col span={12}>
+                    <LhrAuditList
+                        title='Opportunities'
+                        auditList={lhrAudits}
+                        refs={lhrCategory.opportunityRefs || []}
+                    />
 
-                        <LhrAuditList
-                            title='Opportunities'
-                            auditList={lhrAudits}
-                            refs={lhrCategory.opportunityRefs || []}
-                        />
+                    <LhrAuditList
+                        title='Diagnostics'
+                        auditList={lhrAudits}
+                        refs={lhrCategory.diagnosticRefs || []}
+                    />
 
-                        <LhrAuditList
-                            title='Diagnostics'
-                            auditList={lhrAudits}
-                            refs={lhrCategory.diagnosticRefs || []}
-                        />
+                    <LhrAuditList
+                        title='Passed Audits'
+                        auditList={lhrAudits}
+                        refs={lhrCategory.passedRefs || []}
+                    />
 
-                        <LhrAuditList
-                            title='Passed Audits'
-                            auditList={lhrAudits}
-                            refs={lhrCategory.passedRefs || []}
-                        />
+                </Grid.Col>
+            </Grid>
 
-                    </Grid.Col>
-                </Grid>
-
-            </WhitePaper>
         </ResponsiveWrapper>
     )
 }

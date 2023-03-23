@@ -1,22 +1,35 @@
 {
-    "meta": {
-        "categories-title": "Categories | Fields of study",
-        "categories-description": "Find courses all over Europe by fields of study.",
+  "meta": {
+    "categories-title": "Categories | Fields of study",
+    "categories-description": "Find courses all over Europe by fields of study.",
 
-        "category-title": "{{subject}}",
-        "category-description": "Find courses all over Europe by fields of study."
+    "category-title": "{{subject}}",
+    "category-description": "Find courses all over Europe by fields of study."
+  },
+
+  "categories": {
+    "title": "Categories",
+    "subtitle": "Find any category and all of its available courses.",
+    "search-label": "Search for a category",
+    "search-placeholder": "e.g. Marketing",
+    "search-results-label": {
+      "0": "{{count}} results for \"{{query}}\"",
+      "one": "{{count}} result for \"{{query}}\"",
+      "other": "{{count}} results for \"{{query}}\""
     },
+    "page-results-label": "Results from <0>{{fromName}}</0> to <1>{{toName}}</1> ({{from}} - {{to}})"
+  },
 
-    "categories": {
-        "title": "Categories",
-        "subtitle": "Find any category and all of its available courses."
+  "category": {
+    "title": "{{category}}",
+    "subtitle": "Find all subjects in the category {{category}}.",
+    "search-label": "Search for a subject",
+    "search-placeholder": "e.g. Data Science",
+    "search-results-label": {
+      "0": "{{count}} results for \"{{query}}\"",
+      "one": "{{count}} result for \"{{query}}\"",
+      "other": "{{count}} results for \"{{query}}\""
     },
-
-    "category": {
-        "title": "{{category}}",
-        "subtitle": "Find all subjects in the category {{category}}."
-    },
-
-    "subjecttype-search-label": "Search for a subject type",
-    "subjecttype-search-placeholder": "e.g. Marketing"
+    "page-results-label": "Results from <0>{{fromName}}</0> to <1>{{toName}}</1> ({{from}} - {{to}})"
+  }
 }

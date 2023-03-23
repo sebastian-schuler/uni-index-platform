@@ -27,8 +27,20 @@
     "subtitle": "Find any university in a country of your choice."
   },
 
-  "institution": {
+  "location": {
+    "title": "Institutions in {{institution}}",
     "subtitle": "Find all universities and institutions located in {{institution}}.",
+    "search-label": "Search for an institution",
+    "search-placeholder": "e.g. Freie Universität Berlin",
+    "search-results-label": {
+      "0": "{{count}} results for \"{{query}}\"",
+      "one": "{{count}} result for \"{{query}}\"",
+      "other": "{{count}} results for \"{{query}}\""
+    },
+    "page-results-label": "Results from <0>{{fromName}}</0> to <1>{{toName}}</1> ({{from}} - {{to}})"
+  },
+
+  "institution": {
     "tab-profile": "Profile",
     "tab-courses": "Subjects",
     "tab-screenshots": "Screenshots",

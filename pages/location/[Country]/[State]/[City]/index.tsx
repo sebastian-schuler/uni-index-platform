@@ -1,4 +1,4 @@
-import { Group, SimpleGrid, Stack } from '@mantine/core';
+import { Group, SimpleGrid, Stack, useMantineTheme } from '@mantine/core';
 import { City, Country, State } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
@@ -15,7 +15,7 @@ import { getCityStateCountryPaths } from '../../../../../lib/prisma/prismaUrlPat
 import { InstitutionCardData } from '../../../../../lib/types/UiHelperTypes';
 import { convertInstitutionToCardData } from '../../../../../lib/util/conversionUtil';
 
-interface Props {
+type Props = {
   countryList: Country[],
   institutionData: InstitutionCardData[],
   institutionStates: State[],
@@ -30,6 +30,7 @@ interface Props {
 const CityPage: NextPage<Props> = ({ countryList, institutionData, institutionStates, footerContent, cityInfo }: Props) => {
 
   const { t } = useTranslation('location');
+  const theme = useMantineTheme();
 
   return (
     <ResponsiveWrapper footerContent={footerContent}>
@@ -59,12 +60,11 @@ const CityPage: NextPage<Props> = ({ countryList, institutionData, institutionSt
         </Group>
 
         <SimpleGrid
-          cols={4}
           spacing="lg"
           breakpoints={[
-            { maxWidth: 980, cols: 3, spacing: 'md' },
-            { maxWidth: 755, cols: 2, spacing: 'sm' },
-            { maxWidth: 600, cols: 1, spacing: 'sm' },
+            { minWidth: theme.breakpoints.lg, cols: 3, spacing: 'md' },
+            { minWidth: theme.breakpoints.sm, cols: 2, spacing: 'sm' },
+            { minWidth: theme.breakpoints.xs, cols: 1, spacing: 'sm' },
           ]}
         >
           {
@@ -121,6 +121,13 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   const lang = context.locale || "en";
   let cityUrl = "" + context?.params?.City;
   const cityInfo = await getCityStateCountryByCity(cityUrl);
+
+  if (cityInfo === null) {
+    return {
+      notFound: true,
+    }
+  }
+
   const institutionList = cityInfo !== null ? (await getInstitutionsDetailedByCity(cityInfo.id)) : [];
   const institutionData: InstitutionCardData[] = institutionList.map(inst => convertInstitutionToCardData(inst, lang));
 
@@ -136,16 +143,15 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     { title: "Countries", data: countryList, type: "Country" },
   ]
 
-  return {
-    props: {
-      countryList,
-      institutionData,
-      institutionStates,
-      footerContent,
-      cityInfo
-    }
+  const props: Props = {
+    countryList,
+    institutionData,
+    institutionStates,
+    footerContent,
+    cityInfo
   }
 
+  return { props };
 }
 
 export default CityPage

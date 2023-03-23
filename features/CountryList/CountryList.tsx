@@ -7,8 +7,9 @@ import Breadcrumb from '../Breadcrumb/Breadcrumb'
 import { CountryCardData, Searchable } from '../../lib/types/UiHelperTypes'
 import GenericPageHeader from '../../components/Block/GenericPageHeader'
 import CountryCard from '../../components/Card/CountryCard'
-import OrderBySelect, { OrderByState } from '../../components/Select/OrderBySelect'
+import OrderBySelect from '../../components/Select/OrderBySelect'
 import ItemSearch from '../../components/Searchbox/ItemSearch'
+import { OrderBy } from '../../lib/types/OrderBy'
 
 interface Props {
     title: string,
@@ -26,7 +27,7 @@ const CountryList = ({ title, subtitle, searchableCountries, children }: Props) 
     const [dataList, setDataList] = useState<Searchable[]>(searchableCountries);
 
     // Filter
-    const [orderBy, setOrderBy] = useState<OrderByState>("popularity");
+    const [orderBy, setOrderBy] = useState<OrderBy>("popularity");
     const [searchTerm, setSearchTerm] = useState<string>("");
 
     useEffect(() => {
@@ -75,7 +76,7 @@ const CountryList = ({ title, subtitle, searchableCountries, children }: Props) 
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}
                     />
-                    <OrderBySelect orderBy={orderBy} handleChange={setOrderBy} />
+                    <OrderBySelect variant='default' orderBy={orderBy} handleChange={setOrderBy} />
                 </Group>
 
                 <Reorder.Group values={dataList} onReorder={setDataList} as={"div"}>

@@ -1,4 +1,4 @@
-import { Grid, SimpleGrid, Stack, Title, Box, Group } from '@mantine/core';
+import { Box, Grid, Group, SimpleGrid, Stack, Title } from '@mantine/core';
 import { Country } from '@prisma/client';
 import { Reorder } from 'framer-motion';
 import produce from 'immer';
@@ -6,26 +6,25 @@ import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { ParsedUrlQuery } from 'querystring';
 import { useEffect, useState } from 'react';
-import CountryMapContainer from '../../../features/Map/CountryMapContainer';
 import GenericPageHeader from '../../../components/Block/GenericPageHeader';
 import StateCard from '../../../components/Card/StateCard';
-import OrderBySelect, { OrderByState } from '../../../components/Select/OrderBySelect';
+import ResponsiveWrapper from '../../../components/Container/ResponsiveWrapper';
 import ItemSearch from '../../../components/Searchbox/ItemSearch';
+import OrderBySelect from '../../../components/Select/OrderBySelect';
 import Breadcrumb from '../../../features/Breadcrumb/Breadcrumb';
 import { FooterContent } from '../../../features/Footer/Footer';
-import ResponsiveWrapper from '../../../components/Container/ResponsiveWrapper';
-import prisma from '../../../lib/prisma/prisma';
+import CountryMapContainer from '../../../features/Map/CountryMapContainer';
 import { getStatesDetailedByCountry } from '../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry } from '../../../lib/prisma/prismaQueries';
 import { DetailedState } from '../../../lib/types/DetailedDatabaseTypes';
+import { OrderBy } from '../../../lib/types/OrderBy';
 import { Searchable, StateCardData } from '../../../lib/types/UiHelperTypes';
+import { getStaticPathsCountries } from '../../../lib/url-helper/staticPathFunctions';
 import { convertStateToCardData } from '../../../lib/util/conversionUtil';
 import { generateSearchable, getLocalizedName } from '../../../lib/util/util';
-import { getStaticPathsCountries } from '../../../lib/url-helper/staticPathFunctions';
 
-interface Props {
+type Props = {
   searchableStates: Searchable[],
   countryInfo: Country,
   footerContent: FooterContent[],
@@ -39,7 +38,7 @@ const CountryPage: NextPage<Props> = ({ searchableStates, countryInfo, footerCon
   const [dataList, setDataList] = useState<Searchable[]>(searchableStates);
 
   // Filter
-  const [orderBy, setOrderBy] = useState<OrderByState>("popularity");
+  const [orderBy, setOrderBy] = useState<OrderBy>("popularity");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   // Translations
@@ -119,7 +118,7 @@ const CountryPage: NextPage<Props> = ({ searchableStates, countryInfo, footerCon
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
                 />
-                <OrderBySelect orderBy={orderBy} handleChange={setOrderBy} />
+                <OrderBySelect variant='default' orderBy={orderBy} handleChange={setOrderBy} />
               </Group>
 
               <Reorder.Group values={dataList} onReorder={setDataList} as={"div"}>
@@ -171,6 +170,11 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   // Get information on the country of this particular page
   const countryInfo = await getCountry(countryUrl);
+  if (countryInfo === null) {
+    return {
+      notFound: true,
+    }
+  }
 
   const detailedStates: DetailedState[] = await getStatesDetailedByCountry(countryUrl);
   const stateData: StateCardData[] = detailedStates.map(state => convertStateToCardData(state, lang));
@@ -182,14 +186,13 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     { title: "Countries", data: countryList, type: "Country" },
   ]
 
-  return {
-    props: {
-      searchableStates,
-      countryInfo,
-      footerContent
-    }
+  const props: Props = {
+    searchableStates,
+    countryInfo,
+    footerContent
   }
 
+  return { props };
 }
 
 export default CountryPage

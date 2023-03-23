@@ -1,21 +1,20 @@
-import { Group, SimpleGrid } from '@mantine/core';
+import { Group, SimpleGrid, useMantineTheme } from '@mantine/core';
 import { Country, Institution } from '@prisma/client';
-import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
+import { GetStaticPaths, GetStaticPropsContext } from 'next';
+import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
+import React from 'react';
 import SubjectCard from '../../../../../components/Card/SubjectCard';
-import WhitePaper from '../../../../../components/Paper/WhitePaper';
+import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper';
 import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb';
 import { FooterContent } from '../../../../../features/Footer/Footer';
-import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper';
 import InstitutionNav from '../../../../../features/Navigation/InstitutionNav';
 import { getDetailedSubjectsByInstitution } from '../../../../../lib/prisma/prismaDetailedQueries';
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
 import { DetailedSubject } from '../../../../../lib/types/DetailedDatabaseTypes';
+import { SubjectCardData } from '../../../../../lib/types/UiHelperTypes';
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions';
 import { convertSubjectToCardData } from '../../../../../lib/util/conversionUtil';
-import { SubjectCardData } from '../../../../../lib/types/UiHelperTypes';
-import React from 'react';
-import Head from 'next/head';
-import useTranslation from 'next-translate/useTranslation';
 
 interface Props {
   institution: Institution,
@@ -28,6 +27,7 @@ interface Props {
 const SubjectsPage = ({ institution, country, footerContent, subjectData, countryList }: Props) => {
 
   const { t, lang } = useTranslation('institution');
+  const theme = useMantineTheme();
 
   return (
     <ResponsiveWrapper footerContent={footerContent}>
@@ -41,46 +41,43 @@ const SubjectsPage = ({ institution, country, footerContent, subjectData, countr
 
       <InstitutionNav title={institution.name} />
 
-      <WhitePaper>
-        <Group position='apart' >
-          {/* <SearchBox
+      <Group position='apart' >
+        {/* <SearchBox
                         label={langContent.searchLabel}
                         placeholder={langContent.searchPlaceholder}
                         searchableList={dataList}
                         setSearchableList={setDataList}
                     />
                     <OrderBySelect orderBy={orderBy} handleChange={handleOrderChange} /> */}
-        </Group>
+      </Group>
 
-        <SimpleGrid
-          cols={3}
-          spacing="lg"
-          breakpoints={[
-            { maxWidth: 980, cols: 3, spacing: 'md' },
-            { maxWidth: 755, cols: 2, spacing: 'sm' },
-            { maxWidth: 600, cols: 1, spacing: 'sm' },
-          ]}
-        >
+      <SimpleGrid
+        spacing="lg"
+        breakpoints={[
+          { minWidth: theme.breakpoints.lg, cols: 3, spacing: 'md' },
+          { minWidth: theme.breakpoints.sm, cols: 2, spacing: 'sm' },
+          { minWidth: theme.breakpoints.xs, cols: 1, spacing: 'sm' },
+        ]}
+      >
 
-          {
-            subjectData.map((subject, i) => {
+        {
+          subjectData.map((subject, i) => {
 
-              const country = countryList.find(c => c.id === subject.countryId);
-              if (!country) return <React.Fragment key={subject.id} />;
+            const country = countryList.find(c => c.id === subject.countryId);
+            if (!country) return <React.Fragment key={subject.id} />;
 
-              return (
-                <SubjectCard
-                  key={i}
-                  data={subject}
-                  country={country}
-                />
-              )
-            })
-          }
+            return (
+              <SubjectCard
+                key={i}
+                data={subject}
+                country={country}
+              />
+            )
+          })
+        }
 
-        </SimpleGrid>
+      </SimpleGrid>
 
-      </WhitePaper>
 
     </ResponsiveWrapper >
   )

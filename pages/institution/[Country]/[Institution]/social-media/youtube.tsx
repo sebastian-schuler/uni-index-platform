@@ -81,108 +81,106 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, country
                 <meta key={"description"} name="description" content={t('social-media-youtube-description', { institution: institution.name })} />
             </Head>
 
-            <WhitePaper>
-                <Stack>
-                    <Breadcrumb countryInfo={country} institutionInfo={institution} />
+            <Stack>
+                <Breadcrumb countryInfo={country} institutionInfo={institution} />
 
-                    <Group position='apart'>
-                        <div>
-                            <Title order={3}>Youtube Details</Title>
-                            <Text>All social media profiles at a glance.</Text>
-                        </div>
-                        <Button component={Link} href={urlBack} variant='light' radius={"md"}>Go back</Button>
-                    </Group>
+                <Group position='apart'>
+                    <div>
+                        <Title order={3}>Youtube Details</Title>
+                        <Text>All social media profiles at a glance.</Text>
+                    </div>
+                    <Button component={Link} href={urlBack} variant='light' radius={"md"}>Go back</Button>
+                </Group>
 
-                    <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
+                <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
 
-                        <Card shadow={"xs"} className={classes.card}>
+                    <Card shadow={"xs"} className={classes.card}>
 
-                            <Title order={4}>Profile statistic</Title>
-                            <Text>Basic information about the institutions twitter profile.</Text>
+                        <Title order={4}>Profile statistic</Title>
+                        <Text>Basic information about the institutions twitter profile.</Text>
 
-                            <Card.Section className={classes.cardSection}>
+                        <Card.Section className={classes.cardSection}>
 
-                                <SmStatRow
-                                    title='Subscribers'
-                                    countryValue={countryYoutubeProfile.subscribers}
-                                    institutionValue={institutionYoutubeProfile.subscribers}
-                                />
-                                <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Subscribers'
+                                countryValue={countryYoutubeProfile.subscribers}
+                                institutionValue={institutionYoutubeProfile.subscribers}
+                            />
+                            <Divider mt="md" mb="md" />
 
-                                <SmStatRow
-                                    title='Total views'
-                                    countryValue={countryYoutubeProfile.views}
-                                    institutionValue={institutionYoutubeProfile.views}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <div>
-                                    <Text
-                                        color="dimmed"
-                                        transform="uppercase"
-                                        weight={700}
-                                        size="xs"
-                                    >
-                                        Description
-                                    </Text>
-                                    <Text weight={700} size="md" color={institutionYoutubeProfile.descriptionGood ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                        {
-                                            institutionYoutubeProfile.descriptionGood ? "GOOD LENGTH" : "BAD LENGTH"
-                                        }
-                                    </Text>
-                                </div>
-                            </Card.Section>
-                        </Card>
+                            <SmStatRow
+                                title='Total views'
+                                countryValue={countryYoutubeProfile.views}
+                                institutionValue={institutionYoutubeProfile.views}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <div>
+                                <Text
+                                    color="dimmed"
+                                    transform="uppercase"
+                                    weight={700}
+                                    size="xs"
+                                >
+                                    Description
+                                </Text>
+                                <Text weight={700} size="md" color={institutionYoutubeProfile.descriptionGood ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                    {
+                                        institutionYoutubeProfile.descriptionGood ? "GOOD LENGTH" : "BAD LENGTH"
+                                    }
+                                </Text>
+                            </div>
+                        </Card.Section>
+                    </Card>
 
-                        <Card shadow={"xs"} className={classes.card}>
+                    <Card shadow={"xs"} className={classes.card}>
 
-                            <Title order={4}>Video statistic</Title>
-                            <Text>Basic information about the institutions twitter profile.</Text>
+                        <Title order={4}>Video statistic</Title>
+                        <Text>Basic information about the institutions twitter profile.</Text>
 
-                            <Card.Section className={classes.cardSection}>
-                                <SmStatRow
-                                    title='Total videos'
-                                    countryValue={countryYoutubeProfile.videos}
-                                    institutionValue={institutionYoutubeProfile.videos}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <SmStatRow
-                                    title='Average likes per video'
-                                    countryValue={countryYoutubeProfile.averageLikes}
-                                    institutionValue={institutionYoutubeProfile.averageLikes}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <SmStatRow
-                                    title='Average comments per video'
-                                    countryValue={countryYoutubeProfile.averageComments}
-                                    institutionValue={institutionYoutubeProfile.averageComments}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <SmStatRow
-                                    title='Average views per video'
-                                    countryValue={countryYoutubeProfile.averageViews}
-                                    institutionValue={institutionYoutubeProfile.averageViews}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <div>
-                                    <Text
-                                        color="dimmed"
-                                        transform="uppercase"
-                                        weight={700}
-                                        size="xs"
-                                    >
-                                        Average video tags
-                                    </Text>
-                                    <Text weight={700} size="md" color={institutionYoutubeProfile.videosHaveTags ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                        {
-                                            institutionYoutubeProfile.videosHaveTags ? "GOOD AMOUNT" : "BAD AMOUNT"
-                                        }
-                                    </Text>
-                                </div>
-                            </Card.Section>
-                        </Card>
-                    </SimpleGrid>
-                </Stack>
-            </WhitePaper>
+                        <Card.Section className={classes.cardSection}>
+                            <SmStatRow
+                                title='Total videos'
+                                countryValue={countryYoutubeProfile.videos}
+                                institutionValue={institutionYoutubeProfile.videos}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average likes per video'
+                                countryValue={countryYoutubeProfile.averageLikes}
+                                institutionValue={institutionYoutubeProfile.averageLikes}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average comments per video'
+                                countryValue={countryYoutubeProfile.averageComments}
+                                institutionValue={institutionYoutubeProfile.averageComments}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average views per video'
+                                countryValue={countryYoutubeProfile.averageViews}
+                                institutionValue={institutionYoutubeProfile.averageViews}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <div>
+                                <Text
+                                    color="dimmed"
+                                    transform="uppercase"
+                                    weight={700}
+                                    size="xs"
+                                >
+                                    Average video tags
+                                </Text>
+                                <Text weight={700} size="md" color={institutionYoutubeProfile.videosHaveTags ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                    {
+                                        institutionYoutubeProfile.videosHaveTags ? "GOOD AMOUNT" : "BAD AMOUNT"
+                                    }
+                                </Text>
+                            </div>
+                        </Card.Section>
+                    </Card>
+                </SimpleGrid>
+            </Stack>
         </ResponsiveWrapper>
     )
 }

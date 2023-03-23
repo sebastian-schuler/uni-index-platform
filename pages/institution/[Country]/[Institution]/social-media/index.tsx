@@ -104,38 +104,36 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, las
 
             <InstitutionNav title={institution.name} />
 
-            <WhitePaper>
-                <Stack spacing={"lg"}>
+            <Stack spacing={"lg"}>
 
-                    {/* Header Section */}
-                    <Stack>
-                        <div>
-                            <Title order={2}>{t('social-media.header')}</Title>
-                            <Text>{t('social-media.header-text', { name: institution.name })}</Text>
-                            <Text>{t('institution.label-lastupdate', { date: lastUpdateString })}</Text>
-                        </div>
-                        <SimpleGrid
-                            breakpoints={[
-                                { minWidth: 'md', cols: 4, spacing: 'md' },
-                                { minWidth: 'sm', cols: 2, spacing: 'sm' },
-                            ]}
-                        >
-                            {socialMediaPages}
-                        </SimpleGrid>
-                    </Stack>
-
-                    <SmOverviewSection
-                        socialMediaLinks={socialMediaLinks}
-                        country={country}
-                        institution={institution}
-                        institutionScore={institutionScore}
-                        countryPercentScore={countryScore}
-                        countryTwitterScore={countryTwitterScore}
-                        countryYoutubeScore={countryYoutubeScore}
-                    />
-
+                {/* Header Section */}
+                <Stack>
+                    <div>
+                        <Title order={2}>{t('social-media.header')}</Title>
+                        <Text>{t('social-media.header-text', { name: institution.name })}</Text>
+                        <Text>{t('institution.label-lastupdate', { date: lastUpdateString })}</Text>
+                    </div>
+                    <SimpleGrid
+                        breakpoints={[
+                            { minWidth: 'md', cols: 4, spacing: 'md' },
+                            { minWidth: 'sm', cols: 2, spacing: 'sm' },
+                        ]}
+                    >
+                        {socialMediaPages}
+                    </SimpleGrid>
                 </Stack>
-            </WhitePaper>
+
+                <SmOverviewSection
+                    socialMediaLinks={socialMediaLinks}
+                    country={country}
+                    institution={institution}
+                    institutionScore={institutionScore}
+                    countryPercentScore={countryScore}
+                    countryTwitterScore={countryTwitterScore}
+                    countryYoutubeScore={countryYoutubeScore}
+                />
+
+            </Stack>
 
         </ResponsiveWrapper>
     )

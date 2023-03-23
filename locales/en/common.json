@@ -75,7 +75,11 @@
   },
 
   "card-city": {
-    "label-areacodes": "Area codes: {{codes}}",
+    "label-areacodes": {
+      "0": "No area codes",
+      "one": "Area code: {{codes}}",
+      "other": "Area codes: {{codes}}"
+    },
     "label-universities": {
       "0": "No institutions",
       "one": "{{count}} institution",
@@ -92,6 +96,22 @@
 
   "countries-search-label": "Search for a country",
   "countries-search-placeholder": "e.g. Germany",
+
+  "order-by": {
+    "label": "Order by",
+    "order-popularity": "Popularity",
+    "order-az": "A-Z",
+    "order-za": "Z-A",
+    "order-subjects": "Subject count"
+  },
+
+  "pagination": {
+    "label": "Page {{page}}",
+    "prev": "Previous page",
+    "next": "Next page",
+    "first": "First page",
+    "last": "Last page"
+  },
 
   "ads": {
     "title": "Ads",

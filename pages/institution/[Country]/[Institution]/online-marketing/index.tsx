@@ -108,37 +108,35 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
       <InstitutionNav title={institution.name} />
 
-      <WhitePaper>
-        <Stack>
+      <Stack>
 
-          <div>
-            <Title order={2}>{t('online-marketing.header')}</Title>
-            <Text>{t('online-marketing.header-text', { name: institution.name })}</Text>
-          </div>
+        <div>
+          <Title order={2}>{t('online-marketing.header')}</Title>
+          <Text>{t('online-marketing.header-text', { name: institution.name })}</Text>
+        </div>
 
-          <Group position='apart'>
-            <Text>{t('institution.label-lastupdate', { date: lastUpdate })}</Text>
-            <Text>
-              <Trans
-                i18nKey='institution:online-marketing.label-website'
-                components={[<MantineLink key={'label-website'} type='external' url={lhr.institution.website} />]}
-                values={{ label: lhr.institution.website }}
-              />
-            </Text>
-          </Group>
+        <Group position='apart'>
+          <Text>{t('institution.label-lastupdate', { date: lastUpdate })}</Text>
+          <Text>
+            <Trans
+              i18nKey='institution:online-marketing.label-website'
+              components={[<MantineLink key={'label-website'} type='external' url={lhr.institution.website} />]}
+              values={{ label: lhr.institution.website }}
+            />
+          </Text>
+        </Group>
 
-          <SimpleGrid
-            breakpoints={[
-              { minWidth: 'sm', cols: 1 },
-              { minWidth: 'md', cols: 2 },
-              { minWidth: 'lg', cols: 2 },
-            ]}
-          >
-            {categoryCards}
-          </SimpleGrid>
+        <SimpleGrid
+          breakpoints={[
+            { minWidth: 'sm', cols: 1 },
+            { minWidth: 'md', cols: 2 },
+            { minWidth: 'lg', cols: 2 },
+          ]}
+        >
+          {categoryCards}
+        </SimpleGrid>
 
-        </Stack>
-      </WhitePaper>
+      </Stack>
     </ResponsiveWrapper>
   )
 }

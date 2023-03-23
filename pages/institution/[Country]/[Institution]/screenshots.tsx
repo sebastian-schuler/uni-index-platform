@@ -4,10 +4,9 @@ import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
 import { useState } from 'react'
-import WhitePaper from '../../../../components/Paper/WhitePaper'
+import ResponsiveWrapper from '../../../../components/Container/ResponsiveWrapper'
 import Breadcrumb from '../../../../features/Breadcrumb/Breadcrumb'
 import { FooterContent } from '../../../../features/Footer/Footer'
-import ResponsiveWrapper from '../../../../components/Container/ResponsiveWrapper'
 import InstitutionNav from '../../../../features/Navigation/InstitutionNav'
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries'
 import { getInstitutionScreenshots } from '../../../../lib/prisma/prismaScreenshots'
@@ -67,38 +66,32 @@ const InstitutionScreenshots: NextPage<Props> = ({ institution, country, screens
 
       <InstitutionNav title={institution.name} />
 
-      <WhitePaper>
 
-        <Grid>
+      <Grid>
 
-          <Grid.Col span={3}>
-            {
-              screenshotPairs.map((pair, index) => (
-                <div key={index}>
-                  <Stack my={"sm"} spacing={0} className={classes.screenshotThumbnail} onClick={() => setSelectedScreenshot(pair)}>
-                    <Text weight={"bold"}>{getDateString(Number(pair.thumbnail.timestamp), lang)}</Text>
-                    <Image src={toLink(PATH_INSTITUTION_SCREENSHOTS, pair.thumbnail.institution_id, pair.thumbnail.filename + ".jpg")} alt={""} fit={"scale-down"} />
-                  </Stack>
-                  <Divider />
-                </div>
-              ))
-            }
-          </Grid.Col>
+        <Grid.Col span={3}>
+          {
+            screenshotPairs.map((pair, index) => (
+              <div key={index}>
+                <Stack my={"sm"} spacing={0} className={classes.screenshotThumbnail} onClick={() => setSelectedScreenshot(pair)}>
+                  <Text weight={"bold"}>{getDateString(Number(pair.thumbnail.timestamp), lang)}</Text>
+                  <Image src={toLink(PATH_INSTITUTION_SCREENSHOTS, pair.thumbnail.institution_id, pair.thumbnail.filename + ".jpg")} alt={""} fit={"scale-down"} />
+                </Stack>
+                <Divider />
+              </div>
+            ))
+          }
+        </Grid.Col>
 
-          <Grid.Col span={9}>
-            {
-              selectedScreenshot && (
-                <Image src={toLink(PATH_INSTITUTION_SCREENSHOTS, selectedScreenshot.full.institution_id, selectedScreenshot.full.filename + ".jpg")} alt={""} fit={"scale-down"} />
-              )
-            }
-          </Grid.Col>
+        <Grid.Col span={9}>
+          {
+            selectedScreenshot && (
+              <Image src={toLink(PATH_INSTITUTION_SCREENSHOTS, selectedScreenshot.full.institution_id, selectedScreenshot.full.filename + ".jpg")} alt={""} fit={"scale-down"} />
+            )
+          }
+        </Grid.Col>
 
-        </Grid>
-
-
-      </WhitePaper>
-
-
+      </Grid>
 
     </ResponsiveWrapper>
   )

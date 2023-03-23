@@ -1,25 +1,26 @@
 import { Group, SimpleGrid, Stack } from '@mantine/core';
 import { Country, State } from '@prisma/client';
 import { Reorder } from 'framer-motion';
+import produce from 'immer';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
+import { useEffect, useState } from 'react';
 import GenericPageHeader from '../../../../components/Block/GenericPageHeader';
 import CityCard from '../../../../components/Card/CityCard';
 import ResponsiveWrapper from '../../../../components/Container/ResponsiveWrapper';
+import ItemSearch from '../../../../components/Searchbox/ItemSearch';
+import OrderBySelect from '../../../../components/Select/OrderBySelect';
 import Breadcrumb from '../../../../features/Breadcrumb/Breadcrumb';
 import { FooterContent } from '../../../../features/Footer/Footer';
 import prisma from '../../../../lib/prisma/prisma';
 import { getCitiesDetailedByState } from '../../../../lib/prisma/prismaDetailedQueries';
-import { getCountries, getCountryByState, getState } from '../../../../lib/prisma/prismaQueries';
+import { getCountries, getCountryStateByStateUrl, getState } from '../../../../lib/prisma/prismaQueries';
+import { OrderBy } from '../../../../lib/types/OrderBy';
 import { CityCardData, Searchable } from '../../../../lib/types/UiHelperTypes';
 import { convertCityToCardData } from '../../../../lib/util/conversionUtil';
 import { generateSearchable, getLocalizedName } from '../../../../lib/util/util';
-import { useState, useEffect } from 'react';
-import OrderBySelect, { OrderByState } from '../../../../components/Select/OrderBySelect';
-import produce from 'immer';
-import ItemSearch from '../../../../components/Searchbox/ItemSearch';
 
 interface Props {
     searchables: Searchable[],
@@ -37,7 +38,7 @@ const StatePage: NextPage<Props> = ({ searchables, stateInfo, countryInfo, foote
     const [dataList, setDataList] = useState<Searchable[]>(searchables);
 
     // Filter
-    const [orderBy, setOrderBy] = useState<OrderByState>("popularity");
+    const [orderBy, setOrderBy] = useState<OrderBy>("popularity");
     const [searchTerm, setSearchTerm] = useState<string>("");
 
     useEffect(() => {
@@ -63,7 +64,7 @@ const StatePage: NextPage<Props> = ({ searchables, stateInfo, countryInfo, foote
                         if (
                             data.name.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
                             data.areaCodes.some((areaCode) => areaCode.startsWith(searchTerm))
-                            ) {
+                        ) {
                             searchable.visible = true;
                         } else {
                             searchable.visible = false;
@@ -90,12 +91,12 @@ const StatePage: NextPage<Props> = ({ searchables, stateInfo, countryInfo, foote
 
                 <Group position='apart' >
                     <ItemSearch
-                        label={t('state.search-label',{state: stateName})}
+                        label={t('state.search-label', { state: stateName })}
                         placeholder={t('state.search-placeholder')}
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}
                     />
-                    <OrderBySelect orderBy={orderBy} handleChange={setOrderBy} />
+                    <OrderBySelect variant='default' orderBy={orderBy} handleChange={setOrderBy} />
                 </Group>
 
                 <Reorder.Group values={dataList} onReorder={setDataList} as={"div"}>
@@ -191,7 +192,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
     // Selected State information
     const stateInfo = await getState(stateUrl);
-    const countryInfo = await getCountryByState(stateUrl);
+    const countryInfo = await getCountryStateByStateUrl(stateUrl);
     const cities = await getCitiesDetailedByState(stateUrl);
     // Convert to CityCardData and generate Searchable
     const countryData: CityCardData[] = cities.map(city => convertCityToCardData(city, lang));

@@ -1,7 +1,8 @@
 import { createStyles, Select } from '@mantine/core';
 import { IconArrowsSort } from '@tabler/icons-react';
+import useTranslation from 'next-translate/useTranslation';
 import * as React from 'react';
-import { OrderBy, OrderCategoryBy } from '../../lib/types/zod/zodOrderBy';
+import { OrderBy, OrderCategoryBy } from '../../lib/types/OrderBy';
 
 const useStyles = createStyles((theme) => ({
     input: {
@@ -24,21 +25,22 @@ type Props = {
 
 const OrderBySelect: React.FC<Props> = ({ variant, orderBy, handleChange }: Props) => {
     const { classes } = useStyles();
+    const { t } = useTranslation('common');
 
     let data = [
-        { value: 'popularity', label: 'Popularity' },
-        { value: 'az', label: 'A-Z' },
-        { value: 'za', label: 'Z-A' },
+        { value: 'popularity', label: t('order-by.order-popularity') },
+        { value: 'az', label: t('order-by.order-az') },
+        { value: 'za', label: t('order-by.order-za') },
     ]
 
     if (variant === "categories") {
-        data.push({ value: 'subject-count', label: 'Subject Count' })
+        data.push({ value: 'subject-count', label: t('order-by.order-subjects') })
     }
 
     return (
         <Select
             size={'md'}
-            label="Order by"
+            label={t('order-by.label')}
             radius="md"
             data={data}
             value={orderBy}

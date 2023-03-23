@@ -82,121 +82,119 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, country
                 <meta key={"description"} name="description" content={t('social-media-twitter-description', { institution: institution.name })} />
             </Head>
 
-            <WhitePaper>
-                <Stack>
-                    <Breadcrumb countryInfo={country} institutionInfo={institution} />
+            <Stack>
+                <Breadcrumb countryInfo={country} institutionInfo={institution} />
 
-                    <Group position='apart'>
-                        <div>
-                            <Title order={3}>Twitter Details</Title>
-                            <Text>All social media profiles at a glance.</Text>
-                        </div>
-                        <Button component={Link} href={urlBack} variant='light' radius={"md"}>Go back</Button>
-                    </Group>
+                <Group position='apart'>
+                    <div>
+                        <Title order={3}>Twitter Details</Title>
+                        <Text>All social media profiles at a glance.</Text>
+                    </div>
+                    <Button component={Link} href={urlBack} variant='light' radius={"md"}>Go back</Button>
+                </Group>
 
-                    <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
+                <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
 
-                        <Card shadow={"xs"} className={classes.card}>
+                    <Card shadow={"xs"} className={classes.card}>
 
-                            <Title order={4}>Profile statistic</Title>
-                            <Text>Basic information about the institutions twitter profile.</Text>
+                        <Title order={4}>Profile statistic</Title>
+                        <Text>Basic information about the institutions twitter profile.</Text>
 
-                            <Card.Section className={classes.cardSection}>
+                        <Card.Section className={classes.cardSection}>
 
-                                <SmStatRow
-                                    title='Followers'
-                                    countryValue={countryTwitterProfile.followers}
-                                    institutionValue={institutionTwitterProfile.followers}
-                                />
-                                <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Followers'
+                                countryValue={countryTwitterProfile.followers}
+                                institutionValue={institutionTwitterProfile.followers}
+                            />
+                            <Divider mt="md" mb="md" />
 
-                                <SmStatRow
-                                    title='Following'
-                                    countryValue={countryTwitterProfile.following}
-                                    institutionValue={institutionTwitterProfile.following}
-                                />
+                            <SmStatRow
+                                title='Following'
+                                countryValue={countryTwitterProfile.following}
+                                institutionValue={institutionTwitterProfile.following}
+                            />
 
-                                <Divider mt="md" mb="md" />
+                            <Divider mt="md" mb="md" />
 
-                                <SmStatRow
-                                    title='List appearances'
-                                    countryValue={countryTwitterProfile.listed}
-                                    institutionValue={institutionTwitterProfile.listed}
-                                />
+                            <SmStatRow
+                                title='List appearances'
+                                countryValue={countryTwitterProfile.listed}
+                                institutionValue={institutionTwitterProfile.listed}
+                            />
 
-                                <Divider mt="md" mb="md" />
+                            <Divider mt="md" mb="md" />
 
-                                <div>
-                                    <Text
-                                        color="dimmed"
-                                        transform="uppercase"
-                                        weight={700}
-                                        size="xs"
-                                    >
-                                        Profile status
-                                    </Text>
-                                    <Text weight={700} size="md" color={institutionTwitterProfile.isVerified ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                        {
-                                            institutionTwitterProfile.isVerified ? "VERIFIED" : "NOT VERIFIED"
-                                        }
-                                    </Text>
-                                </div>
+                            <div>
+                                <Text
+                                    color="dimmed"
+                                    transform="uppercase"
+                                    weight={700}
+                                    size="xs"
+                                >
+                                    Profile status
+                                </Text>
+                                <Text weight={700} size="md" color={institutionTwitterProfile.isVerified ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                    {
+                                        institutionTwitterProfile.isVerified ? "VERIFIED" : "NOT VERIFIED"
+                                    }
+                                </Text>
+                            </div>
 
-                                <Divider mt="md" mb="md" />
+                            <Divider mt="md" mb="md" />
 
-                                <div>
-                                    <Text
-                                        color="dimmed"
-                                        transform="uppercase"
-                                        weight={700}
-                                        size="xs"
-                                    >
-                                        Website link
-                                    </Text>
-                                    <Text weight={700} size="md" color={institutionTwitterProfile.isWebsiteLinked ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                        {
-                                            institutionTwitterProfile.isWebsiteLinked ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
-                                        }
-                                    </Text>
-                                </div>
+                            <div>
+                                <Text
+                                    color="dimmed"
+                                    transform="uppercase"
+                                    weight={700}
+                                    size="xs"
+                                >
+                                    Website link
+                                </Text>
+                                <Text weight={700} size="md" color={institutionTwitterProfile.isWebsiteLinked ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                    {
+                                        institutionTwitterProfile.isWebsiteLinked ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
+                                    }
+                                </Text>
+                            </div>
 
-                            </Card.Section>
-                        </Card>
+                        </Card.Section>
+                    </Card>
 
-                        <Card shadow={"xs"} className={classes.card}>
+                    <Card shadow={"xs"} className={classes.card}>
 
-                            <Title order={4}>Tweet statistic</Title>
-                            <Text>Basic information about the institutions twitter profile.</Text>
+                        <Title order={4}>Tweet statistic</Title>
+                        <Text>Basic information about the institutions twitter profile.</Text>
 
-                            <Card.Section className={classes.cardSection}>
-                                <SmStatRow
-                                    title='Total tweets'
-                                    countryValue={countryTwitterProfile.tweets}
-                                    institutionValue={institutionTwitterProfile.tweets}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <SmStatRow
-                                    title='Average likes per tweet'
-                                    countryValue={countryTwitterProfile.avgLikes}
-                                    institutionValue={institutionTwitterProfile.avgLikes}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <SmStatRow
-                                    title='Average replies per tweet'
-                                    countryValue={countryTwitterProfile.avgReplies}
-                                    institutionValue={institutionTwitterProfile.avgReplies}
-                                />
-                                <Divider mt="md" mb="md" />
-                                <SmStatRow
-                                    title='Average retweets per tweet'
-                                    countryValue={countryTwitterProfile.avgRetweets}
-                                    institutionValue={institutionTwitterProfile.avgRetweets}
-                                />
-                            </Card.Section>
-                        </Card>
-                    </SimpleGrid>
-                </Stack>
-            </WhitePaper>
+                        <Card.Section className={classes.cardSection}>
+                            <SmStatRow
+                                title='Total tweets'
+                                countryValue={countryTwitterProfile.tweets}
+                                institutionValue={institutionTwitterProfile.tweets}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average likes per tweet'
+                                countryValue={countryTwitterProfile.avgLikes}
+                                institutionValue={institutionTwitterProfile.avgLikes}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average replies per tweet'
+                                countryValue={countryTwitterProfile.avgReplies}
+                                institutionValue={institutionTwitterProfile.avgReplies}
+                            />
+                            <Divider mt="md" mb="md" />
+                            <SmStatRow
+                                title='Average retweets per tweet'
+                                countryValue={countryTwitterProfile.avgRetweets}
+                                institutionValue={institutionTwitterProfile.avgRetweets}
+                            />
+                        </Card.Section>
+                    </Card>
+                </SimpleGrid>
+            </Stack>
         </ResponsiveWrapper>
     )
 }
