@@ -119,4 +119,17 @@ export type ArticleCardData = {
     excerpt: string
     imageUrl: string | null
     date: number
+    Institution: {
+        name: string
+        url: string
+    }
+    Country: {
+        name: string
+        url: string
+        countryCode: string
+    }
+}
+
+export type ArticleData = ArticleCardData & {
+    content: string
 }

@@ -128,6 +128,7 @@ model User {
   date_registered BigInt
   Institution     Institution   @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User belongs to institution")
   UserAd          UserAd[]
+  UserAdPost      UserAdPost[]
   UserSession     UserSession[]
 }
 
@@ -210,4 +211,7 @@ model UserAdPost {
   date_posted Decimal @db.Decimal
   excerpt     String  @db.VarChar
   image       String  @db.VarChar
+  User        User    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User has AdPosts")
+
+  @@unique([url, user_id])
 }

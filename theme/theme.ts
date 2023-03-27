@@ -73,7 +73,7 @@ const appTheme: MantineThemeOverride = {
     fontFamily: 'roboto, arial, sans-serif',
     sizes: {
       h1: {
-        fontSize: '3.5em',
+        fontSize: '3em',
         fontWeight: 700,
         lineHeight: 1.1,
       },

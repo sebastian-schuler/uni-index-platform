@@ -47,8 +47,10 @@ const InstitutionPage: NextPage<Props> = ({ institution, country, wikipediaConte
 
 export async function getStaticProps(context: GetStaticPropsContext) {
 
-  let countryUrl = "" + context?.params?.Country;
-  let institutionUrl = "" + context?.params?.Institution;
+  let countryUrl = context?.params?.Country ? context?.params?.Country as string : null;
+  let institutionUrl = context?.params?.Institution ? context?.params?.Institution as string : null;
+
+  if (!countryUrl || !institutionUrl) return { notFound: true };
 
   const country = await getCountry(countryUrl);
   const institution = await getInstitution({ institutionUrl });

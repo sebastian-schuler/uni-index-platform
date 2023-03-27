@@ -1,7 +1,7 @@
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import React, { memo } from 'react'
-import { URL_INSTITUTION } from '../../lib/url-helper/urlConstants';
+import { URL_INSTITUTION, URL_INSTITUTION_ARTICLES, URL_INSTITUTION_OM, URL_INSTITUTION_REVIEWS, URL_INSTITUTION_SCREENSHOTS, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SUBJECTS } from '../../lib/url-helper/urlConstants';
 import SubNav from '../../components/Nav/SubNav';
 
 type Props = {
@@ -21,23 +21,27 @@ const InstitutionNav = ({ title }: Props) => {
         },
         {
             name: t('institution.tab-social-media'),
-            url: urlBasePath + "/social-media"
+            url: urlBasePath + "/" + URL_INSTITUTION_SOCIALMEDIA
         },
         {
             name: t('institution.tab-online-marketing'),
-            url: urlBasePath + "/online-marketing"
+            url: urlBasePath + "/" + URL_INSTITUTION_OM
         },
         {
             name: t('institution.tab-courses'),
-            url: urlBasePath + "/subjects"
+            url: urlBasePath + "/" + URL_INSTITUTION_SUBJECTS
         },
         {
             name: t('institution.tab-screenshots'),
-            url: urlBasePath + "/screenshots"
+            url: urlBasePath + "/" + URL_INSTITUTION_SCREENSHOTS
         },
         {
             name: t('institution.tab-reviews'),
-            url: urlBasePath + "/reviews"
+            url: urlBasePath + "/" + URL_INSTITUTION_REVIEWS
+        },
+        {
+            name: "Articles",
+            url: urlBasePath + "/" + URL_INSTITUTION_ARTICLES
         },
     ]
 

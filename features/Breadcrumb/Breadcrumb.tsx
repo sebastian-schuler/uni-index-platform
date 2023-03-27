@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 import MantineLink from '../../components/Link/MantineLink';
-import { URL_INSTITUTION, URL_INSTITUTIONS, URL_INSTITUTION_OM, URL_INSTITUTION_OM_ACCESSIBILITY, URL_INSTITUTION_OM_BESTPRACTICES, URL_INSTITUTION_OM_PERFORMANCE, URL_INSTITUTION_OM_PWA, URL_INSTITUTION_OM_SEO, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SOCIALMEDIA_TW, URL_INSTITUTION_SOCIALMEDIA_YT, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING, URL_SOCIAL_MEDIA_STATISTICS, URL_CATEGORY, URL_CATEGORIES, URL_ANALYSIS } from '../../lib/url-helper/urlConstants';
+import { URL_INSTITUTION, URL_INSTITUTIONS, URL_INSTITUTION_OM, URL_INSTITUTION_OM_ACCESSIBILITY, URL_INSTITUTION_OM_BESTPRACTICES, URL_INSTITUTION_OM_PERFORMANCE, URL_INSTITUTION_OM_PWA, URL_INSTITUTION_OM_SEO, URL_INSTITUTION_SOCIALMEDIA, URL_INSTITUTION_SOCIALMEDIA_TW, URL_INSTITUTION_SOCIALMEDIA_YT, URL_LOCATION, URL_LOCATIONS, URL_SEARCH, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING, URL_SOCIAL_MEDIA_STATISTICS, URL_CATEGORY, URL_CATEGORIES, URL_ANALYSIS, URL_INSTITUTION_ARTICLES } from '../../lib/url-helper/urlConstants';
 import { getLocalizedName, toLink } from '../../lib/util/util';
 
 const useStyles = createStyles((theme) => {
@@ -230,6 +230,22 @@ const Breadcrumb: NextPage<Props> = ({ countryInfo, stateInfo, cityInfo, subject
                         name: checkTranslationNull(subject, subjectTranslated),
                         url: toLink(URL_INSTITUTION, country, institution, subject)
                     });
+
+                } else if (route.startsWith(toLink(URL_INSTITUTION, "[Country]", "[Institution]", URL_INSTITUTION_ARTICLES))) {
+                    // INSTITUTIONS > COUNTRY > INSTITUTION > ARTICLES
+                    links.push({
+                        name: "Articles",
+                        url: toLink(URL_INSTITUTION, country, institution, URL_INSTITUTION_ARTICLES)
+                    });
+
+                    if (route.startsWith(toLink(URL_INSTITUTION, "[Country]", "[Institution]", URL_INSTITUTION_ARTICLES, "[Article]"))) {
+                        // INSTITUTIONS > COUNTRY > INSTITUTION > ARTICLES > ARTICLE
+                        let article = query.Article as string;
+                        links.push({
+                            name: article,
+                            url: toLink(URL_INSTITUTION, country, institution, URL_INSTITUTION_ARTICLES)
+                        });
+                    }
                 }
             }
         }
