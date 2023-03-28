@@ -1,4 +1,4 @@
-import { Country } from '@prisma/client';
+import { country } from '@prisma/client';
 import { ArticleCardData, ArticleData } from '../types/UiHelperTypes';
 import { getLocalizedName } from '../util/util';
 import prisma from './prisma';
@@ -10,7 +10,7 @@ export const getAdPostByUrl = async (postUrl: string, institutionUrl: string, la
             url: institutionUrl,
         },
         select: {
-            User: {
+            user: {
                 select: {
                     id: true,
                 }
@@ -18,11 +18,11 @@ export const getAdPostByUrl = async (postUrl: string, institutionUrl: string, la
         }
     });
 
-    if (!userRes || userRes.User.length === 0) return null; // TODO Should change database so that an institution can only have one user
+    if (!userRes || userRes.user.length === 0) return null; // TODO Should change database so that an institution can only have one user
 
-    const userId = userRes.User[0].id;
+    const userId = userRes.user[0].id;
 
-    const res = await prisma.userAdPost.findUnique({
+    const res = await prisma.user_article.findUnique({
         where: {
             url_user_id: {
                 url: postUrl,
@@ -30,17 +30,17 @@ export const getAdPostByUrl = async (postUrl: string, institutionUrl: string, la
             }
         },
         include: {
-            User: {
+            user: {
                 select: {
-                    Institution: {
+                    institution: {
                         select: {
                             name: true,
                             url: true,
-                            City: {
+                            city: {
                                 select: {
-                                    State: {
+                                    state: {
                                         select: {
-                                            Country: {
+                                            country: {
                                                 select: {
                                                     name: true,
                                                     url: true,
@@ -65,17 +65,17 @@ export const getAdPostByUrl = async (postUrl: string, institutionUrl: string, la
             excerpt: res.excerpt,
             url: res.url,
             title: res.title,
-            imageUrl: res.image,
+            imageUrl: res.image_id,
             date: Number(res.date_posted),
             content: res.content,
-            Country: {
-                url: res.User.Institution.City.State.Country.url,
-                name: getLocalizedName({ lang, dbTranslated: res.User.Institution.City.State.Country as Country }),
-                countryCode: res.User.Institution.City.State.Country.country_code,
+            country: {
+                url: res.user.institution.city.state.country.url,
+                name: getLocalizedName({ lang, dbTranslated: res.user.institution.city.state.country as country }),
+                countryCode: res.user.institution.city.state.country.country_code,
             },
-            Institution: {
-                name: res.User.Institution.name,
-                url: res.User.Institution.url,
+            institution: {
+                name: res.user.institution.name,
+                url: res.user.institution.url,
             }
         });
     } else {
@@ -85,10 +85,10 @@ export const getAdPostByUrl = async (postUrl: string, institutionUrl: string, la
 
 export const getAllAdPosts = async (lang: string, institutionIdFilter?: string): Promise<ArticleCardData[]> => { // 
 
-    const res = await prisma.userAdPost.findMany({
+    const res = await prisma.user_article.findMany({
         where: {
-            User: {
-                Institution: {
+            user: {
+                institution: {
                     id: institutionIdFilter,
                 }
             }
@@ -97,20 +97,20 @@ export const getAllAdPosts = async (lang: string, institutionIdFilter?: string):
             id: true,
             title: true,
             excerpt: true,
-            image: true,
+            image_id: true,
             url: true,
             date_posted: true,
-            User: {
+            user: {
                 select: {
-                    Institution: {
+                    institution: {
                         select: {
                             name: true,
                             url: true,
-                            City: {
+                            city: {
                                 select: {
-                                    State: {
+                                    state: {
                                         select: {
-                                            Country: {
+                                            country: {
                                                 select: {
                                                     name: true,
                                                     url: true,
@@ -135,16 +135,16 @@ export const getAllAdPosts = async (lang: string, institutionIdFilter?: string):
             excerpt: item.excerpt,
             url: item.url,
             title: item.title,
-            imageUrl: item.image,
+            imageUrl: item.image_id,
             date: Number(item.date_posted),
-            Country: {
-                url: item.User.Institution.City.State.Country.url,
-                name: getLocalizedName({ lang, dbTranslated: item.User.Institution.City.State.Country as Country }),
-                countryCode: item.User.Institution.City.State.Country.country_code,
+            country: {
+                url: item.user.institution.city.state.country.url,
+                name: getLocalizedName({ lang, dbTranslated: item.user.institution.city.state.country as country }),
+                countryCode: item.user.institution.city.state.country.country_code,
             },
-            Institution: {
-                name: item.User.Institution.name,
-                url: item.User.Institution.url,
+            institution: {
+                name: item.user.institution.name,
+                url: item.user.institution.url,
             }
         })
     });

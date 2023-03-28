@@ -1,12 +1,11 @@
 import { Text, Title } from '@mantine/core';
-import { Country, Institution } from '@prisma/client';
+import { country, institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
-import WhitePaper from '../../../../components/Paper/WhitePaper';
+import ResponsiveWrapper from '../../../../components/Container/ResponsiveWrapper';
 import Breadcrumb from '../../../../features/Breadcrumb/Breadcrumb';
 import { FooterContent } from '../../../../features/Footer/Footer';
-import ResponsiveWrapper from '../../../../components/Container/ResponsiveWrapper';
 import InstitutionNav from '../../../../features/Navigation/InstitutionNav';
 import { searchWikipedia } from '../../../../lib/apis/wikipediaHandler';
 import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma/prismaQueries';
@@ -14,8 +13,8 @@ import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPath
 import { getLocalizedName } from '../../../../lib/util/util';
 
 interface Props {
-  institution: Institution | null,
-  country: Country | null,
+  institution: institution | null,
+  country: country | null,
   wikipediaContent: string,
   footerContent: FooterContent[]
 }

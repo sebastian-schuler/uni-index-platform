@@ -8,6 +8,7 @@ import Flags from 'country-flag-icons/react/3x2'
 import { toLink } from '../../lib/util/util'
 import { URL_INSTITUTION, URL_INSTITUTION_ARTICLES } from '../../lib/url-helper/urlConstants'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -41,10 +42,16 @@ const ArticleCard: React.FC<Props> = ({ data }: Props) => {
 
     const { classes, theme } = useStyles();
     const { t } = useTranslation('common');
-    const Flag = Flags[data.Country.countryCode || ""] || Flags["EU"];
+    
+    const url = toLink(URL_INSTITUTION, data.country.url, data.institution.url, URL_INSTITUTION_ARTICLES, data.url);
+    const urlInstitution = toLink(URL_INSTITUTION, data.country.url, data.institution.url, URL_INSTITUTION_ARTICLES);
 
-    const url = toLink(URL_INSTITUTION, data.Country.url, data.Institution.url, URL_INSTITUTION_ARTICLES, data.url);
-    const urlInstitution = toLink(URL_INSTITUTION, data.Country.url, data.Institution.url, URL_INSTITUTION_ARTICLES);
+    const code = data.country.countryCode || "EU";
+    let Flag: any = undefined;
+    if (Object.keys(Flags).includes(code)) {
+      // @ts-ignore
+      Flag = Flags[code] || Flags["EU"];
+    }
 
     return (
         <Card withBorder radius="md" shadow={"sm"} className={classes.card}>
@@ -60,7 +67,7 @@ const ArticleCard: React.FC<Props> = ({ data }: Props) => {
                 </Group>
                 <Text>{dayjs(data.date).format('DD/MM/YYYY')}</Text>
                 <Anchor component={Link} href={urlInstitution} className={classes.institutionLink}>
-                    <Text lh={1.5}>{data.Institution.name}</Text>
+                    <Text lh={1.5}>{data.institution.name}</Text>
                 </Anchor>
             </Card.Section>
 

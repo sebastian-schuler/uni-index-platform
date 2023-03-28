@@ -1,46 +1,27 @@
-import { Autocomplete, Group, Stack, useMantineTheme } from '@mantine/core';
-import { Subject } from '@prisma/client';
+import { Autocomplete, Stack, useMantineTheme } from '@mantine/core';
 import { IconSchool } from '@tabler/icons-react';
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react';
 import HelpPopover from '../../components/Popover/HelpPopover';
-import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
-import { UserDataProfile } from '../../lib/types/AccountHandlingTypes';
 
 export type SubjectAutofill = {
     value: string
-    subject: Subject
+    subjectId: string
 }
 
 type PropsAutocompleteSubject = {
-    token: string
-    setUserData: (userData: UserDataProfile | null) => void
     selectedAdSubject: SubjectAutofill | undefined
     setSelectedAdSubject: (subject: SubjectAutofill | undefined) => void
+    subjects: {
+        id: string;
+        name: string;
+    }[]
 }
 
-const AutocompleteSubject = ({ token, setUserData, selectedAdSubject, setSelectedAdSubject }: PropsAutocompleteSubject) => {
+const AutocompleteSubject = ({ selectedAdSubject, setSelectedAdSubject, subjects }: PropsAutocompleteSubject) => {
 
     const theme = useMantineTheme();
-    const [formAvailableSubjects, setFormAvailableSubjects] = useState<SubjectAutofill[]>([]);
     const [typedAdSubject, setTypedAdSubject] = useState<string>("");
-
-    /**
- * Gets the subjects from the api and sets them as the available subjects
- */
-    useEffect(() => {
-        const getSubjects = async () => {
-            const userDataRes = await getUserDataFromApi({ userSubjects: true, profile: true });
-            if (userDataRes === null || userDataRes.status !== "SUCCESS") return;
-
-            const subjectAutofill = userDataRes.subjects?.map((subject) => { return { value: subject.name, subject: subject } });
-            setFormAvailableSubjects(subjectAutofill || []);
-            setUserData(userDataRes.profile || null);
-        }
-
-        getSubjects();
-
-        return () => { }
-    }, [token])
+    const data = subjects.map((subject) => { return { value: subject.name, subjectId: subject.id } });
 
     return (
         <Stack spacing={'sm'}>
@@ -48,12 +29,12 @@ const AutocompleteSubject = ({ token, setUserData, selectedAdSubject, setSelecte
                 label='Subject'
                 value={selectedAdSubject?.value}
                 onChange={(value) => {
-                    setSelectedAdSubject(formAvailableSubjects.find((subject) => subject.value === value));
+                    setSelectedAdSubject(data.find((subject) => subject.value === value));
                     setTypedAdSubject(value);
                 }}
                 icon={<IconSchool color={theme.colors.brandGray[0]} />}
                 radius={theme.radius.md}
-                data={formAvailableSubjects}
+                data={data}
                 nothingFound="No subjects found"
                 required
                 limit={6}

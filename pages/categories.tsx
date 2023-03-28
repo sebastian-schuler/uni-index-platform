@@ -223,15 +223,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         { title: "Countries", data: countryList, type: "Country" },
     ]
 
-    return {
-        props: {
-            ads,
-            pageCount,
-            categories,
-            footerContent
-        }
+    const props: Props = {
+        ads,
+        pageCount,
+        categories,
+        footerContent
     }
 
+    return { props };
 }
 
 export default Subjects;

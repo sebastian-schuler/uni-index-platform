@@ -1,12 +1,12 @@
-import { Country, Institution, UserAd, Subject } from "@prisma/client";
+import { country, institution, user_ad, subject } from "@prisma/client";
 
 // Type used in getStaticProps on the server
 export type InstitutionRegistrationDBItem = {
     id: string;
     name: string;
-    User: {
+    user: {
         _count: {
-            UserSession: number;
+            user_session: number;
         };
     }[];
 };
@@ -23,7 +23,7 @@ export type InstitutionRegistrationItem = {
 export type UserDataResponse = {
     status: "SUCCESS"
     profile?: UserDataProfile
-    subjects?: Subject[]
+    subjects?: subject[]
     ads?: PremiumAdDetailed[]
 } | { status: "NO_USER" | "NO_AUTH" | "NOT_VALID" } | null; // status: is taken from UserDataStatus and is split to check for success
 
@@ -32,19 +32,19 @@ export type UserInstitutionLimited = { id: string, email: string };
 export type UserDataProfile = {
     user: UserInstitutionLimited,
     lifetime: Date,
-    institution?: Institution & {
-        InstitutionLocation: {
-            City: {
-                State: {
-                    Country: Country;
+    institution?: institution & {
+        institution_city: {
+            city: {
+                state: {
+                    country: country;
                 };
             };
         }[];
     };
 } | null;
 
-export type PremiumAdDetailed = UserAd & {
-    Subject: Subject | null;
+export type PremiumAdDetailed = user_ad & {
+    subject: subject | null;
 };
 
 // FORM

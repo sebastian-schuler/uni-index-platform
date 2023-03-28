@@ -14,11 +14,9 @@ type AdPreviewProps = {
     description: string
     adLinkedItemType: CreateAdLinkedItemType
     imageFilepath: string | undefined
-    selectedAdSubject: SubjectAutofill | undefined
-    userData: UserDataProfile | undefined
 }
 
-const AdPreview = ({ title, adSize, description, adLinkedItemType, imageFilepath, selectedAdSubject, userData }: AdPreviewProps) => {
+const AdPreview = ({ title, adSize, description, adLinkedItemType, imageFilepath }: AdPreviewProps) => {
 
     const theme = useMantineTheme();
     const SECONDARY_AD_HEIGHT = PRIMARY_AD_HEIGHT / 2 - px(theme.spacing.lg) / 2;

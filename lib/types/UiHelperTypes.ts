@@ -30,18 +30,18 @@ export type CategoryCardData = {
     id: number
     name: string
     url: string
-    subjectCount: number
+    subject_count: number
     popularity: number
 }
 
 export type InstitutionCardData = {
     mainCountryId: string
     mainStateId: string
-    Institution: {
+    institution: {
         url: string
         name: string
         nameBrackets: string
-        City: {
+        city: {
             name: string
             url: string
         }
@@ -52,7 +52,7 @@ export type InstitutionCardData = {
         name: string
         url: string
     }[]
-    InstitutionSocialMedia: {
+    socialMedia: {
         facebook_url: string | null
         twitter_url: string | null
         instagram_url: string | null
@@ -73,11 +73,11 @@ export type SubjectCardData = {
     degree: string
     duration: number
     durationType: string
-    Institution: {
+    institution: {
         name: string
         url: string
     },
-    City: {
+    city: {
         name: string
         fullUrl: string
     },
@@ -119,11 +119,11 @@ export type ArticleCardData = {
     excerpt: string
     imageUrl: string | null
     date: number
-    Institution: {
+    institution: {
         name: string
         url: string
     }
-    Country: {
+    country: {
         name: string
         url: string
         countryCode: string
@@ -136,3 +136,9 @@ export type ArticleData = ArticleCardData & {
 
 // Used for the "Create Ad" page
 export type CreateAdLinkType = "link" | "article";
+
+// Used for the "Create Ad" page
+export type FromToDateRange = {
+    from: number
+    to: number
+}

@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const dbResultInstitutes: InstitutionRegistrationDBItem[] = await getInstitutesForUserAccounts();
   const registrationInstitutes: InstitutionRegistrationItem[] = dbResultInstitutes.map(institute => {
-    return { id: institute.id, name: institute.name, hasAccount: institute.User.length === 0 ? false : true } // TODO check if ok with length
+    return { id: institute.id, name: institute.name, hasAccount: institute.user.length === 0 ? false : true } // TODO check if ok with length
   });
 
   return {

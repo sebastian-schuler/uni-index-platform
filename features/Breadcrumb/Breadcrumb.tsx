@@ -1,5 +1,5 @@
 import { Breadcrumbs, createStyles, Text } from '@mantine/core';
-import { City, Country, Institution, State, Subject, SubjectType } from '@prisma/client';
+import { city, country, institution, state, subject, category } from '@prisma/client';
 import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -26,14 +26,14 @@ const useStyles = createStyles((theme) => {
 
 interface Props {
 
-    countryInfo?: Country | null,
-    stateInfo?: State | null,
-    cityInfo?: City | null,
+    countryInfo?: country | null,
+    stateInfo?: state | null,
+    cityInfo?: city | null,
 
-    subjectTypeInfo?: SubjectType | null
-    subjectInfo?: Subject | null
+    subjectTypeInfo?: category | null
+    subjectInfo?: subject | null
 
-    institutionInfo?: Institution | null
+    institutionInfo?: institution | null
 
 }
 

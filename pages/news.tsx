@@ -4,7 +4,6 @@ import React from 'react'
 import ResponsiveWrapper from '../components/Container/ResponsiveWrapper'
 import { SimpleGrid, Stack } from '@mantine/core'
 import ArticleCard from '../components/Card/ArticleCard';
-import { UserAdPost } from '@prisma/client';
 import { ArticleCardData } from '../lib/types/UiHelperTypes';
 import { GetServerSideProps } from 'next';
 import { getAllAdPosts } from '../lib/prisma/prismaNews';

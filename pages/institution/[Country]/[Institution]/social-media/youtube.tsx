@@ -1,21 +1,20 @@
 
 import { Button, Card, createStyles, Divider, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
-import { Country, Institution } from '@prisma/client'
+import { country, institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import WhitePaper from '../../../../../components/Paper/WhitePaper'
+import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
 import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
 import { FooterContent } from '../../../../../features/Footer/Footer'
-import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
+import SmStatRow from '../../../../../features/SocialMedia/SmStatRow'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
 import { TotalScore, TotalScoreSet, YoutubeProfile } from '../../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION_SOCIALMEDIA_YT } from '../../../../../lib/url-helper/urlConstants'
-import SmStatRow from '../../../../../features/SocialMedia/SmStatRow'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -36,8 +35,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface Props {
-    institution: Institution,
-    country: Country,
+    institution: institution,
+    country: country,
     countryYoutubeScore: TotalScoreSet | null
     countryYoutubeProfile: YoutubeProfile | null
     institutionScore: TotalScoreSet | null
@@ -60,9 +59,7 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, country
             </Head>
 
             <Breadcrumb countryInfo={country} institutionInfo={institution} />
-            <WhitePaper>
-                <Text>No Youtube data</Text>
-            </WhitePaper>
+            <Text>No Youtube data</Text>
         </ResponsiveWrapper>
     );
     // IF NO SOCIAL MEDIA DATA PRESENT, RETURN ERROR COMPONENT

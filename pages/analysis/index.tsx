@@ -9,7 +9,6 @@ import Breadcrumb from '../../features/Breadcrumb/Breadcrumb'
 import { URL_ANALYSIS, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING, URL_SOCIAL_MEDIA_STATISTICS } from '../../lib/url-helper/urlConstants'
 import { toLink } from '../../lib/util/util'
 
-
 const AnalysisPage = () => {
 
   const { t } = useTranslation('analysis');

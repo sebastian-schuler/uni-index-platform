@@ -26,13 +26,13 @@ export const getStaticPathsInstitution = async (locales: string[] | undefined): 
     locales.forEach((locale) => {
         institutions.forEach((institution) => {
 
-            const mainLocationCountry = institution.City.State.Country.url;
+            const mainLocationCountry = institution.city.state.country.url;
 
             // Iterate every Institution but also every InstitutionLocation (unis can have multiple locations, even in different countries)
-            institution.Subject.forEach((subject) => {
+            institution.subject.forEach((subject) => {
                 paths.push({
                     params: {
-                        Country: subject.City?.State.Country.url,
+                        Country: subject.city?.state.country.url,
                         Institution: institution.url
                     },
                     locale,

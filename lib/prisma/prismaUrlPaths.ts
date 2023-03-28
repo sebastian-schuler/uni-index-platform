@@ -7,15 +7,15 @@ import prisma from './prisma';
 export const getInstitutionPaths = async () => {
     return await prisma.institution.findMany({
         select: {
-            City: { select: { State: { select: { Country: true } } } },
+            city: { select: { state: { select: { country: true } } } },
             url: true,
-            Subject: {
+            subject: {
                 select: {
-                    City: {
+                    city: {
                         select: {
-                            State: {
+                            state: {
                                 select: {
-                                    Country: { select: { url: true } }
+                                    country: { select: { url: true } }
                                 }
                             }
                         }
@@ -30,16 +30,16 @@ export const getSubjectPaths = async () => {
     return await prisma.subject.findMany({
         select: {
             url: true,
-            Institution: {
+            institution: {
                 select: {
                     url: true
                 }
             },
-            City: {
+            city: {
                 select: {
-                    State: {
+                    state: {
                         select: {
-                            Country: {
+                            country: {
                                 select: {
                                     url: true
                                 }
@@ -56,10 +56,10 @@ export const getCityStateCountryPaths = async () => {
     return await prisma.city.findMany({
         select: {
             url: true,
-            State: {
+            state: {
                 select: {
                     url: true,
-                    Country: {
+                    country: {
                         select: {
                             url: true
                         }

@@ -1,5 +1,5 @@
 import { Group, SimpleGrid, Stack, Text, useMantineTheme } from '@mantine/core';
-import { Country, State } from '@prisma/client';
+import { country, state } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 import Trans from 'next-translate/Trans';
 import useTranslation from 'next-translate/useTranslation';
@@ -30,10 +30,10 @@ export const INSTITUTIONS_PER_PAGE = 30;
 
 type Props = {
   institutionData: InstitutionCardData[],
-  institutionStates: State[],
+  institutionStates: state[],
   pageCount: number | null,
-  countryInfo: Country,
-  countryList: Country[],
+  countryInfo: country,
+  countryList: country[],
   ads: AdCardData[][],
   footerContent: FooterContent[],
 }
@@ -146,8 +146,8 @@ const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institution
                   i18nKey="institution:location.page-results-label"
                   components={[<Text key={0} component='span' weight={'bold'} />, <Text key={1} component='span' weight={'bold'} />]}
                   values={{
-                    fromName: institutionData.at(0)?.Institution.name,
-                    toName: institutionData.at(-1)?.Institution.name,
+                    fromName: institutionData.at(0)?.institution.name,
+                    toName: institutionData.at(-1)?.institution.name,
                     from: (currentPage - 1) * institutionData.length + 1,
                     to: currentPage * institutionData.length,
                   }}
@@ -237,7 +237,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const institutionData: InstitutionCardData[] = dataSlice.map(inst => convertInstitutionToCardData(inst, lang));
 
   // List of states for institutes
-  const institutionStates = getUniquesFromArray({ type: "State", data: dataSlice.map(inst => inst.City.State) }) as State[];
+  const institutionStates = getUniquesFromArray({ type: "State", data: dataSlice.map(inst => inst.city.state) }) as state[];
 
   // Footer Data
   // Get all countries

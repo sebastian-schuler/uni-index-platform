@@ -1,4 +1,4 @@
-import { Anchor, Box, Card, createStyles, Group, Image, Stack, Text, ThemeIcon, Flex } from '@mantine/core'
+import { Box, Card, createStyles, Flex, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core'
 import { IconBuilding, IconSchool } from '@tabler/icons-react'
 import Link from 'next/link'
 import React, { memo } from 'react'

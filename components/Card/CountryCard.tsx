@@ -32,7 +32,13 @@ const CountryCard: React.FC<Props> = ({ country }: Props) => {
 
     const { classes, theme } = useStyles();
     const { t, lang } = useTranslation('common');
-    const Flag = Flags[country.countryCode || ""] || Flags["EU"];
+
+    const code = country?.countryCode || "EU";
+    let Flag: any = undefined;
+    if (Object.keys(Flags).includes(code)) {
+      // @ts-ignore
+      Flag = Flags[code] || Flags["EU"];
+    }
 
     return (
         <Card radius="md" shadow={"sm"} className={classes.card}>

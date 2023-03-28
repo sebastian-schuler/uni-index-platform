@@ -1,27 +1,27 @@
-import { City, Country, Institution, State, Subject, SubjectHasSubjectTypes, SubjectType, UserAd } from "@prisma/client";
+import { city, country, institution, state, subject, subject_category, category, user_ad } from "@prisma/client";
 
 // Detailed types contain all information for cards
 
 // AD
-export type DetailedUserAd = UserAd & {
-    Subject: (Subject & {
-        SubjectHasSubjectTypes: (SubjectHasSubjectTypes & {
-            SubjectType: SubjectType;
+export type DetailedUserAd = user_ad & {
+    subject: (subject & {
+        subject_category: (subject_category & {
+            category: category;
         })[];
     }) | null;
-    User: {
-        Institution: {
+    user: {
+        institution: {
             url: string;
             name: string;
-            City: {
-                State: {
-                    Country: {
+            city: {
+                state: {
+                    country: {
                         url: string;
                     }
                 }
             };
-            InstitutionLocation: {
-                City: {
+            institution_city: {
+                city: {
                     name: string;
                 }
             }[];
@@ -30,82 +30,82 @@ export type DetailedUserAd = UserAd & {
 };
 
 // SUBJECT CARD
-export type DetailedSubject = (Subject & {
-    City: City & {
-        State: {
+export type DetailedSubject = (subject & {
+    city: city & {
+        state: {
             url: string
-            Country: Country
+            country: country
         }
     }
-    Institution: Institution;
-    SubjectHasSubjectTypes: (SubjectHasSubjectTypes & {
-        SubjectType: SubjectType
+    institution: institution;
+    subject_category: (subject_category & {
+        category: category
     })[]
 });
 
 // SUBJECT TYPE CARD
-export type DetailedSubjectType = SubjectType & {
-    subjectCount: number;
+export type DetailedSubjectType = category & {
+    subject_count: number;
 };
 
 // INSTITUTION CARD
-export type DetailedInstitution = (Institution & {
-    City: City & {
-        State: State & {
-            Country: Country;
+export type DetailedInstitution = (institution & {
+    city: city & {
+        state: state & {
+            country: country;
         }
     }
-    Subject: (Subject & {
-        SubjectHasSubjectTypes: (SubjectHasSubjectTypes & {
-            SubjectType: SubjectType
+    subject: (subject & {
+        subject_category: (subject_category & {
+            category: category
         })[]
     })[]
-    InstitutionLocation: {
-        City: City & {
-            State: State & {
-                Country: Country
+    institution_city: {
+        city: city & {
+            state: state & {
+                country: country
             }
         }
     }[]
-    InstitutionSocialMedia: {
+    institution_socials: {
         facebook_url: string | null
         twitter_url: string | null
         instagram_url: string | null
         youtube_url: string | null
     } | null
     _count: {
-        Subject: number
+        subject: number
     }
 });
 
 // COUNTRY CARD
-export type DetailedCountry = Country & {
+export type DetailedCountry = country & {
     institutionCount: number;
     subjectCount: number;
 };
 
 // STATE CARD
-export type DetailedState = State & {
-    Country: {
+export type DetailedState = state & {
+    country: {
         url: string;
     };
-    City: {
+    city: {
         _count: {
-            Subject: number;
+            subject: number;
         }
     }[];
     _count: {
-        City: number;
+        city: number;
     };
 };
 
 // CITY CARD
-export type DetailedCity = City & {
-    State: State & {
-        Country: Country
+export type DetailedCity = city & {
+    state: state & {
+        country: country
     };
     _count: {
-        InstitutionLocation: number;
-        Subject: number;
+        institution_city: number;
+        subject: number;
     };
 };

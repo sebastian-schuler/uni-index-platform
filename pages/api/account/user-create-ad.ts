@@ -61,6 +61,8 @@ export default async function handler(
 
         if (bookingType) {
 
+            const title = fields.title ? fields.title as string : null;
+
             if (bookingType === "link") {
                 // Create ad
 
@@ -72,19 +74,19 @@ export default async function handler(
                 let image: formidable.File | null = null;
                 let subject: string | null = null;
 
-                if (size && (size === 2 || size === 3)) {
-                    image = files.image ? files.image as formidable.File : null;
-                }
-
                 if (adType === "subject") {
                     subject = fields.subject ? fields.subject as string : null;
                 }
 
+                if (size && (size === 2 || size === 3)) {
+                    image = files.image ? files.image as formidable.File : null;
+                }
+
             } else if (bookingType === "article") {
                 // Create article
-
-                const title = fields.title ? fields.title as string : null;
+                
                 const content = fields.content ? fields.content as string : null;
+                let image = files.image ? files.image as formidable.File : null;
 
             }
 

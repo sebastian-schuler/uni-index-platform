@@ -1,5 +1,5 @@
 import { Group, SimpleGrid, Stack, useMantineTheme } from '@mantine/core';
-import { City, Country, State } from '@prisma/client';
+import { city, country, state } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
@@ -16,13 +16,13 @@ import { InstitutionCardData } from '../../../../../lib/types/UiHelperTypes';
 import { convertInstitutionToCardData } from '../../../../../lib/util/conversionUtil';
 
 type Props = {
-  countryList: Country[],
+  countryList: country[],
   institutionData: InstitutionCardData[],
-  institutionStates: State[],
+  institutionStates: state[],
   footerContent: FooterContent[],
-  cityInfo: (City & {
-    State: State & {
-      Country: Country;
+  cityInfo: (city & {
+    state: state & {
+      country: country;
     };
   }),
 }
@@ -41,8 +41,8 @@ const CityPage: NextPage<Props> = ({ countryList, institutionData, institutionSt
       </Head>
 
       <Breadcrumb
-        countryInfo={cityInfo.State.Country}
-        stateInfo={cityInfo.State}
+        countryInfo={cityInfo.state.country}
+        stateInfo={cityInfo.state}
         cityInfo={cityInfo}
       />
 
@@ -101,8 +101,8 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
     pathUrls.forEach((rootCity) => {
       paths.push({
         params: {
-          Country: rootCity.State.Country.url,
-          State: rootCity.State.url,
+          Country: rootCity.state.country.url,
+          State: rootCity.state.url,
           City: rootCity.url,
         },
         locale,
@@ -132,8 +132,8 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   const institutionData: InstitutionCardData[] = institutionList.map(inst => convertInstitutionToCardData(inst, lang));
 
   // List of states for institutes
-  const institutionStates: State[] = institutionList.map(inst => {
-    return { ...inst.City.State }
+  const institutionStates: state[] = institutionList.map(inst => {
+    return { ...inst.city.state }
   });
 
   // Footer Data

@@ -1,5 +1,5 @@
 import { SimpleGrid, Stack, Text, Title } from '@mantine/core'
-import { Country } from '@prisma/client'
+import { country } from '@prisma/client'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import SocialMediaCard from '../../components/Card/SocialMediaCard'
@@ -11,7 +11,7 @@ interface Props {
   socialMediaList: SmRankingEntryMinified[]
   highestTwitter: SmBestCardMinified
   highestYoutube: SmBestCardMinified
-  countries: Country[]
+  countries: country[]
 }
 
 const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitter, highestYoutube, countries }: Props) => {

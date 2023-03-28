@@ -1,15 +1,15 @@
-import { Country, Institution, State, Subject, SubjectHasSubjectTypes, SubjectType } from "@prisma/client";
+import { country, institution, state, subject, subject_category, category } from "@prisma/client";
 import { SearchedStateResult } from "../types/SearchTypes";
 import { CategoryCardData, CityCardData, CountryCardData, Searchable, StateCardData } from "../types/UiHelperTypes";
 import { URL_CATEGORY } from "../url-helper/urlConstants";
 
 interface LocalizedNameProps {
     lang: string,
-    any?: SubjectType | undefined | null,
-    dbTranslated?: Country | null
-    state?: State | SearchedStateResult | null,
-    subject?: Subject | null,
-    institution?: Institution | null,
+    any?: category | undefined | null,
+    dbTranslated?: country | null
+    state?: state | SearchedStateResult | null,
+    subject?: subject | null,
+    institution?: institution | null,
     searchable?: Searchable | null
 }
 
@@ -134,22 +134,22 @@ export function classNames(...classes: string[]) {
  */
 interface LargestSubjectTypeProps {
     list: (
-        (Subject & {
-            SubjectHasSubjectTypes: (SubjectHasSubjectTypes & {
-                SubjectType: SubjectType;
+        (subject & {
+            subject_category: (subject_category & {
+                category: category;
             })[];
         })[]
     );
     lang: string;
     itemCount: number;
 }
-export const getUniqueSubjectTypeCounts = ({ list, lang, itemCount }: LargestSubjectTypeProps) => {
+export const getUniqueCategoryCounts = ({ list, lang, itemCount }: LargestSubjectTypeProps) => {
 
     // Find all types of subjects
-    const typeList: SubjectType[] = [];
+    const typeList: category[] = [];
     for (const item of list) {
-        for (const type of item.SubjectHasSubjectTypes) {
-            typeList.push(type.SubjectType);
+        for (const type of item.subject_category) {
+            typeList.push(type.category);
         }
     }
 
@@ -185,7 +185,7 @@ export const getUniqueSubjectTypeCounts = ({ list, lang, itemCount }: LargestSub
     return [...result];
 }
 
-type ArrayProps = { type: "Country", data: Country[] } | { type: "State", data: State[] } | { type: "SubjectType", data: SubjectType[] };
+type ArrayProps = { type: "Country", data: country[] } | { type: "State", data: state[] } | { type: "SubjectType", data: category[] };
 /**
  * Removes duplicates from an array of objects, returns a new array
  * @param props - {type: "Country" | "State" | "SubjectType", data: Country[] | State[] | SubjectType[]}

@@ -1,17 +1,33 @@
 import { Stack, Text, useMantineTheme } from '@mantine/core';
 import { DatePickerInput, DatesRangeValue } from '@mantine/dates';
 import useTranslation from 'next-translate/useTranslation';
+import { useState } from 'react';
 import HelpPopover from '../../components/Popover/HelpPopover';
+import { FromToDateRange } from '../../lib/types/UiHelperTypes';
 
 type Props = {
-    value: DatesRangeValue | undefined
-    onChange: (value: DatesRangeValue | undefined) => void
+    onChange: (value: FromToDateRange | undefined) => void
 }
 
-const AdDateRangePicker = ({ value, onChange }: Props) => {
+const AdDateRangePicker = ({ onChange }: Props) => {
 
     const theme = useMantineTheme();
     const { lang, t } = useTranslation();
+
+    const [value, setValue] = useState<DatesRangeValue | undefined>();
+
+    const onChangeRange = (value: DatesRangeValue | undefined) => {
+        setValue(value);
+
+        if (value) {
+            let from = value[0]?.getTime() || 0;
+            let to = value[1]?.getTime() || 0;
+            to += to <= 0 ? 0 : 23 * 60 * 60 * 1000; // Add 23 hours to the end date to make it inclusive, if it's not undefined or 0
+            onChange({ from, to });
+        } else {
+            onChange(value);
+        }
+    }
 
     return (
         <Stack spacing={'xs'}>
@@ -21,7 +37,7 @@ const AdDateRangePicker = ({ value, onChange }: Props) => {
                 required
                 placeholder='Select until date'
                 value={value}
-                onChange={onChange}
+                onChange={onChangeRange}
                 radius={theme.radius.md}
                 hideOutsideDates
                 excludeDate={(date) => date.getTime() < Date.now()}

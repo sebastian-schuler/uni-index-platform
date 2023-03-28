@@ -1,11 +1,10 @@
 import { Button, Divider, Grid, Group, SimpleGrid, Space, Text } from '@mantine/core';
-import { Country, Institution } from '@prisma/client';
+import { country, institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import Link from 'next/link';
 import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper';
-import WhitePaper from '../../../../../components/Paper/WhitePaper';
 import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb';
 import { FooterContent } from '../../../../../features/Footer/Footer';
 import LhrAuditList from '../../../../../features/OnlineMarketing/LhrAuditList';
@@ -45,8 +44,8 @@ const getMetricsCol = (audits: LhrAudit[], fromIndex: number, toIndex: number) =
 }
 
 interface Props {
-    institution: Institution,
-    country: Country,
+    institution: institution,
+    country: country,
     lhrAudits: LhrAudit[],
     lhrCategory: LhrCategory,
     footerContent: FooterContent[],

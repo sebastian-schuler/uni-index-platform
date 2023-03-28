@@ -40,7 +40,7 @@ const ImagePicker = ({ image, setImage, setImageFilepath }: ImagePickerProps) =>
             setImageFilepath(undefined);
         }
         return () => URL.revokeObjectURL(objectUrl)
-    }, [image])
+    }, [image, setImageFilepath])
 
     return (
         <Stack spacing={'xs'}>

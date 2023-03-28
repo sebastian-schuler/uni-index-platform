@@ -1,5 +1,5 @@
 import { Group, SimpleGrid, Stack, useMantineTheme, Text } from '@mantine/core';
-import { Country, SubjectType } from '@prisma/client';
+import { country, category } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 import Trans from 'next-translate/Trans';
 import useTranslation from 'next-translate/useTranslation';
@@ -29,10 +29,10 @@ import { getLocalizedName, toLink } from '../../../lib/util/util';
 export const SUBJECT_PER_PAGE = 30;
 
 type Props = {
-  categoryInfo: SubjectType,
+  categoryInfo: category,
   pageCount: number | null,
   subjectData: SubjectCardData[],
-  countryList: Country[],
+  countryList: country[],
   ads: AdCardData[][],
   footerContent: FooterContent[],
 }
@@ -226,7 +226,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  const categoryInfo: SubjectType | null = await getSubjectType(category)
+  const categoryInfo: category | null = await getSubjectType(category)
 
   // Get all courses of this category
 

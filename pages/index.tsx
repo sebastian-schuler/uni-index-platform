@@ -1,5 +1,5 @@
 import { Grid, Stack } from '@mantine/core';
-import { Country, State } from '@prisma/client';
+import { country, state } from '@prisma/client';
 import type { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
@@ -36,8 +36,8 @@ interface Props {
   institutionData: InstitutionCardData[],
   subjectData: SubjectCardData[],
   countryData: CountryCardData[],
-  countryList: Country[],
-  institutionStates: State[],
+  countryList: country[],
+  institutionStates: state[],
   socialMediaList: SmRankingEntryMinified[],
   highestTwitter: SmBestCardMinified,
   highestYoutube: SmBestCardMinified,
@@ -156,7 +156,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const countryData: CountryCardData[] = countriesDetailed.map(country => convertCountryToCardData(country, lang, "location"));
 
   // List of states for popular institutes
-  const institutionStates = getUniquesFromArray({ type: "State", data: institutionsDetailed.map(inst => inst.City.State) }) as State[];
+  const institutionStates = getUniquesFromArray({ type: "State", data: institutionsDetailed.map(inst => inst.city.state) }) as state[];
 
   // === SOCIAL MEDIA ===
   const socialMediaRankingList = await getSocialMediaRanking();

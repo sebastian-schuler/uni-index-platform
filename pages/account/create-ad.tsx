@@ -1,24 +1,36 @@
-import { Box, Button, Center, Divider, Grid, Text, Title, useMantineTheme } from '@mantine/core';
-import { DatesRangeValue } from '@mantine/dates';
+import { Box, Button, Center, Divider, Grid, Group, Stack, Text, Title } from '@mantine/core';
+import { useMantineTheme } from '@mantine/styles';
 import { Link } from '@mantine/tiptap';
 import { IconArticle, IconLink } from '@tabler/icons-react';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Cookies from 'js-cookie';
 import { GetServerSideProps } from 'next';
+import useTranslation from 'next-translate/useTranslation';
 import { useEffect, useState } from 'react';
 import SegmentedSelect from '../../components/CreateAd/SegmentedSelect';
 import ArticleBuilder from '../../features/AccountCreateAd/ArticleBuilder';
 import { SubjectAutofill } from '../../features/AccountCreateAd/AutocompleteSubject';
 import CreateAdBuilder, { CreateAdLinkedItemType } from '../../features/AccountCreateAd/CreateAdBuilder';
+import { getCalculatedAdCost } from '../../lib/accountHandling/costCalculator';
 import { useAuth } from '../../lib/context/SessionContext';
-import { CreateAdLinkType } from '../../lib/types/UiHelperTypes';
+import { getInstitutionDataFromToken } from '../../lib/prisma/prismaUserAccounts';
+import { CreateAdLinkType, FromToDateRange } from '../../lib/types/UiHelperTypes';
 
-//TODO: Remove small size and and an option with or without image instead
 // TODO 2: Add option to export created ad to a file, so that it can be imported later
 
-const CreateAd = () => {
+type Props = {
+    institutionData: {
+        subject: {
+            id: string;
+            name: string;
+        }[];
+        name: string;
+    }
+}
 
+const CreateAd = ({ institutionData }: Props) => {
+
+    const { t, lang } = useTranslation("account");
     const theme = useMantineTheme();
     const { token } = useAuth();
 
@@ -34,7 +46,7 @@ const CreateAd = () => {
     // Type
     const [adLinkType, setAdLinkType] = useState<CreateAdLinkType>("link");
     // Date range
-    const [selectedDateRange, setSelectedDateRange] = useState<DatesRangeValue | undefined>(undefined);
+    const [selectedDateRange, setSelectedDateRange] = useState<FromToDateRange | undefined>(undefined);
     // Size of ad
     const [adSize, setAdSize] = useState<number>(2);
     // Ad description
@@ -59,21 +71,51 @@ const CreateAd = () => {
     // COST
     const daysBooked = dateDiffInDays(selectedDateRange);
 
-    /**
-     * Calculates the total cost of the ad
-     * @returns 
-     */
-    const getAdTotalCost = (): number => {
-        let cost = 0;
-        if (adSize === 1) {
-            cost = 0.99 * daysBooked;
-        } else if (adSize === 2) {
-            cost = 1.99 * daysBooked;
-        } else {
-            cost = 2.99 * daysBooked;
+    const getAdCost = () => {
+
+        let cost;
+        try {
+            cost = getCalculatedAdCost(adLinkType, adSize, daysBooked).toLocaleString(lang, { style: 'currency', currency: 'EUR' });
+            return cost;
+        } catch (error) {
+            return "N/A";
         }
-        return cost;
     }
+
+    const isSubmitDisabled = () => {
+
+        // Title has to be at least 3 characters long
+        if (title.length < 3) return true;
+
+        if (adLinkType === "link") {
+
+            if (adLinkedItemType === "subject") {
+                // Subject has to be selected
+                if (!selectedAdSubject) return true;
+            }
+
+            if (adSize === 2 || adSize === 3) {
+                // Image has to be selected
+                if (!image) return true;
+            }
+
+            // Description has to be between 10 and 1000 characters long
+            if (description.length < 10 || description.length > 1000) return true;
+
+            // Date range has to be selected
+            if (!selectedDateRange || selectedDateRange.from === 0 || selectedDateRange.to === 0) return true;
+
+        } else if (adLinkType === "article") {
+
+            // Editor has to have at least 4 lines of text
+            if ((editor && editor.getJSON().content?.length || 0) <= 3) return true;
+
+        }
+
+        return false;
+    }
+
+    const submitDisabled = isSubmitDisabled();
 
     // ====================== EFFECTS ======================
 
@@ -92,7 +134,7 @@ const CreateAd = () => {
         }
 
         return () => { }
-    }, [adLinkType, adLinkedItemType, selectedAdSubject, setTitle])
+    }, [adLinkType, adLinkedItemType, selectedAdSubject, setTitle]);
 
     // =============== Submit function =================
 
@@ -105,6 +147,15 @@ const CreateAd = () => {
 
         formData.append("bookingType", adLinkType);
 
+        // Add image to the form
+        if (adSize === 2 || adSize === 3 || adLinkType === "article") {
+            if (image) {
+                formData.append("image", image);
+            } else {
+                return;
+            }
+        }
+
         if (adLinkType === "link") {
 
             // Add all generic data to the form
@@ -113,26 +164,17 @@ const CreateAd = () => {
             formData.append("description", description);
 
             // Add date range to the form
-            if (selectedDateRange && selectedDateRange[0] && selectedDateRange[1]) {
-                formData.append("dateFrom", selectedDateRange[0].getTime().toString());
-                formData.append("dateTo", selectedDateRange[1].getTime().toString());
+            if (selectedDateRange) {
+                formData.append("dateFrom", selectedDateRange.from.toString());
+                formData.append("dateTo", selectedDateRange.to.toString());
             } else {
                 return;
-            }
-
-            // Add image to the form
-            if (adSize === 2 || adSize === 3) {
-                if (image) {
-                    formData.append("image", image);
-                } else {
-                    return;
-                }
             }
 
             // If the ad is linked to a subject, add the subject id to the form
             if (adLinkedItemType === "subject") {
                 if (selectedAdSubject) {
-                    formData.append("subject", selectedAdSubject.subject.id.toString());
+                    formData.append("subject", selectedAdSubject.subjectId.toString());
                 } else {
                     return;
                 }
@@ -162,88 +204,132 @@ const CreateAd = () => {
     }
 
     return (
-        <Grid sx={{ maxWidth: theme.breakpoints.lg }}>
+        <div>
+            <Grid sx={{ maxWidth: theme.breakpoints.lg }}>
 
-            <Grid.Col sm={12} md={6}>
-                <Title order={1} size='h3' mb={'md'}>Create new ad</Title>
-                <SegmentedSelect
-                    label='Type of ad' value={adLinkType}
-                    onChange={(value) => setAdLinkType(value as CreateAdLinkType)}
-                    helperText='Do you want your ad to link to your entire institution page, or just one specific subject?'
-                    data={{
-                        type: "jsx",
-                        arr: [
+                <Grid.Col sm={12} md={6}>
+                    <Title order={1} size='h3' mb={'md'}>Create new ad</Title>
+                    <SegmentedSelect
+                        label='Type of ad' value={adLinkType}
+                        onChange={(value) => setAdLinkType(value as CreateAdLinkType)}
+                        helperText='Do you want your ad to link to your entire institution page, or just one specific subject?'
+                        data={{
+                            type: "jsx",
+                            arr: [
+                                {
+                                    label:
+                                        <Center>
+                                            <IconLink size={16} />
+                                            <Box ml={10}>Link</Box>
+                                        </Center>,
+                                    value: 'link'
+                                },
+                                {
+                                    label:
+                                        <Center>
+                                            <IconArticle size={16} />
+                                            <Box ml={10}>Article</Box>
+                                        </Center>,
+                                    value: 'article'
+                                },
+                            ]
+                        }}
+                    />
+                </Grid.Col>
+
+                <Grid.Col span={12}>
+                    <Divider mb={'md'} />
+                    {
+                        adLinkType === "link" ? (
+                            <CreateAdBuilder
+                                title={title}
+                                setTitle={setTitle}
+                                adLinkType={adLinkType}
+                                setSelectedDateRange={setSelectedDateRange}
+                                adSize={adSize}
+                                setAdSize={setAdSize}
+                                description={description}
+                                setDescription={setDescription}
+                                image={image}
+                                setImage={setImage}
+                                selectedAdSubject={selectedAdSubject}
+                                setSelectedAdSubject={setSelectedAdSubject}
+                                adLinkedItemType={adLinkedItemType}
+                                setAdLinkedItemType={setAdLinkedItemType}
+                                subjects={institutionData.subject}
+                            />
+                        ) : (
+                            <ArticleBuilder
+                                title={title}
+                                setTitle={setTitle}
+                                editor={editor}
+                                image={image}
+                                setImage={setImage}
+                            />
+                        )
+                    }
+
+                </Grid.Col>
+
+                <Grid.Col span={12}>
+                    <Divider mb={'md'} />
+                    <Title order={2} size='h5' mb={'md'}>Cost</Title>
+                    <Group position='apart' align={'flex-start'}>
+                        <Stack spacing={'xs'}>
                             {
-                                label:
-                                    <Center>
-                                        <IconLink size={16} />
-                                        <Box ml={10}>Link</Box>
-                                    </Center>,
-                                value: 'link'
-                            },
-                            {
-                                label:
-                                    <Center>
-                                        <IconArticle size={16} />
-                                        <Box ml={10}>Post</Box>
-                                    </Center>,
-                                value: 'post'
-                            },
-                        ]
-                    }}
-                />
-            </Grid.Col>
-
-            <Grid.Col span={12}>
-                <Divider mb={'md'} />
-                {
-                    adLinkType === "link" ? (
-                        <CreateAdBuilder
-                            title={title}
-                            setTitle={setTitle}
-                            adLinkType={adLinkType}
-                            selectedDateRange={selectedDateRange}
-                            setSelectedDateRange={setSelectedDateRange}
-                            adSize={adSize}
-                            setAdSize={setAdSize}
-                            description={description}
-                            setDescription={setDescription}
-                            image={image}
-                            setImage={setImage}
-                            selectedAdSubject={selectedAdSubject}
-                            setSelectedAdSubject={setSelectedAdSubject}
-                            adLinkedItemType={adLinkedItemType}
-                            setAdLinkedItemType={setAdLinkedItemType}
-                        />
-                    ) : (
-                        <ArticleBuilder
-                            title={title}
-                            setTitle={setTitle}
-                            editor={editor}
-                        />
-                    )
-                }
-
-            </Grid.Col>
-
-            <Grid.Col span={12}>
-                <Divider mb={'md'} />
-                <Title order={2} size='h5' mb={'md'}>Cost</Title>
-                <Text>{daysBooked} days booking</Text>
-                <Text>{getAdTotalCost()} Eur</Text>
-                <Button onClick={submitForm}>Submit</Button>
-
-            </Grid.Col>
-        </Grid>
+                                adLinkType === "link" &&
+                                <Text>
+                                    <Text component='span' weight={500}>{daysBooked}</Text>
+                                    {' days booking'}
+                                </Text>
+                            }
+                            <Text>
+                                <Text component='span' weight={500}>{getAdCost()}</Text>
+                                {' estimated total cost'}
+                            </Text>
+                        </Stack>
+                        <Stack spacing={'xs'}>
+                            {submitDisabled && <Text color={'red'}>Please fill out all required fields</Text>}
+                            <Button onClick={submitForm} size={'lg'} disabled={submitDisabled}>Submit booking</Button>
+                        </Stack>
+                    </Group>
+                </Grid.Col>
+            </Grid>
+        </div>
     )
 }
 
-const dateDiffInDays = (range: DatesRangeValue | undefined): number => {
-    if (!range) return 0;
-    const date1 = range[0]?.getTime() || 0;
-    const date2 = range[1]?.getTime() || 0;
-    const diffInMs = Math.abs(date1 - date2);
-    return Math.round(diffInMs / (24 * 60 * 60 * 1000));
+const dateDiffInDays = (range: FromToDateRange | undefined): number => {
+    if (!range || range.from === 0 || range.to === 0) return 0;
+    const diffInMs = Math.abs(range.from - range.to);
+    return Math.ceil(diffInMs / (24 * 60 * 60 * 1000));
+}
+
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+
+    // Check if the token exists in the cookies
+    const token = context.req.cookies["institution-session"];
+    if (!token) return {
+        redirect: {
+            destination: '/login',
+            permanent: false
+        }
+    }
+
+    // Get data from the token
+    const data = await getInstitutionDataFromToken(token);
+
+    // Check if the token is valid
+    if (!data || Number(data.lifetime) < Date.now()) return {
+        redirect: {
+            destination: '/login',
+            permanent: false
+        }
+    }
+
+    const props: Props = { institutionData: data.user.institution };
+    return { props };
 }
 
 export default CreateAd

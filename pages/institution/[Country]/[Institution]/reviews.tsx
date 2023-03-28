@@ -1,4 +1,4 @@
-import { Country, Institution } from '@prisma/client'
+import { country, institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
@@ -10,8 +10,8 @@ import { getCountries, getCountry, getInstitution } from '../../../../lib/prisma
 import { getStaticPathsInstitution } from '../../../../lib/url-helper/staticPathFunctions'
 
 interface Props {
-  institution: Institution,
-  country: Country,
+  institution: institution,
+  country: country,
   footerContent: FooterContent[],
 }
 
@@ -43,6 +43,12 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   const country = await getCountry(countryUrl);
   const institution = await getInstitution({ institutionUrl });
 
+  if (!country || !institution) {
+    return {
+      notFound: true,
+    }
+  }
+
   // Footer Data
   // Get all countries
   const countryList = await getCountries();
@@ -50,10 +56,11 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     { title: "Countries", data: countryList, type: "Country" },
   ]
 
-  return {
-    props: { institution: institution, country: country, footerContent: footerContent }
+  const props: Props = {
+    institution, country, footerContent
   }
 
+  return { props };
 }
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {

@@ -1,5 +1,5 @@
 import { Title, SimpleGrid, Stack } from '@mantine/core'
-import { Country, Institution } from '@prisma/client'
+import { country, institution } from '@prisma/client'
 import { GetServerSideProps } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
@@ -13,8 +13,8 @@ import { getCountry, getInstitution } from '../../../../../lib/prisma/prismaQuer
 import { ArticleCardData } from '../../../../../lib/types/UiHelperTypes'
 
 type Props = {
-  country: Country;
-  institution: Institution;
+  country: country;
+  institution: institution;
   articles: ArticleCardData[];
 }
 

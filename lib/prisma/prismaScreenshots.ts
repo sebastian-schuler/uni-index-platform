@@ -3,7 +3,7 @@ import prisma from './prisma';
 
 export const getInstitutionScreenshots = async (institutionId: string) => {
 
-    return await prisma.institutionScreenshot.findMany({
+    return await prisma.institution_screenshot.findMany({
         where: {
             institution_id: institutionId
         },

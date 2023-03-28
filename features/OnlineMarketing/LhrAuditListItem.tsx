@@ -146,10 +146,16 @@ const LhrAuditListItem: React.FC<Props> = ({ audit }: Props) => {
                                             let inner: JSX.Element | null = null;
 
                                             if (heading.itemType === "source-location") {
-                                                const sourceLocation = item[heading.key] as unknown as Details.SourceLocationValue;
+                                                const sourceLocation = item[heading.key] as any;
+
                                                 if (sourceLocation) {
-                                                    inner = sourceLocation.url ? <Anchor href={sourceLocation.url}>{sourceLocation.url}</Anchor> : null;
-                                                    if (!inner) inner = <Text>{sourceLocation["value"]}</Text>; // Last table row, "Legible Text" in "SEO"
+                                                    if (sourceLocation.type === "code") {
+                                                        const code = sourceLocation as Details.CodeValue;
+                                                        inner = <Text>{code.value.toString()}</Text>;
+                                                    } else if (sourceLocation.type === "source-location") {
+                                                        const source = sourceLocation as Details.SourceLocationValue;
+                                                        inner = <Anchor href={source.url}>{source.url}</Anchor>;
+                                                    }
                                                 }
 
                                             } else if (heading.itemType === "node") {

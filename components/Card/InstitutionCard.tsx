@@ -1,8 +1,10 @@
 import { Anchor, Card, createStyles, Group, Stack, Text, ThemeIcon } from '@mantine/core'
-import { Country, State } from '@prisma/client'
+import { country, state } from '@prisma/client'
 import { IconBuilding, IconCategory, IconSchool } from '@tabler/icons-react'
 import Flags from 'country-flag-icons/react/3x2'
+import { hasFlag } from 'country-flag-icons'
 import useTranslation from 'next-translate/useTranslation'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import React, { memo } from 'react'
 import SmIconLink from '../../features/SocialMedia/SmIconLink'
@@ -36,8 +38,8 @@ const useStyles = createStyles((theme) => ({
 
 type Props = {
   data: InstitutionCardData
-  country: Country | undefined
-  state: State | undefined
+  country: country | undefined
+  state: state | undefined
 }
 
 const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
@@ -45,18 +47,23 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
   const { classes, theme } = useStyles();
   const { t, lang } = useTranslation('common');
 
-  const youtubeLink = data.InstitutionSocialMedia?.youtube_url;
-  const facebookLink = data.InstitutionSocialMedia?.facebook_url;
-  const twitterLink = data.InstitutionSocialMedia?.twitter_url;
-  const instagramLink = data.InstitutionSocialMedia?.instagram_url;
+  const youtubeLink = data.socialMedia?.youtube_url;
+  const facebookLink = data.socialMedia?.facebook_url;
+  const twitterLink = data.socialMedia?.twitter_url;
+  const instagramLink = data.socialMedia?.instagram_url;
 
   const countryUrl = country?.url;
   const stateUrl = state?.url;
-  const urlInstitution = countryUrl ? toLink(URL_INSTITUTION, countryUrl, data.Institution.url) : "#";
-  const urlCity = countryUrl && stateUrl ? toLink(URL_LOCATION, countryUrl, stateUrl, data.Institution.City.url) : '#';
+  const urlInstitution = countryUrl ? toLink(URL_INSTITUTION, countryUrl, data.institution.url) : "#";
+  const urlCity = countryUrl && stateUrl ? toLink(URL_LOCATION, countryUrl, stateUrl, data.institution.city.url) : '#';
   const urlState = countryUrl && stateUrl ? toLink(URL_LOCATION, countryUrl, stateUrl) : '#';
 
-  const Flag = Flags[country?.country_code || ""] || Flags["EU"];
+  const code = country?.country_code || "EU";
+  let Flag: any = undefined;
+  if (Object.keys(Flags).includes(code)) {
+    // @ts-ignore
+    Flag = Flags[code] || Flags["EU"];
+  }
 
   return (
     <Card withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
@@ -71,7 +78,7 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
               href={urlInstitution}
               text={
                 <>
-                  {data.Institution.name}{data.Institution.nameBrackets !== "" && <Text size={"xs"}>{data.Institution.nameBrackets}</Text>}
+                  {data.institution.name}{data.institution.nameBrackets !== "" && <Text size={"xs"}>{data.institution.nameBrackets}</Text>}
                 </>
               }
             />
@@ -79,7 +86,7 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
             {/* City & State */}
             <Text color={theme.colors.brandGray[2]} sx={{ lineHeight: 1.2 }}>
               {t('card-institution.label-city')}{' '}
-              <Anchor component={Link} href={urlCity}>{data.Institution.City.name}</Anchor>
+              <Anchor component={Link} href={urlCity}>{data.institution.city.name}</Anchor>
               {' | '}
               {t('card-institution.label-state')}{' '}
               <Anchor component={Link} href={urlState}>{getLocalizedName({ lang: lang, state: state })}</Anchor>
@@ -89,19 +96,19 @@ const InstitutionCard: React.FC<Props> = ({ data, country, state }: Props) => {
             <Group spacing={"xs"}>
               {
                 youtubeLink &&
-                <SmIconLink type='youtube' url={youtubeLink} title={t('link-titles.yt-profile', { name: data.Institution.name })} gray />
+                <SmIconLink type='youtube' url={youtubeLink} title={t('link-titles.yt-profile', { name: data.institution.name })} gray />
               }
               {
                 twitterLink &&
-                <SmIconLink type='twitter' url={twitterLink} title={t('link-titles.tw-profile', { name: data.Institution.name })} gray />
+                <SmIconLink type='twitter' url={twitterLink} title={t('link-titles.tw-profile', { name: data.institution.name })} gray />
               }
               {
                 facebookLink &&
-                <SmIconLink type='facebook' url={facebookLink} title={t('link-titles.fb-profile', { name: data.Institution.name })} gray />
+                <SmIconLink type='facebook' url={facebookLink} title={t('link-titles.fb-profile', { name: data.institution.name })} gray />
               }
               {
                 instagramLink &&
-                <SmIconLink type='instagram' url={instagramLink} title={t('link-titles.in-profile', { name: data.Institution.name })} gray />
+                <SmIconLink type='instagram' url={instagramLink} title={t('link-titles.in-profile', { name: data.institution.name })} gray />
               }
             </Group>
           </Stack>

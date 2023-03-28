@@ -1,4 +1,4 @@
-import { Country } from '@prisma/client';
+import { country } from '@prisma/client';
 import { SearchedCityResult, SearchedInstitutionResult, SearchedStateResult, SearchedSubjectResult, SearchResult } from '../types/SearchTypes';
 import { convertCityToSearchResult, convertCountryToSearchResult, convertInstitutionToSearchResult, convertStateToSearchResult, convertSubjectToSearchResult } from '../util/searchUtil';
 import prisma from './prisma';
@@ -8,7 +8,7 @@ const likeStr = (searchTerm: string) => `%${searchTerm}%`;
 export const prismaGlobalSearch = async (searchTerm: string, lang: string): Promise<SearchResult[]> => {
 
     // COUNTRY SEARCH
-    const countryResults: Country[] = await prisma.$queryRaw`SELECT * FROM "Country" WHERE name ILIKE ${likeStr(searchTerm)};`
+    const countryResults: country[] = await prisma.$queryRaw`SELECT * FROM "Country" WHERE name ILIKE ${likeStr(searchTerm)};`
     // Convert to search result
     const countries = countryResults.map(country => convertCountryToSearchResult(country, lang));
 

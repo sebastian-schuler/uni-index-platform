@@ -1,5 +1,5 @@
 import { Stack, Text } from '@mantine/core'
-import { Country, Institution } from '@prisma/client'
+import { country, institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
@@ -7,7 +7,6 @@ import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import ResponsiveWrapper from '../../../../../../components/Container/ResponsiveWrapper'
 import MantineLink from '../../../../../../components/Link/MantineLink'
-import WhitePaper from '../../../../../../components/Paper/WhitePaper'
 import Breadcrumb from '../../../../../../features/Breadcrumb/Breadcrumb'
 import { FooterContent } from '../../../../../../features/Footer/Footer'
 import SubjectNav from '../../../../../../features/Navigation/SubjectNav'
@@ -20,8 +19,8 @@ import { toLink } from '../../../../../../lib/util/util'
 
 
 interface Props {
-    country: Country,
-    institution: Institution,
+    country: country,
+    institution: institution,
     subject: DetailedSubject,
     footerContent: FooterContent[],
 }
@@ -59,36 +58,34 @@ const SubjectFromInstitutionPage: NextPage<Props> = ({ country, institution, sub
                 }}
             />
 
-            <WhitePaper>
-                <Stack>
+            <Stack>
 
-                    <Stack spacing={0}>
-                        <Text size={"lg"} weight={"bold"}>Study length</Text>
-                        <Text>{subject?.duration} Semesters</Text>
-                    </Stack>
-
-                    <Stack spacing={0}>
-                        <Text size={"lg"} weight={"bold"}>Degree</Text>
-                        <Text>{subject?.degree}</Text>
-                    </Stack>
-
-                    <Stack spacing={0}>
-                        <Text size={"lg"} weight={"bold"}>Length ({subject?.duration_type})</Text>
-                        <Text>{subject?.duration}</Text>
-                    </Stack>
-
-                    <Stack spacing={0}>
-                        <Text size={"lg"} weight={"bold"}>Admission</Text>
-                        <Text>{subject?.admission}</Text>
-                    </Stack>
-
-                    <Stack spacing={0}>
-                        <Text size={"lg"} weight={"bold"}>Website</Text>
-                        <MantineLink url={subject?.website} type="external">{subject?.website}</MantineLink>
-                    </Stack>
-
+                <Stack spacing={0}>
+                    <Text size={"lg"} weight={"bold"}>Study length</Text>
+                    <Text>{subject?.duration} Semesters</Text>
                 </Stack>
-            </WhitePaper>
+
+                <Stack spacing={0}>
+                    <Text size={"lg"} weight={"bold"}>Degree</Text>
+                    <Text>{subject?.degree}</Text>
+                </Stack>
+
+                <Stack spacing={0}>
+                    <Text size={"lg"} weight={"bold"}>Length ({subject?.duration_type})</Text>
+                    <Text>{subject?.duration}</Text>
+                </Stack>
+
+                <Stack spacing={0}>
+                    <Text size={"lg"} weight={"bold"}>Admission</Text>
+                    <Text>{subject?.admission}</Text>
+                </Stack>
+
+                <Stack spacing={0}>
+                    <Text size={"lg"} weight={"bold"}>Website</Text>
+                    <MantineLink url={subject?.website} type="external">{subject?.website}</MantineLink>
+                </Stack>
+
+            </Stack>
 
         </ResponsiveWrapper>
     )
@@ -101,8 +98,8 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     let subjectUrl = context?.params?.Subject?.toString() || "";
 
     // Get information single objects
-    const country: Country | null = await getCountry(countryUrl);
-    const institution: Institution | null = await getInstitution({ institutionUrl });
+    const country: country | null = await getCountry(countryUrl);
+    const institution: institution | null = await getInstitution({ institutionUrl });
     const subjectInfo: DetailedSubject | null = institution && (await getSubjectDetailedByUrl(subjectUrl, institution.id));
 
     // Footer Data
@@ -137,8 +134,8 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
         subjects.forEach((subject) => {
             paths.push({
                 params: {
-                    Country: subject.City?.State.Country.url,
-                    Institution: subject.Institution.url,
+                    Country: subject.city?.state.country.url,
+                    Institution: subject.institution.url,
                     Subject: subject.url
                 },
                 locale,

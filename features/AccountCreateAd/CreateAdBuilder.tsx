@@ -1,14 +1,11 @@
 import { Box, Center, Grid, Stack, Title, useMantineTheme } from '@mantine/core';
-import { DatesRangeValue } from '@mantine/dates';
 import { IconBuilding, IconSchool } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import CreateAdTextArea from '../../components/CreateAd/CreateAdTextArea';
 import CreateAdTextField from '../../components/CreateAd/CreateAdTextField';
 import ImagePicker from '../../components/CreateAd/ImagePicker';
 import SegmentedSelect from '../../components/CreateAd/SegmentedSelect';
-import { useAuth } from '../../lib/context/SessionContext';
-import { UserDataProfile } from '../../lib/types/AccountHandlingTypes';
-import { CreateAdLinkType } from '../../lib/types/UiHelperTypes';
+import { CreateAdLinkType, FromToDateRange } from '../../lib/types/UiHelperTypes';
 import AdDateRangePicker from './AdDateRangePicker';
 import AdPreview from './AdPreview';
 import AutocompleteSubject, { SubjectAutofill } from './AutocompleteSubject';
@@ -20,8 +17,7 @@ type CreateAdBuilderProps = {
     title: string
     setTitle: (value: string) => void
     adLinkType: CreateAdLinkType
-    selectedDateRange: DatesRangeValue | undefined
-    setSelectedDateRange: (value: DatesRangeValue | undefined) => void
+    setSelectedDateRange: (value: FromToDateRange | undefined) => void
     adSize: number
     setAdSize: (value: number) => void
     description: string
@@ -32,20 +28,20 @@ type CreateAdBuilderProps = {
     setSelectedAdSubject: (value: SubjectAutofill | undefined) => void
     adLinkedItemType: CreateAdLinkedItemType
     setAdLinkedItemType: (value: CreateAdLinkedItemType) => void
+    subjects: {
+        id: string;
+        name: string;
+    }[]
 }
 
 const CreateAdBuilder: React.FC<CreateAdBuilderProps> = (
-    { title, setTitle, adLinkType, selectedDateRange, setSelectedDateRange, adSize, setAdSize, description, setDescription, image, setImage,
-        selectedAdSubject, setSelectedAdSubject, adLinkedItemType, setAdLinkedItemType }: CreateAdBuilderProps) => {
+    { title, setTitle, adLinkType, setSelectedDateRange, adSize, setAdSize, description, setDescription, image, setImage,
+        selectedAdSubject, setSelectedAdSubject, adLinkedItemType, setAdLinkedItemType, subjects }: CreateAdBuilderProps) => {
 
     const theme = useMantineTheme();
-    const { token } = useAuth();
 
     // Ad image
     const [imageFilepath, setImageFilepath] = useState<string | undefined>(undefined);
-
-    // Data
-    const [userData, setUserData] = useState<UserDataProfile>(null);
 
     return (
         <Grid gutterMd={theme.spacing.lg} sx={{ maxWidth: theme.breakpoints.lg }}>
@@ -86,8 +82,7 @@ const CreateAdBuilder: React.FC<CreateAdBuilderProps> = (
 
                     {adLinkedItemType === "subject" && adLinkType === "link" && (
                         <AutocompleteSubject
-                            token={token}
-                            setUserData={setUserData}
+                            subjects={subjects}
                             selectedAdSubject={selectedAdSubject}
                             setSelectedAdSubject={setSelectedAdSubject}
                         />
@@ -138,7 +133,6 @@ const CreateAdBuilder: React.FC<CreateAdBuilderProps> = (
                         />
                     }
                     <AdDateRangePicker
-                        value={selectedDateRange}
                         onChange={setSelectedDateRange}
                     />
                 </Stack>
@@ -151,9 +145,7 @@ const CreateAdBuilder: React.FC<CreateAdBuilderProps> = (
                     adSize={adSize}
                     description={description}
                     adLinkedItemType={adLinkedItemType}
-                    selectedAdSubject={selectedAdSubject}
                     imageFilepath={imageFilepath}
-                    userData={userData}
                 />
             </Grid.Col>
         </Grid>

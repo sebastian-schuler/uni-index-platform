@@ -2,7 +2,7 @@ import {
     Center, createStyles, Group, ScrollArea, Table, Text, TextInput, UnstyledButton
 } from '@mantine/core';
 import { keys } from '@mantine/utils';
-import { Country } from '@prisma/client';
+import { country } from '@prisma/client';
 import { IconChevronDown, IconChevronUp, IconSearch, IconSelector } from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import { useState } from 'react';
@@ -123,7 +123,7 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 
 interface Props {
     socialMediaList: SmRankingEntryMinified[]
-    countries: Country[]
+    countries: country[]
 }
 
 const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) => {
@@ -132,15 +132,15 @@ const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) 
     const { classes } = useStyles();
 
     const data: RowData[] = socialMediaList.map((item, i) => {
-        const country = countries.find(c => c.id === item.Institution.countryId);
+        const country = countries.find(c => c.id === item.institution.countryId);
         return {
             rank: (i + 1),
-            name: item.Institution.name,
+            name: item.institution.name,
             country: getLocalizedName({ lang: lang, dbTranslated: country }),
             totalscore: item.combinedScore,
             youtubeScore: item.youtubeScore,
             twitterScore: item.twitterScore,
-            url: toLink(URL_INSTITUTION, country?.url || "", item.Institution.url, "social-media"),
+            url: toLink(URL_INSTITUTION, country?.url || "", item.institution.url, "social-media"),
         }
     })
 

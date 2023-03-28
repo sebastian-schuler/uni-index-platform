@@ -13,7 +13,7 @@ export const getAdCardArray = async (source: string, lang: string): Promise<AdCa
     const adCards = ads.map(ad => convertAdToCardData(ad, lang));
     // sort by size
     adCards.sort((a, b) => b.sizeCost - a.sizeCost);
-    
+
     // Split into lists of sum of sizeCost <= 8
     const lists: AdCardData[][] = [[]];
     let x = 0;
@@ -62,13 +62,13 @@ const convertAdToCardData = (ad: DetailedUserAd, lang: string): AdCardData => {
     let subtext = "";
 
     if (ad.type === "subject") {
-        url = toLink(URL_INSTITUTION, ad.User.Institution.City.State.Country.url, ad.User.Institution.url, ad.Subject?.url || "");
-        title = ad.Subject?.name || "";
-        subtext = ad.User.Institution.name;
+        url = toLink(URL_INSTITUTION, ad.user.institution.city.state.country.url, ad.user.institution.url, ad.subject?.url || "");
+        title = ad.subject?.name || "";
+        subtext = ad.user.institution.name;
     } else if (ad.type === "institution") {
-        url = toLink(URL_INSTITUTION, ad.User.Institution.City.State.Country.url, ad.User.Institution.url || "");
-        title = ad.User.Institution.name;
-        subtext = ad.User.Institution.InstitutionLocation.length > 0 ? ad.User.Institution.InstitutionLocation[0].City.name : "";
+        url = toLink(URL_INSTITUTION, ad.user.institution.city.state.country.url, ad.user.institution.url || "");
+        title = ad.user.institution.name;
+        subtext = ad.user.institution.institution_city.length > 0 ? ad.user.institution.institution_city[0].city.name : "";
     }
 
     return {

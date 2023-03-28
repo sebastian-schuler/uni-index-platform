@@ -1,5 +1,5 @@
 import { Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
-import { Country, Institution } from '@prisma/client'
+import { country, institution } from '@prisma/client'
 import dayjs from 'dayjs'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import Trans from 'next-translate/Trans'
@@ -7,7 +7,6 @@ import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
 import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
 import MantineLink from '../../../../../components/Link/MantineLink'
-import WhitePaper from '../../../../../components/Paper/WhitePaper'
 import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
 import { FooterContent } from '../../../../../features/Footer/Footer'
 import InstitutionNav from '../../../../../features/Navigation/InstitutionNav'
@@ -27,8 +26,8 @@ interface CategoryData {
 }
 
 interface Props {
-  institution: Institution,
-  country: Country,
+  institution: institution,
+  country: country,
   lhr: LhrSimple,
   footerContent: FooterContent[],
 }
@@ -45,7 +44,7 @@ const InstitutionOnlineMarketing: NextPage<Props> = ({ institution, country, lhr
       </Head>
       <Breadcrumb countryInfo={country} institutionInfo={institution} />
       <InstitutionNav title={institution.name} />
-      <WhitePaper>No LHR data</WhitePaper>
+      No LHR data
     </ResponsiveWrapper>
   );
 

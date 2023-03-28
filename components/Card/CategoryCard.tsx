@@ -1,4 +1,4 @@
-import { Card, createStyles, Group, Stack, Text, ThemeIcon } from '@mantine/core'
+import { Card, createStyles, Group, Text, ThemeIcon } from '@mantine/core'
 import { IconSchool } from '@tabler/icons-react'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
@@ -40,7 +40,7 @@ const CategoryCard: React.FC<Props> = ({ subjectType }: Props) => {
                 <ThemeIcon size={24} radius="xl">
                     <IconSchool size={18} />
                 </ThemeIcon>
-                <Text>{t('card-category.label-subjects', { count: subjectType.subjectCount })}</Text>
+                <Text>{t('card-category.label-subjects', { count: subjectType.subject_count })}</Text>
             </Group>
 
         </Card>

@@ -1,13 +1,11 @@
-import { Anchor, Card, CardSection, createStyles, SimpleGrid, Stack, Text } from '@mantine/core'
+import { Card, CardSection, createStyles, SimpleGrid, Stack } from '@mantine/core';
 import useTranslation from 'next-translate/useTranslation';
-import Link from 'next/link'
-import React from 'react'
-import MantineLink from '../Link/MantineLink';
-import { LhrSimple } from '../../lib/types/lighthouse/CustomLhrTypes';
 import LhrRingProgress from '../../features/OnlineMarketing/LhrRingProgress';
-import CardTitle from '../Text/CardTitle';
-import { toLink } from '../../lib/util/util';
+import { LhrSimple } from '../../lib/types/lighthouse/CustomLhrTypes';
 import { URL_INSTITUTION_OM_ACCESSIBILITY, URL_INSTITUTION_OM_BESTPRACTICES, URL_INSTITUTION_OM_PERFORMANCE, URL_INSTITUTION_OM_SEO } from '../../lib/url-helper/urlConstants';
+import { toLink } from '../../lib/util/util';
+import MantineLink from '../Link/MantineLink';
+import CardTitle from '../Text/CardTitle';
 
 const useStyles = createStyles((theme) => ({
     card: {

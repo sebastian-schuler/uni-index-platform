@@ -1,5 +1,5 @@
 import { Box, Divider, Grid, Stack, Text, Title, useMantineTheme } from '@mantine/core';
-import { City, Country, State } from '@prisma/client';
+import { city, country, state } from '@prisma/client';
 import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import MantineLink from '../../components/Link/MantineLink';
@@ -20,7 +20,7 @@ export type FooterContentItem = {
 
 export type FooterContent = {
     title: string,
-    data: Country[] | State[] | City[] | Searchable[],
+    data: country[] | state[] | city[] | Searchable[],
     type: "Country" | "State" | "City" | "Searchable",
 }
 
@@ -55,7 +55,7 @@ const Footer: NextPage<Props> = props => {
             let dataRow: FooterContentList = { title: val.title, content: [] };
 
             if (val.type === "Country") {
-                const country = val.data as Country[];
+                const country = val.data as country[];
                 country.forEach(val => {
                     let name = getLocalizedName({ lang: lang, dbTranslated: val });
                     dataRow.content.push({ name: name, url: toLink(val.url) })

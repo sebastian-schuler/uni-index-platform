@@ -1,20 +1,17 @@
 import { Stack, Text, Title } from '@mantine/core';
-import { Country, Institution } from '@prisma/client';
-import { GetServerSideProps, GetStaticPaths } from 'next';
+import { country, institution } from '@prisma/client';
+import { GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
-import { ParsedUrlQuery } from 'querystring';
-import GenericPageHeader from '../../../../../components/Block/GenericPageHeader';
 import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper';
 import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb';
-import InstitutionNav from '../../../../../features/Navigation/InstitutionNav';
 import { getAdPostByUrl } from '../../../../../lib/prisma/prismaNews';
 import { getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
 import { ArticleCardData } from '../../../../../lib/types/UiHelperTypes';
 
 type Props = {
-    country: Country | null;
-    institution: Institution;
+    country: country | null;
+    institution: institution;
     articleData: ArticleCardData;
 }
 

@@ -1,5 +1,5 @@
 import { createStyles, Divider, Grid, Image, Stack, Text } from '@mantine/core'
-import { Country, Institution, InstitutionScreenshot } from '@prisma/client'
+import { country, institution, institution_screenshot } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
@@ -26,11 +26,11 @@ const useStyles = createStyles((theme) => ({
 
 }));
 
-type ScreenshotPair = { full: InstitutionScreenshot, thumbnail: InstitutionScreenshot }
+type ScreenshotPair = { full: institution_screenshot, thumbnail: institution_screenshot }
 
 interface Props {
-  institution: Institution,
-  country: Country,
+  institution: institution,
+  country: country,
   screenshotsStringified: string,
   footerContent: FooterContent[],
 }
@@ -41,11 +41,11 @@ const InstitutionScreenshots: NextPage<Props> = ({ institution, country, screens
   const { t, lang } = useTranslation("institution");
   const { classes } = useStyles();
 
-  const allScreenshots: InstitutionScreenshot[] = JSON.parse(screenshotsStringified);
+  const allScreenshots: institution_screenshot[] = JSON.parse(screenshotsStringified);
 
   const screenshotPairs: ScreenshotPair[] = [];
 
-  allScreenshots.forEach((screenshot: InstitutionScreenshot) => {
+  allScreenshots.forEach((screenshot: institution_screenshot) => {
     if (screenshot.type === "full") {
       const thumbnail = allScreenshots.find(scrn => scrn.pair_index === screenshot.pair_index && scrn.type === "thumbnail");
       if (thumbnail) {

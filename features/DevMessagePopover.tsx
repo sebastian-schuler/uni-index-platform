@@ -4,9 +4,9 @@ const useStyles = createStyles((theme) => ({
 
     root: {
         position: 'fixed',
-        bottom: theme.spacing.md,
-        right: theme.spacing.lg,
-        fontSize: 18,
+        bottom: theme.spacing.xs,
+        left: theme.spacing.xs,
+        fontSize: 11,
         userSelect: 'none',
         zIndex: 99999
     },

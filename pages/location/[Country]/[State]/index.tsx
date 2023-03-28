@@ -1,5 +1,5 @@
 import { Group, SimpleGrid, Stack } from '@mantine/core';
-import { Country, State } from '@prisma/client';
+import { country, state } from '@prisma/client';
 import { Reorder } from 'framer-motion';
 import produce from 'immer';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
@@ -24,8 +24,8 @@ import { generateSearchable, getLocalizedName } from '../../../../lib/util/util'
 
 interface Props {
     searchables: Searchable[],
-    stateInfo: State,
-    countryInfo: Country,
+    stateInfo: state,
+    countryInfo: country,
     footerContent: FooterContent[]
 }
 
@@ -156,7 +156,7 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
     const states = await prisma.state.findMany(
         {
             include: {
-                Country: true,
+                country: true,
             }
         }
     )
@@ -171,7 +171,7 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
         states.forEach((state) => {
             paths.push({
                 params: {
-                    Country: state.Country.url,
+                    Country: state.country.url,
                     State: state.url
                 },
                 locale,
@@ -193,6 +193,13 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     // Selected State information
     const stateInfo = await getState(stateUrl);
     const countryInfo = await getCountryStateByStateUrl(stateUrl);
+
+    if (!stateInfo || !countryInfo) {
+        return {
+            notFound: true,
+        }
+    }
+
     const cities = await getCitiesDetailedByState(stateUrl);
     // Convert to CityCardData and generate Searchable
     const countryData: CityCardData[] = cities.map(city => convertCityToCardData(city, lang));
@@ -205,10 +212,11 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         { title: "Countries", data: countryList, type: "Country" },
     ]
 
-    return {
-        props: { searchables, stateInfo, countryInfo: countryInfo?.Country, footerContent }
+    const props: Props = {
+        searchables, stateInfo, countryInfo: countryInfo?.country, footerContent
     }
 
+    return { props };
 }
 
 export default StatePage

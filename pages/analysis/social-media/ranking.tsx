@@ -1,5 +1,5 @@
 import { Stack, Text, Title } from '@mantine/core'
-import { Country } from '@prisma/client'
+import { country } from '@prisma/client'
 import { GetStaticProps, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
@@ -13,7 +13,7 @@ import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes'
 import { minifySmRankingItem } from '../../../lib/util/conversionUtil'
 
 interface Props {
-    countries: Country[],
+    countries: country[],
     socialMediaList: SmRankingEntryMinified[]
     filtedOutCount: number
     footerContent: FooterContent[]

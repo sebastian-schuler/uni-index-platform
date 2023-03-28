@@ -1,19 +1,18 @@
 import { Button, Grid, Group, Space } from "@mantine/core"
-import { Country, Institution } from "@prisma/client"
+import { country, institution } from "@prisma/client"
 import Link from "next/link"
-import Breadcrumb from "../Breadcrumb/Breadcrumb"
-import { FooterContent } from "../Footer/Footer"
 import ResponsiveWrapper from "../../components/Container/ResponsiveWrapper"
 import { LhrAudit, LhrCategory } from "../../lib/types/lighthouse/CustomLhrTypes"
 import { URL_INSTITUTION, URL_INSTITUTION_OM } from "../../lib/url-helper/urlConstants"
 import { toLink } from "../../lib/util/util"
-import WhitePaper from "../../components/Paper/WhitePaper"
+import Breadcrumb from "../Breadcrumb/Breadcrumb"
+import { FooterContent } from "../Footer/Footer"
 import LhrAuditList from "./LhrAuditList"
 import LhrRingProgress from "./LhrRingProgress"
 
 interface Props {
-    institution: Institution,
-    country: Country,
+    institution: institution,
+    country: country,
     lhrAudits: LhrAudit[],
     lhrCategory: LhrCategory,
     footerContent: FooterContent[],

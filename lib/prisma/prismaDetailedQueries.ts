@@ -1,4 +1,4 @@
-import { Country, Institution, Subject, SubjectType } from "@prisma/client";
+import { category, country, institution, subject, subject_category } from "@prisma/client";
 import prisma from './prisma';
 import { getCountries, getSubjectTypes } from "./prismaQueries";
 import { DetailedCity, DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
@@ -9,7 +9,7 @@ import { OrderBy } from "../types/OrderBy";
 // ================= COUNTRY =============
 // ===========================================================
 
-const loadDetailedCountries = async (countries: Country[]) => {
+const loadDetailedCountries = async (countries: country[]) => {
     return await Promise.all(countries.map(async (country) => {
         const institutionCount: number = await getCountryInstitutionCount(country.id);
         const subjectCount: number = await getCountrySubjectCount(country.id);
@@ -33,9 +33,9 @@ export const getPopularDetailedCountries = async () => {
 const getCountrySubjectCount = async (id: string): Promise<number> => {
     return await prisma.subject.count({
         where: {
-            City: {
-                State: {
-                    Country: {
+            city: {
+                state: {
+                    country: {
                         id: id
                     }
                 }
@@ -48,11 +48,11 @@ const getCountrySubjectCount = async (id: string): Promise<number> => {
 const getCountryInstitutionCount = async (id: string): Promise<number> => {
     return await prisma.institution.count({
         where: {
-            InstitutionLocation: {
+            institution_city: {
                 some: {
-                    City: {
-                        State: {
-                            Country: {
+                    city: {
+                        state: {
+                            country: {
                                 id: id
                             }
                         }
@@ -67,12 +67,15 @@ const getCountryInstitutionCount = async (id: string): Promise<number> => {
 // ================= SUBJECT TYPE =============
 // ===========================================================
 
-export const getDetailedSubjectTypes = async (source?: SubjectType[]) => {
+export const getDetailedSubjectTypes = async (source?: category[]) => {
     const types = source ? source : await getSubjectTypes();
 
     const detailed: DetailedSubjectType[] = await Promise.all(types.map(async (type) => {
         const subjectCount: number = await getSubjectTypeSubjectCount(type.url);
-        return { ...type, subjectCount };
+        return { 
+            ...type,
+            subject_count: subjectCount
+        };
     }));
 
     return detailed;
@@ -82,9 +85,9 @@ export const getDetailedSubjectTypes = async (source?: SubjectType[]) => {
 const getSubjectTypeSubjectCount = async (subjectCategoryUrl: string): Promise<number> => {
     return await prisma.subject.count({
         where: {
-            SubjectHasSubjectTypes: {
+            subject_category: {
                 some: {
-                    SubjectType: {
+                    category: {
                         url: subjectCategoryUrl
                     }
                 }
@@ -106,18 +109,18 @@ export const getDetailedCities = async (stateUrl: string) => {
 export const getCitiesDetailedByState = async (stateUrl: string): Promise<DetailedCity[]> => {
     return await prisma.city.findMany({
         where: {
-            State: { url: stateUrl }
+            state: { url: stateUrl }
         },
         include: {
-            State: {
+            state: {
                 include: {
-                    Country: true
+                    country: true
                 }
             },
             _count: {
                 select: {
-                    Subject: true,
-                    InstitutionLocation: true
+                    subject: true,
+                    institution_city: true
                 }
             }
         },
@@ -142,18 +145,18 @@ const getSubjectsDetailedByInstitution = async (institutionId: string): Promise<
 
     return await prisma.subject.findMany({
         include: {
-            SubjectHasSubjectTypes: {
+            subject_category: {
                 include: {
-                    SubjectType: true
+                    category: true
                 }
             },
-            Institution: true,
-            City: {
+            institution: true,
+            city: {
                 include: {
-                    State: {
+                    state: {
                         select: {
                             url: true,
-                            Country: true
+                            country: true
                         }
                     }
                 }
@@ -173,18 +176,18 @@ const getSubjectsDetailedByInstitution = async (institutionId: string): Promise<
 export const getSubjectDetailedByUrl = async (subjectUrl: string, institutionId: string): Promise<DetailedSubject | null> => {
     return await prisma.subject.findUnique({
         include: {
-            SubjectHasSubjectTypes: {
+            subject_category: {
                 include: {
-                    SubjectType: true
+                    category: true
                 }
             },
-            Institution: true,
-            City: {
+            institution: true,
+            city: {
                 include: {
-                    State: {
+                    state: {
                         select: {
                             url: true,
-                            Country: true
+                            country: true
                         }
                     }
                 }
@@ -200,24 +203,24 @@ export const getSubjectDetailedByUrl = async (subjectUrl: string, institutionId:
 }
 
 // Return DetailedSubjects, where SubjectType is URL parameter 
-export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string, orderBy: OrderBy, filteredSubjects?: Subject[]): Promise<DetailedSubject[]> => {
+export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string, orderBy: OrderBy, filteredSubjects?: subject[]): Promise<DetailedSubject[]> => {
 
     const subjectIds = filteredSubjects?.map((subject) => subject.id);
 
     return await prisma.subject.findMany({
         include: {
-            SubjectHasSubjectTypes: {
+            subject_category: {
                 include: {
-                    SubjectType: true
+                    category: true
                 }
             },
-            Institution: true,
-            City: {
+            institution: true,
+            city: {
                 include: {
-                    State: {
+                    state: {
                         select: {
                             url: true,
-                            Country: true
+                            country: true
                         }
                     }
                 }
@@ -228,9 +231,9 @@ export const getSubjectsDetailedByCategory = async (subjectCategoryUrl: string, 
                 id: {
                     in: subjectIds
                 },
-                SubjectHasSubjectTypes: {
+                subject_category: {
                     some: {
-                        SubjectType: {
+                        category: {
                             url: subjectCategoryUrl
                         }
                     }
@@ -254,27 +257,26 @@ export const getStatesDetailedByCountry = async (countryUrl: string): Promise<De
         include: {
             _count: {
                 select: {
-                    City: true,
-
+                    city: true,
                 }
             },
-            City: {
+            city: {
                 select: {
                     _count: {
                         select: {
-                            Subject: true,
+                            subject: true,
                         }
                     }
                 }
             },
-            Country: {
+            country: {
                 select: {
                     url: true,
                 }
             }
         },
         where: {
-            Country: {
+            country: {
                 url: countryUrl
             }
         },
@@ -289,13 +291,13 @@ export const getStatesDetailedByCountry = async (countryUrl: string): Promise<De
 // ================= INSTITUTION =============
 // =========================================================== 
 
-export const getInstitutionsDetailedByCountry = async (countryId: string, orderBy: OrderBy, filteredInstitutions?: Institution[]): Promise<DetailedInstitution[]> => {
+export const getInstitutionsDetailedByCountry = async (countryId: string, orderBy: OrderBy, filteredInstitutions?: institution[]): Promise<DetailedInstitution[]> => {
 
     const institutionIds = filteredInstitutions?.map((institution) => institution.id);
 
     return await prisma.institution.findMany({
         include: {
-            InstitutionSocialMedia: {
+            institution_socials: {
                 select: {
                     facebook_url: true,
                     instagram_url: true,
@@ -303,28 +305,28 @@ export const getInstitutionsDetailedByCountry = async (countryId: string, orderB
                     youtube_url: true,
                 }
             },
-            City: {
-                include: { State: { include: { Country: true } } },
+            city: {
+                include: { state: { include: { country: true } } },
             },
-            Subject: {
+            subject: {
                 include: {
-                    SubjectHasSubjectTypes: {
+                    subject_category: {
                         include: {
-                            SubjectType: true
+                            category: true
                         }
                     },
                 }
             },
-            InstitutionLocation: {
+            institution_city: {
                 select: {
-                    City: {
-                        include: { State: { include: { Country: true } } }
+                    city: {
+                        include: { state: { include: { country: true } } }
                     }
                 }
             },
             _count: {
                 select: {
-                    Subject: true
+                    subject: true
                 }
             }
         },
@@ -335,12 +337,12 @@ export const getInstitutionsDetailedByCountry = async (countryId: string, orderB
                 },
                 OR: [
                     {
-                        City: { State: { Country: { id: countryId } } }
+                        city: { state: { country: { id: countryId } } }
                     },
                     {
-                        InstitutionLocation: {
+                        institution_city: {
                             some: {
-                                City: { State: { Country: { id: countryId } } }
+                                city: { state: { country: { id: countryId } } }
                             }
                         }
                     }
@@ -361,7 +363,7 @@ export const getInstitutionsDetailedByCountry = async (countryId: string, orderB
 export const getInstitutionsDetailedByCity = async (cityId: string): Promise<DetailedInstitution[]> => {
     return await prisma.institution.findMany({
         include: {
-            InstitutionSocialMedia: {
+            institution_socials: {
                 select: {
                     facebook_url: true,
                     instagram_url: true,
@@ -369,28 +371,28 @@ export const getInstitutionsDetailedByCity = async (cityId: string): Promise<Det
                     youtube_url: true,
                 }
             },
-            City: {
-                include: { State: { include: { Country: true } } },
+            city: {
+                include: { state: { include: { country: true } } },
             },
-            Subject: {
+            subject: {
                 include: {
-                    SubjectHasSubjectTypes: {
+                    subject_category: {
                         include: {
-                            SubjectType: true
+                            category: true
                         }
                     },
                 }
             },
-            InstitutionLocation: {
+            institution_city: {
                 select: {
-                    City: {
-                        include: { State: { include: { Country: true } } }
+                    city: {
+                        include: { state: { include: { country: true } } }
                     }
                 }
             },
             _count: {
                 select: {
-                    Subject: true
+                    subject: true
                 }
             }
         },
@@ -402,7 +404,7 @@ export const getInstitutionsDetailedByCity = async (cityId: string): Promise<Det
                     }
                 },
                 {
-                    InstitutionLocation: {
+                    institution_city: {
                         some: {
                             city_id: {
                                 equals: cityId
@@ -423,7 +425,7 @@ export const getInstitutionsDetailedByCity = async (cityId: string): Promise<Det
 export const getInstitutionDetailed = async (institutionId: string): Promise<DetailedInstitution | null> => {
     return await prisma.institution.findUnique({
         include: {
-            InstitutionSocialMedia: {
+            institution_socials: {
                 select: {
                     facebook_url: true,
                     instagram_url: true,
@@ -431,28 +433,28 @@ export const getInstitutionDetailed = async (institutionId: string): Promise<Det
                     youtube_url: true,
                 }
             },
-            City: {
-                include: { State: { include: { Country: true } } },
+            city: {
+                include: { state: { include: { country: true } } },
             },
-            Subject: {
+            subject: {
                 include: {
-                    SubjectHasSubjectTypes: {
+                    subject_category: {
                         include: {
-                            SubjectType: true
+                            category: true
                         }
                     },
                 }
             },
-            InstitutionLocation: {
+            institution_city: {
                 select: {
-                    City: {
-                        include: { State: { include: { Country: true } } }
+                    city: {
+                        include: { state: { include: { country: true } } }
                     }
                 }
             },
             _count: {
                 select: {
-                    Subject: true
+                    subject: true
                 }
             }
         },
@@ -470,7 +472,7 @@ export const getInstitutionDetailed = async (institutionId: string): Promise<Det
 export const getInstitutionDetailedByUrl = async (internalUrl: string): Promise<DetailedInstitution | null> => {
     return await prisma.institution.findUnique({
         include: {
-            InstitutionSocialMedia: {
+            institution_socials: {
                 select: {
                     facebook_url: true,
                     instagram_url: true,
@@ -478,28 +480,28 @@ export const getInstitutionDetailedByUrl = async (internalUrl: string): Promise<
                     youtube_url: true,
                 }
             },
-            City: {
-                include: { State: { include: { Country: true } } },
+            city: {
+                include: { state: { include: { country: true } } },
             },
-            Subject: {
+            subject: {
                 include: {
-                    SubjectHasSubjectTypes: {
+                    subject_category: {
                         include: {
-                            SubjectType: true
+                            category: true
                         }
                     },
                 }
             },
-            InstitutionLocation: {
+            institution_city: {
                 select: {
-                    City: {
-                        include: { State: { include: { Country: true } } }
+                    city: {
+                        include: { state: { include: { country: true } } }
                     }
                 }
             },
             _count: {
                 select: {
-                    Subject: true
+                    subject: true
                 }
             }
         },

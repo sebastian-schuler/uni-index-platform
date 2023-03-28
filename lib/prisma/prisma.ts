@@ -10,11 +10,6 @@ import { PrismaClient } from "@prisma/client";
 
 // export default prisma;
 
-// Teach server how to stringify BigInt
-BigInt.prototype["toJSON"] = function () {
-  return this.toString();
-};
-
 declare global {
 
   // allow global `var` declarations

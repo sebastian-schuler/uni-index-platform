@@ -1,9 +1,8 @@
-import { Country, State } from "@prisma/client"
+import { country } from "@prisma/client"
 import { SearchedCityResult, SearchedInstitutionResult, SearchedStateResult, SearchedSubjectResult, SearchResult } from "../types/SearchTypes"
-import { URL_LOCATION } from "../url-helper/urlConstants"
-import { getLocalizedName, toLink } from "./util"
+import { getLocalizedName } from "./util"
 
-export const convertCountryToSearchResult = (country: Country, lang: string): SearchResult => {
+export const convertCountryToSearchResult = (country: country, lang: string): SearchResult => {
     return {
         name: getLocalizedName({ lang: lang, dbTranslated: country }),
         url: country.url,

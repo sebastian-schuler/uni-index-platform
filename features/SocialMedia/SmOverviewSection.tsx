@@ -1,17 +1,15 @@
 import { Box, Card, createStyles, Grid, SimpleGrid, Stack, Text, Title } from '@mantine/core';
-import { Country, CountrySocialMedia, Institution, InstitutionSocialMedia } from '@prisma/client';
-import {
-    IconBrandFacebook, IconBrandInstagram, IconBrandTwitter, IconBrandYoutube
-} from '@tabler/icons-react';
+import { country, institution } from '@prisma/client';
+import { IconBrandTwitter, IconBrandYoutube } from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
 import { TotalScore, TotalScoreSet } from '../../lib/types/SocialMediaTypes';
 import { getLocalizedName } from '../../lib/util/util';
+import { SocialMediaLinkProps } from '../../pages/institution/[Country]/[Institution]/social-media';
 import SmProfilesBar from '../Charts/SmProfilesBar';
 import SocialMediaRadar from '../Charts/SmRadar';
-import { SocialMediaLinkProps } from '../../pages/institution/[Country]/[Institution]/social-media';
-import SmStatCard from './SmStatCard';
 import SmIconLink from './SmIconLink';
+import SmStatCard from './SmStatCard';
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -29,8 +27,8 @@ const useStyles = createStyles((theme) => ({
 
 interface Props {
     socialMediaLinks: SocialMediaLinkProps
-    institution: Institution,
-    country: Country,
+    institution: institution,
+    country: country,
     institutionScore: TotalScore,
     countryPercentScore: TotalScoreSet,
     countryTwitterScore: TotalScoreSet,

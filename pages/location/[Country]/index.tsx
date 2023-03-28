@@ -1,5 +1,5 @@
 import { Box, Grid, Group, SimpleGrid, Stack, Title } from '@mantine/core';
-import { Country } from '@prisma/client';
+import { country } from '@prisma/client';
 import { Reorder } from 'framer-motion';
 import produce from 'immer';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
@@ -26,7 +26,7 @@ import { generateSearchable, getLocalizedName } from '../../../lib/util/util';
 
 type Props = {
   searchableStates: Searchable[],
-  countryInfo: Country,
+  countryInfo: country,
   footerContent: FooterContent[],
 }
 

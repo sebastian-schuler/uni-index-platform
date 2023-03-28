@@ -1,7 +1,6 @@
 import { Card, createStyles, Group, Stack, Text, ThemeIcon } from '@mantine/core'
 import { IconBuilding } from '@tabler/icons-react'
 import useTranslation from 'next-translate/useTranslation'
-import Link from 'next/link'
 import React from 'react'
 import { CityCardData } from '../../lib/types/UiHelperTypes'
 import CardTitle from '../Text/CardTitle'

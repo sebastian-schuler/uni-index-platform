@@ -8,14 +8,14 @@ import prisma from './prisma';
 
 export const getAllSocialMedia = async (): Promise<SocialMediaDBEntry[]> => {
 
-    return await prisma.institutionSocialMedia.findMany({
+    return await prisma.institution_socials.findMany({
         include: {
-            Institution: {
+            institution: {
                 include: {
-                    City: {
+                    city: {
                         include: {
-                            State: {
-                                include: { Country: true }
+                            state: {
+                                include: { country: true }
                             }
                         }
                     }
@@ -28,7 +28,7 @@ export const getAllSocialMedia = async (): Promise<SocialMediaDBEntry[]> => {
 
 export const getCountrySocialmedia = async (countryId: string) => {
 
-    return await prisma.countrySocialMedia.findUnique({
+    return await prisma.country_socials.findUnique({
         where: {
             country_id: countryId
         },
@@ -39,20 +39,20 @@ export const getCountrySocialmedia = async (countryId: string) => {
 //
 export const getSocialMediaRanking = async (): Promise<SmRankingEntry[]> => {
 
-    return await prisma.institutionSocialMedia.findMany({
+    return await prisma.institution_socials.findMany({
         select: {
             institution_id: true,
             total_score: true,
             last_update: true,
-            Institution: {
+            institution: {
                 select: {
                     name: true,
                     url: true,
-                    City: {
+                    city: {
                         select: {
-                            State: {
+                            state: {
                                 select: {
-                                    Country: true
+                                    country: true
                                 }
                             }
                         }
@@ -67,7 +67,7 @@ export const getSocialMediaRanking = async (): Promise<SmRankingEntry[]> => {
 }
 
 export const getSocialMedia = async (institutionId: string) => {
-    return await prisma.institutionSocialMedia.findUnique({
+    return await prisma.institution_socials.findUnique({
         where: {
             institution_id: institutionId
         }

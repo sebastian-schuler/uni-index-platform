@@ -1,4 +1,4 @@
-import { InstitutionRegistrationDBItem } from '../types/AccountHandlingTypes';
+import { InstitutionRegistrationDBItem, PremiumAdDetailed } from '../types/AccountHandlingTypes';
 import prisma from './prisma';
 
 // ===========================================================
@@ -21,7 +21,7 @@ export const getUserLogin = async (email: string) => {
 
 export const addUserSession = async (token: string, userId: string, validUntil: number) => {
 
-    return await prisma.userSession.create({
+    return await prisma.user_session.create({
         data: {
             token: token,
             user_id: userId,
@@ -32,20 +32,20 @@ export const addUserSession = async (token: string, userId: string, validUntil: 
 }
 
 export const removeUserSession = async (token: string) => {
-    return await prisma.userSession.delete({
+    return await prisma.user_session.delete({
         where: { token: token }
     });
 }
 
 export const getUserFromToken = async (token: string) => {
 
-    return await prisma.userSession.findUnique({
+    return await prisma.user_session.findUnique({
         where: {
             token: token
         },
         select: {
             lifetime: true,
-            User: {
+            user: {
                 select: {
                     email: true,
                     id: true,
@@ -58,7 +58,7 @@ export const getUserFromToken = async (token: string) => {
 
 export const getSessionByToken = async (token: string) => {
 
-    return await prisma.userSession.findUnique({
+    return await prisma.user_session.findUnique({
         where: {
             token: token
         }
@@ -100,8 +100,8 @@ export const getUserCountByInstitution = async (institutionID: string) => {
 }
 
 export const getAdsByUser = async (userId: string) => {
-    return await prisma.userAd.findMany({
-        include: { Subject: true, },
+    return await prisma.user_ad.findMany({
+        include: { subject: true, },
         where: { user_id: userId }
     })
 }
@@ -112,10 +112,10 @@ export const getInstitutesForUserAccounts = async (): Promise<InstitutionRegistr
         select: {
             id: true,
             name: true,
-            User: {
+            user: {
                 select: {
                     _count: {
-                        select: { UserSession: true }
+                        select: { user_session: true }
                     }
                 }
             }
@@ -126,15 +126,15 @@ export const getInstitutesForUserAccounts = async (): Promise<InstitutionRegistr
 export const getInstitutionByUser = async (institutionId: string) => {
     return await prisma.user.findUnique({
         include: {
-            Institution: {
+            institution: {
                 include: {
-                    InstitutionLocation: {
+                    institution_city: {
                         select: {
-                            City: {
+                            city: {
                                 select: {
-                                    State: {
+                                    state: {
                                         select: {
-                                            Country: true
+                                            country: true
                                         }
                                     }
                                 }
@@ -153,7 +153,7 @@ export const addNewAd = async (
     placement: string[], user_id: string, subject_id: string, description: string, image_id: string
 ) => {
 
-    return await prisma.userAd.create({
+    return await prisma.user_ad.create({
         data: {
             booked_until: booked_until,
             type: type,
@@ -173,8 +173,40 @@ export const addNewAd = async (
 export const getSubjectsByInstitute = async (institutionId: string) => {
 
     return await prisma.user.findUnique({
-        select: { Institution: { include: { Subject: true } } },
+        select: { institution: { include: { subject: true } } },
         where: { id: institutionId }
     });
+
+}
+
+/**
+ * Used in create ad to get the name of the institution
+ * @param token 
+ */
+export const getInstitutionDataFromToken = async (token: string) => {
+
+    return await prisma.user_session.findUnique({
+        where: {
+            token: token
+        },
+        select: {
+            lifetime: true,
+            user: {
+                select: {
+                    institution: {
+                        select: {
+                            name: true,
+                            subject: {
+                                select: {
+                                    id: true,
+                                    name: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    })
 
 }

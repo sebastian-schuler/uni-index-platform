@@ -1,4 +1,4 @@
-import { SubjectType } from '@prisma/client';
+import { category } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { getServerSideSitemapIndexLegacy } from 'next-sitemap';
 import { getCountries, getInstitutionsByCountry, getSubjects, getSubjectTypes } from '../../lib/prisma/prismaQueries';
@@ -9,7 +9,7 @@ import { INSTITUTIONS_PER_PAGE } from '../institution/[Country]';
 /**
  * Get all pages of each category
  */
-const getCategoryPages = async (categories: SubjectType[]) => {
+const getCategoryPages = async (categories: category[]) => {
     const pageCount = Math.ceil(categories.length / CATEGORY_PER_PAGE);
 
     const result: string[] = []

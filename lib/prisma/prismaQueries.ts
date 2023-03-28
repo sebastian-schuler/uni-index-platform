@@ -1,4 +1,4 @@
-import { Subject } from '@prisma/client';
+import { subject } from '@prisma/client';
 import { DetailedUserAd } from '../types/DetailedDatabaseTypes';
 import prisma from './prisma';
 
@@ -15,7 +15,7 @@ export const getCountries = async () => {
 
 // Return all subject types, ordered by localized name
 export const getSubjectTypes = async () => {
-    return await prisma.subjectType.findMany({
+    return await prisma.category.findMany({
         orderBy: { name_en: "asc" }
     })
 }
@@ -24,7 +24,7 @@ export const getSubjectTypes = async () => {
 export const getSubjects = async (categoryId: number) => {
     return await prisma.subject.findMany({
         where: {
-            SubjectHasSubjectTypes: {
+            subject_category: {
                 some: {
                     subject_type_id: categoryId
                 }
@@ -43,35 +43,35 @@ export const getSubjects = async (categoryId: number) => {
  * @param placementLocation 
  */
 export const getAds = async (placementLocation: string): Promise<DetailedUserAd[]> => {
-    return await prisma.userAd.findMany({
+    return await prisma.user_ad.findMany({
         include: {
-            Subject: {
+            subject: {
                 include: {
-                    SubjectHasSubjectTypes: {
+                    subject_category: {
                         include: {
-                            SubjectType: true
+                            category: true
                         }
                     },
                 }
             },
-            User: {
+            user: {
                 select: {
-                    Institution: {
+                    institution: {
                         select: {
                             url: true,
                             name: true,
-                            City: {
+                            city: {
                                 select: {
-                                    State: {
+                                    state: {
                                         select: {
-                                            Country: { select: { url: true } }
+                                            country: { select: { url: true } }
                                         }
                                     }
                                 }
                             },
-                            InstitutionLocation: {
+                            institution_city: {
                                 select: {
-                                    City: {
+                                    city: {
                                         select: {
                                             name: true,
                                         }
@@ -103,7 +103,7 @@ export const getCountryStateByStateUrl = async (stateUrl: string) => {
             url: stateUrl
         },
         select: {
-            Country: true
+            country: true
         }
     });
 }
@@ -114,8 +114,8 @@ export const getCityStateCountryByCity = async (cityUrl: string) => {
             url: cityUrl
         },
         include: {
-            State: {
-                include: { Country: true }
+            state: {
+                include: { country: true }
             }
         }
     });
@@ -124,7 +124,7 @@ export const getCityStateCountryByCity = async (cityUrl: string) => {
 export const getInstitutionsByCountry = async (countryId: string) => {
     return await prisma.institution.findMany({
         where: {
-            City: { State: { Country: { id: countryId } } }
+            city: { state: { country: { id: countryId } } }
         }
     });
 }
@@ -158,7 +158,7 @@ export const getInstitution = async (props: GetInstitutionProps) => {
     });
 }
 
-export const getSubject = async (subjectUrl: string, institutionUrl: string): Promise<Subject | null> => {
+export const getSubject = async (subjectUrl: string, institutionUrl: string): Promise<subject | null> => {
 
     const institutionId = (await getInstitutionIdByUrl(institutionUrl))?.id ?? null;
 
@@ -179,7 +179,7 @@ export const getSubject = async (subjectUrl: string, institutionUrl: string): Pr
 
 export const getSubjectType = async (subjectTypeUrl: string) => {
 
-    return await prisma.subjectType.findUnique({
+    return await prisma.category.findUnique({
         where: {
             url: subjectTypeUrl
         }

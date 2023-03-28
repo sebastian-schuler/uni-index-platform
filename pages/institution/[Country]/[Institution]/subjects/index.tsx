@@ -1,5 +1,5 @@
 import { Group, SimpleGrid, useMantineTheme } from '@mantine/core';
-import { Country, Institution } from '@prisma/client';
+import { country, institution } from '@prisma/client';
 import { GetStaticPaths, GetStaticPropsContext } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
@@ -17,11 +17,11 @@ import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticP
 import { convertSubjectToCardData } from '../../../../../lib/util/conversionUtil';
 
 interface Props {
-  institution: Institution,
-  country: Country,
+  institution: institution,
+  country: country,
   footerContent: FooterContent[],
   subjectData: SubjectCardData[]
-  countryList: Country[]
+  countryList: country[]
 }
 
 const SubjectsPage = ({ institution, country, footerContent, subjectData, countryList }: Props) => {

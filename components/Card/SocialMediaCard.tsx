@@ -49,9 +49,9 @@ const SocialMediaCard: React.FC<Props> = ({ cardData }: Props) => {
     const title = cardData.type === 'twitter' ? t('social-media.best-tw.title') : t('social-media.best-yt.title');
     const icon = cardData.type === 'twitter' ? <IconBrandTwitter size={32} /> : <IconBrandYoutube size={32} />;
 
-    const socialMediaUrl = toLink(URL_INSTITUTION, cardData.Country.url, cardData.Institution.url, URL_INSTITUTION_SOCIALMEDIA);
-    const institutionUrl = toLink(URL_INSTITUTION, cardData.Country.url, cardData.Institution.url);
-    const countryUrl = toLink(URL_LOCATION, cardData.Country.url);
+    const socialMediaUrl = toLink(URL_INSTITUTION, cardData.country.url, cardData.institution.url, URL_INSTITUTION_SOCIALMEDIA);
+    const institutionUrl = toLink(URL_INSTITUTION, cardData.country.url, cardData.institution.url);
+    const countryUrl = toLink(URL_LOCATION, cardData.country.url);
 
     let data = [];
     if (cardData.type === 'twitter') {
@@ -77,9 +77,9 @@ const SocialMediaCard: React.FC<Props> = ({ cardData }: Props) => {
                     <Stack spacing={'sm'}>
                         <CardTitle href={socialMediaUrl} text={title} />
                         <Text size={'md'} lh={1}>
-                            <Anchor component={Link} href={institutionUrl} lh={1}>{cardData.Institution.name}</Anchor>
+                            <Anchor component={Link} href={institutionUrl} lh={1}>{cardData.institution.name}</Anchor>
                             {" | "}
-                            <Anchor component={Link} href={countryUrl} lh={1}>{cardData.Country.name}</Anchor>
+                            <Anchor component={Link} href={countryUrl} lh={1}>{cardData.country.name}</Anchor>
                         </Text>
                     </Stack>
                     <ThemeIcon size={"lg"} className={classes.icon} >

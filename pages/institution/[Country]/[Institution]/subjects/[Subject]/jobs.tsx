@@ -1,23 +1,20 @@
-import { Country, Institution, Subject } from '@prisma/client'
+import { country, institution, subject } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React from 'react'
+import { ParsedUrlQuery } from 'querystring'
+import ResponsiveWrapper from '../../../../../../components/Container/ResponsiveWrapper'
 import Breadcrumb from '../../../../../../features/Breadcrumb/Breadcrumb'
 import { FooterContent } from '../../../../../../features/Footer/Footer'
-import ResponsiveWrapper from '../../../../../../components/Container/ResponsiveWrapper'
 import SubjectNav from '../../../../../../features/Navigation/SubjectNav'
-import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../../lib/url-helper/urlConstants'
 import { getCountries, getCountry, getInstitution, getSubject } from '../../../../../../lib/prisma/prismaQueries'
-import { getDBLocale, toLink } from '../../../../../../lib/util/util'
-import { ParsedUrlQuery } from 'querystring'
-import { getJobsFromApi } from '../../../../../../lib/apis/jobsHandler'
-import WhitePaper from '../../../../../../components/Paper/WhitePaper'
 import { getSubjectPaths } from '../../../../../../lib/prisma/prismaUrlPaths'
+import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from '../../../../../../lib/url-helper/urlConstants'
+import { getDBLocale, toLink } from '../../../../../../lib/util/util'
 
 type Props = {
-    country: Country | null,
-    institution: Institution | null,
-    subject: Subject | null,
+    country: country | null,
+    institution: institution | null,
+    subject: subject | null,
 
     footerContent: FooterContent[],
 }
@@ -48,9 +45,7 @@ const SubjectJobs: NextPage<Props> = ({ country, institution, subject, footerCon
                 }}
             />
 
-            <WhitePaper>
-                <p>Jobs</p>
-            </WhitePaper>
+            <p>Jobs</p>
 
         </ResponsiveWrapper>
     )
@@ -64,11 +59,11 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     let localeDb = getDBLocale(context.locale);
 
     // Get information single objects
-    const country: Country | null = await getCountry(countryQuery);
-    const institution: Institution | null = await getInstitution({ institutionUrl });
-    const subject: Subject | null = await getSubject(subjectQuery, institutionUrl);
+    const country: country | null = await getCountry(countryQuery);
+    const institution: institution | null = await getInstitution({ institutionUrl });
+    const subject: subject | null = await getSubject(subjectQuery, institutionUrl);
 
-    const jobs = await getJobsFromApi({ wo: "Berlin", was: "Informatik" });
+    // const jobs = await getJobsFromApi({ wo: "Berlin", was: "Informatik" });
 
     // Footer Data
     // Get all countries
@@ -97,8 +92,8 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
         subjects.forEach((subject) => {
             paths.push({
                 params: {
-                    Country: subject.City?.State.Country.url,
-                    Institution: subject.Institution.url,
+                    Country: subject.city?.state.country.url,
+                    Institution: subject.institution.url,
                     Subject: subject.url
                 },
                 locale,

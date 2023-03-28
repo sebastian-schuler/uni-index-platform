@@ -1,5 +1,5 @@
 import { Anchor, Card, createStyles, Grid, Group, Stack, Text, ThemeIcon } from '@mantine/core'
-import { Country } from '@prisma/client'
+import { country } from '@prisma/client'
 import { IconAward, IconCalendar, IconCategory } from '@tabler/icons-react'
 import Flags from 'country-flag-icons/react/3x2'
 import useTranslation from 'next-translate/useTranslation'
@@ -32,7 +32,7 @@ const useStyles = createStyles((theme) => ({
 
 type Props = {
   data: SubjectCardData
-  country: Country
+  country: country
 }
 
 const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
@@ -40,10 +40,15 @@ const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
   const { classes, theme } = useStyles();
   const { t } = useTranslation('common');
 
-  const Flag = Flags[country?.country_code || ""] || Flags["EU"];
+  const subjectUrl = toLink(URL_INSTITUTION, country.url, data.institution.url, URL_INSTITUTION_SUBJECTS, data.url);
+  const institutionUrl = toLink(URL_INSTITUTION, country.url, data.institution.url);
 
-  const subjectUrl = toLink(URL_INSTITUTION, country.url, data.Institution.url, URL_INSTITUTION_SUBJECTS, data.url);
-  const institutionUrl = toLink(URL_INSTITUTION, country.url, data.Institution.url);
+  const code = country?.country_code || "EU";
+  let Flag: any = undefined;
+  if (Object.keys(Flags).includes(code)) {
+    // @ts-ignore
+    Flag = Flags[code] || Flags["EU"];
+  }
 
   return (
     <Card withBorder radius="md" p="md" shadow={"sm"} className={classes.card}>
@@ -57,9 +62,9 @@ const SubjectCard: React.FC<Props> = ({ data, country }: Props) => {
             <Stack spacing={theme.spacing.xs}>
               <CardTitle href={subjectUrl} text={data.name} lang={country?.country_code}/>
               <Text lh={1.2}>
-                <Anchor lh={1.1} component={Link} href={institutionUrl}>{data.Institution.name}</Anchor>
+                <Anchor lh={1.1} component={Link} href={institutionUrl}>{data.institution.name}</Anchor>
                 {' | '}
-                <Anchor lh={1.1} component={Link} href={data.City.fullUrl}>{data.City.name}</Anchor>
+                <Anchor lh={1.1} component={Link} href={data.city.fullUrl}>{data.city.name}</Anchor>
               </Text>
             </Stack>
           </Grid.Col>

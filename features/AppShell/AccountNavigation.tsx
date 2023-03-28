@@ -1,5 +1,5 @@
 import {
-    AppShell, Burger, createStyles, Header, MediaQuery, Title, Transition, useMantineTheme
+    AppShell, Burger, createStyles, Header, MediaQuery, Text, Title, Transition, useMantineTheme
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useRouter } from 'next/router';
@@ -70,7 +70,7 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
                     <AccountNavDrawer displayedEmail={userData?.user.email || ""} opened={opened} />
             }
             header={
-                <Header height={70} p="md" className={classes.header}>
+                <Header height={50} p="md" className={classes.header}>
                     <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
                         <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
                             <Burger
@@ -82,7 +82,7 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
                             />
                         </MediaQuery>
 
-                        <Title>Uni-Index App</Title>
+                        <Text size={'xl'}>Uni-Index App</Text>
                     </div>
                 </Header>
             }

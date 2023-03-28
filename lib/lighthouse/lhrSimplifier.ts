@@ -68,7 +68,7 @@ const convertToLhrInstitution = (institution: DetailedInstitution) => {
     const lhInstitution: LhrInstitution = {
         id: institution.id,
         name: institution.name,
-        slug: toLink(URL_INSTITUTION, institution.City.State.Country.url, institution.url, URL_INSTITUTION_OM),
+        slug: toLink(URL_INSTITUTION, institution.city.state.country.url, institution.url, URL_INSTITUTION_OM),
         website: institution.website,
     }
 

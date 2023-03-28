@@ -6,18 +6,18 @@ export const getSubjectsByPopularity = async (takeCount: number): Promise<Detail
     return await prisma.subject.findMany({
         take: takeCount,
         include: {
-            SubjectHasSubjectTypes: {
+            subject_category: {
                 include: {
-                    SubjectType: true
+                    category: true
                 }
             },
-            Institution: true,
-            City: {
+            institution: true,
+            city: {
                 include: {
-                    State: {
+                    state: {
                         select: {
                             url: true,
-                            Country: true
+                            country: true
                         }
                     }
                 }
@@ -34,7 +34,7 @@ export const getInstitutionsByPopularity = async (takeCount: number): Promise<De
     return await prisma.institution.findMany({
         take: takeCount,
         include: {
-            InstitutionSocialMedia: {
+            institution_socials: {
                 select: {
                     facebook_url: true,
                     instagram_url: true,
@@ -42,28 +42,28 @@ export const getInstitutionsByPopularity = async (takeCount: number): Promise<De
                     youtube_url: true,
                 }
             },
-            City: {
-                include: { State: { include: { Country: true } } },
+            city: {
+                include: { state: { include: { country: true } } },
             },
-            Subject: {
+            subject: {
                 include: {
-                    SubjectHasSubjectTypes: {
+                    subject_category: {
                         include: {
-                            SubjectType: true
+                            category: true
                         }
                     },
                 }
             },
-            InstitutionLocation: {
+            institution_city: {
                 select: {
-                    City: {
-                        include: { State: { include: { Country: true } } }
+                    city: {
+                        include: { state: { include: { country: true } } }
                     }
                 }
             },
             _count: {
                 select: {
-                    Subject: true
+                    subject: true
                 }
             }
         },

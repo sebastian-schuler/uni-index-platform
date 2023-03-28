@@ -1,8 +1,8 @@
-import { DetailedCity, DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType, DetailedUserAd } from "../types/DetailedDatabaseTypes";
+import { DetailedCity, DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
 import { SmBestCardMinified, SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry, SocialMediaPages, TotalScore, TwitterProfile, YoutubeProfile } from "../types/SocialMediaTypes";
-import { AdCardData, CategoryCardData, CityCardData, CountryCardData, InstitutionCardData, StateCardData, SubjectCardData } from "../types/UiHelperTypes";
+import { CategoryCardData, CityCardData, CountryCardData, InstitutionCardData, StateCardData, SubjectCardData } from "../types/UiHelperTypes";
 import { PATH_COUNTRY_IMAGES, URL_CATEGORY, URL_INSTITUTION, URL_LOCATION } from "../url-helper/urlConstants";
-import { getLocalizedName, getUniqueSubjectTypeCounts, toLink } from "./util";
+import { getLocalizedName, getUniqueCategoryCounts, toLink } from "./util";
 
 // ========================== Helper Functions ==========================
 
@@ -23,10 +23,10 @@ const getBracketedName = (name: string) => {
 export const minifySmRankingItem = (item: SmRankingEntry): SmRankingEntryMinified => {
     const parsedScore = JSON.parse(item.total_score) as TotalScore;
     return {
-        Institution: {
-            name: item.Institution.name,
-            url: item.Institution.url,
-            countryId: item.Institution.City.State.Country.id,
+        institution: {
+            name: item.institution.name,
+            url: item.institution.url,
+            countryId: item.institution.city.state.country.id,
         },
         combinedScore: parsedScore.percent.all.total,
         youtubeScore: parsedScore.percent.youtube.total,
@@ -49,13 +49,13 @@ export const minifySmBestCard = (item: SocialMediaDBEntry, socialMediaSource: So
         return {
             type: "youtube",
             href: item.youtube_url,
-            Institution: {
-                name: item.Institution.name,
-                url: item.Institution.url,
+            institution: {
+                name: item.institution.name,
+                url: item.institution.url,
             },
-            Country: {
-                name: getLocalizedName({ lang: locale, dbTranslated: item.Institution.City.State.Country }),
-                url: item.Institution.City.State.Country.url,
+            country: {
+                name: getLocalizedName({ lang: locale, dbTranslated: item.institution.city.state.country }),
+                url: item.institution.city.state.country.url,
             },
             youtubeScore: parsedScore.percent.youtube.total,
             totalSubscribers: youtubeProfile.subscribers,
@@ -70,13 +70,13 @@ export const minifySmBestCard = (item: SocialMediaDBEntry, socialMediaSource: So
         return {
             type: "twitter",
             href: item.youtube_url,
-            Institution: {
-                name: item.Institution.name,
-                url: item.Institution.url,
+            institution: {
+                name: item.institution.name,
+                url: item.institution.url,
             },
-            Country: {
-                name: getLocalizedName({ lang: locale, dbTranslated: item.Institution.City.State.Country }),
-                url: item.Institution.City.State.Country.url,
+            country: {
+                name: getLocalizedName({ lang: locale, dbTranslated: item.institution.city.state.country }),
+                url: item.institution.city.state.country.url,
             },
             twitterScore: parsedScore.percent.youtube.total,
             totalFollowers: parsedTwitter.followers,
@@ -98,23 +98,23 @@ export const minifySmBestCard = (item: SocialMediaDBEntry, socialMediaSource: So
 export const convertInstitutionToCardData = (inst: DetailedInstitution, lang: string): InstitutionCardData => {
 
     const { name, nameBrackets } = getBracketedName(getLocalizedName({ lang: lang, institution: inst }));
-    const categories = getUniqueSubjectTypeCounts({ list: inst.Subject || [], lang: lang, itemCount: 3 })
+    const categories = getUniqueCategoryCounts({ list: inst.subject || [], lang: lang, itemCount: 3 })
 
     return {
-        mainCountryId: inst.City.State.Country.id,
-        mainStateId: inst.City.State.id,
-        InstitutionSocialMedia: inst.InstitutionSocialMedia,
-        subjectCount: inst._count.Subject,
-        Institution: {
+        mainCountryId: inst.city.state.country.id,
+        mainStateId: inst.city.state.id,
+        socialMedia: inst.institution_socials,
+        subjectCount: inst._count.subject,
+        institution: {
             url: inst.url,
             name: name,
             nameBrackets: nameBrackets,
-            City: {
-                name: inst.City.name,
-                url: inst.City.url,
+            city: {
+                name: inst.city.name,
+                url: inst.city.url,
             }
         },
-        campusCount: inst.InstitutionLocation.length,
+        campusCount: inst.institution_city.length,
         biggestCategories: categories
     }
 }
@@ -126,10 +126,10 @@ export const convertInstitutionToCardData = (inst: DetailedInstitution, lang: st
  */
 export const convertSubjectToCardData = (subj: DetailedSubject, lang: string): SubjectCardData => {
 
-    let categories = subj.SubjectHasSubjectTypes.map((type) => {
+    let categories = subj.subject_category.map((type) => {
         return ({
-            name: getLocalizedName({ lang: lang, any: type.SubjectType }),
-            url: type.SubjectType.url
+            name: getLocalizedName({ lang: lang, any: type.category }),
+            url: type.category.url
         })
     });
 
@@ -140,18 +140,18 @@ export const convertSubjectToCardData = (subj: DetailedSubject, lang: string): S
         id: subj.id,
         name: subj.name,
         url: subj.url,
-        countryId: subj.City.State.Country.id,
+        countryId: subj.city.state.country.id,
         degree: subj.degree,
         duration: subj.duration,
         durationType: subj.duration_type,
         categories: categories,
-        Institution: {
-            name: subj.Institution.name,
-            url: subj.Institution.url,
+        institution: {
+            name: subj.institution.name,
+            url: subj.institution.url,
         },
-        City: {
-            name: subj.City.name,
-            fullUrl: toLink(URL_LOCATION, subj.City.State.Country.url, subj.City.State.url, subj.City.url),
+        city: {
+            name: subj.city.name,
+            fullUrl: toLink(URL_LOCATION, subj.city.state.country.url, subj.city.state.url, subj.city.url),
         }
     }
 }
@@ -177,20 +177,20 @@ export const convertCategoryToCardData = (category: DetailedSubjectType, lang: s
         id: category.id,
         name: getLocalizedName({ lang: lang, any: category }),
         url: toLink(URL_CATEGORY, category.url),
-        subjectCount: category.subjectCount,
+        subject_count: category.subject_count,
         popularity: category.popularity_score,
     }
 }
 
 export const convertStateToCardData = (state: DetailedState, lang: string): StateCardData => {
 
-    const subjects = state.City.reduce((acc, city) => acc + city._count.Subject, 0);
+    const subjects = state.city.reduce((acc, city) => acc + city._count.subject, 0);
 
     return {
         id: state.id,
         name: getLocalizedName({ lang: lang, state: state }),
-        url: toLink(URL_LOCATION, state.Country.url, state.url),
-        cityCount: state._count.City,
+        url: toLink(URL_LOCATION, state.country.url, state.url),
+        cityCount: state._count.city,
         subjectCount: subjects,
         popularity: state.popularity_score,
     }
@@ -198,12 +198,12 @@ export const convertStateToCardData = (state: DetailedState, lang: string): Stat
 
 export const convertCityToCardData = (city: DetailedCity, lang: string): CityCardData => {
 
-    const institutionCount = city._count.InstitutionLocation;
+    const institutionCount = city._count.institution_city;
 
     return {
         id: city.id,
         name: city.name,
-        fullUrl: toLink(URL_LOCATION, city.State.Country.url, city.State.url, city.url),
+        fullUrl: toLink(URL_LOCATION, city.state.country.url, city.state.url, city.url),
         institutionCount: institutionCount,
         areaCodes: city.postcodes,
         popularity: city.popularity_score,

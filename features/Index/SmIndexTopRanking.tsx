@@ -1,5 +1,5 @@
 import { Card, CardSection, createStyles, Table, Text } from '@mantine/core';
-import { Country } from '@prisma/client';
+import { country } from '@prisma/client';
 import Trans from 'next-translate/Trans';
 import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
@@ -36,7 +36,7 @@ const useStyles = createStyles((theme) => ({
 
 interface Props {
     socialMediaList: SmRankingEntryMinified[]
-    countries: Country[]
+    countries: country[]
 }
 
 const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Props) => {
@@ -46,13 +46,13 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
 
     const rows = socialMediaList.map((row, i) => {
 
-        const country = countries.find(c => c.id === row.Institution.countryId);
-        const url = toLink(URL_INSTITUTION, country?.url || "", row.Institution.url, "social-media");
+        const country = countries.find(c => c.id === row.institution.countryId);
+        const url = toLink(URL_INSTITUTION, country?.url || "", row.institution.url, "social-media");
 
         return (
-            <tr key={row.Institution.name + i}>
+            <tr key={row.institution.name + i}>
                 <td>
-                    <MantineLink url={url} type="internal">{row.Institution.name}</MantineLink>
+                    <MantineLink url={url} type="internal">{row.institution.name}</MantineLink>
                 </td>
                 <td>{country?.name}</td>
                 <td className={classes.scoreColumn}>{Math.round(row.combinedScore).toLocaleString(lang) + '%'}</td>

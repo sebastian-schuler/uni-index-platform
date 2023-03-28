@@ -1,24 +1,23 @@
 
 import { SimpleGrid, Stack, Text, Title } from '@mantine/core'
-import { Country, Institution } from '@prisma/client'
+import { country, institution } from '@prisma/client'
 import { IconBrandTwitter, IconBrandYoutube } from '@tabler/icons-react'
+import dayjs from 'dayjs'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import SocialMediaCategoryCard from '../../../../../components/Card/SocialMediaCategoryCard'
-import WhitePaper from '../../../../../components/Paper/WhitePaper'
-import { FooterContent } from '../../../../../features/Footer/Footer'
-import SmOverviewSection from '../../../../../features/SocialMedia/SmOverviewSection'
-import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
 import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
+import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
+import { FooterContent } from '../../../../../features/Footer/Footer'
 import InstitutionNav from '../../../../../features/Navigation/InstitutionNav'
+import SmOverviewSection from '../../../../../features/SocialMedia/SmOverviewSection'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
 import { TotalScore, TotalScoreSet } from '../../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { toLink } from '../../../../../lib/util/util'
-import dayjs from 'dayjs'
 
 export interface SocialMediaLinkProps {
     twitter: string | null
@@ -28,8 +27,8 @@ export interface SocialMediaLinkProps {
 }
 
 interface Props {
-    institution: Institution,
-    country: Country,
+    institution: institution,
+    country: country,
     lastUpdate: number,
     institutionScore: TotalScore | null
     countryScore: TotalScoreSet | null
@@ -55,9 +54,7 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, las
 
                 <Breadcrumb countryInfo={country} institutionInfo={institution} />
                 <InstitutionNav title={institution.name} />
-                <WhitePaper>
-                    <Text>No data</Text>
-                </WhitePaper>
+                <Text>No data</Text>
             </ResponsiveWrapper>
         )
     }

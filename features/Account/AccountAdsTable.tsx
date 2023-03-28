@@ -81,7 +81,7 @@ const AccountAdsTable: React.FC<Props> = ({ data }: Props) => {
                         {getAdSizeString(row.size)}
                     </Badge>
                 </td>
-                <td>{row.Subject?.name}</td>
+                <td>{row.subject?.name}</td>
                 <td>{row.description}</td>
                 <td>{new Date(Number(row.booked_until)).toLocaleDateString()}</td>
             </tr>

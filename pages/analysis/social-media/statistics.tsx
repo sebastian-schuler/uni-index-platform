@@ -1,15 +1,13 @@
 import { Title } from '@mantine/core';
 import { GetStaticProps, NextPage } from 'next';
-import React from 'react'
-import SmTotalBar from '../../../features/Charts/SmTotalBar';
-import Breadcrumb from '../../../features/Breadcrumb/Breadcrumb';
+import useTranslation from 'next-translate/useTranslation';
+import Head from 'next/head';
 import ResponsiveWrapper from '../../../components/Container/ResponsiveWrapper';
-import WhitePaper from '../../../components/Paper/WhitePaper';
+import Breadcrumb from '../../../features/Breadcrumb/Breadcrumb';
+import SmTotalBar from '../../../features/Charts/SmTotalBar';
 import { getCountries } from '../../../lib/prisma/prismaQueries';
 import { getAllSocialMedia } from '../../../lib/prisma/prismaSocialMedia';
 import { SocialMediaDBEntry, TotalScore } from '../../../lib/types/SocialMediaTypes';
-import useTranslation from 'next-translate/useTranslation';
-import Head from 'next/head';
 
 export interface SmStatisticGraphRatings {
     total: number[]
@@ -38,9 +36,7 @@ const Statistics: NextPage<Props> = ({ graphRatings }: Props) => {
 
             <Title mb={"md"}>Gesamtstatistiken</Title>
 
-            <WhitePaper py={"lg"}>
-                <SmTotalBar ratings={graphRatings} />
-            </WhitePaper>
+            <SmTotalBar ratings={graphRatings} />
 
         </ResponsiveWrapper>
     )
@@ -55,7 +51,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const socialMediaStringified = JSON.stringify(socialMediaList);
 
     // Graph Country comparison data
-    const graphDataGermany = socialMediaList.filter((item: SocialMediaDBEntry) => item.Institution.City.State.Country.name === "Germany");
+    const graphDataGermany = socialMediaList.filter((item: SocialMediaDBEntry) => item.institution.city.state.country.name === "Germany");
 
     const emptyArr = () => [...new Array(10)].map(() => 0);
 

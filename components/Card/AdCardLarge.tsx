@@ -1,10 +1,10 @@
-import { Anchor, Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core';
+import { Card, createStyles, Group, Image, Stack, Text, ThemeIcon } from '@mantine/core';
 import { IconBuilding, IconSchool } from '@tabler/icons-react';
 import Link from 'next/link';
 import React, { memo } from 'react';
+import { LARGE_AD_HEIGHT } from '../../features/Ads/AdContainer';
 import { PATH_PLACEHOLDER_IMAGES } from '../../lib/url-helper/urlConstants';
 import { toLink } from '../../lib/util/util';
-import { LARGE_AD_HEIGHT } from '../../features/Ads/AdContainer';
 
 const useStyles = createStyles((theme) => ({
     card: {

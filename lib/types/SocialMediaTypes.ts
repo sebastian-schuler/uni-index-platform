@@ -1,22 +1,22 @@
-import { City, Country, Institution, InstitutionSocialMedia, State } from "@prisma/client";
+import { city, country, institution, institution_socials, state } from "@prisma/client";
 
 export type SocialMediaPages = "youtube" | "twitter"
 
-export interface SocialMediaDBEntry extends InstitutionSocialMedia {
-    Institution: Institution & {
-        City: City & {
-            State: State & {
-                Country: Country;
+export interface SocialMediaDBEntry extends institution_socials {
+    institution: institution & {
+        city: city & {
+            state: state & {
+                country: country;
             }
         }
     };
 }
 
 export interface SmRankingEntry {
-    Institution: {
-        City: {
-            State: {
-                Country: Country
+    institution: {
+        city: {
+            state: {
+                country: country
             };
         };
         name: string;
@@ -28,7 +28,7 @@ export interface SmRankingEntry {
 }
 
 export interface SmRankingEntryMinified {
-    Institution: {
+    institution: {
         name: string
         url: string
         countryId: string
@@ -40,11 +40,11 @@ export interface SmRankingEntryMinified {
 
 type SmBestCardBase = {
     href: string | null
-    Institution: {
+    institution: {
         name: string
         url: string
     }
-    Country: {
+    country: {
         name: string
         url: string
     }
