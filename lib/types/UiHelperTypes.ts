@@ -133,3 +133,6 @@ export type ArticleCardData = {
 export type ArticleData = ArticleCardData & {
     content: string
 }
+
+// Used for the "Create Ad" page
+export type CreateAdLinkType = "link" | "article";

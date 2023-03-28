@@ -1,11 +1,18 @@
-import { Box, Center, Grid, Title, useMantineTheme, Divider, Text, Button } from '@mantine/core';
+import { Box, Button, Center, Divider, Grid, Text, Title, useMantineTheme } from '@mantine/core';
 import { DatesRangeValue } from '@mantine/dates';
+import { Link } from '@mantine/tiptap';
 import { IconArticle, IconLink } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Cookies from 'js-cookie';
+import { GetServerSideProps } from 'next';
+import { useEffect, useState } from 'react';
 import SegmentedSelect from '../../components/CreateAd/SegmentedSelect';
-import CreateAdBuilder from '../../features/AccountCreateAd/CreateAdBuilder';
-
-export type CreateAdLinkType = "link" | "post";
+import ArticleBuilder from '../../features/AccountCreateAd/ArticleBuilder';
+import { SubjectAutofill } from '../../features/AccountCreateAd/AutocompleteSubject';
+import CreateAdBuilder, { CreateAdLinkedItemType } from '../../features/AccountCreateAd/CreateAdBuilder';
+import { useAuth } from '../../lib/context/SessionContext';
+import { CreateAdLinkType } from '../../lib/types/UiHelperTypes';
 
 //TODO: Remove small size and and an option with or without image instead
 // TODO 2: Add option to export created ad to a file, so that it can be imported later
@@ -13,6 +20,16 @@ export type CreateAdLinkType = "link" | "post";
 const CreateAd = () => {
 
     const theme = useMantineTheme();
+    const { token } = useAuth();
+
+    // ====================== GENERIC VARS ======================
+
+    // Title
+    const [title, setTitle] = useState<string>("");
+    // Image
+    const [image, setImage] = useState<File | null>(null);
+
+    // ====================== AD VARS ======================
 
     // Type
     const [adLinkType, setAdLinkType] = useState<CreateAdLinkType>("link");
@@ -20,6 +37,24 @@ const CreateAd = () => {
     const [selectedDateRange, setSelectedDateRange] = useState<DatesRangeValue | undefined>(undefined);
     // Size of ad
     const [adSize, setAdSize] = useState<number>(2);
+    // Ad description
+    const [description, setDescription] = useState<string>("");
+    // Ad subject
+    const [selectedAdSubject, setSelectedAdSubject] = useState<SubjectAutofill | undefined>(undefined);
+    // Ad linked item
+    const [adLinkedItemType, setAdLinkedItemType] = useState<CreateAdLinkedItemType>("institution");
+
+    // ====================== ARTICLE VARS ======================
+
+    // Article Editor 
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            Link,
+        ]
+    });
+
+    // ==========================================================
 
     // COST
     const daysBooked = dateDiffInDays(selectedDateRange);
@@ -38,6 +73,92 @@ const CreateAd = () => {
             cost = 2.99 * daysBooked;
         }
         return cost;
+    }
+
+    // ====================== EFFECTS ======================
+
+    useEffect(() => {
+
+        if (adLinkType === "link") {
+
+            if (adLinkedItemType === "subject") {
+                setTitle(selectedAdSubject?.value ?? "");
+            } else if (adLinkedItemType === "institution") {
+                setTitle("");
+            }
+
+        } else {
+            setTitle("")
+        }
+
+        return () => { }
+    }, [adLinkType, adLinkedItemType, selectedAdSubject, setTitle])
+
+    // =============== Submit function =================
+
+    /**
+ * Submits the form to the server
+ */
+    const submitForm = async () => {
+
+        let formData = new FormData();
+
+        formData.append("bookingType", adLinkType);
+
+        if (adLinkType === "link") {
+
+            // Add all generic data to the form
+            formData.append("adType", adLinkedItemType);
+            formData.append("size", adSize.toString());
+            formData.append("description", description);
+
+            // Add date range to the form
+            if (selectedDateRange && selectedDateRange[0] && selectedDateRange[1]) {
+                formData.append("dateFrom", selectedDateRange[0].getTime().toString());
+                formData.append("dateTo", selectedDateRange[1].getTime().toString());
+            } else {
+                return;
+            }
+
+            // Add image to the form
+            if (adSize === 2 || adSize === 3) {
+                if (image) {
+                    formData.append("image", image);
+                } else {
+                    return;
+                }
+            }
+
+            // If the ad is linked to a subject, add the subject id to the form
+            if (adLinkedItemType === "subject") {
+                if (selectedAdSubject) {
+                    formData.append("subject", selectedAdSubject.subject.id.toString());
+                } else {
+                    return;
+                }
+            }
+
+        } else if (adLinkType === "article") {
+
+            formData.append("title", title);
+
+            // Add editor content to the form
+            if (editor) {
+                formData.append("content", JSON.stringify(editor.getJSON()));
+            }
+
+        }
+
+        const res = await fetch('/api/account/user-create-ad', {
+            method: 'POST',
+            headers: {
+                'Authorization': token
+            },
+            body: formData
+
+        }).then((t) => t.json());
+
+        console.log(res)
     }
 
     return (
@@ -76,13 +197,29 @@ const CreateAd = () => {
             <Grid.Col span={12}>
                 <Divider mb={'md'} />
                 {
-                    adLinkType === "link" && (
+                    adLinkType === "link" ? (
                         <CreateAdBuilder
+                            title={title}
+                            setTitle={setTitle}
                             adLinkType={adLinkType}
                             selectedDateRange={selectedDateRange}
                             setSelectedDateRange={setSelectedDateRange}
                             adSize={adSize}
                             setAdSize={setAdSize}
+                            description={description}
+                            setDescription={setDescription}
+                            image={image}
+                            setImage={setImage}
+                            selectedAdSubject={selectedAdSubject}
+                            setSelectedAdSubject={setSelectedAdSubject}
+                            adLinkedItemType={adLinkedItemType}
+                            setAdLinkedItemType={setAdLinkedItemType}
+                        />
+                    ) : (
+                        <ArticleBuilder
+                            title={title}
+                            setTitle={setTitle}
+                            editor={editor}
                         />
                     )
                 }
@@ -94,7 +231,7 @@ const CreateAd = () => {
                 <Title order={2} size='h5' mb={'md'}>Cost</Title>
                 <Text>{daysBooked} days booking</Text>
                 <Text>{getAdTotalCost()} Eur</Text>
-                {/* <Button onClick={submitForm}>Submit</Button> */}
+                <Button onClick={submitForm}>Submit</Button>
 
             </Grid.Col>
         </Grid>

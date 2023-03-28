@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     <>
       <Head>
-        <title key={"title"}>{t('page-title')}</title>
+        <title key={"title"}>{t('page-title') as string}</title>
         {/* <script
           dangerouslySetInnerHTML={{
             __html: `

@@ -55,7 +55,7 @@ const Home: NextPage<Props> = ({ simpleLhReports, ads, institutionData, subjectD
 
       <Head>
         <title key={"title"}>{t('common:page-title') + ' | ' + t('meta.title')}</title>
-        <meta key={"description"} name="description" content={t('meta.description')} />
+        <meta key={"description"} name="description" content={t('meta.description') as string} />
       </Head>
 
       <HeroSection />
@@ -75,7 +75,7 @@ const Home: NextPage<Props> = ({ simpleLhReports, ads, institutionData, subjectD
 
         <PopularSection
           title={t('popular.title-courses')}
-          desc={t('popular.desc-courses')}
+          desc={t('popular.desc-courses') as string}
           buttonText={t('popular.label-all-courses')}
           buttonUrl={toLink(URL_CATEGORIES)}
           brandColor
@@ -97,7 +97,7 @@ const Home: NextPage<Props> = ({ simpleLhReports, ads, institutionData, subjectD
 
         <PopularSection
           title={t('popular.title-institutions')}
-          desc={t('popular.desc-institutions')}
+          desc={t('popular.desc-institutions') as string}
           buttonText={t('popular.label-all-institutions')}
           buttonUrl={toLink(URL_INSTITUTIONS)}
         >
@@ -116,7 +116,7 @@ const Home: NextPage<Props> = ({ simpleLhReports, ads, institutionData, subjectD
 
         <PopularSection
           title={t('popular.title-locations')}
-          desc={t('popular.desc-locations')}
+          desc={t('popular.desc-locations') as string}
           buttonText={t('popular.label-all-locations')}
           buttonUrl={toLink(URL_LOCATIONS)}
           brandColor

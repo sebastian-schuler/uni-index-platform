@@ -1,7 +1,7 @@
-import { Box, createStyles, Divider, Grid, Group, Stack, Text, Title, useMantineTheme } from '@mantine/core'
-import React from 'react'
-import MantineLink from '../../components/Link/MantineLink'
-import ResponsiveContainer from '../../components/Container/ResponsiveContainer'
+import { Box, createStyles, Divider, Grid, Text, Title } from '@mantine/core';
+import React from 'react';
+import ResponsiveContainer from '../../components/Container/ResponsiveContainer';
+import MantineLink from '../../components/Link/MantineLink';
 
 const useStyles = createStyles((theme) => ({
 
@@ -18,7 +18,7 @@ const useStyles = createStyles((theme) => ({
 
 interface Props {
     title: string
-    desc?: string
+    desc: string | undefined
     buttonText: string
     buttonUrl: string
     brandColor?: boolean

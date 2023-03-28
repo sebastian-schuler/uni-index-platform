@@ -9,6 +9,7 @@ import { CreateAdLinkedItemType } from './CreateAdBuilder'
 const PRIMARY_AD_HEIGHT = 400;
 
 type AdPreviewProps = {
+    title: string
     adSize: number
     description: string
     adLinkedItemType: CreateAdLinkedItemType
@@ -17,24 +18,20 @@ type AdPreviewProps = {
     userData: UserDataProfile | undefined
 }
 
-const AdPreview = ({ adSize, description, adLinkedItemType, imageFilepath, selectedAdSubject, userData }: AdPreviewProps) => {
+const AdPreview = ({ title, adSize, description, adLinkedItemType, imageFilepath, selectedAdSubject, userData }: AdPreviewProps) => {
 
     const theme = useMantineTheme();
     const SECONDARY_AD_HEIGHT = PRIMARY_AD_HEIGHT / 2 - px(theme.spacing.lg) / 2;
 
     /**
- * Gets the headline of the ad
- * @returns 
- */
+     * Gets the headline of the ad
+     * @returns 
+     */
     const getAdHeadline = (): string => {
-        if (adLinkedItemType === "subject") {
-            if (selectedAdSubject === null) return "[Title]";
-            return selectedAdSubject?.subject.name || "[Title]";
-        } else if (adLinkedItemType === "institution") {
-            return userData?.institution?.name || "[Institution Name]";
-        } else {
+        if (title === "") {
             return "[Title]";
         }
+        return title;
     }
 
     return (
