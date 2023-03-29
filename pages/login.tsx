@@ -2,15 +2,15 @@ import {
   Anchor, Button,
   Center, Checkbox, createStyles, Group, Paper, PasswordInput, Stack, Text, TextInput, Title, useMantineTheme
 } from '@mantine/core';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
+import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import MantineLink from '../components/Link/MantineLink';
 import ForgotPassword from '../features/Login/ForgotPassword';
-import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import { useAuth } from '../lib/context/SessionContext';
+import { getUserFromToken } from '../lib/prisma/prismaUserAccounts';
 import { LoginStatus } from '../lib/types/AccountHandlingTypes';
 import { URL_REGISTER } from '../lib/url-helper/urlConstants';
 
@@ -25,11 +25,8 @@ const CustomerLogin: NextPage = () => {
   const theme = useMantineTheme();
   const { classes } = useStyles();
 
-  // Router
-  const router = useRouter();
   // AuthContext
-  const { token, setAuthToken } = useAuth();
-
+  const { setAuthToken } = useAuth();
 
   // Login fields
   const [username, setUsername] = useState("");
@@ -84,12 +81,6 @@ const CustomerLogin: NextPage = () => {
     if (key === "Enter" && username !== "" && password !== "") {
       submitLogin();
     }
-  }
-
-  // If a token exists, assume its valid and redirect to account page, it will be checked there anyway to get data
-  if (token !== "") {
-    router.replace('/account');
-    return (<></>);
   }
 
   return (
@@ -159,6 +150,32 @@ const CustomerLogin: NextPage = () => {
     </ResponsiveWrapper>
   )
 
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+
+  // Check if the token exists in the cookies
+  const token = context.req.cookies["institution-session"];
+  if (!token) return {
+    redirect: {
+      destination: '/login',
+      permanent: false
+    }
+  }
+
+  // Check if the token is valid
+  const userData = await getUserFromToken(token);
+  if (!userData || Number(userData.lifetime) > Date.now()) {
+    // Token is valid, redirect to account page
+    return {
+      redirect: {
+        destination: '/account',
+        permanent: false
+      }
+    }
+  }
+
+  return { props: {} };
 }
 
 export default CustomerLogin;

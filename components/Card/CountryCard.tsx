@@ -41,7 +41,7 @@ const CountryCard: React.FC<Props> = ({ country }: Props) => {
     }
 
     return (
-        <Card radius="md" shadow={"sm"} className={classes.card}>
+        <Card radius="md" withBorder shadow={"sm"} className={classes.card}>
             <Card.Section>
                 <Image src={country.imgSrc} alt={country.name} fit="cover" height={180} />
             </Card.Section>

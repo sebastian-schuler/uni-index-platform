@@ -4,11 +4,6 @@ import React, { memo } from 'react';
 import { PremiumAdDetailed } from '../../lib/types/AccountHandlingTypes';
 
 const useStyles = createStyles((theme) => ({
-    root: {
-        border: `1px solid ${theme.colors.gray[3]}`,
-        borderRadius: theme.radius.md,
-        padding: theme.spacing.md,
-    },
     progressBar: {
         '&:not(:first-of-type)': {
             borderLeft: `3px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white}`,
@@ -90,7 +85,7 @@ const AccountAdsTable: React.FC<Props> = ({ data }: Props) => {
 
     return (
         <>
-            <ScrollArea className={classes.root}>
+            <ScrollArea>
                 <Title order={6} mb={8}>Booked Ads</Title>
                 <Table sx={{ minWidth: 800 }} verticalSpacing="xs">
                     <thead>

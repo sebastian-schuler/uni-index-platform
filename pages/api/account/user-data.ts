@@ -39,7 +39,7 @@ export default async function handler(
             // Possible query parameters
             if (req.query.profile === "true") {
                 const institutionResult = await getInstitutionByUser(userData.user.id);
-                const profile: UserDataProfile = { user: userData.user, lifetime: validUntil, institution: institutionResult?.institution || undefined };
+                const profile: UserDataProfile = { user: userData.user, institution: institutionResult?.institution || undefined };
                 result.profile = profile;
             }
 

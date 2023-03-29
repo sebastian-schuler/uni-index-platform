@@ -31,7 +31,6 @@ export type UserInstitutionLimited = { id: string, email: string };
 
 export type UserDataProfile = {
     user: UserInstitutionLimited,
-    lifetime: Date,
     institution?: institution & {
         institution_city: {
             city: {

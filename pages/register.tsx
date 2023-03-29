@@ -5,7 +5,7 @@ import Head from 'next/head';
 import MantineLink from '../components/Link/MantineLink';
 import RegisterSteps from '../features/Register/RegisterSteps';
 import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
-import { getInstitutesForUserAccounts } from '../lib/prisma/prismaUserAccounts';
+import { getInstitutesForUserAccounts, getUserFromToken } from '../lib/prisma/prismaUserAccounts';
 import { InstitutionRegistrationDBItem, InstitutionRegistrationItem } from '../lib/types/AccountHandlingTypes';
 import { URL_LOGIN } from '../lib/url-helper/urlConstants';
 
@@ -37,6 +37,27 @@ const Register: NextPage<Props> = props => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+
+  // Check if the token exists in the cookies
+  const token = context.req.cookies["institution-session"];
+  if (!token) return {
+    redirect: {
+      destination: '/login',
+      permanent: false
+    }
+  }
+
+  // Check if the token is valid
+  const userData = await getUserFromToken(token);
+  if (!userData || Number(userData.lifetime) > Date.now()) {
+    // Token is valid, redirect to account page
+    return {
+      redirect: {
+        destination: '/account',
+        permanent: false
+      }
+    }
+  }
 
   const dbResultInstitutes: InstitutionRegistrationDBItem[] = await getInstitutesForUserAccounts();
   const registrationInstitutes: InstitutionRegistrationItem[] = dbResultInstitutes.map(institute => {

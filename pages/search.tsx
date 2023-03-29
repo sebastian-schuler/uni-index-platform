@@ -40,10 +40,10 @@ const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
         setLoading(true);
 
         // Update the URL
-        router.replace(`/${URL_SEARCH}/${URL_SEARCH_GLOBAL}?q=${q}`, undefined, { shallow: true });
+        router.replace(`/${URL_SEARCH}?q=${q}`, undefined, { shallow: true });
 
         // Fetch the data
-        const res = await fetch(`${SITE_URL}/api/search?q=${q}`);
+        const res = await fetch(`${SITE_URL}/api/${URL_SEARCH}/${URL_SEARCH_GLOBAL}?q=${q}`);
         const data = await res.json();
 
         setLoading(false);

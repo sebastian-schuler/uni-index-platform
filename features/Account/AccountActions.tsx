@@ -1,9 +1,6 @@
-import { Card, createStyles, Group, SimpleGrid, Text, UnstyledButton } from '@mantine/core';
-
-import {
-    IconBuildingBank, IconCashBanknote,
-    IconCoin, IconCreditCard, IconReceipt, IconReceiptRefund, IconReceiptTax, IconRepeat, IconReport
-} from '@tabler/icons-react';
+import { createStyles, Group, SimpleGrid, Text, UnstyledButton } from '@mantine/core';
+import { IconPencilPlus } from '@tabler/icons-react';
+import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -32,27 +29,18 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const mockdata = [
-    { title: 'Credit cards', icon: IconCreditCard, color: 'violet' },
-    { title: 'Banks nearby', icon: IconBuildingBank, color: 'indigo' },
-    { title: 'Transfers', icon: IconRepeat, color: 'blue' },
-    { title: 'Refunds', icon: IconReceiptRefund, color: 'green' },
-    { title: 'Receipts', icon: IconReceipt, color: 'teal' },
-    { title: 'Taxes', icon: IconReceiptTax, color: 'cyan' },
-    { title: 'Reports', icon: IconReport, color: 'pink' },
-    { title: 'Payments', icon: IconCoin, color: 'red' },
-    { title: 'Cashback', icon: IconCashBanknote, color: 'orange' },
+const data = [
+    { title: 'Create new ad', icon: IconPencilPlus, color: 'violet', url: '/account/create-ad' },
 ];
 
 const AccountActions = () => {
 
     const { classes, theme } = useStyles();
 
-
-    const items = mockdata.map((item) => (
-        <UnstyledButton key={item.title} className={classes.item}>
+    const items = data.map((item) => (
+        <UnstyledButton key={item.title} component={Link} href={item.url} className={classes.item}>
             <item.icon color={theme.colors[item.color][6]} size={32} />
-            <Text size="xs" mt={7}>
+            <Text size="sm" mt={7}>
                 {item.title}
             </Text>
         </UnstyledButton>
@@ -60,14 +48,12 @@ const AccountActions = () => {
 
     return (
         <>
-            <Card withBorder radius="md" className={classes.card}>
-                <Group position="apart">
-                    <Text className={classes.title}>Actions</Text>
-                </Group>
-                <SimpleGrid cols={3} mt="md">
-                    {items}
-                </SimpleGrid>
-            </Card>
+            <Group position="apart">
+                <Text className={classes.title}>Actions</Text>
+            </Group>
+            <SimpleGrid cols={3} mt="md">
+                {items}
+            </SimpleGrid>
         </>
     )
 }

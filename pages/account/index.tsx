@@ -1,36 +1,22 @@
 
 import { Box, Center, Grid, Loader } from '@mantine/core';
+import { GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import { useEffect, useState } from 'react';
-import AccountAdsTable from '../../features/Account/AccountAdsTable';
 import AccountActions from '../../features/Account/AccountActions';
+import AccountAdsTable from '../../features/Account/AccountAdsTable';
 import GroupedStats from '../../features/Account/AccountGroupedStats';
-import { getUserDataFromApi } from '../../lib/accountHandling/AccountApiHandler';
+import { getAdsByUser, getInstitutionByUser, getUserFromToken } from '../../lib/prisma/prismaUserAccounts';
 import { PremiumAdDetailed, UserDataProfile } from '../../lib/types/AccountHandlingTypes';
 
-const AccountPage = () => {
+type Props = {
+  userData: UserDataProfile
+  userBookedAds: PremiumAdDetailed[]
+}
+
+const AccountPage = ({ userData, userBookedAds }: Props) => {
 
   // Language
   const { t, lang } = useTranslation('account');
-  const langContent = {
-  }
-
-  // If a token exists, assume its valid and redirect to account page, it will be checked there anyway to get data
-  const [userData, setUserData] = useState<UserDataProfile>(null);
-  const [userBookedAds, setUserBookedAds] = useState<PremiumAdDetailed[]>([]);
-
-  useEffect(() => {
-    // Get user data from API
-    const getData = async () => {
-      const userDataRes = await getUserDataFromApi({ profile: true, userAds: true });
-      if (userDataRes === null || userDataRes.status !== "SUCCESS") return;
-      console.log(userDataRes)
-      setUserData(userDataRes.profile || null);
-      setUserBookedAds(userDataRes.ads || []);
-    }
-    getData();
-    return () => { }
-  }, []);
 
   if (userData === null) return (
     <Center sx={{ height: "80vh", overflow: "hidden" }}>
@@ -40,7 +26,6 @@ const AccountPage = () => {
 
   return (
     <Box p={"lg"}>
-
       <Grid>
 
         <Grid.Col xs={12} md={6} lg={4}>
@@ -56,16 +41,48 @@ const AccountPage = () => {
         </Grid.Col>
 
         <Grid.Col lg={12}>
-            <AccountAdsTable data={userBookedAds} />
+          <AccountAdsTable data={userBookedAds} />
         </Grid.Col>
 
       </Grid>
-
-
-
     </Box>
   )
+}
 
+export const getServerSideProps: GetServerSideProps = async (context) => {
+
+  // Check if the token exists in the cookies
+  const token = context.req.cookies["institution-session"];
+  if (!token) return {
+    redirect: {
+      destination: '/login',
+      permanent: false
+    }
+  }
+
+  const userData = await getUserFromToken(token);
+  if (!userData || Number(userData.lifetime) < Date.now()) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
+    }
+  }
+
+  const ads = await getAdsByUser(userData.user.id);
+
+  const institutionResult = await getInstitutionByUser(userData.user.id);
+  const profile: UserDataProfile = {
+    user: userData.user,
+    institution: institutionResult?.institution || undefined
+  };
+
+  const props: Props = { 
+    userData: profile,
+    userBookedAds: ads 
+  };
+  return { props };
 }
 
 export default AccountPage
