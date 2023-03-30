@@ -12,5 +12,18 @@
 
   "title": "Suche",
   "search-button-alt": "Suche starten",
-  "search-placeholder": "Alles durchsuchen"
+  "search-placeholder": "Alles durchsuchen",
+
+  "filter": {
+    "label": "Suchfilter",
+    "placeholder": "Filtern Sie Ihre Suche oder lassen Sie das Feld leer",
+    "item-labels": {
+      "country": "Länder",
+      "state": "Bundesländer",
+      "city": "Städte",
+      "institution": "Institutionen",
+      "category": "Studienrichtungen",
+      "subject": "Studiengänge"
+    }
+  }
 }

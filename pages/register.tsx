@@ -7,7 +7,7 @@ import RegisterSteps from '../features/Register/RegisterSteps';
 import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import { getInstitutesForUserAccounts, getUserFromToken } from '../lib/prisma/prismaUserAccounts';
 import { InstitutionRegistrationDBItem, InstitutionRegistrationItem } from '../lib/types/AccountHandlingTypes';
-import { URL_LOGIN } from '../lib/url-helper/urlConstants';
+import { URL_ACCOUNT, URL_LOGIN } from '../lib/url-helper/urlConstants';
 
 type Props = {
   registrationInstitutes: InstitutionRegistrationItem[]
@@ -38,11 +38,13 @@ const Register: NextPage<Props> = props => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
+  const localeUrl = context.locale === context.defaultLocale ? '' : `${context.locale}/`;
+
   // Check if the token exists in the cookies
   const token = context.req.cookies["institution-session"];
   if (!token) return {
     redirect: {
-      destination: '/login',
+      destination: `/${localeUrl}${URL_LOGIN}`,
       permanent: false
     }
   }
@@ -53,7 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     // Token is valid, redirect to account page
     return {
       redirect: {
-        destination: '/account',
+        destination: `/${localeUrl}${URL_ACCOUNT}`,
         permanent: false
       }
     }

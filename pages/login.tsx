@@ -5,6 +5,7 @@ import {
 import { GetServerSideProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import MantineLink from '../components/Link/MantineLink';
@@ -12,7 +13,8 @@ import ForgotPassword from '../features/Login/ForgotPassword';
 import { useAuth } from '../lib/context/SessionContext';
 import { getUserFromToken } from '../lib/prisma/prismaUserAccounts';
 import { LoginStatus } from '../lib/types/AccountHandlingTypes';
-import { URL_REGISTER } from '../lib/url-helper/urlConstants';
+import { URL_ACCOUNT, URL_REGISTER } from '../lib/url-helper/urlConstants';
+import { toLink } from '../lib/util/util';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -24,6 +26,7 @@ const CustomerLogin: NextPage = () => {
 
   const theme = useMantineTheme();
   const { classes } = useStyles();
+  const router = useRouter();
 
   // AuthContext
   const { setAuthToken } = useAuth();
@@ -59,6 +62,7 @@ const CustomerLogin: NextPage = () => {
 
       // Set context and cookie and go to account page
       setAuthToken(token, lifetime);
+      router.push(toLink(URL_ACCOUNT), undefined, { shallow: true });
 
     } else {
       const status: LoginStatus = res.status;
@@ -156,20 +160,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   // Check if the token exists in the cookies
   const token = context.req.cookies["institution-session"];
-  if (!token) return {
-    redirect: {
-      destination: '/login',
-      permanent: false
-    }
-  }
+  if (!token) return { props: {} };
+
+  const localeUrl = context.locale === context.defaultLocale ? '' : `${context.locale}/`;
 
   // Check if the token is valid
   const userData = await getUserFromToken(token);
-  if (!userData || Number(userData.lifetime) > Date.now()) {
+  if (userData && Number(userData.lifetime) > Date.now()) {
     // Token is valid, redirect to account page
     return {
       redirect: {
-        destination: '/account',
+        destination: `/${localeUrl}${URL_ACCOUNT}`,
         permanent: false
       }
     }

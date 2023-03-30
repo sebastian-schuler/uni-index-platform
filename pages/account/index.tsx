@@ -7,6 +7,7 @@ import AccountAdsTable from '../../features/Account/AccountAdsTable';
 import GroupedStats from '../../features/Account/AccountGroupedStats';
 import { getAdsByUser, getInstitutionByUser, getUserFromToken } from '../../lib/prisma/prismaUserAccounts';
 import { PremiumAdDetailed, UserDataProfile } from '../../lib/types/AccountHandlingTypes';
+import { URL_LOGIN } from '../../lib/url-helper/urlConstants';
 
 type Props = {
   userData: UserDataProfile
@@ -51,12 +52,16 @@ const AccountPage = ({ userData, userBookedAds }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
+  const localeUrl = context.locale === context.defaultLocale ? '' : `${context.locale}/`;
+
   // Check if the token exists in the cookies
   const token = context.req.cookies["institution-session"];
-  if (!token) return {
-    redirect: {
-      destination: '/login',
-      permanent: false
+  if (!token) {
+    return {
+      redirect: {
+        destination: `/${localeUrl}${URL_LOGIN}`,
+        permanent: false
+      }
     }
   }
 
@@ -64,7 +69,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!userData || Number(userData.lifetime) < Date.now()) {
     return {
       redirect: {
-        destination: '/login',
+        destination: `/${localeUrl}`,
         permanent: false
       }
     }
@@ -78,9 +83,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     institution: institutionResult?.institution || undefined
   };
 
-  const props: Props = { 
+  const props: Props = {
     userData: profile,
-    userBookedAds: ads 
+    userBookedAds: ads
   };
   return { props };
 }

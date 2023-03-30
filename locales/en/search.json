@@ -12,5 +12,18 @@
 
   "title": "Search",
   "search-button-alt": "Start search",
-  "search-placeholder": "Search anything"
+  "search-placeholder": "Search anything",
+
+  "filter": {
+    "label": "Search filter",
+    "placeholder": "Filter your search or leave blank for all",
+    "item-labels": {
+      "country": "Countries",
+      "state": "States",
+      "city": "Cities",
+      "institution": "Institutions",
+      "category": "Fields of study",
+      "subject": "Subjects"
+    }
+  }
 }

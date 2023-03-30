@@ -29,7 +29,7 @@ const NewsPage = ({ articles }: Props) => {
                 <Breadcrumb />
                 <Stack>
 
-                    <GenericPageHeader title={t('categories.title')} description={t('categories.subtitle')} />
+                    <GenericPageHeader title={t('news.title')} description={t('news.subtitle')} />
 
                     <SimpleGrid
                         spacing="lg"

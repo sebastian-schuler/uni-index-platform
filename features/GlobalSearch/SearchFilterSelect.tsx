@@ -1,5 +1,5 @@
-import React from 'react'
-import { MultiSelect, useMantineTheme } from '@mantine/core'
+import { MultiSelect } from '@mantine/core'
+import useTranslation from 'next-translate/useTranslation'
 
 export type FilterDataItem = { label: string, value: string }
 
@@ -10,14 +10,14 @@ type Props = {
 
 const SearchFilterSelect = ({ value, onChange }: Props) => {
 
-  const theme = useMantineTheme();
+  const { t } = useTranslation('search');
 
   const data: FilterDataItem[] = [
-    { label: 'Institutions', value: 'institution' },
-    { label: 'Subjects', value: 'subject' },
-    { label: 'Countries', value: 'country' },
-    { label: 'States', value: 'state' },
-    { label: 'Cities', value: 'city' },
+    { label: t('filter.item-labels.institution'), value: 'institution' },
+    { label: t('filter.item-labels.subject'), value: 'subject' },
+    { label: t('filter.item-labels.country'), value: 'country' },
+    { label: t('filter.item-labels.state'), value: 'state' },
+    { label: t('filter.item-labels.city'), value: 'city' },
   ]
 
   return (
@@ -26,9 +26,8 @@ const SearchFilterSelect = ({ value, onChange }: Props) => {
       onChange={onChange}
       size={'md'}
       data={data}
-      label="Search filter"
-      placeholder="Filter your search or leave blank for all"
-      nothingFound="Nothing found"
+      label={t('filter.label')}
+      placeholder={t('filter.placeholder')}
       sx={{ flex: 1 }}
       clearable
     />
