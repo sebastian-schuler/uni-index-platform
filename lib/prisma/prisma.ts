@@ -8,6 +8,9 @@ import { PrismaClient } from "@prisma/client";
 
 //   prisma = new PrismaClient();
 
+// @ts-ignore
+BigInt.prototype.toJSON = function() { return this.toString() }
+
 // export default prisma;
 
 declare global {

@@ -115,7 +115,7 @@ const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institution
 
       <Stack>
 
-        <GenericPageHeader title={t('location.title', { institution: countryInfo.name })} description={t('location.subtitle', { institution: countryInfo.name })} />
+        <GenericPageHeader title={t('location.title', { institution: countryInfo.name })} description={t('location.subtitle', { country: countryInfo.name })} />
 
         <Group position='apart' >
           <ItemApiSearch

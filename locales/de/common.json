@@ -45,7 +45,7 @@
       "other": "{{count}} Studiengänge"
     }
   },
-  
+
   "card-institution": {
     "label-city": "Stadt:",
     "label-state": "Bundesland:",
@@ -75,6 +75,11 @@
   },
 
   "card-city": {
+    "label-areacodes": {
+      "0": "Keine PLZ",
+      "one": "PLZ: {{codes}}",
+      "other": "PLZ: {{codes}}"
+    },
     "label-universities": {
       "0": "Keine Institutionen",
       "one": "Eine Institution",
@@ -89,8 +94,24 @@
     "fb-profile": "Facebook-Profile von {{name}}"
   },
 
-  "countries-search-label": "Ein Land suchen",
+  "countries-search-label": "Nach einem Land suchen",
   "countries-search-placeholder": "z.B. Deutschland",
+
+  "order-by": {
+    "label": "Sortieren nach",
+    "order-popularity": "Beliebtheit",
+    "order-az": "A-Z",
+    "order-za": "Z-A",
+    "order-subjects": "Studiengangsanzahl"
+  },
+
+  "pagination": {
+    "label": "Seite {{page}}",
+    "prev": "Vorherige Seite",
+    "next": "Nächste Seite",
+    "first": "Erste Seite",
+    "last": "Letzte Seite"
+  },
 
   "ads": {
     "title": "Werbung",

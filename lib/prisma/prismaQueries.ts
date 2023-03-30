@@ -85,9 +85,19 @@ export const getAds = async (placementLocation: string): Promise<DetailedUserAd[
         },
         where: {
             OR: [
-                { placement: { has: "all" } },
-                { placement: { has: placementLocation } },
-            ],
+                {
+                    placement: {
+                        path: ["generic"],
+                        array_contains: [placementLocation],
+                    },
+                },
+                {
+                    placement: {
+                        path: ["generic"],
+                        array_contains: ["all"]
+                    }
+                }
+            ]
         }
     });
 }

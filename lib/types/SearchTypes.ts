@@ -22,6 +22,8 @@ export type SearchResult = {
     type: "institution"
     name: string
     url: string
+    countryUrl: string
+    countryName: string
 } | {
     type: "subject"
     name: string
@@ -32,10 +34,6 @@ export type SearchResult = {
     countryName: string
 }
     
-    
-//     type: "country" | "state" | "city" | "institution" | "subject"
-// }
-
 export type SearchedStateResult = {
     name_native: string
     name_en: string
@@ -58,6 +56,8 @@ export type SearchedCityResult = {
 export type SearchedInstitutionResult = {
     name: string
     url: string
+    countryUrl: string
+    countryName: string
 }
 
 export type SearchedSubjectResult = {

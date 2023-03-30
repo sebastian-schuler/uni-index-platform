@@ -1,7 +1,36 @@
 {
-    "subjects-title": "Fächer",
-    "subjects-title-sub": "Finde ein Studienfach deiner Wahl.",
-
-    "subjecttype-search-label": "Eine Fachrichtung suchen",
-    "subjecttype-search-placeholder": "z.B. Marketing"
-}
+    "meta": {
+      "categories-title": "Kategorien | Studiengangsrichtungen",
+      "categories-description": "Finden Sie Studiengänge in ganz Europa nach Studiengangsrichtungen.",
+  
+      "category-title": "{{subject}}",
+      "category-description": "Finden Sie Studiengänge in ganz Europa."
+    },
+  
+    "categories": {
+      "title": "Kategorien",
+      "subtitle": "Suche nach einer beliebigen Kategorie und allen verfügbaren Studiengängen",
+      "search-label": "Suche nach einer Kategorie",
+      "search-placeholder": "z.B. Marketing",
+      "search-results-label": {
+        "0": "{{count}} Ergebnisse für \"{{query}}\"",
+        "one": "{{count}} Ergebnis für \"{{query}}\"",
+        "other": "{{count}} Ergebnisse für \"{{query}}\""
+      },
+      "page-results-label": "Ergebnisse von <0>{{fromName}}</0> bis <1>{{toName}}</1> ({{from}} - {{to}})"
+    },
+  
+    "category": {
+      "title": "{{category}}",
+      "subtitle": "Finden Sie alle Fächer in der Kategorie {{category}}.",
+      "search-label": "Suche nach einem Fach",
+      "search-placeholder": "e.g. Informatik",
+      "search-results-label": {
+        "0": "{{count}} Ergebnisse für \"{{query}}\"",
+        "one": "{{count}} Ergebnis für \"{{query}}\"",
+        "other": "{{count}} Ergebnisse für \"{{query}}\""
+      },
+      "page-results-label": "Ergebnisse von <0>{{fromName}}</0> bis <1>{{toName}}</1> ({{from}} - {{to}})"
+    }
+  }
+  

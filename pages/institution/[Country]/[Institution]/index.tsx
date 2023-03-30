@@ -56,9 +56,9 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   // Get Wikipedia Data
   let wikiDataRes: string | null = null;
-  if (institution) {
-    wikiDataRes = await searchWikipedia(institution.name, "" + context.locale);
-  }
+  // if (institution) {
+  //   wikiDataRes = await searchWikipedia(institution.name, "" + context.locale);
+  // }
 
   // Footer Data
   // Get all countries

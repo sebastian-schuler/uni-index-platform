@@ -1,0 +1,16 @@
+{
+  "meta": {},
+
+  "categories": {
+    "country": "Land",
+    "state": "Bundesland",
+    "city": "Stadt",
+    "institution": "Institution",
+    "category": "Studiengangsrichtung",
+    "subject": "Studiengang"
+  },
+
+  "title": "Suche",
+  "search-button-alt": "Suche starten",
+  "search-placeholder": "Alles durchsuchen"
+}

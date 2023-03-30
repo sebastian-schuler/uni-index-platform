@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client"
+
 export type Searchable = {
     type: "Country"
     visible: boolean,
@@ -131,7 +133,7 @@ export type ArticleCardData = {
 }
 
 export type ArticleData = ArticleCardData & {
-    content: string
+    content: Prisma.JsonValue
 }
 
 // Used for the "Create Ad" page

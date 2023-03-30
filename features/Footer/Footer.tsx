@@ -77,11 +77,11 @@ const Footer: NextPage<Props> = props => {
         <Box component={'footer'} sx={{ backgroundColor: theme.colors.brandGray[5], color: theme.white }}>
             <ResponsiveContainer props={{ pt: 'xl', pb: 'lg' }} >
 
-                <Grid gutter={1}>
+                <Grid gutter={'sm'}>
                     {
                         footerData.map((footerList, i) => {
                             return (
-                                <Grid.Col key={i} xs={6} md={2}>
+                                <Grid.Col key={i} xs={6} md={3}>
                                     <Title order={4}>
                                         {footerList.title}
                                     </Title>

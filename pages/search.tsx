@@ -1,19 +1,18 @@
-import { ActionIcon, Anchor, createStyles, Group, Stack, TextInput, Divider, Text, Loader, Center, Badge, Select, SimpleGrid } from '@mantine/core';
+import { ActionIcon, Anchor, Center, createStyles, Divider, Group, Loader, Stack, Text, TextInput } from '@mantine/core';
 import { IconArrowLeft, IconArrowRight, IconSearch } from '@tabler/icons-react';
 import { GetServerSideProps, NextPage } from 'next';
+import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import GenericPageHeader from '../components/Block/GenericPageHeader';
 import ResponsiveWrapper from '../components/Container/ResponsiveWrapper';
 import Breadcrumb from '../features/Breadcrumb/Breadcrumb';
-import SITE_URL from '../lib/globalUrl';
+import SearchFilterSelect from '../features/GlobalSearch/SearchFilterSelect';
+import { prismaGlobalSearch } from '../lib/prisma/prismaGlobalSearch';
 import { SearchResult } from '../lib/types/SearchTypes';
 import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS, URL_LOCATION, URL_SEARCH, URL_SEARCH_GLOBAL } from '../lib/url-helper/urlConstants';
 import { toLink } from '../lib/util/util';
-import React from 'react';
-import GenericPageHeader from '../components/Block/GenericPageHeader';
-import { useRouter } from 'next/router';
-import { prismaGlobalSearch } from '../lib/prisma/prismaGlobalSearch';
-import useTranslation from 'next-translate/useTranslation';
 
 const useStyles = createStyles((theme) => ({
 
@@ -22,10 +21,11 @@ const useStyles = createStyles((theme) => ({
 
 interface Props {
     q?: string
+    filter?: string[]
     searchResultPreloaded?: SearchResult[]
 }
 
-const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
+const Search: NextPage<Props> = ({ q, filter, searchResultPreloaded }: Props) => {
 
     const { theme } = useStyles();
     const router = useRouter();
@@ -34,16 +34,21 @@ const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
     const [searchTerm, setSearchTerm] = useState(q || "");
     const [isLoading, setLoading] = useState(false);
     const [searchResult, setSearchResult] = useState<SearchResult[] | undefined>(searchResultPreloaded);
+    const [selectedFilters, setSelectedFilters] = useState<string[]>(filter || []);
 
     const runSearch = async (q: string) => {
         if (q.length <= 3) return;
         setLoading(true);
 
+        const encodedQ = encodeURIComponent(q);
+        const encodeFilter = encodeURIComponent(selectedFilters.toString());
+
         // Update the URL
-        router.replace(`/${URL_SEARCH}?q=${q}`, undefined, { shallow: true });
+        const urlQueryFilter = selectedFilters.length > 0 ? `&filter=${encodeFilter}` : '';
+        router.replace(`/${URL_SEARCH}?q=${encodedQ}${urlQueryFilter}`, undefined, { shallow: true });
 
         // Fetch the data
-        const res = await fetch(`${SITE_URL}/api/${URL_SEARCH}/${URL_SEARCH_GLOBAL}?q=${q}`);
+        const res = await fetch(`/api/${URL_SEARCH}/${URL_SEARCH_GLOBAL}?q=${encodedQ}${urlQueryFilter}`);
         const data = await res.json();
 
         setLoading(false);
@@ -71,7 +76,8 @@ const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
             tag = <Text size={'sm'} color={'gray.6'}>{t('categories.city')}</Text>
 
         } else if (result.type === "institution") {
-            url = toLink(URL_INSTITUTION, result.url);
+            url = toLink(URL_INSTITUTION, result.countryUrl, result.url);
+            text = result.countryName;
             tag = <Text size={'sm'} color={'gray.6'}>{t('categories.institution')}</Text>
 
         } else if (result.type === "subject") {
@@ -100,13 +106,7 @@ const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
 
             <GenericPageHeader title={t('title')} description='' />
 
-            <SimpleGrid
-                mt={'lg'}
-                breakpoints={[
-                    { minWidth: 'xs', cols: 1 },
-                    { minWidth: 'sm', cols: 2 },
-                ]}
-            >
+            <Group>
                 <TextInput
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.currentTarget.value)}
@@ -132,9 +132,13 @@ const Search: NextPage<Props> = ({ q, searchResultPreloaded }: Props) => {
                     }
                     placeholder={t('search-placeholder')}
                     rightSectionWidth={42}
+                    sx={{ flex: 1, alignSelf: "flex-end" }}
                 />
-
-            </SimpleGrid>
+                <SearchFilterSelect
+                    value={selectedFilters}
+                    onChange={(e) => setSelectedFilters(e)}
+                />
+            </Group>
             {
                 isLoading ? (
                     <Center mt={'xl'}>
@@ -155,14 +159,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     if (typeof context.query.q !== "string") return { props: {} };
 
-    const searchResult = await prismaGlobalSearch(context.query.q, context.locale || "en");
+    let filter = typeof context.query.filter === 'string' ? context.query.filter.split(',') : [];
 
-    return {
-        props: {
-            q: context.query.q,
-            searchResultPreloaded: searchResult
-        }
+    const searchResult = await prismaGlobalSearch(context.query.q, filter, context.locale || "en");
+
+    const props: Props = {
+        q: context.query.q,
+        filter: filter,
+        searchResultPreloaded: searchResult
     }
+
+    return { props };
 }
 
 export default Search

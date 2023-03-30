@@ -37,6 +37,8 @@ export const convertInstitutionToSearchResult = (institution: SearchedInstitutio
         type: "institution",
         name: institution.name,
         url: institution.url,
+        countryName: institution.countryName,
+        countryUrl: institution.countryUrl
     }
 }
 

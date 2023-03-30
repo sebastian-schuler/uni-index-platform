@@ -1,14 +1,108 @@
 {
-    "countries-title": "Institutionen",
-    "countries-title-sub": "Finde eine beliebige Hochschule in einem Land deiner Wahl.",
+  "meta": {
+    "institutions-title": "Institutionen",
+    "institutions-description": "Entdecken Sie Spitzenuniversitäten in ganz Europa und finden Sie das perfekte Angebot für Ihr Studium.",
 
-    "institution-profile": "Profil",
-    "institution-courses": "Fächer",
-    "institution-screenshots": "Screenshots",
-    "institution-reviews": "Bewertungen",
-    "institution-social-media": "Social Media",
-    "institution-online-marketing": "Online Marketing",
+    "country-title": "Institutionen in {{country}}",
+    "country-description": "Suchen Sie in einer umfassenden Liste aller akademischen Institutionen in {{country}}.",
 
-    "subject-profile": "Profil",
-    "subject-jobs": "Jobs"
+    "profile-title": "{{country}} | {{institution}}",
+    "profile-description": "Alle Informationen, Analysen und Kontaktinformationen über {{institution}} in {{country}}.",
+
+    "reviews-title": "Bewertungen | {{institution}}",
+    "reviews-description": "Lesen Sie Bewertungen von {{institution}}, um mehr über die Institution zu erfahren.",
+
+    "screenshots-title": "Screenshots | {{institution}}",
+    "screenshots-description": "Sehen Sie sich Screenshots von {{institution}} an, um mehr über die Institution zu erfahren.",
+
+    "subjects-title": "Studiengänge | {{institution}}",
+    "subjects-description": "Finden Sie alle Studiengänge, die von {{institution}} angeboten werden.",
+
+    "subject-title": "{{subject}} | {{institution}}",
+    "subject-description": "Erfahren Sie mehr über {{subject}} das von {{institution}} angeboten wird."
+  },
+
+  "institutions": {
+    "title": "Institutionen",
+    "subtitle": "Finde eine beliebige Hochschule in einem europäischen Land deiner Wahl."
+  },
+
+  "location": {
+    "title": "Institutionen in {{institution}}",
+    "subtitle": "Finden Sie alle Institutionen, Hochschulen und Universitäten in {{country}}.",
+    "search-label": "Suche nach einer Institution",
+    "search-placeholder": "e.g. Freie Universität Berlin",
+    "search-results-label": {
+      "0": "{{count}} Ergebnisse für \"{{query}}\"",
+      "one": "Ein Ergebnis für \"{{query}}\"",
+      "other": "{{count}} Ergebnisse für \"{{query}}\""
+    },
+    "page-results-label": "Ergebnisse von <0>{{fromName}}</0> bis <1>{{toName}}</1> ({{from}} - {{to}})"
+  },
+
+  "institution": {
+    "tab-profile": "Profil",
+    "tab-courses": "Studiengänge",
+    "tab-screenshots": "Screenshots",
+    "tab-reviews": "Bewertungen",
+    "tab-social-media": "Social Media",
+    "tab-online-marketing": "Online Marketing",
+    "label-lastupdate": "Letztes Update: {{date}}"
+  },
+
+  "subject": {
+    "tab-profile": "Profil",
+    "tab-jobs": "Jobs"
+  },
+
+  "social-media": {
+    "title": "Social Media | {{institution}}",
+    "title-nodata": "Keine Social Media Daten | {{institution}}",
+    "description": "Sehen Sie sich die Profile der sozialen Medien von {{institution}} an, um mehr über die Institution zu erfahren.",
+    "twitter-title-nodata": "Keine Twitter Daten | {{institution}}",
+    "youtube-title-nodata": "Keine Youtube Daten | {{institution}}",
+    "twitter-title": "Twitter Analyse | {{institution}}",
+    "youtube-title": "Youtube Analyse | {{institution}}",
+    "twitter-description": "Twitter-Analyse von {{institution}}, um mehr über die Institution zu erfahren.",
+    "youtube-description": "Youtube-Analyse von {{institution}}, um mehr über die Institution zu erfahren.",
+    "header": "Social Media",
+    "header-text": "Wir haben die Social-Media-Profile von {{name}} analysiert und mit denen anderer Institutionen verglichen.",
+    "card-lastupdate": "Letztes Update: {{date}}",
+    "header-links": "Social Media Links"
+  },
+
+  "online-marketing": {
+    "meta": {
+      "title-nodata": "Keine Daten | {{institution}}",
+      "title": "Online Marketing | {{institution}}",
+      "description": "Erfahren Sie mehr über die Institution im Online-Marketing von {{Institution}}.",
+      "performance-title": "Online Marketing | Performance | {{institution}}",
+      "performance-description": "Eine detaillierte Analyse der Online-Marketing Performance von {{institution}}.",
+      "seo-title": "Online Marketing | SEO | {{institution}}",
+      "seo-description": "Eine detaillierte Analyse der Online-Marketing SEO von {{institution}}.",
+      "bestpractices-title": "Online Marketing | Best Practices | {{institution}}",
+      "bestpractices-description": "Eine detaillierte Analyse der besten Online-Marketing-Praktiken von {{institution}}.",
+      "accessibility-title": "Online Marketing | Barrierefreiheit | {{institution}}",
+      "accessibility-description": "Eine detaillierte Analyse der Online-Marketing Barrierefreiheit von {{institution}}.",
+      "pwa-title": "Online Marketing | PWA | {{institution}}",
+      "pwa-description": "Eine detaillierte Analyse der Online Marketing PWA von {{institution}}."
+    },
+    "header": "Online Marketing Analyse",
+    "header-text": "Wir haben die Website von {{name}} mit Hilfe von Google Lighthouse analysiert.",
+    "label-website": "Analysierte Website: <0>{{label}}</0>",
+    "categories": {
+      "performance-header": "Performance",
+      "performance-text": "In dieser Kategorie prüfen wir, wie schnell die Website geladen wird und wie schnell Nutzer auf Inhalte zugreifen oder sie anzeigen können.",
+      "seo-header": "SEO",
+      "seo-text": "Tests, um festzustellen, wie gut die Website von Suchmaschinen gecrawlt und in den Suchergebnissen angezeigt werden kann.",
+      "bestpractices-header": "Best Practices",
+      "bestpractices-text": "Die 16 getesteten Best Practices betreffen die Sicherheit von Websites und moderne Webentwicklungsstandards.",
+      "accessibility-header": "Barrierefreiheit",
+      "accessibility-text": "Diese Audits bewerten, wie gut die Website von Menschen mit Behinderungen mit Hilfe von Bildschirmlesegeräten genutzt werden kann.",
+      "pwa-header": "PWA",
+      "pwa-text": "Progressive Web Apps nutzen moderne Webfunktionen, um ein app-ähnliches Benutzererlebnis zu bieten."
+    },
+    "label-show-details": "Details anzeigen von {{category}}",
+    "label-score": "Bewertung"
+  }
 }

@@ -163,11 +163,12 @@ model user_ad {
   booked_until BigInt
   subject_id   String?     @db.Uuid
   type         String      @db.VarChar
-  placement    String[]    @db.VarChar
   size         Int
   description  String?     @db.VarChar
   image_id     String?     @db.Uuid
   date_booked  BigInt
+  placement    Json        @db.Json
+  title        Json?       @db.Json
   user         user        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ad belongs to user")
   user_image   user_image? @relation(fields: [image_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ad has image")
   subject      subject?    @relation(fields: [subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ad is for subject")
@@ -177,11 +178,11 @@ model user_article {
   id          String     @id(map: "UserAdPost_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user_id     String     @db.Uuid
   url         String     @db.VarChar
-  content     String     @db.VarChar
   title       String     @db.VarChar
-  date_posted Decimal    @db.Decimal
+  date_posted BigInt
   excerpt     String     @db.VarChar
   image_id    String     @db.Uuid
+  content     Json       @db.Json
   user_image  user_image @relation(fields: [image_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Article has image")
   user        user       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User has AdPosts")
 
