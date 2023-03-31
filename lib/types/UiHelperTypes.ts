@@ -114,28 +114,6 @@ export type AdCardData = {
     sizeCost: number
 }
 
-export type ArticleCardData = {
-    id: string
-    url: string
-    title: string
-    excerpt: string
-    imageUrl: string | null
-    date: number
-    institution: {
-        name: string
-        url: string
-    }
-    country: {
-        name: string
-        url: string
-        countryCode: string
-    }
-}
-
-export type ArticleData = ArticleCardData & {
-    content: Prisma.JsonValue
-}
-
 // Used for the "Create Ad" page
 export type CreateAdLinkType = "link" | "article";
 

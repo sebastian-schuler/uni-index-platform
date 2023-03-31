@@ -1,35 +1,13 @@
-import { ActionIcon, Autocomplete, Group, SelectItemProps, Text, useMantineTheme } from '@mantine/core';
+import { ActionIcon, Autocomplete, Group, useMantineTheme } from '@mantine/core';
 import { IconSchool, IconX } from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { InstitutionRegistrationItem } from '../../lib/types/AccountHandlingTypes';
-
-interface ItemProps extends SelectItemProps {
-    value: string
-    item: InstitutionRegistrationItem
-}
-
-const AutoCompleteItem = forwardRef<HTMLDivElement, ItemProps>(
-    ({ value, item, ...others }: ItemProps, ref) => (
-        <div ref={ref} {...others}>
-            <Group noWrap>
-                <div>
-                    <Text color={item.hasAccount ? "red" : "black"}>{value}</Text>
-                    <Text size="xs" color="red">
-                        {item.hasAccount ? "Institution already has an account" : ""}
-                    </Text>
-                </div>
-            </Group>
-        </div>
-    )
-);
 
 interface Props {
     registrationInstitutes: InstitutionRegistrationItem[]
-
     selectedInstitutionId: string
     setSelectedInstitutionId: (id: string) => void
-
     setSelectedInstitution: (item: InstitutionRegistrationItem | null) => void
     institutionError: string
     setInstitutionError: (error: string) => void
@@ -40,14 +18,7 @@ const InstitutionSelect: React.FC<Props> = (
 ) => {
 
     const theme = useMantineTheme();
-    AutoCompleteItem.displayName = 'AutoCompleteItem';
-
     const { t } = useTranslation('loginLogout');
-    const langContent = {
-        institutionLabel: t('signup-institution-label'),
-        institutionHelper: t('signup-institution-helper'),
-        errorInstitutionTaken: t('signup-error-institution-taken'),
-    }
 
     const institutionList = registrationInstitutes.map((item) => ({
         value: item.name,
@@ -63,10 +34,13 @@ const InstitutionSelect: React.FC<Props> = (
 
         if (value.length === 0) {
             setInstitutionError("");
+
         } else if (selectedInstitution === null) {
-            setInstitutionError("Institution not found");
+            setInstitutionError(t('signup.step-1.institution-select.error-notfound'));
+
         } else if (selectedInstitution.hasAccount) {
-            setInstitutionError(langContent.errorInstitutionTaken);
+            setInstitutionError(t('signup.step-1.institution-select.error-taken'));
+
         } else {
             setInstitutionError("");
         }
@@ -75,16 +49,16 @@ const InstitutionSelect: React.FC<Props> = (
     return (
         <Group spacing={0}>
             <Autocomplete
-                label={langContent.institutionLabel}
-                description={langContent.institutionHelper}
+                label={t('signup.step-1.institution-select.label')}
+                description={t('signup.step-1.institution-select.helper')}
                 radius={theme.radius.md}
                 icon={<IconSchool color={theme.colors.brandGray[0]} />}
                 value={selectedInstitutionId}
+                size='md'
                 onChange={handleInstitutionChange}
                 data={institutionList}
                 autoCorrect={"off"}
                 spellCheck={false}
-                itemComponent={AutoCompleteItem}
                 limit={5}
                 error={institutionError}
                 onItemSubmit={(value) => handleInstitutionChange(value.value)}
@@ -94,6 +68,7 @@ const InstitutionSelect: React.FC<Props> = (
                         <IconX size={theme.fontSizes.md} />
                     </ActionIcon>
                 }
+                required
             />
 
         </Group>

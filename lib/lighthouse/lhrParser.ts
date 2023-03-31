@@ -1,4 +1,4 @@
-import markdownToHtml from "../markdownParser";
+import markdownToHtml from "../parser/markdownParser";
 import { AuditResult } from "../types/lighthouse/audit-result";
 import { LhrAudit, LhrAuditDetails, LhrCategory, LhrCategoryName, LhrMinified } from "../types/lighthouse/CustomLhrTypes";
 import Result from "../types/lighthouse/lhr";

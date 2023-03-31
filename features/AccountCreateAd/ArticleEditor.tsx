@@ -1,6 +1,27 @@
 import { Text } from '@mantine/core';
 import { RichTextEditor } from '@mantine/tiptap';
-import { Editor } from '@tiptap/react';
+import { Editor, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { Link } from '@mantine/tiptap';
+import Highlight from '@tiptap/extension-highlight';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Superscript from '@tiptap/extension-superscript';
+import SubScript from '@tiptap/extension-subscript';
+
+export const getTiptapEditor = () => {
+    return useEditor({
+        extensions: [
+            StarterKit,
+            Link,
+            Underline,
+            Highlight,
+            Superscript,
+            SubScript,
+            TextAlign.configure({ types: ['heading', 'paragraph'] }),
+        ]
+    });
+}
 
 type Props = {
     editor: Editor | null
@@ -31,6 +52,8 @@ const ArticleEditor = ({ editor }: Props) => {
                         <RichTextEditor.H2 tabIndex={1} />
                         <RichTextEditor.H3 tabIndex={1} />
                         <RichTextEditor.H4 tabIndex={1} />
+                        <RichTextEditor.H5 tabIndex={1} />
+                        <RichTextEditor.H6 tabIndex={1} />
                     </RichTextEditor.ControlsGroup>
 
                     <RichTextEditor.ControlsGroup>

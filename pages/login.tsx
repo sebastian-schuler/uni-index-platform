@@ -15,6 +15,7 @@ import { getUserFromToken } from '../lib/prisma/prismaUserAccounts';
 import { LoginStatus } from '../lib/types/AccountHandlingTypes';
 import { URL_ACCOUNT, URL_REGISTER } from '../lib/url-helper/urlConstants';
 import { toLink } from '../lib/util/util';
+import Trans from 'next-translate/Trans';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -68,14 +69,16 @@ const CustomerLogin: NextPage = () => {
       const status: LoginStatus = res.status;
 
       if (status === "NO_USER") {
-        setUsernameError("No user with this username");
+        setUsernameError(t('login.error.no-user'));
 
       } else if (status === "NO_AUTH") {
-        setPasswordError("Wrong password");
+        setPasswordError(t('login.error.wrong-password'));
         setUsernameError("");
 
       } else {
-        console.log("Something went wrong.");
+        setPasswordError(t('login.error.unknown'));
+        setUsernameError(t('login.error.unknown'));
+        console.error("Something went wrong.");
       }
     }
   }
@@ -91,8 +94,8 @@ const CustomerLogin: NextPage = () => {
     <ResponsiveWrapper>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('login-tab-title')}</title>
-        <meta key={"description"} name="description" content={t('login-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('meta.login-tab-title')}</title>
+        <meta key={"description"} name="description" content={t('meta.login-description')} />
       </Head>
 
       <Center>
@@ -103,16 +106,22 @@ const CustomerLogin: NextPage = () => {
               <ForgotPassword setShowForgotPassword={setShowForgotPassword} /> :
               (
                 <>
-                  <Title color={theme.colors.brandGray[3]} align={"center"} >Welcome back!</Title>
-                  <Text color={"dimmed"} align={"center"}>Do not have an account yet? <MantineLink url={URL_REGISTER} type="internal">Create account</MantineLink></Text>
+                  <Title order={1} align={"center"} >{t('login.title')}</Title>
+
+                  <Text color={"dimmed"} align={"center"}>
+                    <Trans
+                      i18nKey='loginLogout:login.subtitle'
+                      components={[<MantineLink url={URL_REGISTER} type="internal" />]}
+                    />
+                  </Text>
 
                   <Paper component='form' withBorder shadow="md" p={theme.spacing.lg} mt={theme.spacing.lg} radius="md" sx={{ maxWidth: 400, backgroundColor: theme.colors.light[0] }}>
                     <TextInput
                       autoComplete='username'
                       value={username}
                       onChange={(event) => setUsername(event.currentTarget.value)}
-                      label="Email"
-                      placeholder="name@uni.de"
+                      label={t('login.email-label')}
+                      placeholder={t('login.email-placeholder')}
                       required
                       error={usernameError}
                     />
@@ -121,8 +130,8 @@ const CustomerLogin: NextPage = () => {
                       value={password}
                       onChange={(event) => setPassword(event.currentTarget.value)}
                       onKeyDown={(event) => handleEnterPressed(event.key)}
-                      label="Password"
-                      placeholder="Your password"
+                      label={t('login.password-label')}
+                      placeholder={t('login.password-placeholder')}
                       required
                       mt="md"
                       error={passwordError}
@@ -138,11 +147,14 @@ const CustomerLogin: NextPage = () => {
                         size="sm"
                         className={classes.link}
                       >
-                        Forgot password?
+                        {t('login.password-forgot')}
                       </Anchor>
                     </Group>
-                    <Button radius={"md"} fullWidth mt="xl" onClick={submitLogin} disabled={username === "" || password === ""}>
-                      Sign in
+                    <Button
+                      radius={"md"} fullWidth mt="xl"
+                      onClick={submitLogin} disabled={username === "" || password === ""}
+                    >
+                      {t('login.button-text')}
                     </Button>
                   </Paper>
                 </>

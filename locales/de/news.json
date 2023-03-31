@@ -2,5 +2,10 @@
   "meta": {
     "news-title": "Nachrichten",
     "news-desc": "Lesen Sie auf unserer umfassenden Plattform, was es Neues von den besten Hochschulen und Studiengängen gibt."
+  },
+
+  "news": {
+    "title": "Nachrichten von Institutionen",
+    "subtitle": "Lesen Sie Artikel, die von Universitäten aus ganz Europa veröffentlicht wurden."
   }
 }

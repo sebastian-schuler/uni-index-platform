@@ -1,37 +1,91 @@
 {
-  "login-email-label": "E-Mail-Adresse",
-  "login-password-label": "Passwort",
-  "login-forgot": "Passwort vergessen?",
-  "login-button-text": "Einloggen",
-  "login-needaccount": "Kein Konto? Jetzt registrieren!",
-  "login-error-username": "Bitte geben Sie eine gültige Email-Adresse ein.",
-  "login-title": "Als Institut anmelden",
+  "meta": {
+    "login-tab-title": "Login",
+    "login-description": "Login as an institution to manage your ads on our platform.",
+    "signup-tab-title": "Sign up",
+    "signup-description": "Sign up as an institution to book ads on our platform."
+  },
 
-  "signup-institution-label": "Institution *",
-  "signup-institution-helper": "Jede Einrichtung kann nur ein Konto haben, und jedes Konto muss mit einer Einrichtung verknüpft sein.",
-  "signup-email-label": "E-Mail-Adresse",
-  "signup-email-helper": "Ihre E-Mail-Adresse brauchen Sie, um sich bei Ihrem Konto anzumelden.",
-  "signup-password-label": "Passwort",
-  "signup-password-helper": "Ihr Passwort muss zwischen 8 und 64 Zeichen lang sein und Folgendes enthalten: 2 Großbuchstaben, 1 Symbol, 3 Kleinbuchstaben und 2 Ziffern.",
-  "signup-displayname-label": "Anzeigename",
-  "signup-terms-notice": "<0>Durch Klicken auf Registrieren erklären Sie sich mit unseren <1></1> einverstanden.</0>",
-  "signup-terms-name": "Bedingungen",
+  "login": {
+    "title": "Willkommen zurück!",
+    "subtitle": "Sie haben noch kein Konto? <0>Registrieren</0>",
 
-  "signup-title": "Registrieren",
-  "signup-next": "Weiter",
-  "signup-back": "Zurück",
-  "signup-finish": "Fertig",
-  "signup-steps": [
-    { "t": "Institution auswählen" },
-    { "t": "Ihre Daten eingeben" },
-    { "t": "Bestätigen" }
-  ],
-  "signup-completed": "Konto erfolgreich erstellt! Sie werden in wenigen Sekunden weitergeleitet.",
+    "email-label": "Email",
+    "email-placeholder": "name@uni.com",
+    "password-label": "Passwort",
+    "password-placeholder": "Ihr Passwort",
+    "password-forgot": "Passwort vergessen?",
+    "button-text": "Anmelden",
+    "error": {
+      "no-user": "Kein Benutzer mit dieser E-Mail-Adresse gefunden.",
+      "wrong-password": "Falsches Passwort.",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten."
+    }
+  },
 
-  "signup-error-step": "Fehler im Abschnitt",
-  "signup-error-email-taken": "E-Mail wird schon benutzt",
-  "signup-error-email-invalid": "E-Mail ist ungültig",
-  "signup-error-password-invalid": "Passwort ist ungültig",
-  "signup-error-displayname-invalid": "Anzeigename ist nicht gültig. (4-32 Buchstaben, keine Sonderzeichen, keine Zahlen)",
-  "signup-error-institution-taken": "Institution hat bereits ein Konto. Kontaktieren Sie uns, wenn Sie den Zugang zu Ihrer E-Mail verloren haben."
+  "signup": {
+    "title": "Registrieren",
+    "subtitle": "Sie haben bereits ein Konto? <0>Anmelden</0>",
+
+    "stepper": {
+      "next": "Weiter",
+      "back": "Zurück",
+      "finish": "Fertigstellen"
+    },
+
+    "step-1": {
+      "label": "Institution",
+      "desc": "Wählen Sie Ihre Institution",
+
+      "institution-select": {
+        "label": "Institution",
+        "helper": "Jede Einrichtung kann nur ein Konto haben, und jedes Konto muss mit einer Einrichtung verknüpft sein.",
+        "error-taken": "Institution hat bereits ein Konto. Kontaktieren Sie uns, wenn Sie den Zugang zu Ihrer E-Mail verloren haben.",
+        "error-notfound": "Institution nicht gefunden. Kontaktieren Sie uns, wenn Sie Ihre Einrichtung hinzufügen möchten."
+      }
+    },
+
+    "step-2": {
+      "label": "Konto-Details",
+      "desc": "Erforderliche Kontoinformationen eingeben",
+
+      "email": {
+        "label": "E-Mail",
+        "helper": "Die E-Mail muss in der Domäne Ihrer Einrichtung liegen, z.B. @hs-kl.de",
+        "placeholder": "Ihre E-Mail"
+      },
+
+      "password": {
+        "label": "Passwort",
+        "placeholder": "Ihr Passwort",
+        "req": {
+          "length": "Mindestens 6 Zeichen",
+          "number": "Mindestens eine Zahl",
+          "lower": "Mindestens ein Kleinbuchstabe",
+          "upper": "Mindestens ein Großbuchstabe",
+          "special": "Mindestens ein Sonderzeichen ($&+,:;=?@#|'<>.^*()%!-)"
+        }
+      },
+
+      "password-confirm": {
+        "label": "Passwort bestätigen",
+        "placeholder": "Bestätigen Sie Ihr Passwort"
+      },
+
+      "error": {
+        "email-taken": "E-Mail wird bereits verwendet",
+        "email-invalid": "E-Mail ist ungültig",
+        "password-invalid": "Passwort ist ungültig",
+        "institution-taken": "Institution hat bereits ein Konto. Kontaktieren Sie uns, wenn Sie den Zugang zu Ihrer E-Mail verloren haben."
+      }
+    },
+
+    "step-3": {
+      "label": "Bestätigung",
+      "desc": "Eingegebene Daten prüfen",
+
+      "text-waiting": "Bitte warten Sie, während wir Ihr Konto erstellen...",
+      "text-success": "Konto erfolgreich erstellt! Sie werden in wenigen Sekunden weitergeleitet."
+    }
+  }
 }

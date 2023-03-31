@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { IconX, IconCheck } from '@tabler/icons-react';
-import { PasswordInput, Progress, Text, Popover, Box, useMantineTheme } from '@mantine/core';
+import { PasswordInput, Progress, Text, Popover, Box, useMantineTheme, ThemeIcon } from '@mantine/core';
+import useTranslation from 'next-translate/useTranslation';
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
     return (
@@ -10,29 +11,18 @@ function PasswordRequirement({ meets, label }: { meets: boolean; label: string }
             mt={7}
             size="sm"
         >
-            {meets ? <IconCheck size={14} /> : <IconX size={14} />} <Box ml={10}>{label}</Box>
+            {meets ? (
+                <ThemeIcon variant='light'>
+                    <IconCheck size={14} />
+                </ThemeIcon>
+            ) : (
+                <ThemeIcon variant='light'>
+                    <IconX size={14} />
+                </ThemeIcon>
+            )}
+            <Box ml={'sm'}>{label}</Box>
         </Text>
     );
-}
-
-
-const requirements = [
-    { re: /[0-9]/, label: 'Includes number' },
-    { re: /[a-z]/, label: 'Includes lowercase letter' },
-    { re: /[A-Z]/, label: 'Includes uppercase letter' },
-    { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Includes special symbol' },
-];
-
-function getStrength(password: string) {
-    let multiplier = password.length > 5 ? 0 : 1;
-
-    requirements.forEach((requirement) => {
-        if (!requirement.re.test(password)) {
-            multiplier += 1;
-        }
-    });
-
-    return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
 }
 
 interface Props {
@@ -41,8 +31,26 @@ interface Props {
 }
 const PasswordStrengthField = ({ value, onChange }: Props) => {
 
+    const { t } = useTranslation('loginLogout');
     const theme = useMantineTheme();
     const [popoverOpened, setPopoverOpened] = useState(false);
+
+    const requirements = [
+        { re: /[0-9]/, label: t('signup.step-2.password.req.number') },
+        { re: /[a-z]/, label: t('signup.step-2.password.req.lower') },
+        { re: /[A-Z]/, label: t('signup.step-2.password.req.upper') },
+        { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: t('signup.step-2.password.req.special') },
+    ];
+
+    function getStrength(password: string) {
+        let multiplier = password.length > 5 ? 0 : 1;
+        requirements.forEach((requirement) => {
+            if (!requirement.re.test(password)) {
+                multiplier += 1;
+            }
+        });
+        return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
+    }
 
     const checks = requirements.map((requirement, index) => (
         <PasswordRequirement key={index} label={requirement.label} meets={requirement.re.test(value)} />
@@ -60,8 +68,8 @@ const PasswordStrengthField = ({ value, onChange }: Props) => {
                 >
                     <PasswordInput
                         radius={theme.radius.md}
-                        label="Your password"
-                        placeholder="Your password"
+                        label={t('signup.step-2.password.label')}
+                        placeholder={t('signup.step-2.password.placeholder')}
                         value={value}
                         onChange={(event) => onChange(event.currentTarget.value)}
                         required
@@ -71,7 +79,7 @@ const PasswordStrengthField = ({ value, onChange }: Props) => {
             </Popover.Target>
             <Popover.Dropdown>
                 <Progress color={color} value={strength} size={5} style={{ marginBottom: 10 }} />
-                <PasswordRequirement label="Includes at least 6 characters" meets={value.length > 5} />
+                <PasswordRequirement label={t('signup.step-2.password.req.length')} meets={value.length > 5} />
                 {checks}
             </Popover.Dropdown>
         </Popover>

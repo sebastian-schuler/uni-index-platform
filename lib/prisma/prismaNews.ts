@@ -1,7 +1,8 @@
 import { country } from '@prisma/client';
-import { ArticleCardData, ArticleData } from '../types/UiHelperTypes';
 import { getLocalizedName } from '../util/util';
 import prisma from './prisma';
+import { ArticleCardData, ArticleData } from '../types/ArticleTypes';
+import { JSONContent } from '@tiptap/react';
 
 export const getAdPostByUrl = async (postUrl: string, institutionUrl: string, lang: string): Promise<ArticleData | null> => {
 
@@ -67,7 +68,7 @@ export const getAdPostByUrl = async (postUrl: string, institutionUrl: string, la
             title: res.title,
             imageUrl: res.image_id,
             date: Number(res.date_posted),
-            content: res.content,
+            content: res.content as JSONContent,
             country: {
                 url: res.user.institution.city.state.country.url,
                 name: getLocalizedName({ lang, dbTranslated: res.user.institution.city.state.country as country }),

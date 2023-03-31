@@ -1,9 +1,8 @@
 import { Box, Button, Center, Divider, Grid, Group, Stack, Text, Title } from '@mantine/core';
 import { useMantineTheme } from '@mantine/styles';
-import { Link } from '@mantine/tiptap';
+
 import { IconArticle, IconLink } from '@tabler/icons-react';
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+
 import { GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useEffect, useState } from 'react';
@@ -16,6 +15,7 @@ import { useAuth } from '../../lib/context/SessionContext';
 import { getInstitutionDataFromToken } from '../../lib/prisma/prismaUserAccounts';
 import { CreateAdLinkType, FromToDateRange } from '../../lib/types/UiHelperTypes';
 import { URL_LOGIN } from '../../lib/url-helper/urlConstants';
+import { getTiptapEditor } from '../../features/AccountCreateAd/ArticleEditor';
 
 // TODO 2: Add option to export created ad to a file, so that it can be imported later
 
@@ -60,12 +60,7 @@ const CreateAd = ({ institutionData }: Props) => {
     // ====================== ARTICLE VARS ======================
 
     // Article Editor 
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-            Link,
-        ]
-    });
+    const editor = getTiptapEditor();
 
     // ==========================================================
 
@@ -188,6 +183,8 @@ const CreateAd = ({ institutionData }: Props) => {
             // Add editor content to the form
             if (editor) {
                 formData.append("content", JSON.stringify(editor.getJSON()));
+
+                console.log(editor.getHTML());
             }
 
         }

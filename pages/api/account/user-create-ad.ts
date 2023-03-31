@@ -88,6 +88,7 @@ export default async function handler(
                 const content = fields.content ? fields.content as string : null;
                 let image = files.image ? files.image as formidable.File : null;
 
+                console.log(content?.toString());
             }
 
         } else {

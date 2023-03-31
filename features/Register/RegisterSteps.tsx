@@ -7,6 +7,8 @@ import { isEmailValid, isPasswordValid } from '../../lib/accountHandling/regex';
 import { InstitutionRegistrationItem, RegisterStatus } from '../../lib/types/AccountHandlingTypes';
 import InstitutionSelect from './InstitutionSelect';
 import PasswordStrengthField from './PasswordStrengthField';
+import { toLink } from '../../lib/util/util';
+import { URL_ACCOUNT } from '../../lib/url-helper/urlConstants';
 
 interface Props {
     registrationInstitutes: InstitutionRegistrationItem[]
@@ -50,31 +52,6 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
 
     // Language
     const { t } = useTranslation('loginLogout');
-    const langContent = {
-        // Textfields
-        institutionLabel: t('signup-institution-label'),
-        institutionHelper: t('signup-institution-helper'),
-        emailLabel: t('signup-email-label'),
-        emailHelper: t('signup-email-helper'),
-        passwordLabel: t('signup-password-label'),
-        displaynameLabel: t('signup-displayname-label'),
-        passwordHelper: t('signup-password-helper'),
-        // Terms
-        TermsName: t('signup-terms-name'),
-        // Errors
-        errorInstitutionTaken: t('signup-error-institution-taken'),
-        errorEmailTaken: t('signup-error-email-taken'),
-        errorEmailInvalid: t('signup-error-email-invalid'),
-        errorPasswordInvalid: t('signup-error-password-invalid'),
-        errorDisplayNameInvalid: t('signup-error-displayname-invalid'),
-        errorStep: t('signup-error-step'),
-        // Form
-        next: t('signup-next'),
-        back: t('signup-back'),
-        finish: t('signup-finish'),
-        signupCompleted: t('signup-completed'),
-        stepsArray: t('signup-steps', { count: 1 }, { returnObjects: true }) as { [key in string]: string }[]
-    }
 
     const isNextDisabled = (): boolean => {
         if (active === 0 && (!selectedInstitution || institutionError.length > 0)) return true;
@@ -105,21 +82,21 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
         setRegisterResult(status);
         switch (status) {
             case 'INVALID_EMAIL':
-                setEmailError(langContent.errorEmailInvalid);
+                setEmailError(t('signup.step-2.error.email-invalid'));
                 break;
             case 'INVALID_PASSWORD':
-                setPasswordError(langContent.errorPasswordInvalid);
+                setPasswordError(t('signup.step-2.error.password-invalid'));
                 break;
             case 'EMAIL_TAKEN':
-                setEmailError(langContent.errorEmailTaken);
+                setEmailError(t('signup.step-2.error.email-taken'));
                 break;
             case 'INSTITUTION_TAKEN':
-                setInstitutionError(langContent.errorInstitutionTaken);
+                setInstitutionError(t('signup.step-2.error.institution-taken'));
                 break;
             case 'SUCCESS':
                 setTimeout(() => {
                     setAuthToken(res.token, res.lifetime);
-                    router.replace('/account');
+                    router.replace(toLink(URL_ACCOUNT));
                 }, 5000);
                 break;
         }
@@ -130,7 +107,7 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
             <Paper p={"lg"} shadow="sm" radius="md" h={'100%'} sx={{ backgroundColor: theme.colors.light[0], }}>
 
                 <Stepper active={active} breakpoint="sm">
-                    <Stepper.Step label="Institution" description="Select your institution">
+                    <Stepper.Step label={t('signup.step-1.label')} description={t('signup.step-1.desc')}>
 
                         <Center mt={theme.spacing.lg}>
                             <Stack sx={{ maxWidth: 650 }} >
@@ -148,7 +125,7 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
                         </Center>
 
                     </Stepper.Step>
-                    <Stepper.Step label="Account Details" description="Set required account data">
+                    <Stepper.Step label={t('signup.step-2.label')} description={t('signup.step-2.desc')}>
 
                         <Center mt={theme.spacing.lg}>
                             <Stack sx={{ maxWidth: 650 }}>
@@ -156,9 +133,9 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
                                     value={email}
                                     onChange={(e) => setEmail(e.currentTarget.value)}
                                     radius={theme.radius.md}
-                                    label="Your email"
-                                    description="E-Mail address has to be your institutions domain, e.g. @hs-kl.de"
-                                    placeholder="Your email"
+                                    label={t('signup.step-2.email.label')}
+                                    description={t('signup.step-2.email.helper')}
+                                    placeholder={t('signup.step-2.email.placeholder')}
                                     required
                                     autoComplete='email'
                                     spellCheck={false}
@@ -169,8 +146,8 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
 
                                 <PasswordInput
                                     radius={theme.radius.md}
-                                    label="Confirm password"
-                                    placeholder="Confirm your password"
+                                    label={t('signup.step-2.password-confirm.label')}
+                                    placeholder={t('signup.step-2.password-confirm.placeholder')}
                                     value={passwordConfirm}
                                     onChange={(event) => setPasswordConfirm(event.currentTarget.value)}
                                     required
@@ -181,7 +158,7 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
                         </Center>
 
                     </Stepper.Step>
-                    <Stepper.Step label="Confirm" description="Check if data is correct">
+                    <Stepper.Step label={t('signup.step-3.label')} description={t('signup.step-3.desc')}>
 
                         <Text>{email}</Text>
                         <Text>{password}</Text>
@@ -190,10 +167,10 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
                     </Stepper.Step>
                     <Stepper.Completed>
                         {
-                            registerResult === null && "Waiting for response"
+                            registerResult === null && t('signup.step-3.text-waiting')
                         }
                         {
-                            registerResult === "SUCCESS" && "Successfully registered, you will be redirected in a few seconds"
+                            registerResult === "SUCCESS" && t('signup.step-3.text-success')
                         }
                     </Stepper.Completed>
                 </Stepper>
@@ -204,157 +181,19 @@ const RegisterSteps: React.FC<Props> = ({ registrationInstitutes }: Props) => {
                         variant="default"
                         onClick={prevStep}
                         disabled={active === 0}
-                    >Back</Button>
+                    >
+                        {t('signup.stepper.back')}
+                    </Button>
                     <Button
                         radius={theme.radius.md}
                         onClick={nextStep}
                         disabled={isNextDisabled() || active === 3}
                     >
-                        {active >= 2 ? "Finish" : "Next"}
+                        {active >= 2 ? t('signup.stepper.finish') : t('signup.stepper.next')}
                     </Button>
                 </Group>
 
             </Paper>
-
-            {/* <Stepper activeStep={activeStep} sx={{ paddingBottom: 3 }}>
-                {steps.map((label, index) => {
-                    const stepProps: { completed?: boolean } = {};
-                    const labelProps: {
-                        optional?: React.ReactNode;
-                        error?: boolean;
-                    } = {};
-                    if (isStepFailed(index)) {
-                        labelProps.optional = (
-                            <Typography variant="caption" color="error">
-                                {langContent.errorStep}
-                            </Typography>
-                        );
-                        labelProps.error = true;
-                    }
-                    return (
-                        <Step key={label} {...stepProps} >
-                            <StepLabel {...labelProps}>{label}</StepLabel>
-                        </Step>
-                    );
-                })}
-            </Stepper>
-
-            {activeStep === steps.length ? (
-                <React.Fragment>
-                    <Typography sx={{ mt: 2, mb: 1 }}>
-                        {langContent.signupCompleted}
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                        <Box sx={{ flex: '1 1 auto' }} />
-                    </Box>
-                </React.Fragment>
-            ) : (
-                <React.Fragment>
-                    {
-                        activeStep === 0 && (
-                            <Box sx={{ mt: 2, mb: 1, px: 1 }}>
-                                <Typography variant='body2'>{langContent.institutionHelper}</Typography>
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-institution"
-                                    options={registrationInstitutes}
-                                    getOptionLabel={(option) => option.name}
-                                    value={selectedInstitution}
-                                    onChange={(e, value) => {
-                                        setSelectedInstitution(value as InstitutionRegistrationItem);
-                                        if (value !== null && value.hasAccount) {
-                                            setInstitutionError(langContent.errorInstitutionTaken);
-                                        } else {
-                                            setInstitutionError("");
-                                        }
-                                    }}
-                                    sx={{ width: '100%', mt: 2 }}
-                                    renderInput={(params) => <TextField {...params} label={langContent.institutionLabel} />}
-                                />
-                                {
-                                    institutionError.length > 0 && <Typography mt={1} color={'error'}>{institutionError}</Typography>
-                                }
-                            </Box>
-                        )
-                    }
-                    {
-                        activeStep === 1 && (
-                            <Box sx={{ mt: 2, mb: 1, px: 1 }}>
-                                <Typography variant='body2'>{langContent.emailHelper}</Typography>
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label={langContent.emailLabel}
-                                    name="email"
-                                    autoComplete="email"
-                                    autoFocus
-                                    value={email}
-                                    error={emailError.length > 0}
-                                    helperText={emailError}
-                                    onChange={(e) => handleEmailChange(e.target.value)}
-                                />
-                                <TextField
-                                    margin="normal"
-                                    fullWidth
-                                    id="displayname"
-                                    label={langContent.displaynameLabel}
-                                    name="displayname"
-                                    value={displayName}
-                                    onChange={(e) => handleDisplayNameChange(e.target.value)}
-                                    error={displayNameError.length > 0}
-                                    helperText={displayNameError}
-                                />
-                                <PasswordInput
-                                    password={password}
-                                    setPassword={setPassword}
-                                    onChange={(val) => handlePasswordChange(val)}
-                                    sx={{ mt: 2 }}
-                                    isError={passwordError.length > 0}
-                                    errorMessage={passwordError}
-                                />
-                                <Typography
-                                    variant='caption'
-                                    component={'p'}
-                                    lineHeight={1.2}
-                                    mt={1}
-                                >
-                                    {langContent.passwordHelper}
-                                </Typography>
-                            </Box>
-                        )
-                    }
-                    {
-                        activeStep === 2 && (
-                            <Box sx={{ mt: 2, mb: 1, px: 1 }}>
-                                <Trans
-                                    i18nKey="account:signup-terms-notice"
-                                    components={[<p className='text-sm' />, <DataNoticeLink />]}
-                                />
-                            </Box>
-                        )
-                    }
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                        <Button
-                            color="inherit"
-                            disabled={activeStep === 0}
-                            onClick={handleBack}
-                            sx={{ mr: 1 }}
-                        >
-                            {langContent.back}
-                        </Button>
-                        <Box sx={{ flex: '1 1 auto' }} />
-                        <Button
-                            onClick={handleNext}
-                            disabled={isNextDisabled()}
-                        >
-                            {activeStep === steps.length - 1 ? langContent.finish : langContent.next}
-                        </Button>
-                    </Box>
-                </React.Fragment>
-            )} */}
-
         </Box>
     )
 }

@@ -5,19 +5,28 @@ import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper';
 import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb';
+import { TipTapParser } from '../../../../../lib/parser/tiptapParser';
 import { getAdPostByUrl } from '../../../../../lib/prisma/prismaNews';
 import { getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
-import { ArticleCardData } from '../../../../../lib/types/UiHelperTypes';
+import { ArticleData } from '../../../../../lib/types/ArticleTypes';
+
 
 type Props = {
     country: country | null;
     institution: institution;
-    articleData: ArticleCardData;
+    articleData: ArticleData;
 }
 
 const InstitutionArticle = ({ country, institution, articleData }: Props) => {
 
     const { t, lang } = useTranslation("institution");
+
+    // const output = useMemo(() => {
+    //     return parseTiptapContent(articleData.content)
+    // }, [articleData]);
+
+    const parser = new TipTapParser();
+    const rendered = parser.renderJson(articleData.content);
 
     return (
         <ResponsiveWrapper>
@@ -32,6 +41,13 @@ const InstitutionArticle = ({ country, institution, articleData }: Props) => {
             <Stack>
                 <Title order={1}>{articleData.title}</Title>
                 <Text>{articleData.excerpt}</Text>
+
+
+                {rendered}
+                {/* <TypographyStylesProvider>
+                    <div dangerouslySetInnerHTML={{ __html: output }} />
+                </TypographyStylesProvider> */}
+
             </Stack>
 
         </ResponsiveWrapper>
