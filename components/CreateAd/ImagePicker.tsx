@@ -1,4 +1,4 @@
-import { ActionIcon, createStyles, FileInput, Group, Stack } from '@mantine/core';
+import { ActionIcon, createStyles, FileInput, Stack } from '@mantine/core';
 import { IconUpload, IconX } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import HelpPopover from '../Popover/HelpPopover';
@@ -11,9 +11,12 @@ type ImagePickerProps = {
     image: File | null
     setImage: (image: File | null) => void
     setImageFilepath: (imageFilepath: string | undefined) => void
+    label: string
+    placeholder: string
+    helper: string
 }
 
-const ImagePicker = ({ image, setImage, setImageFilepath }: ImagePickerProps) => {
+const ImagePicker = ({ image, setImage, setImageFilepath, label, placeholder, helper }: ImagePickerProps) => {
 
     const { classes, theme } = useStyles();
 
@@ -45,12 +48,12 @@ const ImagePicker = ({ image, setImage, setImageFilepath }: ImagePickerProps) =>
     return (
         <Stack spacing={'xs'}>
             <FileInput
-                label="Pick image"
+                label={label}
                 value={image}
                 onChange={handleSetImage}
                 radius={theme.radius.md}
                 icon={<IconUpload size={14} />}
-                placeholder="Pick image"
+                placeholder={placeholder}
                 withAsterisk
                 accept="image/png,image/jpeg"
                 sx={{ flex: 1, flexGrow: 2 }}
@@ -61,7 +64,7 @@ const ImagePicker = ({ image, setImage, setImageFilepath }: ImagePickerProps) =>
                     </ActionIcon>
                 }
             />
-            <HelpPopover helpText='The description placed inside your ad.' />
+            <HelpPopover helpText={helper} />
         </Stack>
     )
 }

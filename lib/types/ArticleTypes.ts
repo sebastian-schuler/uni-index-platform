@@ -3,10 +3,13 @@ import { JSONContent } from "@tiptap/react"
 export type ArticleCardData = {
     id: string
     url: string
-    title: string
+    title: { [key: string]: string }
     excerpt: string
-    imageUrl: string | null
-    date: number
+    date: number,
+    image: {
+        id: string
+        filetype: string
+    }
     institution: {
         name: string
         url: string

@@ -1,13 +1,98 @@
 {
-  "menu-item-dashboard": "Dashboard",
-  "menu-item-newad": "Create new ad",
-  "menu-item-manageads": "Manage ads",
-  "menu-item-history": "History",
-  "menu-item-support": "Contact our support",
-  "menu-item-settings": "Settings",
-  "menu-item-logout": "Log out",
-  "menu-item-openmain": "Open Uni-Index",
-  "menu-item-institution": "Open Institution Page",
+  "nav": {
+    "dashboard": "Dashboard",
+    "create-ad": "Create new ad",
+    "manage-ads": "Manage ads",
+    "history": "History",
+    "support": "Contact our support",
+    "settings": "Settings",
+    "logout": "Log out",
+    "main-page": "Uni-Index Homepage"
+  },
+
+  "create-ad": {
+    "title": "Create new ad",
+
+    "type": {
+      "label": "Type",
+      "helper": "Do you want to create an ad or an article?",
+      "label-link": "Link",
+      "label-article": "Article"
+    },
+
+    "ad": {
+      "section-title": "Link details",
+      "linked": {
+        "label": "Linked item",
+        "helper": "Do you want your ad to link to your entire institution page, or just one specific subject?",
+        "label-institution": "Institution",
+        "label-subject": "Subject"
+      },
+      "subject": {
+        "label": "Subject",
+        "helper": "Select the subject you want to advertise for.",
+        "nothing-found": "No subjects found."
+      },
+      "title": {
+        "label": "Title",
+        "placeholder": "Enter a title for your ad",
+        "helper": "The title will be displayed on top of the ad."
+      },
+      "size": {
+        "label": "Size",
+        "helper": "The size your ad should be, check the preview. This also affects the price.",
+        "label-large": "Large",
+        "label-medium": "Medium",
+        "label-small": "Small"
+      },
+      "image": {
+        "label": "Image",
+        "placeholder": "Pick an image for your ad",
+        "helper": "The image will be displayed on the ad."
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Enter a description for your ad",
+        "helper": "The description will be displayed below the title."
+      },
+      "dates": {
+        "label": "Select time frame",
+        "placeholder": "Select from and to date",
+        "helper": "How long you want to book your ad for. Starting from the day after the booking until the day of your choosing, inclusive."
+      },
+      "preview": {
+        "title": "Preview",
+        "title-placeholder": "[Title]",
+        "description-placeholder": "[Description]"
+      }
+    },
+
+    "article": {
+      "title": {
+        "label": "Title",
+        "placeholder": "Enter a title for your article",
+        "helper": "The title will be displayed on top of the article."
+      },
+      "image": {
+        "label": "Image",
+        "placeholder": "Pick a thumbnail image for your article",
+        "helper": "The image will be displayed on top of the article and will be used as a preview image in search results."
+      },
+      "image-preview-label": "Image preview"
+    },
+
+    "days-booked-label": {
+      "0": "No dates selected",
+      "one": "<0>One</0> day selected",
+      "other": "<0>{{count}}</0> days selected"
+    },
+
+    "helper-text-label": "Learn more",
+    "summary-title": "Summary",
+    "cost-label": "<0>{{cost}}</0> estimated total cost.",
+    "error-required-fields": "Please fill in all required fields.",
+    "submit-button": "Submit booking"
+  },
 
   "ad-col-id": "ID",
   "ad-col-booked-until": "Booked until",

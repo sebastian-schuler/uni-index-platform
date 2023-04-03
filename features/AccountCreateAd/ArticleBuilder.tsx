@@ -4,17 +4,22 @@ import CreateAdTextField from '../../components/CreateAd/CreateAdTextField';
 import ImagePicker from '../../components/CreateAd/ImagePicker';
 import ArticleEditor from './ArticleEditor';
 import React, { useState } from 'react';
+import useTranslation from 'next-translate/useTranslation';
+import CreateAdTextArea from '../../components/CreateAd/CreateAdTextArea';
 
 type Props = {
     editor: Editor | null
     title: string
     setTitle: (title: string) => void
+    excerpt: string
+    setExcerpt: (excerpt: string) => void
     image: File | null
     setImage: (image: File | null) => void
 }
 
-const ArticleBuilder = ({ editor, title, setTitle, image, setImage }: Props) => {
+const ArticleBuilder = ({ editor, title, setTitle, excerpt, setExcerpt, image, setImage }: Props) => {
 
+    const { t } = useTranslation('account');
     const [imageFilepath, setImageFilepath] = useState<string | undefined>(undefined);
     const theme = useMantineTheme();
 
@@ -27,11 +32,21 @@ const ArticleBuilder = ({ editor, title, setTitle, image, setImage }: Props) => 
                     <CreateAdTextField
                         value={title}
                         onChange={setTitle}
-                        label="Title"
-                        placeholder="Enter a title for your article"
-                        helpText="The title of your article."
+                        label={t('create-ad.article.title.label')}
+                        placeholder={t('create-ad.article.title.placeholder')}
+                        helpText={t('create-ad.article.title.helper')}
+                    />
+                    <CreateAdTextArea
+                        label='Excerpt'
+                        helper='This will be shown on the article card'
+                        placeholder='Write a short excerpt here'
+                        onChange={setExcerpt}
+                        value={excerpt}
                     />
                     <ImagePicker
+                        label={t('create-ad.article.image.label')}
+                        placeholder={t('create-ad.article.image.placeholder')}
+                        helper={t('create-ad.article.image.helper')}
                         image={image}
                         setImage={setImage}
                         setImageFilepath={setImageFilepath}
@@ -46,7 +61,7 @@ const ArticleBuilder = ({ editor, title, setTitle, image, setImage }: Props) => 
                         )
                     }
 
-                    <Text align='center' size='sm'>Image Preview</Text>
+                    <Text align='center' size='sm'>{t('create-ad.article.image-preview-label')}</Text>
                 </Stack>
             </SimpleGrid>
 

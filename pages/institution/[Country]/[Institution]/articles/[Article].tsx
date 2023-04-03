@@ -1,4 +1,4 @@
-import { Stack, Text, Title } from '@mantine/core';
+import { Stack, Text, Title, Divider } from '@mantine/core';
 import { country, institution } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
@@ -39,9 +39,9 @@ const InstitutionArticle = ({ country, institution, articleData }: Props) => {
             <Breadcrumb countryInfo={country} institutionInfo={institution} />
 
             <Stack>
-                <Title order={1}>{articleData.title}</Title>
+                <Title order={1}>{articleData.title.en}</Title>
                 <Text>{articleData.excerpt}</Text>
-
+                <Divider />
 
                 {rendered}
                 {/* <TypographyStylesProvider>
@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
     const country = await getCountry(countryUrl);
     const institution = await getInstitution({ institutionUrl });
-    const articleData = await getAdPostByUrl(articleUrl, institutionUrl, lang);
+    const articleData = await getAdPostByUrl(encodeURIComponent(articleUrl), institutionUrl, lang);
 
     if (!articleData || !institution || !country) {
         return { notFound: true }

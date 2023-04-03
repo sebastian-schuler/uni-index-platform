@@ -4,24 +4,26 @@ import HelpPopover from '../Popover/HelpPopover'
 
 type CreateAdTextAreaProps = {
     label: string
+    placeholder: string
+    helper: string
     value: string
     onChange: (value: string) => void
     error?: boolean | React.ReactNode
 }
 
-const CreateAdTextArea = ({ label, value, onChange, error }: CreateAdTextAreaProps) => {
+const CreateAdTextArea = ({ label, placeholder, helper, value, onChange, error }: CreateAdTextAreaProps) => {
     return (
         <Stack spacing={'xs'}>
             <Textarea
                 label={label}
-                placeholder="Your description"
+                placeholder={placeholder}
                 radius="md"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 error={error}
                 required
             />
-            <HelpPopover helpText='The description placed inside your ad.' />
+            <HelpPopover helpText={helper} />
         </Stack>
     )
 }

@@ -6,10 +6,13 @@ import HelpPopover from '../../components/Popover/HelpPopover';
 import { FromToDateRange } from '../../lib/types/UiHelperTypes';
 
 type Props = {
+    label: string
+    placeholder: string
+    helper: string
     onChange: (value: FromToDateRange | undefined) => void
 }
 
-const AdDateRangePicker = ({ onChange }: Props) => {
+const AdDateRangePicker = ({ label, placeholder, helper, onChange }: Props) => {
 
     const theme = useMantineTheme();
     const { lang, t } = useTranslation();
@@ -32,10 +35,10 @@ const AdDateRangePicker = ({ onChange }: Props) => {
     return (
         <Stack spacing={'xs'}>
             <DatePickerInput
-                label='Select time frame'
+                label={label}
                 type='range'
                 required
-                placeholder='Select until date'
+                placeholder={placeholder}
                 value={value}
                 onChange={onChangeRange}
                 radius={theme.radius.md}
@@ -66,7 +69,7 @@ const AdDateRangePicker = ({ onChange }: Props) => {
                     );
                 }}
             />
-            <HelpPopover helpText='How long you want to book your ad for. Starting from the day after the booking until the day of your choosing, inclusive.' />
+            <HelpPopover helpText={helper} />
         </Stack>
     )
 }

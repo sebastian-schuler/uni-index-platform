@@ -1,5 +1,5 @@
 import { Button, createStyles, getStylesRef, Group, Navbar } from '@mantine/core';
-import { IconArticle, IconDashboard, IconHelp, IconHistory, IconHome, IconLogout, IconPencilPlus, IconSettings } from '@tabler/icons-react';
+import { IconArticle, IconDashboard, IconExternalLink, IconHelp, IconHistory, IconLogout, IconPencilPlus, IconSettings } from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -32,8 +32,7 @@ const useStyles = createStyles((theme, _params) => {
         footer: {
             paddingTop: theme.spacing.md,
             marginTop: theme.spacing.md,
-            borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
-                }`,
+            borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}`,
         },
 
         link: {
@@ -84,25 +83,14 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedEmail }: Props) =>
 
     const { deleteAuthToken } = useAuth();
     const { t } = useTranslation("account");
-    const langContent = {
-        mniDashboard: t("menu-item-dashboard"),
-        mniNewAd: t("menu-item-newad"),
-        mniManageAds: t('menu-item-manageads'),
-        mniHistory: t('menu-item-history'),
-        mniSupport: t('menu-item-support'),
-        mniSettings: t('menu-item-settings'),
-        mniLogout: t('menu-item-logout'),
-        mniOpenMain: t('menu-item-openmain'),
-        mniOpenInstitution: t('menu-item-institution'),
-    }
 
     const data = [
-        { link: '/account', label: langContent.mniDashboard, icon: IconDashboard },
-        { link: '/account/create-ad', label: langContent.mniNewAd, icon: IconPencilPlus },
-        { link: '/account/manage-ads', label: langContent.mniManageAds, icon: IconArticle },
-        { link: '/account/history', label: langContent.mniHistory, icon: IconHistory },
-        { link: '/account/support', label: langContent.mniSupport, icon: IconHelp },
-        { link: '/account/settings', label: langContent.mniSettings, icon: IconSettings },
+        { link: '/account', label: t("nav.dashboard"), icon: IconDashboard },
+        { link: '/account/create-ad', label: t("nav.create-ad"), icon: IconPencilPlus },
+        { link: '/account/manage-ads', label: t('nav.manage-ads'), icon: IconArticle },
+        { link: '/account/history', label: t('nav.history'), icon: IconHistory },
+        { link: '/account/support', label: t('nav.support'), icon: IconHelp },
+        { link: '/account/settings', label: t('nav.settings'), icon: IconSettings },
     ];
 
     const router = useRouter()
@@ -143,14 +131,13 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedEmail }: Props) =>
                         variant="subtle"
                         fullWidth
                     >
-                        <IconHome className={classes.linkIcon} stroke={1.5} />
-                        <span>Uni-Index Homepage</span>
+                        <IconExternalLink className={classes.linkIcon} stroke={1.5} />
+                        <span>{t('nav.main-page')}</span>
                     </Button>
                 </Group>
             </Navbar.Section>
 
             <Navbar.Section className={classes.footer}>
-
                 <Button
                     component='button'
                     variant='subtle'
@@ -162,7 +149,7 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedEmail }: Props) =>
                     }}
                 >
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
-                    <span>Logout</span>
+                    <span>{t('nav.logout')}</span>
                 </Button>
             </Navbar.Section>
         </Navbar>

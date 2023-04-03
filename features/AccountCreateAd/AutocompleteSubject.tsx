@@ -9,6 +9,9 @@ export type SubjectAutofill = {
 }
 
 type PropsAutocompleteSubject = {
+    label: string
+    helper: string
+    nothingFound: string
     selectedAdSubject: SubjectAutofill | undefined
     setSelectedAdSubject: (subject: SubjectAutofill | undefined) => void
     subjects: {
@@ -17,7 +20,7 @@ type PropsAutocompleteSubject = {
     }[]
 }
 
-const AutocompleteSubject = ({ selectedAdSubject, setSelectedAdSubject, subjects }: PropsAutocompleteSubject) => {
+const AutocompleteSubject = ({ label, helper, nothingFound, selectedAdSubject, setSelectedAdSubject, subjects }: PropsAutocompleteSubject) => {
 
     const theme = useMantineTheme();
     const [typedAdSubject, setTypedAdSubject] = useState<string>("");
@@ -26,7 +29,7 @@ const AutocompleteSubject = ({ selectedAdSubject, setSelectedAdSubject, subjects
     return (
         <Stack spacing={'sm'}>
             <Autocomplete
-                label='Subject'
+                label={label}
                 value={selectedAdSubject?.value}
                 onChange={(value) => {
                     setSelectedAdSubject(data.find((subject) => subject.value === value));
@@ -35,7 +38,7 @@ const AutocompleteSubject = ({ selectedAdSubject, setSelectedAdSubject, subjects
                 icon={<IconSchool color={theme.colors.brandGray[0]} />}
                 radius={theme.radius.md}
                 data={data}
-                nothingFound="No subjects found"
+                nothingFound={nothingFound}
                 required
                 limit={6}
                 sx={{ flexGrow: 1 }}
@@ -43,7 +46,7 @@ const AutocompleteSubject = ({ selectedAdSubject, setSelectedAdSubject, subjects
                     typedAdSubject.length !== 0 && selectedAdSubject === undefined
                 }
             />
-            <HelpPopover helpText='Select the subject you want to advertise for.' />
+            <HelpPopover helpText={helper} />
         </Stack>
 
     )

@@ -1,9 +1,8 @@
 import { Box, px, Text, useMantineTheme } from '@mantine/core'
+import useTranslation from 'next-translate/useTranslation'
 import AdCardLarge from '../../components/Card/AdCardLarge'
 import AdCardMedium from '../../components/Card/AdCardMedium'
 import AdCardSmall from '../../components/Card/AdCardSmall'
-import { UserDataProfile } from '../../lib/types/AccountHandlingTypes'
-import { SubjectAutofill } from './AutocompleteSubject'
 import { CreateAdLinkedItemType } from './CreateAdBuilder'
 
 const PRIMARY_AD_HEIGHT = 400;
@@ -18,6 +17,7 @@ type AdPreviewProps = {
 
 const AdPreview = ({ title, adSize, description, adLinkedItemType, imageFilepath }: AdPreviewProps) => {
 
+    const { t } = useTranslation('account');
     const theme = useMantineTheme();
     const SECONDARY_AD_HEIGHT = PRIMARY_AD_HEIGHT / 2 - px(theme.spacing.lg) / 2;
 
@@ -27,19 +27,19 @@ const AdPreview = ({ title, adSize, description, adLinkedItemType, imageFilepath
      */
     const getAdHeadline = (): string => {
         if (title === "") {
-            return "[Title]";
+            return t('create-ad.ad.preview.title-placeholder');
         }
         return title;
     }
 
     return (
         <div>
-            <Text size={"xl"} color={"dimmed"} weight={"bold"}>Preview</Text>
+            <Text size={"xl"} color={"dimmed"} weight={"bold"}>{t('create-ad.ad.preview.title')}</Text>
 
             {
                 adSize === 3 &&
                 <AdCardLarge
-                    description={description === "" ? "[Description]" : description}
+                    description={description === "" ? t('create-ad.ad.preview.description-placeholder') : description}
                     subtext='subtext'
                     title={getAdHeadline()}
                     link='#'
@@ -52,7 +52,7 @@ const AdPreview = ({ title, adSize, description, adLinkedItemType, imageFilepath
                 adSize === 2 &&
                 <AdCardMedium
                     subtext='subtext'
-                    description={description === "" ? "[Description]" : description}
+                    description={description === "" ? t('create-ad.ad.preview.description-placeholder') : description}
                     title={getAdHeadline()}
                     link='#'
                     colHeight={SECONDARY_AD_HEIGHT}
@@ -65,7 +65,7 @@ const AdPreview = ({ title, adSize, description, adLinkedItemType, imageFilepath
                 <Box sx={{ maxWidth: 260 }}>
                     <AdCardSmall
                         subtext='subtext'
-                        description={description === "" ? "[Description]" : description}
+                        description={description === "" ? t('create-ad.ad.preview.description-placeholder') : description}
                         title={getAdHeadline()}
                         link='#'
                         adType={adLinkedItemType}

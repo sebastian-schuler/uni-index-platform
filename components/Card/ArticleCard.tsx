@@ -1,14 +1,13 @@
-import { Anchor, Box, Card, createStyles, Group, Image, Text } from '@mantine/core'
+import { Anchor, Card, createStyles, Group, Image, Text } from '@mantine/core'
+import Flags from 'country-flag-icons/react/3x2'
 import dayjs from 'dayjs'
 import useTranslation from 'next-translate/useTranslation'
-import React from 'react'
-import { ArticleCardData } from '../../lib/types/UiHelperTypes'
-import CardTitle from '../Text/CardTitle'
-import Flags from 'country-flag-icons/react/3x2'
-import { toLink } from '../../lib/util/util'
-import { URL_INSTITUTION, URL_INSTITUTION_ARTICLES } from '../../lib/url-helper/urlConstants'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
+import React from 'react'
+import { ArticleCardData } from '../../lib/types/ArticleTypes'
+import { URL_INSTITUTION, URL_INSTITUTION_ARTICLES } from '../../lib/url-helper/urlConstants'
+import { toLink } from '../../lib/util/util'
+import CardTitle from '../Text/CardTitle'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -42,27 +41,27 @@ const ArticleCard: React.FC<Props> = ({ data }: Props) => {
 
     const { classes, theme } = useStyles();
     const { t } = useTranslation('common');
-    
+
     const url = toLink(URL_INSTITUTION, data.country.url, data.institution.url, URL_INSTITUTION_ARTICLES, data.url);
     const urlInstitution = toLink(URL_INSTITUTION, data.country.url, data.institution.url, URL_INSTITUTION_ARTICLES);
 
     const code = data.country.countryCode || "EU";
     let Flag: any = undefined;
     if (Object.keys(Flags).includes(code)) {
-      // @ts-ignore
-      Flag = Flags[code] || Flags["EU"];
+        // @ts-ignore
+        Flag = Flags[code] || Flags["EU"];
     }
 
     return (
         <Card withBorder radius="md" shadow={"sm"} className={classes.card}>
 
             <Card.Section>
-                <Image src={data.imageUrl} fit="cover" height={200} alt={""} />
+                <Image src={`/api/image/${data.image.id}`} fit="cover" height={200} alt={""} />
             </Card.Section>
 
             <Card.Section className={classes.section}>
                 <Group position='apart'>
-                    <CardTitle href={url} text={data.title} />
+                    <CardTitle href={url} text={data.title.en} />
                     <Flag className={classes.flag} />
                 </Group>
                 <Text>{dayjs(data.date).format('DD/MM/YYYY')}</Text>

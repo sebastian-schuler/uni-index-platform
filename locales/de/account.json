@@ -1,13 +1,98 @@
 {
-  "menu-item-dashboard": "Dashboard",
-  "menu-item-newad": "Neue Anzeige",
-  "menu-item-manageads": "Anzeigen verwalten",
-  "menu-item-history": "Verlauf",
-  "menu-item-support": "Support kontaktieren",
-  "menu-item-settings": "Einstellungen",
-  "menu-item-logout": "Ausloggen",
-  "menu-item-openmain": "Uni-Index öffnen",
-  "menu-item-institution": "Universitätsseite öffnen",
+  "nav": {
+    "dashboard": "Dashboard",
+    "create-ad": "Neue Anzeige",
+    "manage-ads": "Manage ads",
+    "history": "Verlauf",
+    "support": "Support kontaktieren",
+    "settings": "Einstellungen",
+    "logout": "Ausloggen",
+    "main-page": "Uni-Index öffnen"
+  },
+
+  "create-ad": {
+    "title": "Neue Anzeige erstellen",
+
+    "type": {
+      "label": "Art",
+      "helper": "Möchten Sie eine Anzeige oder einen Artikel erstellen?",
+      "label-link": "Link",
+      "label-article": "Artikel"
+    },
+
+    "ad": {
+      "section-title": "Link Details",
+      "linked": {
+        "label": "Verknüpftes Objekt",
+        "helper": "Möchten Sie, dass Ihre Anzeige mit der gesamten Seite Ihrer Einrichtung verlinkt wird, oder nur mit einem bestimmten Studiengang?",
+        "label-institution": "Institution",
+        "label-subject": "Studiengang"
+      },
+      "subject": {
+        "label": "Studiengang",
+        "helper": "Wählen Sie den Studiengang, für das Sie werben möchten.",
+        "nothing-found": "Keine Studiengänge gefunden."
+      },
+      "title": {
+        "label": "Titel",
+        "placeholder": "Titel für Ihre Anzeige eingeben",
+        "helper": "Der Titel wird oben in der Anzeige dargestellt."
+      },
+      "size": {
+        "label": "Größe",
+        "helper": "Wie groß Ihre Anzeige sein sollte - siehe Vorschau. Dies wirkt sich auch auf den Preis aus.",
+        "label-large": "Groß",
+        "label-medium": "Medium",
+        "label-small": "Klein"
+      },
+      "image": {
+        "label": "Bild",
+        "placeholder": "Wählen Sie ein Bild für Ihre Anzeige",
+        "helper": "Das Bild wird auf der Anzeige dargestellt."
+      },
+      "description": {
+        "label": "Beschreibung",
+        "placeholder": "Beschreibung für Ihre Anzeige eingeben",
+        "helper": "Die Beschreibung wird unterhalb des Titels angezeigt."
+      },
+      "dates": {
+        "label": "Zeitrahmen auswählen",
+        "placeholder": "Von und bis Datum auswählen",
+        "helper": "Für welchen Zeitraum Sie Ihre Anzeige buchen möchten. "
+      },
+      "preview": {
+        "title": "Vorschau",
+        "title-placeholder": "[Titel]",
+        "description-placeholder": "[Beschreibung]"
+      }
+    },
+
+    "article": {
+      "title": {
+        "label": "Titel",
+        "placeholder": "Titel für Ihren Artikel eingeben",
+        "helper": "Der Titel wird oben in der Anzeige dargestellt."
+      },
+      "image": {
+        "label": "Bild",
+        "placeholder": "Wählen Sie ein Vorschaubild für Ihren Artikel",
+        "helper": "Das Bild wird im oberen Teil des Artikels angezeigt und in den Suchergebnissen als Vorschaubild verwendet."
+      },
+      "image-preview-label": "Bildvorschau"
+    },
+
+    "days-booked-label": {
+      "0": "Keine Daten ausgewählt",
+      "one": "<0>Einen</0> Tag ausgewählt",
+      "other": "<0>{{count}}</0> Tage ausgewählt"
+    },
+
+    "helper-text-label": "Mehr erfahren",
+    "summary-title": "Übersicht",
+    "cost-label": "<0>{{cost}}</0> geschätzte Gesamtkosten",
+    "error-required-fields": "Bitte füllen Sie alle erforderlichen Felder aus.",
+    "submit-button": "Abschicken"
+  },
 
   "ad-col-id": "ID",
   "ad-col-booked-until": "Gebucht bis",

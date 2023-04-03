@@ -1,14 +1,14 @@
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ResponsiveWrapper from '../components/Container/ResponsiveWrapper'
-import { SimpleGrid, Stack } from '@mantine/core'
+import { Image, SimpleGrid, Stack } from '@mantine/core'
 import ArticleCard from '../components/Card/ArticleCard';
-import { ArticleCardData } from '../lib/types/UiHelperTypes';
 import { GetServerSideProps } from 'next';
 import { getAllAdPosts } from '../lib/prisma/prismaNews';
 import GenericPageHeader from '../components/Block/GenericPageHeader';
 import Breadcrumb from '../features/Breadcrumb/Breadcrumb';
+import { ArticleCardData } from '../lib/types/ArticleTypes';
 
 type Props = {
     articles: ArticleCardData[]

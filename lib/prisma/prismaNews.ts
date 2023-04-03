@@ -1,4 +1,4 @@
-import { country } from '@prisma/client';
+import { country, user_image } from '@prisma/client';
 import { getLocalizedName } from '../util/util';
 import prisma from './prisma';
 import { ArticleCardData, ArticleData } from '../types/ArticleTypes';
@@ -31,6 +31,12 @@ export const getAdPostByUrl = async (postUrl: string, institutionUrl: string, la
             }
         },
         include: {
+            user_image: {
+                select: {
+                    id: true,
+                    filetype: true,
+                }
+            },
             user: {
                 select: {
                     institution: {
@@ -61,14 +67,20 @@ export const getAdPostByUrl = async (postUrl: string, institutionUrl: string, la
     });
 
     if (res) {
-        return ({
+
+        const title = res.title as { [key: string]: string };
+
+        const result: ArticleData = {
             id: res.id,
             excerpt: res.excerpt,
             url: res.url,
-            title: res.title,
-            imageUrl: res.image_id,
+            title: title,
             date: Number(res.date_posted),
             content: res.content as JSONContent,
+            image: {
+                id: res.user_image.id,
+                filetype: res.user_image.filetype,
+            },
             country: {
                 url: res.user.institution.city.state.country.url,
                 name: getLocalizedName({ lang, dbTranslated: res.user.institution.city.state.country as country }),
@@ -78,7 +90,9 @@ export const getAdPostByUrl = async (postUrl: string, institutionUrl: string, la
                 name: res.user.institution.name,
                 url: res.user.institution.url,
             }
-        });
+        }
+        return result;
+
     } else {
         return null;
     }
@@ -101,6 +115,12 @@ export const getAllAdPosts = async (lang: string, institutionIdFilter?: string):
             image_id: true,
             url: true,
             date_posted: true,
+            user_image: {
+                select: {
+                    id: true,
+                    filetype: true,
+                }
+            },
             user: {
                 select: {
                     institution: {
@@ -130,14 +150,22 @@ export const getAllAdPosts = async (lang: string, institutionIdFilter?: string):
         }
     });
 
+
+
     return res.map((item) => {
-        return ({
+
+        const title = item.title as { [key: string]: string };
+
+        const result: ArticleCardData = {
             id: item.id,
             excerpt: item.excerpt,
             url: item.url,
-            title: item.title,
-            imageUrl: item.image_id,
+            title: title,
             date: Number(item.date_posted),
+            image: {
+                id: item.user_image.id,
+                filetype: item.user_image.filetype,
+            },
             country: {
                 url: item.user.institution.city.state.country.url,
                 name: getLocalizedName({ lang, dbTranslated: item.user.institution.city.state.country as country }),
@@ -147,6 +175,48 @@ export const getAllAdPosts = async (lang: string, institutionIdFilter?: string):
                 name: item.user.institution.name,
                 url: item.user.institution.url,
             }
-        })
+        }
+        return result;
+    });
+}
+
+
+type NewArticleProps = {
+    title: { [key: string]: string }
+    user_id: string
+    content: JSONContent
+    excerpt: string
+    url: string
+    filetype: string
+}
+
+export const addNewArticle = async (props: NewArticleProps) => {
+    return await prisma.user_article.create({
+        data: {
+            title: props.title,
+            content: props.content,
+            date_posted: Date.now(),
+            excerpt: props.excerpt,
+            url: props.url,
+            user: {
+                connect: {
+                    id: props.user_id,
+                }
+            },
+            user_image: {
+                create: {
+                    filetype: props.filetype,
+                    upload_date: Date.now(),
+                }
+            }
+        },
+        select: {
+            id: true,
+            user_image: {
+                select: {
+                    id: true,
+                }
+            }
+        }
     });
 }

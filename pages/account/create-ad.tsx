@@ -1,13 +1,13 @@
 import { Box, Button, Center, Divider, Grid, Group, Stack, Text, Title } from '@mantine/core';
 import { useMantineTheme } from '@mantine/styles';
-
 import { IconArticle, IconLink } from '@tabler/icons-react';
-
 import { GetServerSideProps } from 'next';
+import Trans from 'next-translate/Trans';
 import useTranslation from 'next-translate/useTranslation';
 import { useEffect, useState } from 'react';
 import SegmentedSelect from '../../components/CreateAd/SegmentedSelect';
 import ArticleBuilder from '../../features/AccountCreateAd/ArticleBuilder';
+import { getTiptapEditor } from '../../features/AccountCreateAd/ArticleEditor';
 import { SubjectAutofill } from '../../features/AccountCreateAd/AutocompleteSubject';
 import CreateAdBuilder, { CreateAdLinkedItemType } from '../../features/AccountCreateAd/CreateAdBuilder';
 import { getCalculatedAdCost } from '../../lib/accountHandling/costCalculator';
@@ -15,7 +15,6 @@ import { useAuth } from '../../lib/context/SessionContext';
 import { getInstitutionDataFromToken } from '../../lib/prisma/prismaUserAccounts';
 import { CreateAdLinkType, FromToDateRange } from '../../lib/types/UiHelperTypes';
 import { URL_LOGIN } from '../../lib/url-helper/urlConstants';
-import { getTiptapEditor } from '../../features/AccountCreateAd/ArticleEditor';
 
 // TODO 2: Add option to export created ad to a file, so that it can be imported later
 
@@ -58,6 +57,9 @@ const CreateAd = ({ institutionData }: Props) => {
     const [adLinkedItemType, setAdLinkedItemType] = useState<CreateAdLinkedItemType>("institution");
 
     // ====================== ARTICLE VARS ======================
+
+    // Excerpt
+    const [excerpt, setExcerpt] = useState<string>("");
 
     // Article Editor 
     const editor = getTiptapEditor();
@@ -105,6 +107,9 @@ const CreateAd = ({ institutionData }: Props) => {
 
             // Editor has to have at least 4 lines of text
             if ((editor && editor.getJSON().content?.length || 0) <= 3) return true;
+
+            // Excerpt has to be between 10 and 500 characters long
+            if (excerpt.length < 10 || excerpt.length > 500) return true;
 
         }
 
@@ -179,12 +184,11 @@ const CreateAd = ({ institutionData }: Props) => {
         } else if (adLinkType === "article") {
 
             formData.append("title", title);
+            formData.append("excerpt", excerpt);
 
             // Add editor content to the form
             if (editor) {
                 formData.append("content", JSON.stringify(editor.getJSON()));
-
-                console.log(editor.getHTML());
             }
 
         }
@@ -206,11 +210,11 @@ const CreateAd = ({ institutionData }: Props) => {
             <Grid sx={{ maxWidth: theme.breakpoints.lg }}>
 
                 <Grid.Col sm={12} md={6}>
-                    <Title order={1} size='h3' mb={'md'}>Create new ad</Title>
+                    <Title order={1} size='h3' mb={'md'}>{t('create-ad.title')}</Title>
                     <SegmentedSelect
-                        label='Type of ad' value={adLinkType}
+                        label={t('create-ad.type.label')} value={adLinkType}
                         onChange={(value) => setAdLinkType(value as CreateAdLinkType)}
-                        helperText='Do you want your ad to link to your entire institution page, or just one specific subject?'
+                        helperText={t('create-ad.type.helper')}
                         data={{
                             type: "jsx",
                             arr: [
@@ -218,7 +222,7 @@ const CreateAd = ({ institutionData }: Props) => {
                                     label:
                                         <Center>
                                             <IconLink size={16} />
-                                            <Box ml={10}>Link</Box>
+                                            <Box ml={10}>{t('create-ad.type.label-link')}</Box>
                                         </Center>,
                                     value: 'link'
                                 },
@@ -226,7 +230,7 @@ const CreateAd = ({ institutionData }: Props) => {
                                     label:
                                         <Center>
                                             <IconArticle size={16} />
-                                            <Box ml={10}>Article</Box>
+                                            <Box ml={10}>{t('create-ad.type.label-article')}</Box>
                                         </Center>,
                                     value: 'article'
                                 },
@@ -242,7 +246,6 @@ const CreateAd = ({ institutionData }: Props) => {
                             <CreateAdBuilder
                                 title={title}
                                 setTitle={setTitle}
-                                adLinkType={adLinkType}
                                 setSelectedDateRange={setSelectedDateRange}
                                 adSize={adSize}
                                 setAdSize={setAdSize}
@@ -261,6 +264,8 @@ const CreateAd = ({ institutionData }: Props) => {
                                 title={title}
                                 setTitle={setTitle}
                                 editor={editor}
+                                excerpt={excerpt}
+                                setExcerpt={setExcerpt}
                                 image={image}
                                 setImage={setImage}
                             />
@@ -271,24 +276,30 @@ const CreateAd = ({ institutionData }: Props) => {
 
                 <Grid.Col span={12}>
                     <Divider mb={'md'} />
-                    <Title order={2} size='h5' mb={'md'}>Cost</Title>
+                    <Title order={2} size='h5' mb={'md'}>{t('create-ad.summary-title')}</Title>
                     <Group position='apart' align={'flex-start'}>
                         <Stack spacing={'xs'}>
                             {
                                 adLinkType === "link" &&
                                 <Text>
-                                    <Text component='span' weight={500}>{daysBooked}</Text>
-                                    {' days booking'}
+                                    <Trans
+                                        i18nKey='account:create-ad.days-booked-label'
+                                        components={[<Text component='span' weight={500} />]}
+                                        values={{ count: daysBooked }}
+                                    />
                                 </Text>
                             }
                             <Text>
-                                <Text component='span' weight={500}>{getAdCost()}</Text>
-                                {' estimated total cost'}
+                                <Trans
+                                    i18nKey='account:create-ad.cost-label'
+                                    components={[<Text component='span' weight={500} />]}
+                                    values={{ cost: getAdCost() }}
+                                />
                             </Text>
                         </Stack>
                         <Stack spacing={'xs'}>
-                            {submitDisabled && <Text color={'red'}>Please fill out all required fields</Text>}
-                            <Button onClick={submitForm} size={'lg'} disabled={submitDisabled}>Submit booking</Button>
+                            {submitDisabled && <Text color={'red'}>{t('create-ad.error-required-fields')}</Text>}
+                            <Button onClick={submitForm} size={'lg'} disabled={submitDisabled}>{t('create-ad.submit-button')}</Button>
                         </Stack>
                     </Group>
                 </Grid.Col>
