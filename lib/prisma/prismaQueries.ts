@@ -1,6 +1,10 @@
 import { subject } from '@prisma/client';
 import { DetailedUserAd } from '../types/DetailedDatabaseTypes';
 import prisma from './prisma';
+import { toLink } from '../util/util';
+import { URL_INSTITUTION } from '../url-helper/urlConstants';
+import { convertAdToCardData } from '../ads/adConverter';
+import { AdCardData } from '../types/UiHelperTypes';
 
 // ===========================================================
 // ================= FULL DEFAULT GETTER FUNCTIONS ===========
@@ -31,75 +35,6 @@ export const getSubjects = async (categoryId: number) => {
             }
         }
     })
-}
-
-
-// ===========================================================
-// ============ SPECIFIED MANY GETTER FUNCTIONS ==============
-// ===========================================================
-
-/**
- * 
- * @param placementLocation 
- */
-export const getAds = async (placementLocation: string): Promise<DetailedUserAd[]> => {
-    return await prisma.user_ad.findMany({
-        include: {
-            subject: {
-                include: {
-                    subject_category: {
-                        include: {
-                            category: true
-                        }
-                    },
-                }
-            },
-            user: {
-                select: {
-                    institution: {
-                        select: {
-                            url: true,
-                            name: true,
-                            city: {
-                                select: {
-                                    state: {
-                                        select: {
-                                            country: { select: { url: true } }
-                                        }
-                                    }
-                                }
-                            },
-                            institution_city: {
-                                select: {
-                                    city: {
-                                        select: {
-                                            name: true,
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        where: {
-            OR: [
-                {
-                    placement: {
-                        path: ["generic"],
-                        array_contains: [placementLocation],
-                    },
-                },
-                {
-                    placement: {
-                        path: ["generic"],
-                        array_contains: ["all"]
-                    }
-                }
-            ]
-        }
-    });
 }
 
 // ===========================================================

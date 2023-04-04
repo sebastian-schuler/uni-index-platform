@@ -4,6 +4,10 @@ import { city, country, institution, state, subject, subject_category, category,
 
 // AD
 export type DetailedUserAd = user_ad & {
+    user_image: {
+        id: string;
+        filetype: string;
+    } | null,
     subject: (subject & {
         subject_category: (subject_category & {
             category: category;

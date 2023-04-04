@@ -4,6 +4,8 @@ import AdCardLarge from '../../components/Card/AdCardLarge'
 import AdCardMedium from '../../components/Card/AdCardMedium'
 import AdCardSmall from '../../components/Card/AdCardSmall'
 import { CreateAdLinkedItemType } from './CreateAdBuilder'
+import { toLink } from '../../lib/util/util'
+import { PATH_PLACEHOLDER_IMAGES } from '../../lib/url-helper/urlConstants'
 
 const PRIMARY_AD_HEIGHT = 400;
 
@@ -20,6 +22,8 @@ const AdPreview = ({ title, adSize, description, adLinkedItemType, imageFilepath
     const { t } = useTranslation('account');
     const theme = useMantineTheme();
     const SECONDARY_AD_HEIGHT = PRIMARY_AD_HEIGHT / 2 - px(theme.spacing.lg) / 2;
+
+    const subtext = adLinkedItemType === "subject" ? t('create-ad.ad.preview.subtext-institution') : t('create-ad.ad.preview.subtext-subject');
 
     /**
      * Gets the headline of the ad
@@ -40,31 +44,31 @@ const AdPreview = ({ title, adSize, description, adLinkedItemType, imageFilepath
                 adSize === 3 &&
                 <AdCardLarge
                     description={description === "" ? t('create-ad.ad.preview.description-placeholder') : description}
-                    subtext='subtext'
+                    subtext={subtext}
                     title={getAdHeadline()}
                     link='#'
                     colHeight={PRIMARY_AD_HEIGHT}
                     adType={adLinkedItemType}
-                    imgUrl={imageFilepath}
+                    imageFilePath={imageFilepath || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")}
                     disableLink
                 />
                 ||
                 adSize === 2 &&
                 <AdCardMedium
-                    subtext='subtext'
+                    subtext={subtext}
                     description={description === "" ? t('create-ad.ad.preview.description-placeholder') : description}
                     title={getAdHeadline()}
                     link='#'
                     colHeight={SECONDARY_AD_HEIGHT}
                     adType={adLinkedItemType}
-                    imgUrl={imageFilepath}
+                    imageFilePath={imageFilepath || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")}
                     disableLink
                 />
                 ||
                 adSize === 1 &&
                 <Box sx={{ maxWidth: 260 }}>
                     <AdCardSmall
-                        subtext='subtext'
+                        subtext={subtext}
                         description={description === "" ? t('create-ad.ad.preview.description-placeholder') : description}
                         title={getAdHeadline()}
                         link='#'

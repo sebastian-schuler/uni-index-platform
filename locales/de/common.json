@@ -25,6 +25,10 @@
     "social-media-ranking": "Social-Media Rangliste"
   },
 
+  "settings": {
+    "language-label": "Sprache"
+  },
+
   "card-state": {
     "label-cities": {
       "0": "Keine Städte",
@@ -121,6 +125,6 @@
   "footer": {
     "about-title": "Über uns",
     "about-imprint": "Impressum",
-    "about-privacy": "Datenschutzbestimmungen"
+    "about-privacy": "Datenschutz"
   }
 }

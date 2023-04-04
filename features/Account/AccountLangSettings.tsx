@@ -1,4 +1,4 @@
-import { Anchor, createStyles, Divider, Stack, Title } from '@mantine/core';
+import { Anchor, createStyles, Divider, Stack, Text } from '@mantine/core';
 import setLanguage from 'next-translate/setLanguage';
 import useTranslation from 'next-translate/useTranslation';
 import { useState } from 'react';
@@ -39,7 +39,7 @@ const useStyles = createStyles((theme) => ({
 const LanguageSettings = () => {
 
     const locales = i18nConfig.locales.map(locale => getLanguageById(locale)).filter(locale => locale !== undefined) as LocaleItem[];
-    const { lang } = useTranslation('common');
+    const { t, lang } = useTranslation('common');
 
     const [selectedIndex, setSelectedIndex] = useState(locales.findIndex(x => x.id === lang));
     const { classes } = useStyles();
@@ -50,16 +50,13 @@ const LanguageSettings = () => {
     }
     return (
         <Stack spacing={"xs"} sx={{ maxWidth: 400 }}>
-            <Title order={5}>Language</Title>
+            <Text size={'lg'} weight={500}>{t('settings.language-label')}</Text>
             <Stack spacing={0}>
                 {
                     locales.map((locale, i) => (
-                        <div key={i}>
-                            <Anchor component='div' className={i === selectedIndex ? classes.linkSelected : classes.link} onClick={() => handleSelect(i)}>
-                                {locale.text}
-                            </Anchor>
-                            {i !== locales.length - 1 && <Divider />}
-                        </div>
+                        <Anchor key={i} component='div' className={i === selectedIndex ? classes.linkSelected : classes.link} onClick={() => handleSelect(i)}>
+                            {locale.text}
+                        </Anchor>
                     ))
                 }
             </Stack>

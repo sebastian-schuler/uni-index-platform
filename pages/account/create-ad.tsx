@@ -34,6 +34,8 @@ const CreateAd = ({ institutionData }: Props) => {
     const theme = useMantineTheme();
     const { token } = useAuth();
 
+    const [status, setStatus] = useState<"editing" | "success" | "error">("editing");
+
     // ====================== GENERIC VARS ======================
 
     // Title
@@ -146,6 +148,7 @@ const CreateAd = ({ institutionData }: Props) => {
 
         let formData = new FormData();
 
+        formData.append("title", title);
         formData.append("bookingType", adLinkType);
 
         // Add image to the form
@@ -153,7 +156,7 @@ const CreateAd = ({ institutionData }: Props) => {
             if (image) {
                 formData.append("image", image);
             } else {
-                return;
+                // return;
             }
         }
 
@@ -169,21 +172,20 @@ const CreateAd = ({ institutionData }: Props) => {
                 formData.append("dateFrom", selectedDateRange.from.toString());
                 formData.append("dateTo", selectedDateRange.to.toString());
             } else {
-                return;
+                // return;
             }
 
             // If the ad is linked to a subject, add the subject id to the form
             if (adLinkedItemType === "subject") {
                 if (selectedAdSubject) {
-                    formData.append("subject", selectedAdSubject.subjectId.toString());
+                    formData.append("subject", selectedAdSubject.subjectid.toString());
                 } else {
-                    return;
+                    // return;
                 }
             }
 
         } else if (adLinkType === "article") {
 
-            formData.append("title", title);
             formData.append("excerpt", excerpt);
 
             // Add editor content to the form
@@ -200,9 +202,23 @@ const CreateAd = ({ institutionData }: Props) => {
             },
             body: formData
 
-        }).then((t) => t.json());
+        }).then((t) => t);
 
-        console.log(res)
+        if (res.status === 200) {
+            setStatus("success");
+        } else {
+            setStatus("error");
+        }
+
+    }
+
+    // If the ad has been created successfully, show a success message
+    if (status === "success") {
+        return (
+            <div>
+                Your ad has been created successfully!
+            </div>
+        )
     }
 
     return (

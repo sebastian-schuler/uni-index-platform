@@ -1,5 +1,81 @@
-import { Prisma, user_ad } from '@prisma/client';
+import { convertAdToCardData } from '../ads/adConverter';
+import { DetailedUserAd } from '../types/DetailedDatabaseTypes';
+import { AdCardData } from '../types/UiHelperTypes';
 import prisma from './prisma';
+
+/**
+ * 
+ * @param placementLocation 
+ */
+export const getAds = async (placementLocation: string, lang: string): Promise<AdCardData[]> => {
+
+    const resArr: DetailedUserAd[] = await prisma.user_ad.findMany({
+        include: {
+            user_image: {
+                select: {
+                    id: true,
+                    filetype: true
+                }
+            },
+            subject: {
+                include: {
+                    subject_category: {
+                        include: {
+                            category: true
+                        }
+                    },
+                }
+            },
+            user: {
+                select: {
+                    institution: {
+                        select: {
+                            url: true,
+                            name: true,
+                            city: {
+                                select: {
+                                    state: {
+                                        select: {
+                                            country: { select: { url: true } }
+                                        }
+                                    }
+                                }
+                            },
+                            institution_city: {
+                                select: {
+                                    city: {
+                                        select: {
+                                            name: true,
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        where: {
+            OR: [
+                {
+                    placement: {
+                        path: ["generic"],
+                        array_contains: [placementLocation],
+                    },
+                },
+                {
+                    placement: {
+                        path: ["generic"],
+                        array_contains: ["all"]
+                    }
+                }
+            ]
+        }
+    });
+
+    const cards = resArr.map((item) => convertAdToCardData(item, lang));
+    return cards.filter((item) => item !== undefined) as AdCardData[];
+}
 
 type NewAdProps = {
     title: { [key: string]: string } | undefined

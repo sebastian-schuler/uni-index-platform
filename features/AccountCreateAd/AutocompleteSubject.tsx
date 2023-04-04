@@ -5,7 +5,7 @@ import HelpPopover from '../../components/Popover/HelpPopover';
 
 export type SubjectAutofill = {
     value: string
-    subjectId: string
+    subjectid: string
 }
 
 type PropsAutocompleteSubject = {
@@ -24,7 +24,7 @@ const AutocompleteSubject = ({ label, helper, nothingFound, selectedAdSubject, s
 
     const theme = useMantineTheme();
     const [typedAdSubject, setTypedAdSubject] = useState<string>("");
-    const data = subjects.map((subject) => { return { value: subject.name, subjectId: subject.id } });
+    const data: SubjectAutofill[] = subjects.map((subject) => { return { value: subject.name, subjectid: subject.id } });
 
     return (
         <Stack spacing={'sm'}>

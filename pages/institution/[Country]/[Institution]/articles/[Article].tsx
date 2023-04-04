@@ -1,4 +1,4 @@
-import { Stack, Text, Title, Divider } from '@mantine/core';
+import { Stack, Text, Title, Divider, Image, useMantineTheme, Box, Anchor } from '@mantine/core';
 import { country, institution } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
@@ -9,6 +9,10 @@ import { TipTapParser } from '../../../../../lib/parser/tiptapParser';
 import { getAdPostByUrl } from '../../../../../lib/prisma/prismaArticles';
 import { getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
 import { ArticleData } from '../../../../../lib/types/ArticleTypes';
+import { toLink } from '../../../../../lib/util/util';
+import { URL_INSTITUTION } from '../../../../../lib/url-helper/urlConstants';
+import Trans from 'next-translate/Trans';
+import Link from 'next/link';
 
 
 type Props = {
@@ -20,33 +24,42 @@ type Props = {
 const InstitutionArticle = ({ country, institution, articleData }: Props) => {
 
     const { t, lang } = useTranslation("institution");
-
-    // const output = useMemo(() => {
-    //     return parseTiptapContent(articleData.content)
-    // }, [articleData]);
+    const theme = useMantineTheme();
 
     const parser = new TipTapParser();
     const rendered = parser.renderJson(articleData.content);
+    const date = new Date(articleData.date).toLocaleDateString(lang);
+
+    const institutionUrl = toLink(URL_INSTITUTION, articleData.country.url, articleData.institution.url);
+    const title = articleData.title.en;
 
     return (
         <ResponsiveWrapper>
 
             <Head>
-                <title key={"title"}>{t('common:page-title') + " | " + t('meta.screenshots-title', { institution: institution?.name })}</title>
-                <meta key={"description"} name="description" content={t('meta.screenshots-description')} />
+                <title key={"title"}>{t('common:page-title') + " | " + t('meta.article-title', { institution: institution?.name, title: title })}</title>
+                <meta key={"description"} name="description" content={t('meta.article-description', { institution: institution?.name, title: title })} />
             </Head>
 
-            <Breadcrumb countryInfo={country} institutionInfo={institution} />
-
             <Stack>
-                <Title order={1}>{articleData.title.en}</Title>
-                <Text>{articleData.excerpt}</Text>
+                <Breadcrumb countryInfo={country} institutionInfo={institution} />
+                <Box sx={{ maxWidth: theme.breakpoints.xs }}>
+                    <Image src={`/api/image/${articleData.image.id}?ext=${articleData.image.filetype}`} fit="cover" height={200} alt={""} radius={'md'} />
+                </Box>
+                <div>
+                    <Title order={1}>{articleData.title.en}</Title>
+                    <Text>
+                        <Trans
+                            i18nKey='institution:article.subtext'
+                            components={[<Anchor component={Link} href={institutionUrl} />]}
+                            values={{ date: date, author: articleData.institution.name }}
+                        />
+                    </Text>
+                    <Text>{articleData.excerpt}</Text>
+                </div>
                 <Divider />
 
                 {rendered}
-                {/* <TypographyStylesProvider>
-                    <div dangerouslySetInnerHTML={{ __html: output }} />
-                </TypographyStylesProvider> */}
 
             </Stack>
 

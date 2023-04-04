@@ -34,8 +34,7 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
     const { token, deleteAuthToken } = useAuth();
     const [userData, setUserData] = useState<UserDataProfile>(null);
 
-    // Check SM breakpoint to animate drawer
-    const isSmallBreakpoint = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`, false, { getInitialValueInEffect: false })
+    const [active, setActive] = useState(router.asPath);
 
     useEffect(() => {
         // Get user data from API
@@ -50,7 +49,7 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
         }
         getData();
         return () => { }
-    }, [token,deleteAuthToken,router]);
+    }, [token, deleteAuthToken, router]);
 
     return (
         <AppShell
@@ -63,11 +62,19 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
             navbarOffsetBreakpoint="sm"
             asideOffsetBreakpoint="sm"
             navbar={
-                isSmallBreakpoint ?
-                    <Transition mounted={opened} transition="fade" duration={400} timingFunction="ease">
-                        {(styles) => <div style={styles}><AccountNavDrawer displayedEmail={userData?.user.email || ""} opened={opened} /> </div>}
-                    </Transition> :
-                    <AccountNavDrawer displayedEmail={userData?.user.email || ""} opened={opened} />
+                <>
+                    <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
+                        <AccountNavDrawer displayedEmail={userData?.user.email || ""} opened={opened} setOpened={setOpened} active={active} setActive={setActive} />
+                    </MediaQuery>
+
+                    <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+                        <Transition mounted={opened} transition="fade" duration={400} timingFunction="ease">
+                            {(styles) => <div style={styles}>
+                                <AccountNavDrawer displayedEmail={userData?.user.email || ""} opened={opened} setOpened={setOpened} active={active} setActive={setActive} />
+                            </div>}
+                        </Transition>
+                    </MediaQuery>
+                </>
             }
             header={
                 <Header height={50} p="md" className={classes.header}>

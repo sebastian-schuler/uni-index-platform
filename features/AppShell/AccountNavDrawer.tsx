@@ -77,9 +77,12 @@ const useStyles = createStyles((theme, _params) => {
 
 interface Props {
     opened: boolean;
+    setOpened: (opened: boolean) => void;
+    active: string;
+    setActive: (active: string) => void;
     displayedEmail: string;
 }
-const AccountNavDrawer: React.FC<Props> = ({ opened, displayedEmail }: Props) => {
+const AccountNavDrawer: React.FC<Props> = ({ opened, setOpened, active, setActive, displayedEmail }: Props) => {
 
     const { deleteAuthToken } = useAuth();
     const { t } = useTranslation("account");
@@ -96,7 +99,6 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedEmail }: Props) =>
     const router = useRouter()
 
     const { classes, cx } = useStyles();
-    const [active, setActive] = useState(router.asPath);
 
     const links = data.map((item) => (
         <Button
@@ -107,6 +109,7 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedEmail }: Props) =>
             onClick={() => {
                 setActive(item.link);
                 router.push(item.link);
+                setOpened(false);
             }}
         >
             <item.icon className={classes.linkIcon} stroke={1.5} />
@@ -127,6 +130,7 @@ const AccountNavDrawer: React.FC<Props> = ({ opened, displayedEmail }: Props) =>
                     <Button
                         component={Link}
                         href={"/"}
+                        target='_blank'
                         className={classes.link}
                         variant="subtle"
                         fullWidth

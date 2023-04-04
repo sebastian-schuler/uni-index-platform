@@ -68,8 +68,16 @@ export default async function handler(
 
             if (bookingType) {
 
+                console.log(fields.title);
                 const titleString = fields.title ? fields.title as string : null;
                 const title = titleString ? { en: titleString } : undefined;
+
+                // Check if title is missing
+                if (!titleString || !title) {
+                    res.writeHead(400, { 'Content-Type': 'text/plain' });
+                    res.end("Missing title data");
+                    return;
+                }
 
                 let isCreated = false;
                 let imageDbId: string | null = null;
@@ -162,7 +170,7 @@ export default async function handler(
                     image = files.image ? files.image as formidable.File : null;
 
                     // Check if all data is present
-                    if (!title || !content || !excerpt) {
+                    if (!content || !excerpt) {
                         res.writeHead(400, { 'Content-Type': 'text/plain' });
                         res.end("Missing data");
                         return;
@@ -199,21 +207,20 @@ export default async function handler(
                         const mainLocaleTitle = title.en;
                         const newUrl = encodeURIComponent(mainLocaleTitle).normalize("NFC");
 
-                        console.log(title);
                         // Add article to database
-                        // const dbResult = await addNewArticle({
-                        //     title, excerpt, content,
-                        //     url: newUrl,
-                        //     user_id: session.user_id,
-                        //     filetype: fileExtension
-                        // }).catch((err) => {
-                        //     console.log(err);
-                        // });
+                        const dbResult = await addNewArticle({
+                            title, excerpt, content,
+                            url: newUrl,
+                            user_id: session.user_id,
+                            filetype: fileExtension
+                        }).catch((err) => {
+                            console.log(err);
+                        });
 
-                        // if (dbResult) {
-                        //     isCreated = true;
-                        //     imageDbId = dbResult.user_image?.id || null;
-                        // }
+                        if (dbResult) {
+                            isCreated = true;
+                            imageDbId = dbResult.user_image?.id || null;
+                        }
 
                     } else {
                         // If image is missing
@@ -225,32 +232,40 @@ export default async function handler(
 
                 // If article/ad was added to database
                 if (isCreated) {
-                    // Copy image to uploads folder
-                    const isImageCopied = await new Promise(resolve => {
-                        if (image) {
-                            fs.copyFile(image.filepath, path.join('uploads', `${imageDbId}.${fileExtension}`), () => {
-                                resolve(true);
-                            });
+
+                    if (image) {
+                        // Copy image to uploads folder
+                        const isImageCopied = await new Promise(resolve => {
+                            if (image) {
+                                fs.copyFile(image.filepath, path.join('uploads', `${imageDbId}.${fileExtension}`), () => {
+                                    resolve(true);
+                                });
+                            } else {
+                                resolve(false);
+                            }
+                        });
+
+                        // If image was copied
+                        if (isImageCopied) {
+                            res.writeHead(200, { 'Content-Type': 'text/plain' });
+                            res.end("Article created");
+                            return;
                         } else {
-                            resolve(false);
+                            // If image was not copied
+
+                            // Remove article or ad from database
+                            // await removeArticle(dbResult.user_image.id);
+
+                            res.writeHead(500, { 'Content-Type': 'text/plain' });
+                            res.end("Image copy error");
+                            return;
                         }
-                    });
-
-                    // If image was copied
-                    if (isImageCopied) {
+                    }else{
                         res.writeHead(200, { 'Content-Type': 'text/plain' });
-                        res.end("Article created");
-                        return;
-                    } else {
-                        // If image was not copied
-
-                        // Remove article or ad from database
-                        // await removeArticle(dbResult.user_image.id);
-
-                        res.writeHead(500, { 'Content-Type': 'text/plain' });
-                        res.end("Image copy error");
+                        res.end("Ad created");
                         return;
                     }
+
                 } else {
                     // Error on article creation
                     res.writeHead(400, { 'Content-Type': 'text/plain' });

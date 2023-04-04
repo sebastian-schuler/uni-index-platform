@@ -25,6 +25,10 @@
     "social-media-ranking": "Social-Media Ranking"
   },
 
+  "settings": {
+    "language-label": "Language"
+  },
+
   "card-state": {
     "label-cities": {
       "0": "No cities",

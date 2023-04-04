@@ -109,7 +109,8 @@ export type AdCardData = {
     title: string
     subtext: string
     description: string | null
-    imageUrl: string | null
+    imageId: string | null
+    imageExtension: string | null
     type: string
     sizeCost: number
 }

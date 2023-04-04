@@ -19,7 +19,13 @@
     "subjects-description": "Find all subjects offered by {{institution}}.",
 
     "subject-title": "{{subject}} | {{institution}}",
-    "subject-description": "Find out more about {{subject}} offered by {{institution}}."
+    "subject-description": "Find out more about {{subject}} offered by {{institution}}.",
+
+    "articles-title": "Articles | {{institution}}",
+    "articles-description": "Read articles published by {{institution}}.",
+
+    "article-title": "{{title}} | {{institution}}",
+    "article-description": "Read the article \"{{title}}\" published by {{institution}}."
   },
 
   "institutions": {
@@ -104,5 +110,9 @@
     },
     "label-show-details": "Show details of {{category}}",
     "label-score": "Score"
+  },
+
+  "article": {
+    "subtext": "Published on {{date}} by <0>{{author}}</0>"
   }
 }

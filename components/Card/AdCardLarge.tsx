@@ -3,8 +3,6 @@ import { IconBuilding, IconSchool } from '@tabler/icons-react';
 import Link from 'next/link';
 import React, { memo } from 'react';
 import { LARGE_AD_HEIGHT } from '../../features/Ads/AdContainer';
-import { PATH_PLACEHOLDER_IMAGES } from '../../lib/url-helper/urlConstants';
-import { toLink } from '../../lib/util/util';
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -32,14 +30,16 @@ interface Props {
     link: string
     title: string
     subtext: string
-    imgUrl?: string
+    imageId?: string | null
+    imageExtension?: string | null
+    imageFilePath?: string
     description: string
     colHeight: number
     adType: string
     disableLink?: boolean
 }
 
-const AdCardLarge: React.FC<Props> = ({ link, title, subtext, imgUrl, description, colHeight, adType, disableLink }: Props) => {
+const AdCardLarge: React.FC<Props> = ({ link, title, subtext, imageId, imageFilePath, imageExtension, description, colHeight, adType, disableLink }: Props) => {
 
     const { classes, theme } = useStyles();
 
@@ -47,7 +47,7 @@ const AdCardLarge: React.FC<Props> = ({ link, title, subtext, imgUrl, descriptio
         <Card component={"div"} withBorder radius="md" shadow="sm" className={classes.card} title={title} sx={{ height: colHeight }}>
 
             <Card.Section>
-                <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={LARGE_AD_HEIGHT / 2} alt={""} />
+                <Image src={imageFilePath || `/api/image/${imageId}?ext=${imageExtension}`} fit="cover" height={LARGE_AD_HEIGHT / 2} alt={""} />
             </Card.Section>
 
             <Card.Section className={classes.section}>

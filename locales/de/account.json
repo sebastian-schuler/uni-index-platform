@@ -10,6 +10,13 @@
     "main-page": "Uni-Index öffnen"
   },
 
+  "index": {
+    "actions": {
+      "label": "Aktionen",
+      "create-ad": "Neue Anzeige"
+    }
+  },
+
   "create-ad": {
     "title": "Neue Anzeige erstellen",
 
@@ -63,7 +70,9 @@
       "preview": {
         "title": "Vorschau",
         "title-placeholder": "[Titel]",
-        "description-placeholder": "[Beschreibung]"
+        "description-placeholder": "[Beschreibung]",
+        "subtext-subject": "[Stadtname]",
+        "subtext-institution": "[Institutionsname]"
       }
     },
 
@@ -92,6 +101,10 @@
     "cost-label": "<0>{{cost}}</0> geschätzte Gesamtkosten",
     "error-required-fields": "Bitte füllen Sie alle erforderlichen Felder aus.",
     "submit-button": "Abschicken"
+  },
+
+  "settings": {
+    "title": "Einstellungen"
   },
 
   "ad-col-id": "ID",

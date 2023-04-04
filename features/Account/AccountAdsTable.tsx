@@ -59,12 +59,12 @@ const AccountAdsTable: React.FC<Props> = ({ data }: Props) => {
         }
     }
 
-    const rows = data.map((row) => {
+    const rows = data.map((row, i) => {
 
         return (
-            <tr key={Number(row.id)}>
+            <tr key={row.id}>
                 <td>
-                    {Number(row.id)}
+                    {i}
                 </td>
                 <td>
                     <Badge>
@@ -78,7 +78,7 @@ const AccountAdsTable: React.FC<Props> = ({ data }: Props) => {
                 </td>
                 <td>{row.subject?.name}</td>
                 <td>{row.description}</td>
-                <td>{new Date(Number(row.booked_until)).toLocaleDateString()}</td>
+                <td>{new Date(Number(row.booked_until)).toLocaleDateString(lang)}</td>
             </tr>
         );
     });

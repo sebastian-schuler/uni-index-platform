@@ -104,5 +104,9 @@
     },
     "label-show-details": "Details anzeigen von {{category}}",
     "label-score": "Bewertung"
+  },
+
+  "article": {
+    "subtext": "Veröffentlicht am {{date}} von <0>{{{author}}</0>"
   }
 }

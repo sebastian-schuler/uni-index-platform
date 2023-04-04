@@ -10,6 +10,13 @@
     "main-page": "Uni-Index Homepage"
   },
 
+  "index": {
+    "actions": {
+      "label": "Actions",
+      "create-ad": "Create new ad"
+    }
+  },
+
   "create-ad": {
     "title": "Create new ad",
 
@@ -63,7 +70,9 @@
       "preview": {
         "title": "Preview",
         "title-placeholder": "[Title]",
-        "description-placeholder": "[Description]"
+        "description-placeholder": "[Description]",
+        "subtext-subject": "[City Name]",
+        "subtext-institution": "[Institution Name]"
       }
     },
 
@@ -92,6 +101,10 @@
     "cost-label": "<0>{{cost}}</0> estimated total cost.",
     "error-required-fields": "Please fill in all required fields.",
     "submit-button": "Submit booking"
+  },
+
+  "settings": {
+    "title": "Settings"
   },
 
   "ad-col-id": "ID",

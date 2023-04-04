@@ -2,8 +2,6 @@ import { Box, Card, createStyles, Flex, Group, Image, Stack, Text, ThemeIcon } f
 import { IconBuilding, IconSchool } from '@tabler/icons-react'
 import Link from 'next/link'
 import React, { memo } from 'react'
-import { PATH_PLACEHOLDER_IMAGES } from '../../lib/url-helper/urlConstants'
-import { toLink } from '../../lib/util/util'
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -32,13 +30,15 @@ interface Props {
     title: string
     subtext: string
     description: string
-    imgUrl?: string
+    imageId?: string | null
+    imageExtension?: string | null
+    imageFilePath?: string
     colHeight: number
     adType: string
     disableLink?: boolean
 }
 
-const AdCardMedium: React.FC<Props> = ({ title, link, subtext, description, imgUrl, colHeight, adType, disableLink }: Props) => {
+const AdCardMedium: React.FC<Props> = ({ title, link, subtext, description, imageId, imageExtension, imageFilePath, colHeight, adType, disableLink }: Props) => {
 
     const { classes, theme } = useStyles();
 
@@ -47,7 +47,7 @@ const AdCardMedium: React.FC<Props> = ({ title, link, subtext, description, imgU
             <Flex>
 
                 <Box sx={{ width: "50%" }}>
-                    <Image src={imgUrl || toLink(PATH_PLACEHOLDER_IMAGES, "460x140.png")} fit="cover" height={colHeight} alt={""} />
+                    <Image src={imageFilePath || `/api/image/${imageId}?ext=${imageExtension}`} fit="cover" height={colHeight} alt={""} />
                 </Box>
 
                 <Box px={'md'} sx={{ flex: 1 }}>

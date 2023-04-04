@@ -11,13 +11,15 @@ import { URL_LOGIN } from '../../lib/url-helper/urlConstants';
 
 type Props = {
   userData: UserDataProfile
-  userBookedAds: PremiumAdDetailed[]
+  userBookedAds: string
 }
 
 const AccountPage = ({ userData, userBookedAds }: Props) => {
 
   // Language
   const { t, lang } = useTranslation('account');
+
+  const ads: PremiumAdDetailed[] = JSON.parse(userBookedAds);
 
   if (userData === null) return (
     <Center sx={{ height: "80vh", overflow: "hidden" }}>
@@ -42,7 +44,7 @@ const AccountPage = ({ userData, userBookedAds }: Props) => {
         </Grid.Col>
 
         <Grid.Col lg={12}>
-          <AccountAdsTable data={userBookedAds} />
+          <AccountAdsTable data={ads} />
         </Grid.Col>
 
       </Grid>
@@ -85,7 +87,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const props: Props = {
     userData: profile,
-    userBookedAds: ads
+    userBookedAds: JSON.stringify(ads)
   };
   return { props };
 }

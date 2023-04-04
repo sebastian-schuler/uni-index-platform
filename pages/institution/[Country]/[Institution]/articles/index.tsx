@@ -10,7 +10,7 @@ import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
 import InstitutionNav from '../../../../../features/Navigation/InstitutionNav'
 import { getAllAdPosts } from '../../../../../lib/prisma/prismaArticles'
 import { getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
-import { ArticleCardData } from '../../../../../lib/types/UiHelperTypes'
+import { ArticleCardData } from '../../../../../lib/types/ArticleTypes'
 
 type Props = {
   country: country;
@@ -26,8 +26,8 @@ const InstitutionArticlesPage = ({ country, institution, articles }: Props) => {
     <ResponsiveWrapper>
 
       <Head>
-        <title key={"title"}>{t('common:page-title') + " | " + t('meta.screenshots-title', { institution: institution?.name })}</title>
-        <meta key={"description"} name="description" content={t('meta.screenshots-description')} />
+        <title key={"title"}>{t('common:page-title') + " | " + t('meta.articles-title', { institution: institution?.name })}</title>
+        <meta key={"description"} name="description" content={t('meta.articles-description', { institution: institution?.name })} />
       </Head>
 
       <Breadcrumb countryInfo={country} institutionInfo={institution} />

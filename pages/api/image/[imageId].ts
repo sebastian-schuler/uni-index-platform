@@ -7,9 +7,9 @@ export default async function handler(
     res: NextApiResponse
 ) {
 
-    const { imageId } = req.query;
-
-    const path = `uploads/${imageId}.png`;
+    const { imageId, ext } = req.query;
+    const fileExtension = typeof ext === 'string' ? ext : "jpg";
+    const path = `uploads/${imageId}.${fileExtension}`;
 
     if (existsSync(path)) {
 
@@ -19,7 +19,7 @@ export default async function handler(
 
         res.setHeader('Content-Type', 'image/png');
         // res.setHeader('Content-Size', image.length)
-        res.setHeader('Content-Disposition', 'inline; filename="test.png"')
+        res.setHeader('Content-Disposition', `inline; filename="${imageId}.${fileExtension}"`)
         res.status(200);
         res.send(image);
         return;

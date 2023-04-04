@@ -1,26 +1,24 @@
-import { getAds } from "../prisma/prismaQueries";
+import { getAds } from "../prisma/prismaAds";
 import { DetailedUserAd } from "../types/DetailedDatabaseTypes";
 import { AdCardData } from "../types/UiHelperTypes";
-import { URL_INSTITUTION } from "../url-helper/urlConstants";
+import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from "../url-helper/urlConstants";
 import { toLink } from "../util/util";
 
 export const getAdCardArray = async (source: string, lang: string): Promise<AdCardData[][]> => {
 
     // Get ads from database
-    const ads: DetailedUserAd[] = await getAds(source);
+    const ads: AdCardData[] = await getAds(source, lang);
 
-    // Convert ads to card data
-    const adCards = ads.map(ad => convertAdToCardData(ad, lang));
     // sort by size
-    adCards.sort((a, b) => b.sizeCost - a.sizeCost);
+    ads.sort((a, b) => b.sizeCost - a.sizeCost);
 
     // Split into lists of sum of sizeCost <= 8
     const lists: AdCardData[][] = [[]];
     let x = 0;
 
-    for (let i = 0; i < adCards.length; i++) {
+    for (let i = 0; i < ads.length; i++) {
 
-        const ad = adCards[i];
+        const ad = ads[i];
         const currentTotal = lists[x].reduce((acc, curr) => { return acc + curr.sizeCost }, 0);
 
         // Create new list if current list would have sizeCost > 8
@@ -55,19 +53,22 @@ const getAdCost = (ad: DetailedUserAd) => {
  * @param lang 
  * @returns 
  */
-const convertAdToCardData = (ad: DetailedUserAd, lang: string): AdCardData => {
+export const convertAdToCardData = (ad: DetailedUserAd, lang: string): AdCardData | undefined => {
 
     let url = "";
-    let title = "";
+    const titleObject = ad.title as { [key: string]: string };
+    let title = titleObject?.en;
     let subtext = "";
 
+    if (!title || !ad.subject) {
+        return undefined;
+    }
+
     if (ad.type === "subject") {
-        url = toLink(URL_INSTITUTION, ad.user.institution.city.state.country.url, ad.user.institution.url, ad.subject?.url || "");
-        title = ad.subject?.name || "";
+        url = toLink(URL_INSTITUTION, ad.user.institution.city.state.country.url, ad.user.institution.url, URL_INSTITUTION_SUBJECTS, ad.subject.url);
         subtext = ad.user.institution.name;
     } else if (ad.type === "institution") {
-        url = toLink(URL_INSTITUTION, ad.user.institution.city.state.country.url, ad.user.institution.url || "");
-        title = ad.user.institution.name;
+        url = toLink(URL_INSTITUTION, ad.user.institution.city.state.country.url, ad.user.institution.url);
         subtext = ad.user.institution.institution_city.length > 0 ? ad.user.institution.institution_city[0].city.name : "";
     }
 
@@ -78,7 +79,8 @@ const convertAdToCardData = (ad: DetailedUserAd, lang: string): AdCardData => {
         fullUrl: url,
         type: ad.type,
         description: ad.description,
-        imageUrl: ad.image_id,
+        imageId: ad.image_id,
+        imageExtension: ad.user_image?.filetype || null,
         sizeCost: getAdCost(ad),
     }
 

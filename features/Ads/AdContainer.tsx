@@ -39,7 +39,8 @@ const renderAd = (ad: AdCardData, colHeight: number) => {
             adType={ad.type}
             description={ad.description || ""}
             colHeight={colHeight}
-            imgUrl={"/images/thumbnails/countries" + "/germany" + ".jpg"}
+            imageId={ad.imageId}
+            imageExtension={ad.imageExtension}
         />
 
     } else if (ad.sizeCost === 4) {
@@ -48,10 +49,11 @@ const renderAd = (ad: AdCardData, colHeight: number) => {
             link={ad.fullUrl}
             title={ad.title}
             subtext={ad.subtext}
-            imgUrl={"/images/thumbnails/countries" + "/germany" + ".jpg"}
             adType={ad.type}
             colHeight={colHeight}
             description={ad.description || ""}
+            imageId={ad.imageId}
+            imageExtension={ad.imageExtension}
         />
 
     } else {

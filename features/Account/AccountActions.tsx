@@ -1,5 +1,6 @@
 import { createStyles, Group, SimpleGrid, Text, UnstyledButton } from '@mantine/core';
 import { IconPencilPlus } from '@tabler/icons-react';
+import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
@@ -29,17 +30,20 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const data = [
-    { title: 'Create new ad', icon: IconPencilPlus, color: 'violet', url: '/account/create-ad' },
-];
+
 
 const AccountActions = () => {
 
     const { classes, theme } = useStyles();
+    const { t } = useTranslation('account');
+
+    const data = [
+        { title: t('index.actions.create-ad'), icon: IconPencilPlus, url: '/account/create-ad' },
+    ];
 
     const items = data.map((item) => (
         <UnstyledButton key={item.title} component={Link} href={item.url} className={classes.item}>
-            <item.icon color={theme.colors[item.color][6]} size={32} />
+            <item.icon color={theme.colors.brandOrange[5]} size={32} />
             <Text size="sm" mt={7}>
                 {item.title}
             </Text>
@@ -49,7 +53,7 @@ const AccountActions = () => {
     return (
         <>
             <Group position="apart">
-                <Text className={classes.title}>Actions</Text>
+                <Text className={classes.title}>{t('index.actions.label')}</Text>
             </Group>
             <SimpleGrid cols={3} mt="md">
                 {items}
