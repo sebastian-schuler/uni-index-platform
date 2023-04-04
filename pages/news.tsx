@@ -5,7 +5,7 @@ import ResponsiveWrapper from '../components/Container/ResponsiveWrapper'
 import { Image, SimpleGrid, Stack } from '@mantine/core'
 import ArticleCard from '../components/Card/ArticleCard';
 import { GetServerSideProps } from 'next';
-import { getAllAdPosts } from '../lib/prisma/prismaNews';
+import { getAllAdPosts } from '../lib/prisma/prismaArticles';
 import GenericPageHeader from '../components/Block/GenericPageHeader';
 import Breadcrumb from '../features/Breadcrumb/Breadcrumb';
 import { ArticleCardData } from '../lib/types/ArticleTypes';

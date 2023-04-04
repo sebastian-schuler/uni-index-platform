@@ -1,5 +1,4 @@
-import { user_ad } from '@prisma/client';
-import { InstitutionRegistrationDBItem, PremiumAdDetailed } from '../types/AccountHandlingTypes';
+import { InstitutionRegistrationDBItem } from '../types/AccountHandlingTypes';
 import prisma from './prisma';
 
 // ===========================================================
@@ -147,39 +146,6 @@ export const getInstitutionByUser = async (institutionId: string) => {
         },
         where: { id: institutionId }
     });
-}
-
-type NewAdProps = {
-    title: { [key: string]: string } | undefined
-    booked_from: number
-    booked_until: number
-    type: string
-    size: number
-    date_booked: number
-    placement: string[]
-    user_id: string
-    subject_id: string | null
-    description: string | null
-    image_id: string | null
-}
-
-export const addNewAd = async (props: NewAdProps) => {
-
-    return await prisma.user_ad.create({
-        data: {
-            title: props.title,
-            booked_from: props.booked_from,
-            booked_until: props.booked_until,
-            type: props.type,
-            size: props.size,
-            placement: props.placement,
-            user_id: props.user_id,
-            subject_id: props.subject_id,
-            description: props.description,
-            image_id: props.image_id,
-            date_booked: props.date_booked
-        }
-    })
 }
 
 // Used for creating subject ads

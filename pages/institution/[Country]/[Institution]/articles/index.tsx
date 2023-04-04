@@ -8,7 +8,7 @@ import ArticleCard from '../../../../../components/Card/ArticleCard'
 import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper'
 import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
 import InstitutionNav from '../../../../../features/Navigation/InstitutionNav'
-import { getAllAdPosts } from '../../../../../lib/prisma/prismaNews'
+import { getAllAdPosts } from '../../../../../lib/prisma/prismaArticles'
 import { getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { ArticleCardData } from '../../../../../lib/types/UiHelperTypes'
 

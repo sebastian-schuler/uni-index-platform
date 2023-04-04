@@ -6,7 +6,7 @@ import Head from 'next/head';
 import ResponsiveWrapper from '../../../../../components/Container/ResponsiveWrapper';
 import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb';
 import { TipTapParser } from '../../../../../lib/parser/tiptapParser';
-import { getAdPostByUrl } from '../../../../../lib/prisma/prismaNews';
+import { getAdPostByUrl } from '../../../../../lib/prisma/prismaArticles';
 import { getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries';
 import { ArticleData } from '../../../../../lib/types/ArticleTypes';
 
