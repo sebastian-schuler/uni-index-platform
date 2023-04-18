@@ -37,9 +37,9 @@ const ArticleBuilder = ({ editor, title, setTitle, excerpt, setExcerpt, image, s
                         helpText={t('create-ad.article.title.helper')}
                     />
                     <CreateAdTextArea
-                        label='Excerpt'
-                        helper='This will be shown on the article card'
-                        placeholder='Write a short excerpt here'
+                        label={t('create-ad.article.excerpt.label')}
+                        placeholder={t('create-ad.article.excerpt.placeholder')}
+                        helpText={t('create-ad.article.excerpt.helper')}
                         onChange={setExcerpt}
                         value={excerpt}
                     />

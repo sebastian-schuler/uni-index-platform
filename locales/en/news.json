@@ -1,11 +1,11 @@
 {
   "meta": {
-    "news-title": "News",
+    "news-title": "Press Releases & Sponsored Articles",
     "news-desc": "Read what's new from top universities & courses on our comprehensive platform."
   },
 
   "news": {
-    "title": "Institution News",
+    "title": "Press Releases & Sponsored Articles",
     "subtitle": "Read articles posted by universities across Europe."
   }
 }

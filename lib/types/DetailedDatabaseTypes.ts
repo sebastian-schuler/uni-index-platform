@@ -2,37 +2,6 @@ import { city, country, institution, state, subject, subject_category, category,
 
 // Detailed types contain all information for cards
 
-// AD
-export type DetailedUserAd = user_ad & {
-    user_image: {
-        id: string;
-        filetype: string;
-    } | null,
-    subject: (subject & {
-        subject_category: (subject_category & {
-            category: category;
-        })[];
-    }) | null;
-    user: {
-        institution: {
-            url: string;
-            name: string;
-            city: {
-                state: {
-                    country: {
-                        url: string;
-                    }
-                }
-            };
-            institution_city: {
-                city: {
-                    name: string;
-                }
-            }[];
-        }
-    }
-};
-
 // SUBJECT CARD
 export type DetailedSubject = (subject & {
     city: city & {

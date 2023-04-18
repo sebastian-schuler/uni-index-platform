@@ -8,6 +8,10 @@ import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
+import CharacterCount from '@tiptap/extension-character-count'
+import useTranslation from 'next-translate/useTranslation';
+
+const characterLimit = 1000;
 
 export const getTiptapEditor = () => {
     return useEditor({
@@ -18,6 +22,9 @@ export const getTiptapEditor = () => {
             Highlight,
             Superscript,
             SubScript,
+            CharacterCount.configure({
+                limit: characterLimit,
+            }),
             TextAlign.configure({ types: ['heading', 'paragraph'] }),
         ]
     });
@@ -29,10 +36,12 @@ type Props = {
 
 const ArticleEditor = ({ editor }: Props) => {
 
+    const { t, lang } = useTranslation("account");
+
     return (
         <div>
             <Text size={'sm'} weight={500}>
-                Content
+                {t('create-ad.article.editor.label')}
                 <Text component='span' color={'brandOrange'}>{' *'}</Text>
             </Text>
             <RichTextEditor editor={editor} >
@@ -76,6 +85,10 @@ const ArticleEditor = ({ editor }: Props) => {
                         <RichTextEditor.AlignJustify tabIndex={1} />
                         <RichTextEditor.AlignRight tabIndex={1} />
                     </RichTextEditor.ControlsGroup>
+
+                    <Text lh={1} sx={{ userSelect: 'none' }}>
+                        {t('create-ad.article.editor.character-count', { count: (editor?.storage.characterCount.characters() || 0), limit: characterLimit })}
+                    </Text>
                 </RichTextEditor.Toolbar>
 
                 <RichTextEditor.Content />

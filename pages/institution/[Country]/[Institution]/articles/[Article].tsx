@@ -51,7 +51,7 @@ const InstitutionArticle = ({ country, institution, articleData }: Props) => {
                     <Text>
                         <Trans
                             i18nKey='institution:article.subtext'
-                            components={[<Anchor component={Link} href={institutionUrl} />]}
+                            components={[<Anchor key={'institution-link'} component={Link} href={institutionUrl} />]}
                             values={{ date: date, author: articleData.institution.name }}
                         />
                     </Text>

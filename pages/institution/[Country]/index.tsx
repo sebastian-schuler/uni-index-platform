@@ -32,13 +32,15 @@ type Props = {
   institutionData: InstitutionCardData[],
   institutionStates: state[],
   pageCount: number | null,
+  totalInstitutionCount: number,
   countryInfo: country,
   countryList: country[],
   ads: AdCardData[][],
   footerContent: FooterContent[],
 }
 
-const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institutionStates, pageCount, countryInfo, countryList, ads, footerContent }: Props) => {
+const InstitutionCountryIndex: NextPage<Props> = (
+  { institutionData, institutionStates, pageCount, totalInstitutionCount, countryInfo, countryList, ads, footerContent }: Props) => {
 
   const { t, lang } = useTranslation('institution');
 
@@ -150,6 +152,7 @@ const InstitutionCountryIndex: NextPage<Props> = ({ institutionData, institution
                     toName: institutionData.at(-1)?.institution.name,
                     from: (currentPage - 1) * institutionData.length + 1,
                     to: currentPage * institutionData.length,
+                    total: totalInstitutionCount,
                   }}
                 />
               </Text>
@@ -250,6 +253,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     institutionData,
     institutionStates,
     pageCount,
+    totalInstitutionCount: institutions.length,
     countryInfo,
     countryList,
     ads: [],

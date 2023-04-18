@@ -32,7 +32,7 @@ const Register: NextPage<Props> = props => {
       <Text color={"dimmed"} align={"center"} pb='lg'>
         <Trans
           i18nKey='loginLogout:signup.subtitle'
-          components={[<MantineLink url={URL_LOGIN} type="internal" />]}
+          components={[<MantineLink key={'login-text'} url={URL_LOGIN} type="internal" />]}
         />
       </Text>
 

@@ -43,7 +43,7 @@
       "one": "One result for \"{{query}}\"",
       "other": "{{count}} results for \"{{query}}\""
     },
-    "page-results-label": "Results from <0>{{fromName}}</0> to <1>{{toName}}</1> ({{from}} - {{to}})"
+    "page-results-label": "Results from <0>{{fromName}}</0> to <1>{{toName}}</1> ({{from}} - {{to}} / {{total}})"
   },
 
   "institution": {

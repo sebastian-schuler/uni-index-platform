@@ -300,7 +300,7 @@ const CreateAd = ({ institutionData }: Props) => {
                                 <Text>
                                     <Trans
                                         i18nKey='account:create-ad.days-booked-label'
-                                        components={[<Text component='span' weight={500} />]}
+                                        components={[<Text key={'days-booked'} component='span' weight={500} />]}
                                         values={{ count: daysBooked }}
                                     />
                                 </Text>
@@ -308,7 +308,7 @@ const CreateAd = ({ institutionData }: Props) => {
                             <Text>
                                 <Trans
                                     i18nKey='account:create-ad.cost-label'
-                                    components={[<Text component='span' weight={500} />]}
+                                    components={[<Text key={'ad-cost'} component='span' weight={500} />]}
                                     values={{ cost: getAdCost() }}
                                 />
                             </Text>

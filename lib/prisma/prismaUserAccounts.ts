@@ -99,13 +99,6 @@ export const getUserCountByInstitution = async (institutionID: string) => {
 
 }
 
-export const getAdsByUser = async (userId: string) => {
-    return await prisma.user_ad.findMany({
-        include: { subject: true, },
-        where: { user_id: userId }
-    })
-}
-
 // Used for registration: 
 export const getInstitutesForUserAccounts = async (): Promise<InstitutionRegistrationDBItem[]> => {
     return await prisma.institution.findMany({

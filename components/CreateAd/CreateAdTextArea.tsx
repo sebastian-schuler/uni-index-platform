@@ -5,13 +5,13 @@ import HelpPopover from '../Popover/HelpPopover'
 type CreateAdTextAreaProps = {
     label: string
     placeholder: string
-    helper: string
+    helpText: string
     value: string
     onChange: (value: string) => void
     error?: boolean | React.ReactNode
 }
 
-const CreateAdTextArea = ({ label, placeholder, helper, value, onChange, error }: CreateAdTextAreaProps) => {
+const CreateAdTextArea = ({ label, placeholder, helpText, value, onChange, error }: CreateAdTextAreaProps) => {
     return (
         <Stack spacing={'xs'}>
             <Textarea
@@ -23,7 +23,7 @@ const CreateAdTextArea = ({ label, placeholder, helper, value, onChange, error }
                 error={error}
                 required
             />
-            <HelpPopover helpText={helper} />
+            <HelpPopover helpText={helpText} />
         </Stack>
     )
 }

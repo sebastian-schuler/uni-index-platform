@@ -1,5 +1,5 @@
 import { convertAdToCardData } from '../ads/adConverter';
-import { DetailedUserAd } from '../types/DetailedDatabaseTypes';
+import { AdPlacement, AdTitle, DetailedUserAd, ManagedAd } from '../types/Ads';
 import { AdCardData } from '../types/UiHelperTypes';
 import prisma from './prisma';
 
@@ -56,18 +56,32 @@ export const getAds = async (placementLocation: string, lang: string): Promise<A
             }
         },
         where: {
-            OR: [
+            AND: [
                 {
-                    placement: {
-                        path: ["generic"],
-                        array_contains: [placementLocation],
-                    },
+                    booked_until: {
+                        gt: Date.now()
+                    }
                 },
                 {
-                    placement: {
-                        path: ["generic"],
-                        array_contains: ["all"]
+                    booked_from: {
+                        lt: Date.now()
                     }
+                },
+                {
+                    OR: [
+                        {
+                            placement: {
+                                path: ["generic"],
+                                array_contains: [placementLocation],
+                            },
+                        },
+                        {
+                            placement: {
+                                path: ["generic"],
+                                array_contains: ["all"]
+                            }
+                        }
+                    ]
                 }
             ]
         }
@@ -134,4 +148,49 @@ export const addNewAd = async ({ title, booked_from, booked_until, type, size, p
             }
         }
     })
+}
+
+export const getAdsByUser = async (userId: string) => {
+    return await prisma.user_ad.findMany({
+        include: { subject: true, },
+        where: {
+            user_id: userId,
+        }
+    })
+}
+
+
+export const getActiveAdsByUser = async (userId: string): Promise<ManagedAd[]> => {
+
+    const res = await prisma.user_ad.findMany({
+        include: { subject: true, },
+        where: {
+            user_id: userId,
+            booked_until: {
+                gt: Date.now()
+            },
+            booked_from: {
+                lt: Date.now()
+            }
+        }
+    })
+
+    return res.map((item) => {
+        return ({
+            id: item.id,
+            user_id: item.user_id,
+            booked_from: Number(item.booked_from),
+            booked_until: Number(item.booked_until),
+            subject: item.subject ? {
+                name: item.subject?.name,
+            } : null,
+            type: item.type,
+            size: item.size,
+            description: item.description,
+            image_id: item.image_id,
+            date_booked: Number(item.date_booked),
+            placement: item.placement as AdPlacement,
+            title: item.title as AdTitle,
+        })
+    });
 }

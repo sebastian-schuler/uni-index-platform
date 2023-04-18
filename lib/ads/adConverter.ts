@@ -1,5 +1,5 @@
 import { getAds } from "../prisma/prismaAds";
-import { DetailedUserAd } from "../types/DetailedDatabaseTypes";
+import { DetailedUserAd } from "../types/Ads";
 import { AdCardData } from "../types/UiHelperTypes";
 import { URL_INSTITUTION, URL_INSTITUTION_SUBJECTS } from "../url-helper/urlConstants";
 import { toLink } from "../util/util";

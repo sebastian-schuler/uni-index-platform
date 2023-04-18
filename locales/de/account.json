@@ -1,4 +1,6 @@
 {
+  "title": "Uni-Index App",
+
   "nav": {
     "dashboard": "Dashboard",
     "create-ad": "Neue Anzeige",
@@ -24,7 +26,7 @@
       "label": "Art",
       "helper": "Möchten Sie eine Anzeige oder einen Artikel erstellen?",
       "label-link": "Link",
-      "label-article": "Artikel"
+      "label-article": "Pressemitteilung / Gesponserter Artikel"
     },
 
     "ad": {
@@ -81,6 +83,11 @@
         "label": "Titel",
         "placeholder": "Titel für Ihren Artikel eingeben",
         "helper": "Der Titel wird oben in der Anzeige dargestellt."
+      },
+      "excerpt": {
+        "label": "Auszug",
+        "placeholder": "Geben Sie einen Auszug für Ihren Artikel ein.",
+        "helper": "Dies wird auf der Artikelkarte angezeigt."
       },
       "image": {
         "label": "Bild",

@@ -1,11 +1,11 @@
 {
   "meta": {
-    "news-title": "Nachrichten",
+    "news-title": "Pressemitteilungen und gesponserte Artikel",
     "news-desc": "Lesen Sie auf unserer umfassenden Plattform, was es Neues von den besten Hochschulen und Studiengängen gibt."
   },
 
   "news": {
-    "title": "Nachrichten von Institutionen",
+    "title": "Pressemitteilungen und gesponserte Artikel",
     "subtitle": "Lesen Sie Artikel, die von Universitäten aus ganz Europa veröffentlicht wurden."
   }
 }

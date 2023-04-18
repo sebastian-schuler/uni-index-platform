@@ -1,4 +1,6 @@
 {
+  "title": "Uni-Index App",
+
   "nav": {
     "dashboard": "Dashboard",
     "create-ad": "Create new ad",
@@ -24,7 +26,7 @@
       "label": "Type",
       "helper": "Do you want to create an ad or an article?",
       "label-link": "Link",
-      "label-article": "Article"
+      "label-article": "Press release / Sponsored article"
     },
 
     "ad": {
@@ -82,10 +84,19 @@
         "placeholder": "Enter a title for your article",
         "helper": "The title will be displayed on top of the article."
       },
+      "excerpt": {
+        "label": "Excerpt",
+        "placeholder": "Enter an excerpt for your article",
+        "helper": "This will be shown on the article card."
+      },
       "image": {
         "label": "Image",
         "placeholder": "Pick a thumbnail image for your article",
         "helper": "The image will be displayed on top of the article and will be used as a preview image in search results."
+      },
+      "editor": {
+        "label": "Content",
+        "character-count": "{{count}}/{{limit}} characters"
       },
       "image-preview-label": "Image preview"
     },

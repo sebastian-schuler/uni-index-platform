@@ -5,9 +5,10 @@ import useTranslation from 'next-translate/useTranslation';
 import AccountActions from '../../features/Account/AccountActions';
 import AccountAdsTable from '../../features/Account/AccountAdsTable';
 import GroupedStats from '../../features/Account/AccountGroupedStats';
-import { getAdsByUser, getInstitutionByUser, getUserFromToken } from '../../lib/prisma/prismaUserAccounts';
+import { getInstitutionByUser, getUserFromToken } from '../../lib/prisma/prismaUserAccounts';
 import { PremiumAdDetailed, UserDataProfile } from '../../lib/types/AccountHandlingTypes';
 import { URL_LOGIN } from '../../lib/url-helper/urlConstants';
+import { getAdsByUser } from '../../lib/prisma/prismaAds';
 
 type Props = {
   userData: UserDataProfile

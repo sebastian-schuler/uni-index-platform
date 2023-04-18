@@ -1,10 +1,5 @@
 import { subject } from '@prisma/client';
-import { DetailedUserAd } from '../types/DetailedDatabaseTypes';
 import prisma from './prisma';
-import { toLink } from '../util/util';
-import { URL_INSTITUTION } from '../url-helper/urlConstants';
-import { convertAdToCardData } from '../ads/adConverter';
-import { AdCardData } from '../types/UiHelperTypes';
 
 // ===========================================================
 // ================= FULL DEFAULT GETTER FUNCTIONS ===========

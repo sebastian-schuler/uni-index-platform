@@ -10,6 +10,7 @@ import { UserDataProfile } from '../../lib/types/AccountHandlingTypes';
 import { URL_LOGIN } from '../../lib/url-helper/urlConstants';
 import { toLink } from '../../lib/util/util';
 import AccountNavDrawer from './AccountNavDrawer';
+import useTranslation from 'next-translate/useTranslation';
 
 
 const useStyles = createStyles((theme, _params, getRef) => {
@@ -29,6 +30,7 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
     const { classes } = useStyles();
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(false);
+    const { t } = useTranslation('account');
 
     const router = useRouter();
     const { token, deleteAuthToken } = useAuth();
@@ -89,7 +91,7 @@ const AccountNavigation: React.FC<Props> = ({ children }: Props) => {
                             />
                         </MediaQuery>
 
-                        <Text size={'xl'}>Uni-Index App</Text>
+                        <Text size={'xl'}>{t('title')}</Text>
                     </div>
                 </Header>
             }

@@ -30,13 +30,15 @@ export const CATEGORY_PER_PAGE = 32;
 interface Props {
     ads: AdCardData[][],
     pageCount: number | null,
+    totalCategoryCount: number,
     categories: CategoryCardData[]
     footerContent: FooterContent[]
 }
 
-const Subjects: NextPage<Props> = ({ ads, pageCount, categories, footerContent }: Props) => {
+const Subjects: NextPage<Props> = ({ ads, pageCount, totalCategoryCount, categories, footerContent }: Props) => {
 
     const router = useRouter();
+
     // Query params
     const currentPage = router.query.page ? parseInt(router.query.page as string) : 1;
     const searchQuery = router.query.q ? router.query.q as string : undefined;
@@ -142,6 +144,7 @@ const Subjects: NextPage<Props> = ({ ads, pageCount, categories, footerContent }
                                         toName: categories.at(-1)?.name,
                                         from: (currentPage - 1) * categories.length + 1,
                                         to: currentPage * categories.length,
+                                        total: totalCategoryCount,
                                     }}
                                 />
                             </Text>
@@ -226,6 +229,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const props: Props = {
         ads,
         pageCount,
+        totalCategoryCount: detailedSubjectTypes.length,
         categories,
         footerContent
     }

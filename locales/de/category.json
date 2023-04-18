@@ -17,7 +17,7 @@
         "one": "{{count}} Ergebnis für \"{{query}}\"",
         "other": "{{count}} Ergebnisse für \"{{query}}\""
       },
-      "page-results-label": "Ergebnisse von <0>{{fromName}}</0> bis <1>{{toName}}</1> ({{from}} - {{to}})"
+      "page-results-label": "Ergebnisse von <0>{{fromName}}</0> bis <1>{{toName}}</1> ({{from}} - {{to}} / {{total}})"
     },
   
     "category": {
@@ -30,7 +30,7 @@
         "one": "{{count}} Ergebnis für \"{{query}}\"",
         "other": "{{count}} Ergebnisse für \"{{query}}\""
       },
-      "page-results-label": "Ergebnisse von <0>{{fromName}}</0> bis <1>{{toName}}</1> ({{from}} - {{to}})"
+      "page-results-label": "Ergebnisse von <0>{{fromName}}</0> bis <1>{{toName}}</1> ({{from}} - {{to}} / {{total}})"
     }
   }
   

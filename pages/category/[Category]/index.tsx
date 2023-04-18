@@ -31,13 +31,14 @@ export const SUBJECT_PER_PAGE = 30;
 type Props = {
   categoryInfo: category,
   pageCount: number | null,
+  totalSubjectCount: number,
   subjectData: SubjectCardData[],
   countryList: country[],
   ads: AdCardData[][],
   footerContent: FooterContent[],
 }
 
-const SubjectCategoryPage: NextPage<Props> = ({ categoryInfo, pageCount, subjectData, countryList, ads, footerContent }: Props) => {
+const SubjectCategoryPage: NextPage<Props> = ({ categoryInfo, pageCount, totalSubjectCount, subjectData, countryList, ads, footerContent }: Props) => {
 
   // TRANSLATION
   const { t, lang } = useTranslation('category');
@@ -150,6 +151,7 @@ const SubjectCategoryPage: NextPage<Props> = ({ categoryInfo, pageCount, subject
                     toName: subjectData.at(-1)?.name,
                     from: (currentPage - 1) * subjectData.length + 1,
                     to: currentPage * subjectData.length,
+                    total: totalSubjectCount,
                   }}
                 />
               </Text>
@@ -248,6 +250,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const props: Props = {
     categoryInfo,
     pageCount,
+    totalSubjectCount: subjects.length,
     subjectData,
     countryList,
     ads: [],

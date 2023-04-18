@@ -39,14 +39,17 @@ const CustomerLogin: NextPage = () => {
   // Errors
   const [usernameError, setUsernameError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
-
+  // Status
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
 
   // Translation
   const { t } = useTranslation('loginLogout');
 
   // Handle login
   const submitLogin = async () => {
+
+    setIsWaiting(true);
 
     // Send login data to API
     const res = await fetch('/api/account/login', {
@@ -67,6 +70,7 @@ const CustomerLogin: NextPage = () => {
 
     } else {
       const status: LoginStatus = res.status;
+      setIsWaiting(false);
 
       if (status === "NO_USER") {
         setUsernameError(t('login.error.no-user'));
@@ -111,7 +115,7 @@ const CustomerLogin: NextPage = () => {
                   <Text color={"dimmed"} align={"center"}>
                     <Trans
                       i18nKey='loginLogout:login.subtitle'
-                      components={[<MantineLink url={URL_REGISTER} type="internal" />]}
+                      components={[<MantineLink key={'register-text'} url={URL_REGISTER} type="internal" />]}
                     />
                   </Text>
 
@@ -152,7 +156,7 @@ const CustomerLogin: NextPage = () => {
                     </Group>
                     <Button
                       radius={"md"} fullWidth mt="xl"
-                      onClick={submitLogin} disabled={username === "" || password === ""}
+                      onClick={submitLogin} disabled={username === "" || password === "" || isWaiting}
                     >
                       {t('login.button-text')}
                     </Button>
