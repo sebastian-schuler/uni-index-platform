@@ -123,7 +123,7 @@ const CreateAdBuilder: React.FC<CreateAdBuilderProps> = (
                     <CreateAdTextArea
                         label={t('create-ad.ad.description.label')}
                         placeholder={t('create-ad.ad.description.placeholder')}
-                        helper={t('create-ad.ad.description.helper')}
+                        helpText={t('create-ad.ad.description.helper')}
                         value={description}
                         onChange={setDescription}
                         error={description.length > MAX_DESCRIPTION_LENGTH}

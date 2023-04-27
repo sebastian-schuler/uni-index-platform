@@ -9,7 +9,6 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { TotalScoreSet } from '../../lib/types/SocialMediaTypes';
 
 ChartJS.register(
     CategoryScale,
@@ -21,14 +20,15 @@ ChartJS.register(
 );
 
 interface Props {
-    total: TotalScoreSet
-    scoreSetTwitter: TotalScoreSet
-    scoreSetYoutube: TotalScoreSet
-    scoreSetFacebook?: TotalScoreSet
-    scoreSetInstagram?: TotalScoreSet
+    // total: TotalScoreSet
+    // scoreSetTwitter: TotalScoreSet
+    // scoreSetYoutube: TotalScoreSet
+    // scoreSetFacebook?: TotalScoreSet
+    // scoreSetInstagram?: TotalScoreSet
 }
 
-const SmProfilesBar: React.FC<Props> = ({ total, scoreSetTwitter, scoreSetYoutube, scoreSetFacebook, scoreSetInstagram }: Props) => {
+// const SmProfilesBar: React.FC<Props> = ({ total, scoreSetTwitter, scoreSetYoutube, scoreSetFacebook, scoreSetInstagram }: Props) => {
+const SmProfilesBar: React.FC<Props> = ({ }: Props) => {
 
     const options = {
         indexAxis: 'y' as const,
@@ -59,11 +59,11 @@ const SmProfilesBar: React.FC<Props> = ({ total, scoreSetTwitter, scoreSetYoutub
             {
                 label: 'Twitter',
                 data: [
-                    calcValue(scoreSetTwitter.averageImpressions, total.averageImpressions),
-                    calcValue(scoreSetTwitter.averageInteraction, total.averageInteraction),
-                    calcValue(scoreSetTwitter.totalContentOutput, total.totalContentOutput),
-                    calcValue(scoreSetTwitter.totalReach, total.totalReach),
-                    calcValue(scoreSetTwitter.profilesCompleted, total.profilesCompleted),
+                    // calcValue(scoreSetTwitter.averageImpressions, total.averageImpressions),
+                    // calcValue(scoreSetTwitter.averageInteraction, total.averageInteraction),
+                    // calcValue(scoreSetTwitter.totalContentOutput, total.totalContentOutput),
+                    // calcValue(scoreSetTwitter.totalReach, total.totalReach),
+                    // calcValue(scoreSetTwitter.profilesCompleted, total.profilesCompleted),
                 ],
                 backgroundColor: 'rgba(29, 161, 242, 0.2)',
                 borderColor: 'rgba(29, 161, 242, 1)',
@@ -71,11 +71,11 @@ const SmProfilesBar: React.FC<Props> = ({ total, scoreSetTwitter, scoreSetYoutub
             {
                 label: 'Youtube',
                 data: [
-                    calcValue(scoreSetYoutube.averageImpressions, total.averageImpressions),
-                    calcValue(scoreSetYoutube.averageInteraction, total.averageInteraction),
-                    calcValue(scoreSetYoutube.totalContentOutput, total.totalContentOutput),
-                    calcValue(scoreSetYoutube.totalReach, total.totalReach),
-                    calcValue(scoreSetYoutube.profilesCompleted, total.profilesCompleted),
+                    // calcValue(scoreSetYoutube.averageImpressions, total.averageImpressions),
+                    // calcValue(scoreSetYoutube.averageInteraction, total.averageInteraction),
+                    // calcValue(scoreSetYoutube.totalContentOutput, total.totalContentOutput),
+                    // calcValue(scoreSetYoutube.totalReach, total.totalReach),
+                    // calcValue(scoreSetYoutube.profilesCompleted, total.profilesCompleted),
                 ],
                 backgroundColor: 'rgba(255, 0, 0, 0.2)',
                 borderColor: 'rgba(255, 0, 0, 1)',

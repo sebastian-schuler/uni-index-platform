@@ -4,17 +4,17 @@ import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import SocialMediaCard from '../../components/Card/SocialMediaCard'
 import ResponsiveContainer from '../../components/Container/ResponsiveContainer'
-import { SmBestCardMinified, SmRankingEntryMinified } from '../../lib/types/SocialMediaTypes'
+import { BestSocialMediaItem, SocialMediaGenericRankingItem } from '../../lib/types/social-media/SocialMediaSimplifiedTypes'
 import SmIndexTopRanking from './SmIndexTopRanking'
 
 interface Props {
-  socialMediaList: SmRankingEntryMinified[]
-  highestTwitter: SmBestCardMinified
-  highestYoutube: SmBestCardMinified
+  socialMediaList: SocialMediaGenericRankingItem[]
+  bestTwitter: BestSocialMediaItem | null
+  bestYoutube: BestSocialMediaItem | null
   countries: country[]
 }
 
-const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitter, highestYoutube, countries }: Props) => {
+const SocialMediaSection: React.FC<Props> = ({ socialMediaList, bestTwitter, bestYoutube, countries }: Props) => {
 
   const { t } = useTranslation('index');
 
@@ -40,8 +40,12 @@ const SocialMediaSection: React.FC<Props> = ({ socialMediaList, highestTwitter, 
         />
 
         <Stack spacing={"lg"}>
-          <SocialMediaCard cardData={highestTwitter} />
-          <SocialMediaCard cardData={highestYoutube} />
+          {
+            bestTwitter && <SocialMediaCard cardData={bestTwitter} />
+          }
+          {
+            bestYoutube && <SocialMediaCard cardData={bestYoutube} />
+          }
         </Stack>
 
       </SimpleGrid>

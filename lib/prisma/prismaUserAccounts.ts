@@ -68,12 +68,14 @@ export const getSessionByToken = async (token: string) => {
 
 export const addNewUser = async (email: string, password: string, institution_id: string, date_registered: number) => {
 
+    // TODO: Add preferred language to user
     return await prisma.user.create({
         data: {
             email: email,
             password: password,
             institution_id: institution_id,
-            date_registered: date_registered
+            date_registered: date_registered,
+            preferred_lang: "en"
         }
     })
 

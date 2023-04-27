@@ -21,13 +21,13 @@ import { getAllLhrSimplified } from '../lib/lighthouse/lhrSimplifier';
 import { getPopularDetailedCountries } from '../lib/prisma/prismaDetailedQueries';
 import { getInstitutionsByPopularity, getSubjectsByPopularity } from '../lib/prisma/prismaPopularQueries';
 import { getCountries } from '../lib/prisma/prismaQueries';
-import { getAllSocialMedia, getSocialMediaRanking } from '../lib/prisma/prismaSocialMedia';
+import { getBestSocialMedia, getSocialMediaRanking } from '../lib/prisma/prismaSocialMedia';
 import { DetailedCountry, DetailedInstitution, DetailedSubject } from '../lib/types/DetailedDatabaseTypes';
-import { LhrSimple } from '../lib/types/lighthouse/CustomLhrTypes';
-import { SmBestCardMinified, SmRankingEntryMinified, TotalScore } from '../lib/types/SocialMediaTypes';
 import { AdCardData, CountryCardData, InstitutionCardData, SubjectCardData } from '../lib/types/UiHelperTypes';
+import { LhrSimple } from '../lib/types/lighthouse/CustomLhrTypes';
+import { BestSocialMediaItem, SocialMediaGenericRankingItem } from '../lib/types/social-media/SocialMediaSimplifiedTypes';
 import { URL_CATEGORIES, URL_INSTITUTIONS, URL_LOCATIONS } from '../lib/url-helper/urlConstants';
-import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData, minifySmBestCard, minifySmRankingItem } from '../lib/util/conversionUtil';
+import { convertCountryToCardData, convertInstitutionToCardData, convertSubjectToCardData } from '../lib/util/conversionUtil';
 import { getUniquesFromArray, toLink } from '../lib/util/util';
 
 interface Props {
@@ -38,16 +38,15 @@ interface Props {
   countryData: CountryCardData[],
   countryList: country[],
   institutionStates: state[],
-  socialMediaList: SmRankingEntryMinified[],
-  highestTwitter: SmBestCardMinified,
-  highestYoutube: SmBestCardMinified,
+  socialMediaList: SocialMediaGenericRankingItem[],
+  bestTwitter: BestSocialMediaItem | null,
+  bestYoutube: BestSocialMediaItem | null,
   footerContent: FooterContent[],
 }
 
 const Home: NextPage<Props> = ({ simpleLhReports, ads, institutionData, subjectData, countryData, countryList,
-  institutionStates, socialMediaList, highestTwitter, highestYoutube, footerContent }: Props) => {
+  institutionStates, socialMediaList, bestTwitter, bestYoutube, footerContent }: Props) => {
 
-  // const ads: DetailedUserAd[] = JSON.parse(adsStringified);
   const { t } = useTranslation('index');
 
   return (
@@ -62,8 +61,8 @@ const Home: NextPage<Props> = ({ simpleLhReports, ads, institutionData, subjectD
 
       <SocialMediaSection
         socialMediaList={socialMediaList}
-        highestTwitter={highestTwitter}
-        highestYoutube={highestYoutube}
+        bestTwitter={bestTwitter}
+        bestYoutube={bestYoutube}
         countries={countryList}
       />
 
@@ -159,30 +158,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const institutionStates = getUniquesFromArray({ type: "State", data: institutionsDetailed.map(inst => inst.city.state) }) as state[];
 
   // === SOCIAL MEDIA ===
-  const socialMediaRankingList = await getSocialMediaRanking();
-  const socialMediaList = await getAllSocialMedia();
+  let socialMediaRankingList = await getSocialMediaRanking({ take: 10 });
 
-  // Sort by total score, get top 5
-  let socialMediaTopList: SmRankingEntryMinified[] = socialMediaRankingList.map((item) => minifySmRankingItem(item));
-  socialMediaTopList = socialMediaTopList.sort((a, b) => {
-    return b.combinedScore - a.combinedScore;
-  }).slice(0, 13);
-
-  // Highest Youtube score
-  socialMediaList.sort((a, b) => {
-    const totalScoreA = JSON.parse(a.total_score) as TotalScore;
-    const totalScoreB = JSON.parse(b.total_score) as TotalScore;
-    return totalScoreB.percent.youtube.total - totalScoreA.percent.youtube.total;
-  });
-  const highestYoutube = minifySmBestCard(socialMediaList[0], "youtube", lang);
-
-  // Highest Twitter score
-  socialMediaList.sort((a, b) => {
-    const totalScoreA = JSON.parse(a.total_score) as TotalScore;
-    const totalScoreB = JSON.parse(b.total_score) as TotalScore;
-    return totalScoreB.percent.twitter.total - totalScoreA.percent.twitter.total;
-  });
-  const highestTwitter = minifySmBestCard(socialMediaList[0], "twitter", lang);
+  // Best social media
+  const bestYoutube = await getBestSocialMedia({ type: "youtube", lang });
+  const bestTwitter = await getBestSocialMedia({ type: "twitter", lang });
 
   // === ONLINE MARKETING ===
   const simpleLhReports = await getAllLhrSimplified(4);
@@ -197,20 +177,22 @@ export const getStaticProps: GetStaticProps = async (context) => {
     { title: "Countries", data: countryList, type: "Country" },
   ]
 
+  const props:Props = {
+    simpleLhReports,
+    ads,
+    institutionData,
+    subjectData,
+    countryList,
+    institutionStates,
+    socialMediaList: socialMediaRankingList,
+    bestYoutube,
+    bestTwitter,
+    countryData,
+    footerContent,
+  }
+
   return {
-    props: {
-      simpleLhReports,
-      ads,
-      institutionData,
-      subjectData,
-      countryList,
-      institutionStates,
-      socialMediaList: socialMediaTopList,
-      highestTwitter,
-      highestYoutube,
-      countryData,
-      footerContent,
-    },
+    props,
     revalidate: 60 * 60 * 24, // 24 hours
   }
 

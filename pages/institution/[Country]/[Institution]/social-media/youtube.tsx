@@ -11,8 +11,9 @@ import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
 import { FooterContent } from '../../../../../features/Footer/Footer'
 import SmStatRow from '../../../../../features/SocialMedia/SmStatRow'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
-import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
-import { TotalScore, TotalScoreSet, YoutubeProfile } from '../../../../../lib/types/SocialMediaTypes'
+import { getCountrySocialmedia, getInstitutionYoutubeData } from '../../../../../lib/prisma/prismaSocialMedia'
+import { CountryYoutubeSummary } from '../../../../../lib/types/social-media/CountrySocialRatingTypes'
+import { YoutubeChannel } from '../../../../../lib/types/social-media/YoutubeTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION_SOCIALMEDIA_YT } from '../../../../../lib/url-helper/urlConstants'
 
@@ -37,14 +38,13 @@ const useStyles = createStyles((theme) => ({
 interface Props {
     institution: institution,
     country: country,
-    countryYoutubeScore: TotalScoreSet | null
-    countryYoutubeProfile: YoutubeProfile | null
-    institutionScore: TotalScoreSet | null
-    institutionYoutubeProfile: YoutubeProfile | null
+    youtubeProfile: YoutubeChannel | null
+    avgYoutubeProfile: CountryYoutubeSummary | null,
+    avgYoutubeScore: number | null,
     footerContent: FooterContent[],
 }
 
-const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, countryYoutubeScore, countryYoutubeProfile, institutionScore, institutionYoutubeProfile, footerContent }: Props) => {
+const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, youtubeProfile, avgYoutubeProfile, avgYoutubeScore, footerContent }: Props) => {
 
     const { classes, theme } = useStyles();
     const { t, lang } = useTranslation('institution');
@@ -63,7 +63,7 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, country
         </ResponsiveWrapper>
     );
     // IF NO SOCIAL MEDIA DATA PRESENT, RETURN ERROR COMPONENT
-    if (!countryYoutubeScore || !countryYoutubeProfile || !institutionScore || !institutionYoutubeProfile) {
+    if (!avgYoutubeProfile || !youtubeProfile) {
         return errorComponent;
     }
 
@@ -100,32 +100,16 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, country
 
                             <SmStatRow
                                 title='Subscribers'
-                                countryValue={countryYoutubeProfile.subscribers}
-                                institutionValue={institutionYoutubeProfile.subscribers}
+                                countryValue={avgYoutubeProfile.avgSubscribers}
+                                institutionValue={youtubeProfile.meta.metrics.subscriberCount}
                             />
                             <Divider mt="md" mb="md" />
 
                             <SmStatRow
                                 title='Total views'
-                                countryValue={countryYoutubeProfile.views}
-                                institutionValue={institutionYoutubeProfile.views}
+                                countryValue={0}
+                                institutionValue={youtubeProfile.meta.metrics.viewCount}
                             />
-                            <Divider mt="md" mb="md" />
-                            <div>
-                                <Text
-                                    color="dimmed"
-                                    transform="uppercase"
-                                    weight={700}
-                                    size="xs"
-                                >
-                                    Description
-                                </Text>
-                                <Text weight={700} size="md" color={institutionYoutubeProfile.descriptionGood ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
-                                    {
-                                        institutionYoutubeProfile.descriptionGood ? "GOOD LENGTH" : "BAD LENGTH"
-                                    }
-                                </Text>
-                            </div>
                         </Card.Section>
                     </Card>
 
@@ -137,26 +121,26 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, country
                         <Card.Section className={classes.cardSection}>
                             <SmStatRow
                                 title='Total videos'
-                                countryValue={countryYoutubeProfile.videos}
-                                institutionValue={institutionYoutubeProfile.videos}
+                                countryValue={avgYoutubeProfile.avgVideos}
+                                institutionValue={youtubeProfile.meta.metrics.videoCount}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average likes per video'
-                                countryValue={countryYoutubeProfile.averageLikes}
-                                institutionValue={institutionYoutubeProfile.averageLikes}
+                                countryValue={0}
+                                institutionValue={0}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average comments per video'
-                                countryValue={countryYoutubeProfile.averageComments}
-                                institutionValue={institutionYoutubeProfile.averageComments}
+                                countryValue={0}
+                                institutionValue={0}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average views per video'
-                                countryValue={countryYoutubeProfile.averageViews}
-                                institutionValue={institutionYoutubeProfile.averageViews}
+                                countryValue={avgYoutubeProfile.avgViews}
+                                institutionValue={0}
                             />
                             <Divider mt="md" mb="md" />
                             <div>
@@ -168,9 +152,9 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, country
                                 >
                                     Average video tags
                                 </Text>
-                                <Text weight={700} size="md" color={institutionYoutubeProfile.videosHaveTags ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                <Text weight={700} size="md" color={youtubeProfile.raw.multiplier.isWellTagged ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
                                     {
-                                        institutionYoutubeProfile.videosHaveTags ? "GOOD AMOUNT" : "BAD AMOUNT"
+                                        youtubeProfile.raw.multiplier.isWellTagged ? "GOOD AMOUNT" : "BAD AMOUNT"
                                     }
                                 </Text>
                             </div>
@@ -189,16 +173,8 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
     const country = await getCountry(countryUrl);
     const institution = await getInstitution({ institutionUrl });
-    const socialMedia = institution ? (await getSocialMedia(institution.id)) : null;
+    const institutionSocialMedia = institution ? (await getInstitutionYoutubeData(institution.id)) : null;
     const countrySocialMedia = country ? (await getCountrySocialmedia(country.id)) : null;
-
-    // Country data
-    const countryYoutubeScore = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_youtube_score) as TotalScoreSet : null;
-    const countryYoutubeProfile = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_youtube_profile) as YoutubeProfile : null;
-
-    // Institution data
-    const institutionScore = socialMedia ? JSON.parse(socialMedia.total_score) as TotalScore : null;
-    const institutionYoutubeProfile = socialMedia && socialMedia.youtube_profile ? JSON.parse(socialMedia.youtube_profile) as YoutubeProfile : null;
 
     // Footer Data
     // Get all countries
@@ -207,18 +183,20 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         { title: "Countries", data: countryList, type: "Country" },
     ]
 
-    return {
-        props: {
-            institution: institution,
-            country: country,
-            countryYoutubeScore,
-            countryYoutubeProfile,
-            institutionScore,
-            institutionYoutubeProfile,
-            footerContent: footerContent
-        }
+    if (!institution || !country) {
+        return { notFound: true }
     }
 
+    const props: Props = {
+        institution,
+        country,
+        youtubeProfile: institutionSocialMedia?.youtube_data || null,
+        avgYoutubeProfile: countrySocialMedia?.profile.youtube || null,
+        avgYoutubeScore: countrySocialMedia?.count || null,
+        footerContent,
+    }
+
+    return { props };
 }
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {

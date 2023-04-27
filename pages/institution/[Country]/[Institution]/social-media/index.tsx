@@ -15,7 +15,6 @@ import InstitutionNav from '../../../../../features/Navigation/InstitutionNav'
 import SmOverviewSection from '../../../../../features/SocialMedia/SmOverviewSection'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
-import { TotalScore, TotalScoreSet } from '../../../../../lib/types/SocialMediaTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { toLink } from '../../../../../lib/util/util'
 
@@ -30,34 +29,30 @@ interface Props {
     institution: institution,
     country: country,
     lastUpdate: number,
-    institutionScore: TotalScore | null
-    countryScore: TotalScoreSet | null
-    countryTwitterScore: TotalScoreSet | null
-    countryYoutubeScore: TotalScoreSet | null
     socialMediaLinks: SocialMediaLinkProps
     footerContent: FooterContent[],
 }
 
-const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, lastUpdate, institutionScore, countryScore, countryTwitterScore, countryYoutubeScore, socialMediaLinks, footerContent }: Props) => {
+const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, lastUpdate, socialMediaLinks, footerContent }: Props) => {
 
     const { t, lang } = useTranslation('institution');
     const router = useRouter();
 
-    if (!institutionScore || !countryScore || !countryTwitterScore || !countryYoutubeScore) {
-        return (
-            <ResponsiveWrapper footerContent={footerContent}>
+    // if (!institutionScore || !countryScore || !countryTwitterScore || !countryYoutubeScore) {
+    //     return (
+    //         <ResponsiveWrapper footerContent={footerContent}>
 
-                <Head>
-                    <title key={"title"}>{t('common:page-title') + " | " + t('social-media.title-nodata', { institution: institution.name })}</title>
-                    <meta key={"description"} name="description" content={t('social-media.description', { institution: institution.name })} />
-                </Head>
+    //             <Head>
+    //                 <title key={"title"}>{t('common:page-title') + " | " + t('social-media.title-nodata', { institution: institution.name })}</title>
+    //                 <meta key={"description"} name="description" content={t('social-media.description', { institution: institution.name })} />
+    //             </Head>
 
-                <Breadcrumb countryInfo={country} institutionInfo={institution} />
-                <InstitutionNav title={institution.name} />
-                <Text>No data</Text>
-            </ResponsiveWrapper>
-        )
-    }
+    //             <Breadcrumb countryInfo={country} institutionInfo={institution} />
+    //             <InstitutionNav title={institution.name} />
+    //             <Text>No data</Text>
+    //         </ResponsiveWrapper>
+    //     )
+    // }
 
     const socialMediaPages: JSX.Element[] = [];
 
@@ -124,10 +119,6 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, las
                     socialMediaLinks={socialMediaLinks}
                     country={country}
                     institution={institution}
-                    institutionScore={institutionScore}
-                    countryPercentScore={countryScore}
-                    countryTwitterScore={countryTwitterScore}
-                    countryYoutubeScore={countryYoutubeScore}
                 />
 
             </Stack>
@@ -145,14 +136,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     const institution = await getInstitution({ institutionUrl });
     const socialMedia = institution ? (await getSocialMedia(institution.id)) : null;
     const countrySocialMedia = country ? (await getCountrySocialmedia(country.id)) : null;
-
-    // Institution data
-    const institutionScore = socialMedia ? JSON.parse(socialMedia.total_score) as TotalScore : null;
-
-    // Country data
-    const countryScore = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_total_score) as TotalScoreSet : null;
-    const countryTwitterScore = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_twitter_score) as TotalScoreSet : null;
-    const countryYoutubeScore = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_youtube_score) as TotalScoreSet : null;
 
     // Social Media Links
     const socialMediaLinks: SocialMediaLinkProps = {
@@ -172,20 +155,19 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         { title: "Countries", data: countryList, type: "Country" },
     ]
 
-    return {
-        props: {
-            institution,
-            country,
-            lastUpdate,
-            institutionScore,
-            countryScore,
-            countryTwitterScore,
-            countryYoutubeScore,
-            socialMediaLinks,
-            footerContent
-        }
+    if (!institution || !country) {
+        return { notFound: true }
     }
 
+    const props: Props = {
+        institution,
+        country,
+        lastUpdate,
+        socialMediaLinks,
+        footerContent
+    }
+
+    return { props };
 }
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {

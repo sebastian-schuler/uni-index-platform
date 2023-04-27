@@ -1,5 +1,4 @@
 import { DetailedCity, DetailedCountry, DetailedInstitution, DetailedState, DetailedSubject, DetailedSubjectType } from "../types/DetailedDatabaseTypes";
-import { SmBestCardMinified, SmRankingEntry, SmRankingEntryMinified, SocialMediaDBEntry, SocialMediaPages, TotalScore, TwitterProfile, YoutubeProfile } from "../types/SocialMediaTypes";
 import { CategoryCardData, CityCardData, CountryCardData, InstitutionCardData, StateCardData, SubjectCardData } from "../types/UiHelperTypes";
 import { PATH_COUNTRY_IMAGES, URL_CATEGORY, URL_INSTITUTION, URL_LOCATION } from "../url-helper/urlConstants";
 import { getLocalizedName, getUniqueCategoryCounts, toLink } from "./util";
@@ -12,80 +11,6 @@ const getBracketedName = (name: string) => {
     const nameBrackets = name.match(/\(.*\)/gi)?.[0] || "";
     if (nameBrackets !== "") newName = name.replace(nameBrackets, "").trim();
     return { name: newName, nameBrackets: nameBrackets };
-}
-
-// ========================== Minify Functions ==========================
-
-/**
- * Minify a ranking entry to only contain the data needed for the ranking table
- * @param item 
- */
-export const minifySmRankingItem = (item: SmRankingEntry): SmRankingEntryMinified => {
-    const parsedScore = JSON.parse(item.total_score) as TotalScore;
-    return {
-        institution: {
-            name: item.institution.name,
-            url: item.institution.url,
-            countryId: item.institution.city.state.country.id,
-        },
-        combinedScore: parsedScore.percent.all.total,
-        youtubeScore: parsedScore.percent.youtube.total,
-        twitterScore: parsedScore.percent.twitter.total,
-    }
-}
-
-/**
- * Minify a "Best (Youtube/Twitter) Card" to only contain the data needed
- * @param item 
- */
-export const minifySmBestCard = (item: SocialMediaDBEntry, socialMediaSource: SocialMediaPages, locale: string): SmBestCardMinified | null => {
-    const parsedScore = JSON.parse(item.total_score) as TotalScore;
-
-    if (socialMediaSource === "youtube") {
-
-        if (!item.youtube_profile) return null;
-        const youtubeProfile = JSON.parse(item.youtube_profile) as YoutubeProfile;
-
-        return {
-            type: "youtube",
-            href: item.youtube_url,
-            institution: {
-                name: item.institution.name,
-                url: item.institution.url,
-            },
-            country: {
-                name: getLocalizedName({ lang: locale, dbTranslated: item.institution.city.state.country }),
-                url: item.institution.city.state.country.url,
-            },
-            youtubeScore: parsedScore.percent.youtube.total,
-            totalSubscribers: youtubeProfile.subscribers,
-            totalVideos: youtubeProfile.videos,
-            avgViews: youtubeProfile.averageViews,
-            avgComments: youtubeProfile.averageComments,
-        }
-    } else {
-        if (!item.twitter_profile) return null;
-        const parsedTwitter = JSON.parse(item.twitter_profile) as TwitterProfile;
-
-        return {
-            type: "twitter",
-            href: item.youtube_url,
-            institution: {
-                name: item.institution.name,
-                url: item.institution.url,
-            },
-            country: {
-                name: getLocalizedName({ lang: locale, dbTranslated: item.institution.city.state.country }),
-                url: item.institution.city.state.country.url,
-            },
-            twitterScore: parsedScore.percent.youtube.total,
-            totalFollowers: parsedTwitter.followers,
-            avgLikes: parsedTwitter.avgLikes,
-            avgRetweets: parsedTwitter.avgRetweets,
-            totalTweets: parsedTwitter.tweets,
-        }
-    }
-
 }
 
 // ========================== Conversion Functions ==========================

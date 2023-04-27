@@ -9,12 +9,11 @@ import { FooterContent } from '../../../features/Footer/Footer'
 import SmRankingTable from '../../../features/SocialMedia/SmRankingTable'
 import { getCountries } from '../../../lib/prisma/prismaQueries'
 import { getSocialMediaRanking } from '../../../lib/prisma/prismaSocialMedia'
-import { SmRankingEntryMinified } from '../../../lib/types/SocialMediaTypes'
-import { minifySmRankingItem } from '../../../lib/util/conversionUtil'
+import { SocialMediaGenericRankingItem } from '../../../lib/types/social-media/SocialMediaSimplifiedTypes'
 
 interface Props {
     countries: country[],
-    socialMediaList: SmRankingEntryMinified[]
+    socialMediaList: SocialMediaGenericRankingItem[]
     filtedOutCount: number
     footerContent: FooterContent[]
 }
@@ -53,15 +52,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const countries = await getCountries();
 
     // SOCIAL MEDIA
-    const rawSocialMediaList = await getSocialMediaRanking();
-    let socialMediaList: SmRankingEntryMinified[] = rawSocialMediaList.map((item) => minifySmRankingItem(item));
-    socialMediaList = socialMediaList.filter((item) => item.combinedScore > 0);
-
-    const filtedOutCount = rawSocialMediaList.length - socialMediaList.length;
-
-    socialMediaList.sort((a, b) => {
-        return b.combinedScore - a.combinedScore;
-    });
+    const rawSocialMediaList = await getSocialMediaRanking({});
+    const filteredList = rawSocialMediaList.filter((item) => item.total_score > 0);
+    const filtedOutCount = rawSocialMediaList.length - filteredList.length;
 
     const footerContent: FooterContent[] = [
         { title: "Countries", data: countries, type: "Country" },
@@ -70,7 +63,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     return {
         props: {
             countries,
-            socialMediaList,
+            socialMediaList: filteredList,
             filtedOutCount,
             footerContent
         }

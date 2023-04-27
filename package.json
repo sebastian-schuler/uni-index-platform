@@ -23,7 +23,7 @@
     "@mantine/notifications": "^6.0.5",
     "@mantine/nprogress": "^6.0.5",
     "@mantine/tiptap": "^6.0.5",
-    "@prisma/client": "^4.12.0",
+    "@prisma/client": "^4.13.0",
     "@tabler/icons-react": "^2.11.0",
     "@tiptap/extension-character-count": "^2.0.3",
     "@tiptap/extension-highlight": "^2.0.1",
@@ -71,7 +71,7 @@
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "next-translate-plugin": "^2.0.4",
-    "prisma": "^4.12.0",
+    "prisma": "^4.13.0",
     "typescript": "5.0.2"
   }
 }

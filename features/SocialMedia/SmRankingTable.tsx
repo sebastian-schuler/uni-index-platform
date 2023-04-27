@@ -6,11 +6,11 @@ import { country } from '@prisma/client';
 import { IconChevronDown, IconChevronUp, IconSearch, IconSelector } from '@tabler/icons-react';
 import useTranslation from 'next-translate/useTranslation';
 import { useState } from 'react';
-import { SmRankingEntryMinified } from '../../lib/types/SocialMediaTypes';
+import MantineLink from '../../components/Link/MantineLink';
+import { SocialMediaGenericRankingItem } from '../../lib/types/social-media/SocialMediaSimplifiedTypes';
 import { URL_INSTITUTION } from '../../lib/url-helper/urlConstants';
 import { formatNumber } from '../../lib/util/formattingUtil';
 import { getLocalizedName, toLink } from '../../lib/util/util';
-import MantineLink from '../../components/Link/MantineLink';
 
 const useStyles = createStyles((theme) => ({
     th: {
@@ -122,7 +122,7 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 }
 
 interface Props {
-    socialMediaList: SmRankingEntryMinified[]
+    socialMediaList: SocialMediaGenericRankingItem[]
     countries: country[]
 }
 
@@ -132,14 +132,14 @@ const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) 
     const { classes } = useStyles();
 
     const data: RowData[] = socialMediaList.map((item, i) => {
-        const country = countries.find(c => c.id === item.institution.countryId);
+        const country = countries.find(c => c.id === item.country.id);
         return {
             rank: (i + 1),
             name: item.institution.name,
             country: getLocalizedName({ lang: lang, dbTranslated: country }),
-            totalscore: item.combinedScore,
-            youtubeScore: item.youtubeScore,
-            twitterScore: item.twitterScore,
+            totalscore: item.total_score,
+            youtubeScore: item.youtube_score,
+            twitterScore: item.twitter_score,
             url: toLink(URL_INSTITUTION, country?.url || "", item.institution.url, "social-media"),
         }
     })

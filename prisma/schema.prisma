@@ -46,15 +46,15 @@ model country_socials {
   country_id              String  @id(map: "CountrySocialMedia_pkey") @db.VarChar
   last_update             BigInt
   rated_institution_count Int     @default(0)
-  avg_total_score         String  @db.VarChar
-  avg_twitter_score       String  @db.VarChar
-  avg_youtube_score       String  @db.VarChar
-  avg_facebook_score      String? @db.VarChar
-  avg_instagram_score     String? @db.VarChar
-  avg_twitter_profile     String  @db.VarChar
-  avg_youtube_profile     String  @db.VarChar
-  avg_facebook_profile    String? @db.VarChar
-  avg_instagram_profile   String? @db.VarChar
+  avg_total_score         Decimal @default(0) @db.Decimal
+  avg_twitter_score       Decimal @default(0) @db.Decimal
+  avg_youtube_score       Decimal @default(0) @db.Decimal
+  avg_instagram_score     Decimal @default(0) @db.Decimal
+  avg_facebook_score      Decimal @default(0) @db.Decimal
+  avg_twitter_profile     Json?   @db.Json
+  avg_youtube_profile     Json?   @db.Json
+  avg_instagram_profile   Json?   @db.Json
+  avg_facebook_profile    Json?   @db.Json
   country                 country @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SocialMediaCountry id of country")
 }
 
@@ -66,6 +66,8 @@ model institution {
   main_location          String                   @db.Uuid
   popularity_score       Int                      @default(0)
   is_hrk_source          Boolean                  @default(false)
+  omar_id                String?                  @db.Uuid
+  institution_omar       institution_omar?        @relation(fields: [omar_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Institution has Online Marketing Object")
   city                   city                     @relation(fields: [main_location], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Institution main location in city")
   institution_city       institution_city[]
   institution_screenshot institution_screenshot[]
@@ -84,22 +86,22 @@ model institution_city {
 }
 
 model institution_socials {
-  institution_id    String      @id(map: "InstitutionSocialMedia2_pkey") @db.Uuid
-  twitter_url       String?     @db.VarChar
-  facebook_url      String?     @db.VarChar
-  youtube_url       String?     @db.VarChar
-  instagram_url     String?     @db.VarChar
-  last_update       BigInt
-  twitter_data      String?     @db.VarChar
-  facebook_data     String?     @db.VarChar
-  youtube_data      String?     @db.VarChar
-  instagram_data    String?     @db.VarChar
-  twitter_profile   String?     @db.VarChar
-  facebook_profile  String?     @db.VarChar
-  youtube_profile   String?     @db.VarChar
-  instagram_profile String?     @db.VarChar
-  total_score       String      @db.VarChar
-  institution       institution @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "institution has social media stats")
+  institution_id  String      @id(map: "InstitutionSocialMedia2_pkey") @db.Uuid
+  twitter_url     String?     @db.VarChar
+  facebook_url    String?     @db.VarChar
+  youtube_url     String?     @db.VarChar
+  instagram_url   String?     @db.VarChar
+  last_update     BigInt
+  total_score     Decimal     @default(0) @db.Decimal
+  twitter_score   Decimal     @default(0) @db.Decimal
+  youtube_score   Decimal     @default(0) @db.Decimal
+  instagram_score Decimal     @default(0) @db.Decimal
+  facebook_score  Decimal     @default(0) @db.Decimal
+  twitter_data    Json?       @db.Json
+  youtube_data    Json?       @db.Json
+  instagram_data  Json?       @db.Json
+  facebook_data   Json?       @db.Json
+  institution     institution @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "institution has social media stats")
 }
 
 model state {
@@ -151,6 +153,7 @@ model user {
   password        String         @db.VarChar
   institution_id  String         @db.Uuid
   date_registered BigInt
+  preferred_lang  String         @db.VarChar
   institution     institution    @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User belongs to institution")
   user_ad         user_ad[]
   user_article    user_article[]
@@ -218,4 +221,10 @@ model institution_screenshot {
 
   @@unique([institution_id, filename], map: "filename per institution is unique")
   @@unique([institution_id, screen_index], map: "screenshot index per institution unique")
+}
+
+model institution_omar {
+  id          String        @id(map: "test_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        Int?
+  institution institution[]
 }

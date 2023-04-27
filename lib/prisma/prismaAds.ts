@@ -194,3 +194,35 @@ export const getActiveAdsByUser = async (userId: string): Promise<ManagedAd[]> =
         })
     });
 }
+
+export const getAdByUser = async (adId: string | null, userId: string): Promise<ManagedAd | null> => {
+
+    if(!adId) return null;
+
+    const res = await prisma.user_ad.findFirst({
+        include: { subject: true, },
+        where: {
+            id: adId,
+            user_id: userId,
+        }
+    })
+
+    if (!res) return null;
+
+    return ({
+        id: res.id,
+        user_id: res.user_id,
+        booked_from: Number(res.booked_from),
+        booked_until: Number(res.booked_until),
+        subject: res.subject ? {
+            name: res.subject?.name,
+        } : null,
+        type: res.type,
+        size: res.size,
+        description: res.description,
+        image_id: res.image_id,
+        date_booked: Number(res.date_booked),
+        placement: res.placement as AdPlacement,
+        title: res.title as AdTitle,
+    });
+}

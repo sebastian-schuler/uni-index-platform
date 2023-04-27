@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
 import MantineLink from '../../components/Link/MantineLink';
 import CardTitle from '../../components/Text/CardTitle';
-import { SmRankingEntryMinified } from '../../lib/types/SocialMediaTypes';
+import { SocialMediaGenericRankingItem } from '../../lib/types/social-media/SocialMediaSimplifiedTypes';
 import { URL_INSTITUTION, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING } from '../../lib/url-helper/urlConstants';
 import { toLink } from '../../lib/util/util';
 
@@ -35,7 +35,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface Props {
-    socialMediaList: SmRankingEntryMinified[]
+    socialMediaList: SocialMediaGenericRankingItem[]
     countries: country[]
 }
 
@@ -46,7 +46,7 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
 
     const rows = socialMediaList.map((row, i) => {
 
-        const country = countries.find(c => c.id === row.institution.countryId);
+        const country = countries.find(c => c.id === row.country.id);
         const url = toLink(URL_INSTITUTION, country?.url || "", row.institution.url, "social-media");
 
         return (
@@ -54,15 +54,15 @@ const SmIndexTopRanking: React.FC<Props> = ({ socialMediaList, countries }: Prop
                 <td>
                     <MantineLink url={url} type="internal">{row.institution.name}</MantineLink>
                 </td>
-                <td>{country?.name}</td>
-                <td className={classes.scoreColumn}>{Math.round(row.combinedScore).toLocaleString(lang) + '%'}</td>
+                <td>{country && country.name}</td>
+                <td className={classes.scoreColumn}>{row.total_score.toLocaleString(lang,{minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
             </tr>
         );
     });
 
     return (
         <Card radius="md" shadow={"sm"} className={classes.card}>
-            
+
             <CardSection className={classes.topSection}>
                 <CardTitle href={toLink(URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING)} text={t('social-media.top-institutions-title')} />
                 <Text sx={{ lineHeight: 1.1 }}>{t('social-media.top-institutions-desc')}</Text>

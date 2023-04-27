@@ -11,8 +11,9 @@ import Breadcrumb from '../../../../../features/Breadcrumb/Breadcrumb'
 import { FooterContent } from '../../../../../features/Footer/Footer'
 import SmStatRow from '../../../../../features/SocialMedia/SmStatRow'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
-import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
-import { TotalScore, TotalScoreSet, TwitterProfile } from '../../../../../lib/types/SocialMediaTypes'
+import { getCountrySocialmedia, getInstitutionTwitterData } from '../../../../../lib/prisma/prismaSocialMedia'
+import { CountryTwitterSummary } from '../../../../../lib/types/social-media/CountrySocialRatingTypes'
+import { TwitterProfile } from '../../../../../lib/types/social-media/TwitterTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION_SOCIALMEDIA_TW } from '../../../../../lib/url-helper/urlConstants'
 
@@ -37,14 +38,13 @@ const useStyles = createStyles((theme) => ({
 interface Props {
     institution: institution,
     country: country,
-    countryTwitterScore: TotalScoreSet | null
-    countryTwitterProfile: TwitterProfile | null
-    institutionScore: TotalScoreSet | null
-    institutionTwitterProfile: TwitterProfile | null
+    twitterProfile: TwitterProfile | null
+    avgTwitterProfile: CountryTwitterSummary | null,
+    avgTwitterScore: number | null,
     footerContent: FooterContent[],
 }
 
-const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, countryTwitterScore, countryTwitterProfile, institutionScore, institutionTwitterProfile, footerContent }: Props) => {
+const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, twitterProfile, avgTwitterProfile, avgTwitterScore, footerContent }: Props) => {
 
     const { classes, theme } = useStyles();
     const { t, lang } = useTranslation('institution');
@@ -66,7 +66,7 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, country
     );
 
     // IF NO SOCIAL MEDIA DATA PRESENT, RETURN ERROR COMPONENT
-    if (!institutionTwitterProfile || !countryTwitterProfile || !institutionScore || !countryTwitterScore) {
+    if (!avgTwitterProfile || !twitterProfile) {
         return errorComponent;
     }
 
@@ -103,23 +103,23 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, country
 
                             <SmStatRow
                                 title='Followers'
-                                countryValue={countryTwitterProfile.followers}
-                                institutionValue={institutionTwitterProfile.followers}
+                                countryValue={avgTwitterProfile.avgFollowers}
+                                institutionValue={twitterProfile.meta.metrics.followerCount}
                             />
                             <Divider mt="md" mb="md" />
 
                             <SmStatRow
                                 title='Following'
-                                countryValue={countryTwitterProfile.following}
-                                institutionValue={institutionTwitterProfile.following}
+                                countryValue={avgTwitterProfile.avgFollowing}
+                                institutionValue={twitterProfile.meta.metrics.followingCount}
                             />
 
                             <Divider mt="md" mb="md" />
 
                             <SmStatRow
                                 title='List appearances'
-                                countryValue={countryTwitterProfile.listed}
-                                institutionValue={institutionTwitterProfile.listed}
+                                countryValue={avgTwitterProfile.avgListed}
+                                institutionValue={twitterProfile.meta.metrics.listedCount}
                             />
 
                             <Divider mt="md" mb="md" />
@@ -133,9 +133,9 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, country
                                 >
                                     Profile status
                                 </Text>
-                                <Text weight={700} size="md" color={institutionTwitterProfile.isVerified ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                <Text weight={700} size="md" color={twitterProfile.raw.multiplier.isVerified ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
                                     {
-                                        institutionTwitterProfile.isVerified ? "VERIFIED" : "NOT VERIFIED"
+                                        twitterProfile.raw.multiplier.isVerified ? "VERIFIED" : "NOT VERIFIED"
                                     }
                                 </Text>
                             </div>
@@ -151,9 +151,9 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, country
                                 >
                                     Website link
                                 </Text>
-                                <Text weight={700} size="md" color={institutionTwitterProfile.isWebsiteLinked ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
+                                <Text weight={700} size="md" color={twitterProfile.raw.multiplier.isLinked ? 'teal' : 'red'} sx={{ lineHeight: 1.2 }}>
                                     {
-                                        institutionTwitterProfile.isWebsiteLinked ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
+                                        twitterProfile.raw.multiplier.isLinked ? "LINK IN PROFILE" : "NO LINK IN PROFILE"
                                     }
                                 </Text>
                             </div>
@@ -169,26 +169,26 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, country
                         <Card.Section className={classes.cardSection}>
                             <SmStatRow
                                 title='Total tweets'
-                                countryValue={countryTwitterProfile.tweets}
-                                institutionValue={institutionTwitterProfile.tweets}
+                                countryValue={avgTwitterProfile.avgTweets}
+                                institutionValue={twitterProfile.meta.metrics.tweetCount}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average likes per tweet'
-                                countryValue={countryTwitterProfile.avgLikes}
-                                institutionValue={institutionTwitterProfile.avgLikes}
+                                countryValue={0}
+                                institutionValue={twitterProfile.raw.averages.avgLikes}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average replies per tweet'
-                                countryValue={countryTwitterProfile.avgReplies}
-                                institutionValue={institutionTwitterProfile.avgReplies}
+                                countryValue={0}
+                                institutionValue={twitterProfile.raw.averages.avgReplies}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average retweets per tweet'
-                                countryValue={countryTwitterProfile.avgRetweets}
-                                institutionValue={institutionTwitterProfile.avgRetweets}
+                                countryValue={0}
+                                institutionValue={twitterProfile.raw.averages.avgRetweets}
                             />
                         </Card.Section>
                     </Card>
@@ -205,16 +205,8 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
     const country = await getCountry(countryUrl);
     const institution = await getInstitution({ institutionUrl });
-    const socialMedia = institution ? (await getSocialMedia(institution.id)) : null;
+    const institutionSocialMedia = institution ? (await getInstitutionTwitterData(institution.id)) : null;
     const countrySocialMedia = country ? (await getCountrySocialmedia(country.id)) : null;
-
-    // Country data
-    const countryTwitterScore = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_twitter_score) as TotalScoreSet : null;
-    const countryTwitterProfile = countrySocialMedia ? JSON.parse(countrySocialMedia.avg_twitter_profile) as TwitterProfile : null;
-
-    // Institution data
-    const institutionScore = socialMedia ? JSON.parse(socialMedia.total_score) as TotalScore : null;
-    const institutionTwitterProfile = socialMedia && socialMedia.twitter_profile ? JSON.parse(socialMedia.twitter_profile) as TwitterProfile : null;
 
     // Footer Data
     // Get all countries
@@ -223,18 +215,20 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         { title: "Countries", data: countryList, type: "Country" },
     ]
 
-    return {
-        props: {
-            institution,
-            country,
-            countryTwitterScore,
-            countryTwitterProfile,
-            institutionScore,
-            institutionTwitterProfile,
-            footerContent: footerContent
-        }
+    if (!institution || !country) {
+        return { notFound: true }
     }
 
+    const props: Props = {
+        institution,
+        country,
+        twitterProfile: institutionSocialMedia?.twitter_data || null,
+        avgTwitterProfile: countrySocialMedia?.profile.twitter || null,
+        avgTwitterScore: countrySocialMedia?.count || null,
+        footerContent,
+    }
+
+    return { props };
 }
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
