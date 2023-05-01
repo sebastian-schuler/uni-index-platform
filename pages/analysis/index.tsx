@@ -24,26 +24,26 @@ const AnalysisPage = () => {
       <Breadcrumb />
 
       <Stack>
-        <GenericPageHeader title={t('analysis.title')} description={t('analysis.subtitle')} />
+        <GenericPageHeader title={t('title')} description={t('subtitle')} />
 
-        <Title order={2}>{t('analysis.social-media.title')}</Title>
+        <Title order={2}>{t('social-media.title')}</Title>
         <List>
           <List.Item>
             <Anchor component={Link} href={toLink(URL_ANALYSIS, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_RANKING)}>
-              {t('analysis.social-media.label-ranking')}
+              {t('social-media.label-ranking')}
             </Anchor>
           </List.Item>
 
           <List.Item>
             <Anchor component={Link} href={toLink(URL_ANALYSIS, URL_SOCIAL_MEDIA, URL_SOCIAL_MEDIA_STATISTICS)}>
-              {t('analysis.social-media.label-statistics')}
+              {t('social-media.label-statistics')}
             </Anchor>
           </List.Item>
         </List>
 
         <Divider />
 
-        <Title order={2}>{t('analysis.online-marketing')}</Title>
+        <Title order={2}>{t('online-marketing')}</Title>
         <List>
 
         </List>

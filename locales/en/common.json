@@ -1,5 +1,6 @@
 {
   "page-title": "Uni-Index",
+  "map-loading-label": "Loading map...",
 
   "account": {
     "view": "Account",

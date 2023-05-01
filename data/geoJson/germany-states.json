@@ -135,7 +135,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-BW" },
+      "properties": { "id": "DE_BW" },
       "id": 0
     },
     {
@@ -382,7 +382,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-BY" },
+      "properties": { "id": "DE_BY" },
       "id": 1
     },
     {
@@ -411,7 +411,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-BE" },
+      "properties": { "id": "DE_BE" },
       "id": 2
     },
     {
@@ -562,7 +562,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-BB" },
+      "properties": { "id": "DE_BB" },
       "id": 3
     },
     {
@@ -583,7 +583,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-HB" },
+      "properties": { "id": "DE_HB" },
       "id": 4
     },
     {
@@ -624,7 +624,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-HH" },
+      "properties": { "id": "DE_HH" },
       "id": 5
     },
     {
@@ -755,7 +755,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-HE" },
+      "properties": { "id": "DE_HE" },
       "id": 6
     },
     {
@@ -915,7 +915,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-MV" },
+      "properties": { "id": "DE_MV" },
       "id": 7
     },
     {
@@ -1127,7 +1127,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-NI" },
+      "properties": { "id": "DE_NI" },
       "id": 8
     },
     {
@@ -1285,7 +1285,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-NW" },
+      "properties": { "id": "DE_NW" },
       "id": 9
     },
     {
@@ -1388,7 +1388,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-RP" },
+      "properties": { "id": "DE_RP" },
       "id": 10
     },
     {
@@ -1429,7 +1429,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-SL" },
+      "properties": { "id": "DE_SL" },
       "id": 11
     },
     {
@@ -1546,7 +1546,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-ST" },
+      "properties": { "id": "DE_ST" },
       "id": 12
     },
     {
@@ -1659,7 +1659,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-SN" },
+      "properties": { "id": "DE_SN" },
       "id": 13
     },
     {
@@ -1782,7 +1782,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-SH" },
+      "properties": { "id": "DE_SH" },
       "id": 14
     },
     {
@@ -1914,7 +1914,7 @@
           ]
         ]
       },
-      "properties": { "id": "DE-TH" },
+      "properties": { "id": "DE_TH" },
       "id": 15
     }
   ]

@@ -1,7 +1,7 @@
 import { Group, SimpleGrid, Stack } from '@mantine/core';
 import { country, state } from '@prisma/client';
 import { Reorder } from 'framer-motion';
-import produce from 'immer';
+import { produce } from 'immer';
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';

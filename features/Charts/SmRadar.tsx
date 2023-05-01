@@ -20,9 +20,9 @@ const options = {
                 display: false
             },
             min: 0,
-            max: 100,
+            // max: 10,
             ticks: {
-                stepSize: 20
+                stepSize: 1
             }
         }
     }

@@ -70,6 +70,7 @@ const HeroSection = () => {
                                 i18nKey="index:hero.title"
                                 components={[
                                     <Text
+                                        key={'title-label'}
                                         component="span"
                                         inherit
                                         variant="gradient"

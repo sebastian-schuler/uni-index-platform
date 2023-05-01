@@ -1,5 +1,5 @@
 import { CountrySocialRating, CountryTwitterSummary, CountryYoutubeSummary } from '../types/social-media/CountrySocialRatingTypes';
-import { BestSocialMediaItem, SocialMediaGenericRankingItem } from '../types/social-media/SocialMediaSimplifiedTypes';
+import { BestSocialMediaItem, SocialMediaGenericRankingItem, SocialMediaLargeItem } from '../types/social-media/SocialMediaSimplifiedTypes';
 import { TwitterProfile } from '../types/social-media/TwitterTypes';
 import { YoutubeChannel } from '../types/social-media/YoutubeTypes';
 import { URL_INSTITUTION, URL_INSTITUTION_SOCIALMEDIA, URL_LOCATION } from '../url-helper/urlConstants';
@@ -31,11 +31,11 @@ export const getCountrySocialmedia = async (countryId: string): Promise<CountryS
             twitter: res.avg_twitter_profile ? res.avg_twitter_profile as CountryTwitterSummary : null,
         },
         score: {
-            avgYoutube: Number(res.avg_youtube_score),
-            avgTwitter: Number(res.avg_twitter_score),
-            avgInstagram: Number(res.avg_instagram_score),
-            avgFacebook: Number(res.avg_facebook_score),
-            avgTotal: Number(res.avg_total_score),
+            youtube: Number(res.avg_youtube_score),
+            twitter: Number(res.avg_twitter_score),
+            instagram: Number(res.avg_instagram_score),
+            facebook: Number(res.avg_facebook_score),
+            total: Number(res.avg_total_score),
         }
     };
 }
@@ -194,14 +194,44 @@ export const getBestSocialMedia = async ({ type, lang }: GetBestSocialMediaProps
     return null;
 }
 
-export const getSocialMedia = async (institutionId: string) => {
-    return await prisma.institution_socials.findUnique({
+/**
+ * Get social media data of a specific institution
+ * @param institutionId 
+ * @returns 
+ */
+export const getSocialMedia = async (institutionId: string): Promise<SocialMediaLargeItem | null> => {
+    const res = await prisma.institution_socials.findUnique({
         where: {
             institution_id: institutionId
         }
     });
+
+    if (!res) return null;
+
+    return {
+        institution_id: res.institution_id,
+        last_update: res.last_update.toString(),
+
+        total_score: Number(res.total_score),
+
+        twitter_url: res.twitter_url,
+        twitter_score: Number(res.twitter_score),
+        twitter_data: res.twitter_data ? res.twitter_data as TwitterProfile : null,
+        youtube_url: res.youtube_url,
+        youtube_score: Number(res.youtube_score),
+        youtube_data: res.youtube_data ? res.youtube_data as YoutubeChannel : null,
+        instagram_url: res.instagram_url,
+        instagram_score: Number(res.instagram_score),
+        facebook_url: res.facebook_url,
+        facebook_score: Number(res.facebook_score),
+    }
 }
 
+/**
+ * Return twitter data of a specific institution
+ * @param institutionId 
+ * @returns 
+ */
 export const getInstitutionTwitterData = async (institutionId: string) => {
     const res = await prisma.institution_socials.findUnique({
         where: {
@@ -221,6 +251,11 @@ export const getInstitutionTwitterData = async (institutionId: string) => {
     }
 }
 
+/**
+ * Return youtube data of a specific institution
+ * @param institutionId 
+ * @returns 
+ */
 export const getInstitutionYoutubeData = async (institutionId: string) => {
     const res = await prisma.institution_socials.findUnique({
         where: {

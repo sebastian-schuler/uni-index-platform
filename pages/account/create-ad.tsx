@@ -7,7 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useEffect, useState } from 'react';
 import SegmentedSelect from '../../components/CreateAd/SegmentedSelect';
 import ArticleBuilder from '../../features/AccountCreateAd/ArticleBuilder';
-import { getTiptapEditor } from '../../features/AccountCreateAd/ArticleEditor';
+import { useTiptapEditor } from '../../features/AccountCreateAd/ArticleEditor';
 import { SubjectAutofill } from '../../features/AccountCreateAd/AutocompleteSubject';
 import CreateAdBuilder, { CreateAdLinkedItemType } from '../../features/AccountCreateAd/CreateAdBuilder';
 import { getCalculatedAdCost } from '../../lib/accountHandling/costCalculator';
@@ -64,7 +64,7 @@ const CreateAd = ({ institutionData }: Props) => {
     const [excerpt, setExcerpt] = useState<string>("");
 
     // Article Editor 
-    const editor = getTiptapEditor();
+    const editor = useTiptapEditor();
 
     // ==========================================================
 

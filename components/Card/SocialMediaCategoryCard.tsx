@@ -18,7 +18,6 @@ const useStyles = createStyles((theme, _params: StyleParams) => ({
     },
 
     section: {
-        borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
         padding: theme.spacing.md,
     },
 }));
@@ -29,12 +28,13 @@ interface Props {
     icon: JSX.Element
     color: string
     textColor: string
+    rating: number
 }
 
-const SocialMediaCategoryCard: React.FC<Props> = ({ title, url, icon, color, textColor }: Props) => {
+const SocialMediaCategoryCard: React.FC<Props> = ({ title, url, icon, color, textColor, rating }: Props) => {
 
     const { classes, theme } = useStyles({ color: color });
-    const { t } = useTranslation('institution');
+    const { t, lang } = useTranslation('institution');
 
     return (
         <Card component={Link} href={url} withBorder radius="md" shadow={"sm"} className={classes.card}>
@@ -46,6 +46,14 @@ const SocialMediaCategoryCard: React.FC<Props> = ({ title, url, icon, color, tex
                     </Stack>
                     {icon}
                 </Group>
+            </Card.Section>
+
+            <Card.Section className={classes.section}>
+                <Text color='white'>{t('social-media.card-rating-label')}</Text>
+                <div>
+                    <Text component='span' color='white' size={'xl'}>{rating.toLocaleString(lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
+                    <Text component='span' color='white' size={'md'} ml={'sm'}>/ 10</Text>
+                </div>
             </Card.Section>
 
         </Card>

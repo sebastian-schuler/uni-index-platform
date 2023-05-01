@@ -37,7 +37,7 @@ const useStyles = createStyles((theme) => ({
         minWidth: 150,
     },
     numberRow: {
-        textAlign: 'right',
+        textAlign: 'left',
         minWidth: 150,
     },
 }));
@@ -169,9 +169,9 @@ const SmRankingTable: React.FC<Props> = ({ socialMediaList, countries }: Props) 
                 <MantineLink url={row.url} type="internal">{row.name}</MantineLink>
             </td>
             <td className={classes.countryRow}>{row.country}</td>
-            <td className={classes.numberRow}>{formatNumber(row.totalscore, lang, 2)}%</td>
-            <td className={classes.numberRow}>{formatNumber(row.twitterScore, lang, 2)}%</td>
-            <td className={classes.numberRow}>{formatNumber(row.youtubeScore, lang, 2)}%</td>
+            <td className={classes.numberRow}>{formatNumber(row.totalscore, lang, 2)}</td>
+            <td className={classes.numberRow}>{formatNumber(row.twitterScore, lang, 2)}</td>
+            <td className={classes.numberRow}>{formatNumber(row.youtubeScore, lang, 2)}</td>
         </tr>
     ));
 

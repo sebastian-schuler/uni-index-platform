@@ -100,14 +100,14 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, youtube
 
                             <SmStatRow
                                 title='Subscribers'
-                                countryValue={avgYoutubeProfile.avgSubscribers}
+                                countryValue={avgYoutubeProfile.subscribers}
                                 institutionValue={youtubeProfile.meta.metrics.subscriberCount}
                             />
                             <Divider mt="md" mb="md" />
 
                             <SmStatRow
                                 title='Total views'
-                                countryValue={0}
+                                countryValue={avgYoutubeProfile.totalViews}
                                 institutionValue={youtubeProfile.meta.metrics.viewCount}
                             />
                         </Card.Section>
@@ -121,26 +121,26 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, youtube
                         <Card.Section className={classes.cardSection}>
                             <SmStatRow
                                 title='Total videos'
-                                countryValue={avgYoutubeProfile.avgVideos}
+                                countryValue={avgYoutubeProfile.videos}
                                 institutionValue={youtubeProfile.meta.metrics.videoCount}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average likes per video'
-                                countryValue={0}
-                                institutionValue={0}
+                                countryValue={avgYoutubeProfile.videoLikes}
+                                institutionValue={youtubeProfile.raw.averages.avgLikes}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average comments per video'
-                                countryValue={0}
-                                institutionValue={0}
+                                countryValue={avgYoutubeProfile.videoComments}
+                                institutionValue={youtubeProfile.raw.averages.avgComments}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average views per video'
-                                countryValue={avgYoutubeProfile.avgViews}
-                                institutionValue={0}
+                                countryValue={avgYoutubeProfile.videoViews}
+                                institutionValue={youtubeProfile.raw.averages.avgViews}
                             />
                             <Divider mt="md" mb="md" />
                             <div>

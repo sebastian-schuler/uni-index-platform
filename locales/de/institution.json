@@ -19,7 +19,13 @@
     "subjects-description": "Finden Sie alle Studiengänge, die von {{institution}} angeboten werden.",
 
     "subject-title": "{{subject}} | {{institution}}",
-    "subject-description": "Erfahren Sie mehr über {{subject}} das von {{institution}} angeboten wird."
+    "subject-description": "Erfahren Sie mehr über {{subject}} das von {{institution}} angeboten wird.",
+    
+    "articles-title": "Artikel | {{institution}}",
+    "articles-description": "Lesen Sie Artikel veröffentlicht von {{institution}}.",
+
+    "article-title": "{{title}} | {{institution}}",
+    "article-description": "Lesen Sie den Artikel \"{{title}}\" veröffentlich von {{institution}}."
   },
 
   "institutions": {
@@ -68,7 +74,8 @@
     "header": "Social Media",
     "header-text": "Wir haben die Social-Media-Profile von {{name}} analysiert und mit denen anderer Institutionen verglichen.",
     "card-lastupdate": "Letztes Update: {{date}}",
-    "header-links": "Social Media Links"
+    "header-links": "Social Media Links",
+    "card-rating-label": "Gesamtwertung" 
   },
 
   "online-marketing": {

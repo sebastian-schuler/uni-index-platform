@@ -55,7 +55,7 @@ const ArticleBuilder = ({ editor, title, setTitle, excerpt, setExcerpt, image, s
                 <Stack>
                     {
                         imageFilepath ? (
-                            <Image src={imageFilepath} height={200} fit={'contain'} />
+                            <Image alt='Preview' src={imageFilepath} height={200} fit={'contain'} />
                         ) : (
                             <Skeleton h={200} animate={false} />
                         )

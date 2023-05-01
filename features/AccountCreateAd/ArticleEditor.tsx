@@ -1,19 +1,18 @@
 import { Text } from '@mantine/core';
-import { RichTextEditor } from '@mantine/tiptap';
+import { Link, RichTextEditor } from '@mantine/tiptap';
+import CharacterCount from '@tiptap/extension-character-count';
+import Highlight from '@tiptap/extension-highlight';
+import SubScript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
+import TextAlign from '@tiptap/extension-text-align';
+import Underline from '@tiptap/extension-underline';
 import { Editor, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { Link } from '@mantine/tiptap';
-import Highlight from '@tiptap/extension-highlight';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
-import Superscript from '@tiptap/extension-superscript';
-import SubScript from '@tiptap/extension-subscript';
-import CharacterCount from '@tiptap/extension-character-count'
 import useTranslation from 'next-translate/useTranslation';
 
 const characterLimit = 1000;
 
-export const getTiptapEditor = () => {
+export const useTiptapEditor = () => {
     return useEditor({
         extensions: [
             StarterKit,

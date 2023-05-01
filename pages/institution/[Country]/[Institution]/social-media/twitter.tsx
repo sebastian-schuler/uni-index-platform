@@ -103,14 +103,14 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, twitter
 
                             <SmStatRow
                                 title='Followers'
-                                countryValue={avgTwitterProfile.avgFollowers}
+                                countryValue={avgTwitterProfile.followers}
                                 institutionValue={twitterProfile.meta.metrics.followerCount}
                             />
                             <Divider mt="md" mb="md" />
 
                             <SmStatRow
                                 title='Following'
-                                countryValue={avgTwitterProfile.avgFollowing}
+                                countryValue={avgTwitterProfile.following}
                                 institutionValue={twitterProfile.meta.metrics.followingCount}
                             />
 
@@ -118,7 +118,7 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, twitter
 
                             <SmStatRow
                                 title='List appearances'
-                                countryValue={avgTwitterProfile.avgListed}
+                                countryValue={avgTwitterProfile.listed}
                                 institutionValue={twitterProfile.meta.metrics.listedCount}
                             />
 
@@ -169,25 +169,25 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, twitter
                         <Card.Section className={classes.cardSection}>
                             <SmStatRow
                                 title='Total tweets'
-                                countryValue={avgTwitterProfile.avgTweets}
+                                countryValue={avgTwitterProfile.tweets}
                                 institutionValue={twitterProfile.meta.metrics.tweetCount}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average likes per tweet'
-                                countryValue={0}
+                                countryValue={avgTwitterProfile.tweetLikes}
                                 institutionValue={twitterProfile.raw.averages.avgLikes}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average replies per tweet'
-                                countryValue={0}
+                                countryValue={avgTwitterProfile.tweetReplies}
                                 institutionValue={twitterProfile.raw.averages.avgReplies}
                             />
                             <Divider mt="md" mb="md" />
                             <SmStatRow
                                 title='Average retweets per tweet'
-                                countryValue={0}
+                                countryValue={avgTwitterProfile.tweetRetweets}
                                 institutionValue={twitterProfile.raw.averages.avgRetweets}
                             />
                         </Card.Section>

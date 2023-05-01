@@ -12,11 +12,9 @@ const nextConfig = {
   compiler: {
     emotion: true,
   },
-  // experimental: {
-  //   forceSwcTransforms: true, // required for emotion?
-  // },
+  eslint: {
+    dirs: ["pages", "components", "lib", "features", "theme"],
+  }
 };
-
-// module.exports = nextConfig;
 
 module.exports = nextTranslate(nextConfig);

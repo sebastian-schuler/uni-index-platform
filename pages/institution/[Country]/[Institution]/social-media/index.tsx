@@ -15,48 +15,44 @@ import InstitutionNav from '../../../../../features/Navigation/InstitutionNav'
 import SmOverviewSection from '../../../../../features/SocialMedia/SmOverviewSection'
 import { getCountries, getCountry, getInstitution } from '../../../../../lib/prisma/prismaQueries'
 import { getCountrySocialmedia, getSocialMedia } from '../../../../../lib/prisma/prismaSocialMedia'
+import { CountrySocialRating } from '../../../../../lib/types/social-media/CountrySocialRatingTypes'
+import { SocialMediaLargeItem } from '../../../../../lib/types/social-media/SocialMediaSimplifiedTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { toLink } from '../../../../../lib/util/util'
-
-export interface SocialMediaLinkProps {
-    twitter: string | null
-    youtube: string | null
-    instagram: string | null
-    facebook: string | null
-}
 
 interface Props {
     institution: institution,
     country: country,
     lastUpdate: number,
-    socialMediaLinks: SocialMediaLinkProps
+    socialMedia: SocialMediaLargeItem | null,
+    countrySocialMedia: CountrySocialRating | null,
     footerContent: FooterContent[],
 }
 
-const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, lastUpdate, socialMediaLinks, footerContent }: Props) => {
+const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, lastUpdate, countrySocialMedia, socialMedia, footerContent }: Props) => {
 
     const { t, lang } = useTranslation('institution');
     const router = useRouter();
 
-    // if (!institutionScore || !countryScore || !countryTwitterScore || !countryYoutubeScore) {
-    //     return (
-    //         <ResponsiveWrapper footerContent={footerContent}>
+    if (!socialMedia || !countrySocialMedia) {
+        return (
+            <ResponsiveWrapper footerContent={footerContent}>
 
-    //             <Head>
-    //                 <title key={"title"}>{t('common:page-title') + " | " + t('social-media.title-nodata', { institution: institution.name })}</title>
-    //                 <meta key={"description"} name="description" content={t('social-media.description', { institution: institution.name })} />
-    //             </Head>
+                <Head>
+                    <title key={"title"}>{t('common:page-title') + " | " + t('social-media.title-nodata', { institution: institution.name })}</title>
+                    <meta key={"description"} name="description" content={t('social-media.description', { institution: institution.name })} />
+                </Head>
 
-    //             <Breadcrumb countryInfo={country} institutionInfo={institution} />
-    //             <InstitutionNav title={institution.name} />
-    //             <Text>No data</Text>
-    //         </ResponsiveWrapper>
-    //     )
-    // }
+                <Breadcrumb countryInfo={country} institutionInfo={institution} />
+                <InstitutionNav title={institution.name} />
+                <Text>No data</Text>
+            </ResponsiveWrapper>
+        )
+    }
 
     const socialMediaPages: JSX.Element[] = [];
 
-    if (socialMediaLinks.twitter) {
+    if (socialMedia.twitter_data) {
         socialMediaPages.push(
             <SocialMediaCategoryCard
                 key={'twitter'}
@@ -65,11 +61,12 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, las
                 icon={<IconBrandTwitter size={24} color={"white"} />}
                 color={"#1DA1F2"}
                 textColor={"white"}
+                rating={socialMedia.twitter_score}
             />
         );
     }
 
-    if (socialMediaLinks.youtube) {
+    if (socialMedia.youtube_data) {
         socialMediaPages.push(
             <SocialMediaCategoryCard
                 key={'youtube'}
@@ -78,6 +75,7 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, las
                 icon={<IconBrandYoutube size={24} color={"white"} />}
                 color={"#FF0000"}
                 textColor={"white"}
+                rating={socialMedia.youtube_score}
             />
         );
     }
@@ -91,9 +89,7 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, las
                 <title key={"title"}>{t('common:page-title') + " | " + t('social-media.title', { institution: institution.name })}</title>
                 <meta key={"description"} name="description" content={t('social-media.description', { institution: institution.name })} />
             </Head>
-
             <Breadcrumb countryInfo={country} institutionInfo={institution} />
-
             <InstitutionNav title={institution.name} />
 
             <Stack spacing={"lg"}>
@@ -116,7 +112,8 @@ const InstitutionSocialMediaPage: NextPage<Props> = ({ institution, country, las
                 </Stack>
 
                 <SmOverviewSection
-                    socialMediaLinks={socialMediaLinks}
+                    socialMedia={socialMedia}
+                    countrySocialMedia={countrySocialMedia}
                     country={country}
                     institution={institution}
                 />
@@ -137,14 +134,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     const socialMedia = institution ? (await getSocialMedia(institution.id)) : null;
     const countrySocialMedia = country ? (await getCountrySocialmedia(country.id)) : null;
 
-    // Social Media Links
-    const socialMediaLinks: SocialMediaLinkProps = {
-        twitter: socialMedia?.twitter_url || null,
-        youtube: socialMedia?.youtube_url || null,
-        instagram: socialMedia?.instagram_url || null,
-        facebook: socialMedia?.facebook_url || null,
-    }
-
     // Last Update
     const lastUpdate = socialMedia ? Number(socialMedia.last_update) : 0;
 
@@ -163,7 +152,8 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         institution,
         country,
         lastUpdate,
-        socialMediaLinks,
+        socialMedia,
+        countrySocialMedia,
         footerContent
     }
 

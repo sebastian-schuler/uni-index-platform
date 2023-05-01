@@ -47,3 +47,23 @@ export type BestSocialMediaItem = ({
     )
 );
 
+export type SocialMediaLargeItem = {
+    institution_id: string;
+    last_update: string;
+
+    twitter_url: string | null;
+    twitter_data: TwitterProfile | null;
+    twitter_score: number;
+
+    youtube_url: string | null;
+    youtube_data: YoutubeChannel | null;
+    youtube_score: number;
+
+    instagram_url: string | null;
+    instagram_score: number;
+
+    facebook_url: string | null;
+    facebook_score: number;
+
+    total_score: number;
+}

@@ -14,11 +14,11 @@ import { SocialMediaGenericRankingItem } from '../../../lib/types/social-media/S
 interface Props {
     countries: country[],
     socialMediaList: SocialMediaGenericRankingItem[]
-    filtedOutCount: number
+    filteredCount: number
     footerContent: FooterContent[]
 }
 
-const SocialMediaRanking: NextPage<Props> = ({ countries, socialMediaList, filtedOutCount, footerContent }: Props) => {
+const SocialMediaRanking: NextPage<Props> = ({ countries, socialMediaList, filteredCount, footerContent }: Props) => {
 
     const { t } = useTranslation('analysis');
 
@@ -33,14 +33,14 @@ const SocialMediaRanking: NextPage<Props> = ({ countries, socialMediaList, filte
             <Breadcrumb />
 
             <Stack>
-                <Title mb={"md"}>Social-Media Ranking</Title>
+                <Title mb={"md"}>{t('social-media.ranking.title')}</Title>
 
                 <SmRankingTable
                     countries={countries}
                     socialMediaList={socialMediaList}
                 />
 
-                <Text mt={"lg"}>{filtedOutCount} institutions are not being displayed, due to having a score of 0.</Text>
+                <Text mt={"lg"}>{t('social-media.ranking.bottom-notice', { count: filteredCount })}</Text>
             </Stack>
 
         </ResponsiveWrapper>
@@ -54,21 +54,21 @@ export const getStaticProps: GetStaticProps = async (context) => {
     // SOCIAL MEDIA
     const rawSocialMediaList = await getSocialMediaRanking({});
     const filteredList = rawSocialMediaList.filter((item) => item.total_score > 0);
-    const filtedOutCount = rawSocialMediaList.length - filteredList.length;
+    const filteredCount = rawSocialMediaList.length - filteredList.length;
 
     const footerContent: FooterContent[] = [
         { title: "Countries", data: countries, type: "Country" },
     ]
 
-    return {
-        props: {
-            countries,
-            socialMediaList: filteredList,
-            filtedOutCount,
-            footerContent
-        }
+
+    const props:Props = {
+        countries,
+        socialMediaList: filteredList,
+        filteredCount,
+        footerContent
     }
 
+    return {props};
 }
 
 export default SocialMediaRanking

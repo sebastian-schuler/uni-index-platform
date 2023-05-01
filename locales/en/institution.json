@@ -74,7 +74,8 @@
     "header": "Social Media",
     "header-text": "We analysed the social media profiles of {{name}} and compared them to other institutions.",
     "card-lastupdate": "Last update: {{date}}",
-    "header-links": "Social Media Links"
+    "header-links": "Social Media Links",
+    "card-rating-label": "Total rating" 
   },
 
   "online-marketing": {

@@ -1,4 +1,4 @@
-import { Card, CardSection, createStyles, SimpleGrid, Stack } from '@mantine/core';
+import { Card, CardSection, createStyles, SimpleGrid, Stack, Text } from '@mantine/core';
 import useTranslation from 'next-translate/useTranslation';
 import LhrRingProgress from '../../features/OnlineMarketing/LhrRingProgress';
 import { LhrSimple } from '../../lib/types/lighthouse/CustomLhrTypes';
@@ -6,6 +6,7 @@ import { URL_INSTITUTION_OM_ACCESSIBILITY, URL_INSTITUTION_OM_BESTPRACTICES, URL
 import { toLink } from '../../lib/util/util';
 import MantineLink from '../Link/MantineLink';
 import CardTitle from '../Text/CardTitle';
+import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -45,7 +46,7 @@ const OnlineMarketingCard = ({ report }: Props) => {
                 <LhrRingProgress
                     size='sm'
                     title={
-                        <MantineLink type='internal' url={toLink(report.institution.slug, URL_INSTITUTION_OM_PERFORMANCE)}>
+                        <MantineLink type='internal' props={{ color: theme.black }} url={toLink(report.institution.slug, URL_INSTITUTION_OM_PERFORMANCE)}>
                             {t('online-marketing.categories.performance')}
                         </MantineLink>
                     }
@@ -55,7 +56,7 @@ const OnlineMarketingCard = ({ report }: Props) => {
                 <LhrRingProgress
                     size='sm'
                     title={
-                        <MantineLink type='internal' url={toLink(report.institution.slug, URL_INSTITUTION_OM_BESTPRACTICES)}>
+                        <MantineLink type='internal' props={{ color: theme.black }} url={toLink(report.institution.slug, URL_INSTITUTION_OM_BESTPRACTICES)}>
                             {t('online-marketing.categories.best-practices')}
                         </MantineLink>
                     }
@@ -65,7 +66,7 @@ const OnlineMarketingCard = ({ report }: Props) => {
                 <LhrRingProgress
                     size='sm'
                     title={
-                        <MantineLink type='internal' url={toLink(report.institution.slug, URL_INSTITUTION_OM_ACCESSIBILITY)}>
+                        <MantineLink type='internal' props={{ color: theme.black }} url={toLink(report.institution.slug, URL_INSTITUTION_OM_ACCESSIBILITY)}>
                             {t('online-marketing.categories.accessibility')}
                         </MantineLink>
                     }
@@ -75,7 +76,7 @@ const OnlineMarketingCard = ({ report }: Props) => {
                 <LhrRingProgress
                     size='sm'
                     title={
-                        <MantineLink type='internal' url={toLink(report.institution.slug, URL_INSTITUTION_OM_SEO)}>
+                        <MantineLink type='internal' props={{ color: theme.black }} url={toLink(report.institution.slug, URL_INSTITUTION_OM_SEO)}>
                             {t('online-marketing.categories.seo')}
                         </MantineLink>
                     }

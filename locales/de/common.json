@@ -1,5 +1,6 @@
 {
   "page-title": "Uni-Index",
+  "map-loading-label": "Karte laden...",
 
   "account": {
     "view": "Account",

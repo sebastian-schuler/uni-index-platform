@@ -1,28 +1,36 @@
 export type CountryTwitterSummary = {
-    avgFollowers: number,
-    avgFollowing: number,
-    avgTweets: number,
-    avgListed: number,
+    followers: number,
+    following: number,
+    tweets: number,
+    listed: number,
+    tweetReplies: number,
+    tweetRetweets: number,
+    tweetLikes: number,
 }
 
 export type CountryYoutubeSummary = {
-    avgSubscribers: number
-    avgVideos: number
-    avgViews: number
+    subscribers: number
+    videos: number
+    totalViews: number
+    videoViews: number
+    videoLikes: number
+    videoComments: number
+    videoFavorites: number
 }
 
 export type CountrySocialRating = {
     countryId: string,
     count: number,
     score: {
-        avgTotal: number,
-        avgTwitter: number,
-        avgYoutube: number,
-        avgInstagram: number,
-        avgFacebook: number,
+        total: number,
+        twitter: number,
+        youtube: number,
+        instagram: number,
+        facebook: number,
     },
     profile: {
-        twitter: CountryTwitterSummary | null,
-        youtube: CountryYoutubeSummary | null,
+        twitter: CountryTwitterSummary | null
+        youtube: CountryYoutubeSummary | null
     }
+
 }

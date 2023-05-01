@@ -15,7 +15,7 @@ type Props = {
 
 const CountryMapContainer = ({ country, stateNames }: Props) => {
 
-  const { lang } = useTranslation();
+  const { t } = useTranslation('common');
 
   let data = undefined;
   let coordinates = { lat: 0, lng: 0 };
@@ -47,10 +47,10 @@ const CountryMapContainer = ({ country, stateNames }: Props) => {
   const Map = React.useMemo(() => dynamic(
     () => import('./CountryMap'),
     {
-      loading: () => <Skeleton height={height}>Loading</Skeleton>,
+      loading: () => <Skeleton height={height}>{t('map-loading-label')}</Skeleton>,
       ssr: false // prevent server-side render
     }
-  ), [lang, height]);
+  ), [t, height]);
 
   if (data === undefined) {
     return <></>;

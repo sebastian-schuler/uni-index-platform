@@ -1,15 +1,15 @@
-import { Group, SimpleGrid, Space, Stack } from '@mantine/core'
-import { Reorder } from "framer-motion"
-import produce from 'immer'
-import useTranslation from 'next-translate/useTranslation'
-import { useEffect, useState } from 'react'
-import Breadcrumb from '../Breadcrumb/Breadcrumb'
-import { CountryCardData, Searchable } from '../../lib/types/UiHelperTypes'
-import GenericPageHeader from '../../components/Block/GenericPageHeader'
-import CountryCard from '../../components/Card/CountryCard'
-import OrderBySelect from '../../components/Select/OrderBySelect'
-import ItemSearch from '../../components/Searchbox/ItemSearch'
-import { OrderBy } from '../../lib/types/OrderBy'
+import { Group, SimpleGrid, Space, Stack } from '@mantine/core';
+import { Reorder } from 'framer-motion';
+import { produce } from 'immer';
+import useTranslation from 'next-translate/useTranslation';
+import { useEffect, useState } from 'react';
+import GenericPageHeader from '../../components/Block/GenericPageHeader';
+import CountryCard from '../../components/Card/CountryCard';
+import ItemSearch from '../../components/Searchbox/ItemSearch';
+import OrderBySelect from '../../components/Select/OrderBySelect';
+import { OrderBy } from '../../lib/types/OrderBy';
+import { CountryCardData, Searchable } from '../../lib/types/UiHelperTypes';
+import Breadcrumb from '../Breadcrumb/Breadcrumb';
 
 interface Props {
     title: string,
