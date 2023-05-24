@@ -43,19 +43,23 @@ model country {
 }
 
 model country_socials {
-  country_id              String  @id(map: "CountrySocialMedia_pkey") @db.VarChar
-  last_update             BigInt
-  rated_institution_count Int     @default(0)
-  avg_total_score         Decimal @default(0) @db.Decimal
-  avg_twitter_score       Decimal @default(0) @db.Decimal
-  avg_youtube_score       Decimal @default(0) @db.Decimal
-  avg_instagram_score     Decimal @default(0) @db.Decimal
-  avg_facebook_score      Decimal @default(0) @db.Decimal
-  avg_twitter_profile     Json?   @db.Json
-  avg_youtube_profile     Json?   @db.Json
-  avg_instagram_profile   Json?   @db.Json
-  avg_facebook_profile    Json?   @db.Json
-  country                 country @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SocialMediaCountry id of country")
+  country_id            String  @id(map: "CountrySocialMedia_pkey") @db.VarChar
+  last_update           BigInt
+  avg_total_score       Decimal @default(0) @db.Decimal
+  avg_twitter_score     Decimal @default(0) @db.Decimal
+  avg_youtube_score     Decimal @default(0) @db.Decimal
+  avg_instagram_score   Decimal @default(0) @db.Decimal
+  avg_facebook_score    Decimal @default(0) @db.Decimal
+  avg_twitter_profile   Json?   @db.Json
+  avg_youtube_profile   Json?   @db.Json
+  avg_instagram_profile Json?   @db.Json
+  avg_facebook_profile  Json?   @db.Json
+  count_total           Int     @default(0)
+  count_twitter         Int     @default(0)
+  count_youtube         Int     @default(0)
+  count_instagram       Int     @default(0)
+  count_facebook        Int     @default(0)
+  country               country @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SocialMediaCountry id of country")
 }
 
 model institution {

@@ -8,12 +8,13 @@ import { getLocalizedName } from '../../lib/util/util';
 import SmProfilesBar from '../Charts/SmProfilesBar';
 import { SocialMediaLargeItem } from '../../lib/types/social-media/SocialMediaSimplifiedTypes';
 import { CountrySocialRating } from '../../lib/types/social-media/CountrySocialRatingTypes';
+import { TwitterTweetEmbed } from 'react-twitter-embed';
 
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colors.light[0],
-        borderRadius: theme.radius.sm,
-        border: `1px solid ${theme.colors.gray[2]}`,
+        borderRadius: theme.radius.md,
+        border: `1px solid ${theme.colors.gray[4]}`,
     },
     cardSection: {
         padding: theme.spacing.md,
@@ -64,7 +65,7 @@ const SmOverviewSection: React.FC<Props> = (
             <Text>All social media profiles at a glance.</Text>
             <Grid>
                 <Grid.Col md={8} order={2} orderMd={1}>
-                    <Card shadow={"xs"} className={classes.card}>
+                    <Card className={classes.card}>
                         <SmRadar
                             countryName={getLocalizedName({ lang: lang, dbTranslated: country })}
                             institutionName={getLocalizedName({ lang: lang, institution: institution })}
@@ -80,7 +81,7 @@ const SmOverviewSection: React.FC<Props> = (
 
                 <Grid.Col md={4} order={1} orderMd={2}>
                     <Stack>
-                        <Card shadow={"xs"} className={classes.card}>
+                        <Card className={classes.card}>
                             <Stack spacing={"sm"}>
                                 <Text size="sm" weight={"bold"} color="dimmed" transform='uppercase'>{t('social-media.header-links')}</Text>
                                 {
@@ -121,6 +122,14 @@ const SmOverviewSection: React.FC<Props> = (
                                 }
                             </Stack>
                         </Card>
+
+                        {socialMedia.twitter_data && socialMedia.twitter_data.meta.pinnedTweetId.length > 0 &&
+                            < TwitterTweetEmbed
+                                tweetId={socialMedia.twitter_data.meta.pinnedTweetId}
+                                options={{ lang: lang }}
+                            />
+                        }
+                        
                     </Stack>
                 </Grid.Col>
 

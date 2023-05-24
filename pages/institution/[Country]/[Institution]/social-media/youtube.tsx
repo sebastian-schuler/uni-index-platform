@@ -16,12 +16,14 @@ import { CountryYoutubeSummary } from '../../../../../lib/types/social-media/Cou
 import { YoutubeChannel } from '../../../../../lib/types/social-media/YoutubeTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION_SOCIALMEDIA_YT } from '../../../../../lib/url-helper/urlConstants'
+import YoutubeEmbed from '../../../../../components/Embed/YoutubeEmbed'
+import YtVideoEmbedDetails from '../../../../../features/SocialMedia/YtVideoEmbedDetails'
 
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colors.light[0],
         borderRadius: theme.radius.sm,
-        border: `1px solid ${theme.colors.gray[2]}`,
+        border: `1px solid ${theme.colors.gray[4]}`,
     },
     title: {
         fontSize: theme.fontSizes.sm,
@@ -83,18 +85,18 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, youtube
 
                 <Group position='apart'>
                     <div>
-                        <Title order={3}>Youtube Details</Title>
-                        <Text>All social media profiles at a glance.</Text>
+                        <Title order={2}>Youtube Details</Title>
+                        <Text>{institution.name} Youtube channel statistics compared to the averages of institutions in {country.name}.</Text>
                     </div>
                     <Button component={Link} href={urlBack} variant='light' radius={"md"}>Go back</Button>
                 </Group>
 
                 <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
 
-                    <Card shadow={"xs"} className={classes.card}>
+                    <Card className={classes.card}>
 
-                        <Title order={4}>Profile statistic</Title>
-                        <Text>Basic information about the institutions twitter profile.</Text>
+                        <Title order={4}>Channel</Title>
+                        <Text>General stats of the channel.</Text>
 
                         <Card.Section className={classes.cardSection}>
 
@@ -103,6 +105,7 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, youtube
                                 countryValue={avgYoutubeProfile.subscribers}
                                 institutionValue={youtubeProfile.meta.metrics.subscriberCount}
                             />
+
                             <Divider mt="md" mb="md" />
 
                             <SmStatRow
@@ -110,21 +113,33 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, youtube
                                 countryValue={avgYoutubeProfile.totalViews}
                                 institutionValue={youtubeProfile.meta.metrics.viewCount}
                             />
-                        </Card.Section>
-                    </Card>
 
-                    <Card shadow={"xs"} className={classes.card}>
+                            <Divider mt="md" mb="md" />
 
-                        <Title order={4}>Video statistic</Title>
-                        <Text>Basic information about the institutions twitter profile.</Text>
+                            <SmStatRow
+                                title='Avg. videos per month'
+                                countryValue={avgYoutubeProfile.videosPerMonth}
+                                institutionValue={youtubeProfile.meta.metrics.avgVideosPerMonth}
+                            />
 
-                        <Card.Section className={classes.cardSection}>
+                            <Divider mt="md" mb="md" />
+
                             <SmStatRow
                                 title='Total videos'
                                 countryValue={avgYoutubeProfile.videos}
                                 institutionValue={youtubeProfile.meta.metrics.videoCount}
                             />
-                            <Divider mt="md" mb="md" />
+
+                        </Card.Section>
+                    </Card>
+
+                    <Card className={classes.card}>
+
+                        <Title order={4}>Video averages</Title>
+                        <Text>Average stats of all videos of this institutions Youtube channel.</Text>
+
+                        <Card.Section className={classes.cardSection}>
+
                             <SmStatRow
                                 title='Average likes per video'
                                 countryValue={avgYoutubeProfile.videoLikes}
@@ -161,6 +176,19 @@ const InstitutionYoutubePage: NextPage<Props> = ({ institution, country, youtube
                         </Card.Section>
                     </Card>
                 </SimpleGrid>
+
+                <Title order={3} mt='lg'>Best Performing Videos</Title>
+
+                <Stack spacing={'lg'}>
+
+                    {
+                        youtubeProfile.bestVideos.map((video, index) => (
+                            <YtVideoEmbedDetails key={index} video={video} />
+                        ))
+                    }
+
+                </Stack>
+
             </Stack>
         </ResponsiveWrapper>
     )

@@ -6,11 +6,13 @@ export type YoutubeMetaData = {
     publishedAt: string
     customUrl: string
     country: string
+    mostCommonTags: string[]
     lastStatisticsUpdate: number
     metrics: {
         viewCount: number
         subscriberCount: number
         videoCount: number
+        avgVideosPerMonth: number
     },
 }
 
@@ -31,10 +33,24 @@ export type YoutubeRawScore = {
     rating: number;
 };
 
+export type YoutubeScoredVideo = {
+    id: string
+    description: string
+    title: string
+    tags: string[]
+    publishedAt: string
+    videoStatistics: {
+        viewCount: number
+        likeCount: number
+        favoriteCount: number
+        commentCount: number
+    }
+}
+
 export type YoutubeChannel = {
     institutionId: string;
     meta: YoutubeMetaData;
     raw: YoutubeRawScore;
     score: number;
-    bestVideos: string[];
+    bestVideos: YoutubeScoredVideo[];
 }

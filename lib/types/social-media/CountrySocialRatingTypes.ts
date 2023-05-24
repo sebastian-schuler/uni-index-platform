@@ -1,11 +1,13 @@
 export type CountryTwitterSummary = {
-    followers: number,
-    following: number,
-    tweets: number,
-    listed: number,
-    tweetReplies: number,
-    tweetRetweets: number,
-    tweetLikes: number,
+    followers: number
+    following: number
+    tweets: number
+    listed: number
+    tweetReplies: number
+    tweetRetweets: number
+    tweetLikes: number
+    verified: number
+    tweetsPerMonth: number
 }
 
 export type CountryYoutubeSummary = {
@@ -16,6 +18,7 @@ export type CountryYoutubeSummary = {
     videoLikes: number
     videoComments: number
     videoFavorites: number
+    videosPerMonth: number
 }
 
 export type CountrySocialRating = {
@@ -32,5 +35,4 @@ export type CountrySocialRating = {
         twitter: CountryTwitterSummary | null
         youtube: CountryYoutubeSummary | null
     }
-
 }

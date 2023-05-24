@@ -7,6 +7,7 @@ export type TwitterMetaData = {
     verified: boolean;
     url: string;
     location: string;
+    pinnedTweetId: string;
     lastProfileUpdate: number;
     lastTweetUpdate: number;
     metrics: {
@@ -14,6 +15,7 @@ export type TwitterMetaData = {
         followingCount: number;
         tweetCount: number;
         listedCount: number;
+        avgTweetsPerMonth: number;
     }
 }
 

@@ -1,5 +1,5 @@
 
-import { Button, Card, createStyles, Divider, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { Button, Card, createStyles, Divider, Group, SimpleGrid, Stack, Text, Title, Space } from '@mantine/core'
 import { country, institution } from '@prisma/client'
 import { GetStaticPaths, GetStaticPropsContext, NextPage } from 'next'
 import useTranslation from 'next-translate/useTranslation'
@@ -16,12 +16,13 @@ import { CountryTwitterSummary } from '../../../../../lib/types/social-media/Cou
 import { TwitterProfile } from '../../../../../lib/types/social-media/TwitterTypes'
 import { getStaticPathsInstitution } from '../../../../../lib/url-helper/staticPathFunctions'
 import { URL_INSTITUTION_SOCIALMEDIA_TW } from '../../../../../lib/url-helper/urlConstants'
+import { TwitterTimelineEmbed } from 'react-twitter-embed';
 
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colors.light[0],
         borderRadius: theme.radius.sm,
-        border: `1px solid ${theme.colors.gray[2]}`,
+        border: `1px solid ${theme.colors.gray[4]}`,
     },
     title: {
         fontSize: theme.fontSizes.sm,
@@ -94,7 +95,7 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, twitter
 
                 <SimpleGrid cols={2} mt={"sm"} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
 
-                    <Card shadow={"xs"} className={classes.card}>
+                    <Card className={classes.card}>
 
                         <Title order={4}>Profile statistic</Title>
                         <Text>Basic information about the institutions twitter profile.</Text>
@@ -161,7 +162,7 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, twitter
                         </Card.Section>
                     </Card>
 
-                    <Card shadow={"xs"} className={classes.card}>
+                    <Card className={classes.card}>
 
                         <Title order={4}>Tweet statistic</Title>
                         <Text>Basic information about the institutions twitter profile.</Text>
@@ -193,6 +194,14 @@ const InstitutionTwitterPage: NextPage<Props> = ({ institution, country, twitter
                         </Card.Section>
                     </Card>
                 </SimpleGrid>
+
+                <Space h='md'/>
+
+                <TwitterTimelineEmbed
+                    sourceType="profile"
+                    screenName={twitterProfile.meta.username}
+                    options={{  }}
+                />
             </Stack>
         </ResponsiveWrapper>
     )
